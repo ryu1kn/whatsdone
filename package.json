@@ -1,0 +1,52 @@
+{
+  "name": "whatsdone",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Code from the React tutorial.",
+  "keywords": [
+    "react"
+  ],
+  "author": "Ryuichi Inagaki",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.4.3",
+    "bower": "^1.3.12",
+    "express": "^4.4.5",
+    "jquery": "^2.1.3",
+    "lodash": "^3.6.0",
+    "q": "^1.2.0",
+    "react": "^0.13.1"
+  },
+  "devDependencies": {
+    "browserify": "^9.0.3",
+    "gulp": "^3.8.11",
+    "reactify": "^1.1.0",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "reactify",
+        {
+          "es6": true,
+          "target": "es5"
+        }
+      ]
+    ]
+  },
+  "scripts": {
+    "postinstall": "npm run build",
+    "build": "gulp compile",
+    "watch": "gulp",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryu1kn/whatsdone.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ryu1kn/whatsdone/issues"
+  },
+  "homepage": "https://github.com/ryu1kn/whatsdone"
+}

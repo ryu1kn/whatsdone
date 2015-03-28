@@ -1,0 +1,6 @@
+
+node_modules/
+npm-debug.log
+.module-cache/
+/public/scripts
+/dones.json
