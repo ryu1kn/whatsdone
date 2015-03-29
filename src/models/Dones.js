@@ -1,27 +1,50 @@
 
-var fs = require('fs');
 var q = require('q');
+var MongoClient = require('mongodb').MongoClient;
+
+function getAllDones (db) {
+  return q.ninvoke(db.collection('dones').find({}, {_id: 0}), 'toArray')
+    .catch(() => '[]');
+}
+
+function putDone (db, newData) {
+  return q.ninvoke(db.collection('dones'), 'insert', newData);
+}
 
 module.exports = {
 
-  DataFileName: 'dones.json',
+  DbConnectUrl: 'mongodb://localhost:27017/whatsdone',
 
   /**
    * @return {Q}
    */
   read: () =>
-    q.nfcall(fs.readFile, this.DataFileName)
-      .catch(() => '[]'),
+    q.nfcall(MongoClient.connect, this.DbConnectUrl)
+      .then((db) => {
+        return getAllDones(db)
+          .catch(() => '[]')
+          .finally(() => {
+            db.close();
+          });
+      }),
 
-  write: (newData) => {
-    var fileName = this.DataFileName;
-    return q.nfcall(fs.readFile, fileName)
-      .catch(() => 'null')
-      .then((storedData) => {
-        var dones = (JSON.parse(storedData) || []).concat(newData);
-        return q.nfcall(fs.writeFile, fileName, JSON.stringify(dones, null, 4))
-          .then(() => dones);
-      });
-  }
+  /**
+   * @param {{doneThing: string, date: string}}
+   */
+  write: (newData) =>
+    q.nfcall(MongoClient.connect, this.DbConnectUrl)
+      .then((db) => {
+        return putDone(db, newData)
+          .then((result) => {
+            if (result.result.ok === 1) {
+              return getAllDones(db);
+            } else {
+              throw new Error('Failed to save the given data');
+            }
+          })
+          .finally(() => {
+            db.close();
+          });
+      })
 
 };
