@@ -10,11 +10,10 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-var fs = require('fs');
 var path = require('path');
-var Q = require('q');
 var express = require('express');
 var bodyParser = require('body-parser');
+var Dones = require('./src/models/Dones');
 var app = express();
 
 app.use('/', express.static(path.join(__dirname, 'public')));
@@ -22,29 +21,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/dones.json', function(req, res) {
-  Q.nfcall(fs.readFile, 'dones.json')
-    .catch(function () {
-      return '[]';
-    })
+  Dones.read()
     .then(function (data) {
       res.setHeader('Content-Type', 'application/json');
       res.send(data);
-    });
+    })
+    .done();
 });
 
 app.post('/dones.json', function(req, res) {
-  Q.nfcall(fs.readFile, 'dones.json')
-    .catch(function () {
-      return 'null';
-    })
+  Dones.write(req.body)
     .then(function (data) {
-      var dones = (JSON.parse(data) || []).concat(req.body);
-      return Q.nfcall(fs.writeFile, 'dones.json', JSON.stringify(dones, null, 4))
-        .then(function () {
-          res.setHeader('Content-Type', 'application/json');
-          res.setHeader('Cache-Control', 'no-cache');
-          res.send(JSON.stringify(dones));
-        });
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Cache-Control', 'no-cache');
+      res.send(JSON.stringify(data));
     })
     .catch(function (reason) {
       console.error(reason);

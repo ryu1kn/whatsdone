@@ -5,8 +5,8 @@ var browserify = require('browserify'),
 
 var paths = {
         js: {
-            inEntry: './src/scripts/app.js',
-            inAll  : './src/scripts/**/*.js',
+            inEntry: './src/client/scripts/app.js',
+            inAll  : './src/client/scripts/**/*.js',
             outName: 'app.js',
             outPath: './public/scripts'
         }
