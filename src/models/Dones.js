@@ -16,6 +16,21 @@ module.exports = {
   DbConnectUrl: 'mongodb://localhost:27017/whatsdone',
 
   /**
+   * Check if we can connect to the DB.
+   * TODO: Move it outside. This shouldn't be placed in a model.
+   */
+  isAvailable: () =>
+    q.nfcall(MongoClient.connect, this.DbConnectUrl)
+      .then((db) => {
+        return q.ninvoke(db, 'stats')
+          .then((stats) => !!stats)
+          .finally(() => {
+            db.close();
+          });
+      })
+      .catch(() => false),
+
+  /**
    * @return {Q}
    */
   read: () =>
@@ -30,6 +45,7 @@ module.exports = {
 
   /**
    * @param {{doneThing: string, date: string}}
+   * @return {Q}
    */
   write: (newData) =>
     q.nfcall(MongoClient.connect, this.DbConnectUrl)

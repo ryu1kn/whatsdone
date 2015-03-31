@@ -16,34 +16,48 @@ var bodyParser = require('body-parser');
 var Dones = require('./src/models/Dones');
 var app = express();
 
-app.use('/', express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-
-app.get('/dones.json', function(req, res) {
-  Dones.read()
-    .then(function (data) {
-      res.setHeader('Content-Type', 'application/json');
-      res.send(data);
-    })
-    .done();
+Dones.isAvailable()
+.then((isAvailable) => {
+  if (isAvailable) {
+    startServer();
+  } else {
+    console.error('Cannot connect to the DB. Server doesn\'t start up.');
+  }
 });
 
-app.post('/dones.json', function(req, res) {
-  Dones.write(req.body)
-    .then(function (data) {
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Cache-Control', 'no-cache');
-      res.send(JSON.stringify(data));
-    })
-    .catch(function (reason) {
-      console.error(reason);
-      res.status(500);
-      res.send('500: Internal Server Error');
-    })
-    .done();
-});
+function startServer() {
+  app.use('/', express.static(path.join(__dirname, 'public')));
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({extended: true}));
 
-app.listen(3000);
+  function error500 (reason, res) {
+    console.error(reason);
+    res.status(500);
+    res.send('500: Internal Server Error');
+  }
 
-console.log('Server started: http://localhost:3000/');
+  app.get('/dones.json', function(req, res) {
+    Dones.read()
+      .then(function (data) {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(data);
+      })
+      .catch((reason) => { error500(reason, res); })
+      .done();
+  });
+
+  app.post('/dones.json', function(req, res) {
+    Dones.write(req.body)
+      .then(function (data) {
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Cache-Control', 'no-cache');
+        res.send(JSON.stringify(data));
+      })
+      .catch((reason) => { error500(reason, res); })
+      .done();
+  });
+
+  app.listen(3000);
+
+  console.log('Server started: http://localhost:3000/');
+}
