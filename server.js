@@ -57,7 +57,7 @@ function startServer() {
       .done();
   });
 
-  app.listen(3000);
-
-  console.log('Server started: http://localhost:3000/');
+  var port = process.env.PORT || 3000;
+  app.listen(port);
+  console.log('Server started: http://localhost:'+port+'/');
 }

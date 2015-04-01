@@ -16,9 +16,7 @@
     "lodash": "^3.6.0",
     "mongodb": "^2.0.25",
     "q": "^1.2.0",
-    "react": "^0.13.1"
-  },
-  "devDependencies": {
+    "react": "^0.13.1",
     "browserify": "^9.0.3",
     "gulp": "^3.8.11",
     "reactify": "^1.1.0",
@@ -34,6 +32,9 @@
         }
       ]
     ]
+  },
+  "engines": {
+    "node": "0.12.0"
   },
   "scripts": {
     "postinstall": "npm run build",

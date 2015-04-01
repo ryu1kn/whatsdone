@@ -2,6 +2,9 @@
 var q = require('q');
 var MongoClient = require('mongodb').MongoClient;
 
+var dbConnectUrl = process.env.DB_URI_KEY &&
+                   process.env[process.env.DB_URI_KEY];
+
 function getAllDones (db) {
   return q.ninvoke(db.collection('dones').find({}, {_id: 0}), 'toArray')
     .catch(() => '[]');
@@ -13,7 +16,7 @@ function putDone (db, newData) {
 
 module.exports = {
 
-  DbConnectUrl: 'mongodb://localhost:27017/whatsdone',
+  DbConnectUrl: dbConnectUrl || 'mongodb://localhost:27017/whatsdone',
 
   /**
    * Check if we can connect to the DB.
