@@ -42,7 +42,6 @@ var DoneBox = React.createClass({
   },
   componentDidMount: function() {
     this.loadDoneItemsFromServer();
-    // setInterval(this.loadDoneItemsFromServer, this.props.pollInterval);
   },
   render: function() {
     return (

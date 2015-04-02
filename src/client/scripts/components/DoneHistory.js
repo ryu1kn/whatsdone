@@ -5,10 +5,13 @@ var React = require('react');
 var DoneList = require('./DoneList');
 
 var DoneHistory = React.createClass({
+
+  oneDay_ms: 24 * 60 * 60 * 1000,
+
   getDayLabel: function (dateString) {
     var now = new Date(),
-        today = now.toISOString().substr(0, 10),
-        yesterday = (new Date(now - 24 * 60 * 60 * 1000)).toISOString().substr(0, 10);
+        today = now.toLocaleDateString(),
+        yesterday = (new Date(now - this.oneDay_ms)).toLocaleDateString();
     switch (dateString) {
     case today:
       return 'Today';
@@ -18,9 +21,10 @@ var DoneHistory = React.createClass({
       return dateString;
     }
   },
-  render: function() {
+
+  render: function () {
     var grouped = _.groupBy(this.props.data, (entry) =>
-                      entry.date.substr(0, 'yyyy-mm-dd'.length));
+                      new Date(entry.date).toLocaleDateString());
     return (
       <div className="donehistory">
         {_.pairs(grouped).map((data) =>
@@ -29,6 +33,7 @@ var DoneHistory = React.createClass({
       </div>
     );
   }
+
 });
 
 module.exports = DoneHistory;
