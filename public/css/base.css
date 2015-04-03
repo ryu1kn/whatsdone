@@ -1,96 +1,39 @@
-body {
-  background: #fff;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 15px;
-  line-height: 1.7;
-  margin: 0;
-  padding: 30px;
-}
-
-a {
-  color: #4183c4;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-code {
-  background-color: #f8f8f8;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-  font-family: "Bitstream Vera Sans Mono", Consolas, Courier, monospace;
-  font-size: 12px;
-  margin: 0 2px;
-  padding: 0px 5px;
-}
-
-h1, h2, h3, h4 {
-  font-weight: bold;
-  margin: 0 0 15px;
-  padding: 0;
-}
-
-h1 {
-  border-bottom: 1px solid #ddd;
-  font-size: 2.5em;
-  font-weight: bold;
-  margin: 0 0 15px;
-  padding: 0;
-}
-
-h2 {
-  border-bottom: 1px solid #eee;
-  font-size: 2em;
-}
-
-h3 {
-  font-size: 1.5em;
-}
-
-h4 {
-  font-size: 1.2em;
-}
-
-p, ul {
-  margin: 15px 0;
-}
-
-ul {
-  padding-left: 30px;
-}
-
-::-webkit-input-placeholder {
-  color: #DDD;
-}
-::-moz-placeholder {
-  color: #DDD;
-}
-:-ms-input-placeholder {
-  color: #DDD;
-}
-input:-moz-placeholder {
-  color: #DDD;
+p {
+  font-size: 1.3em;
 }
 
 .doneform {
+  display: -webkit-flex;
   display: flex;
-  margin-bottom: 2em;
 }
-.doneform > input[type="text"] {
+.doneform > .form-group {
+  -webkit-flex;
   flex: 1;
-  font-size: 2em;
+  display: block;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+.doneform > .form-group > input {
+  width: 100%;
 }
 .doneform > button {
-  font-size: 1.5em;
+  margin-left: .3em;
+}
+
+.donelist {
+  margin-top: 3.5em;
+}
+.donelist__title {
+  margin-bottom: .7em;
+  border-bottom: 1px solid #eee;
 }
 
 .doneitem {
   margin-bottom: 15px;
 }
 .doneitem__done-thing > p {
-  margin: 0;
+  line-height: 1.6em;
+  margin-bottom: .3em;
 }
 .doneitem__time {
   color: lightgray;

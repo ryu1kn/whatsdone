@@ -27,9 +27,9 @@ var DoneItem = React.createClass({
       <div className="doneitem">
         <div className="doneitem__done-thing"
              dangerouslySetInnerHTML={{__html: rawMarkup}} />
-        <div className="doneitem__time">
+        <p className="doneitem__time">
           {this.formatTime(this.props.date)}
-        </div>
+        </p>
       </div>
     );
   }

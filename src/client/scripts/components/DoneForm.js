@@ -13,9 +13,13 @@ var DoneForm = React.createClass({
   },
   render: function() {
     return (
-      <form className="doneform" onSubmit={this.handleSubmit}>
-        <input type="text" placeholder="What have you done today?" ref="doneThing" />
-        <button type="submit">Done!</button>
+      <form className="form-inline doneform" onSubmit={this.handleSubmit}>
+        <div className="form-group">
+          <label className="sr-only" for="doneInput">Done Thing</label>
+          <input type="text" className="form-control" id="doneInput"
+                 placeholder="What have you done today?" ref="doneThing" />
+        </div>
+        <button type="submit" className="btn btn-default">Done!</button>
       </form>
     );
   }

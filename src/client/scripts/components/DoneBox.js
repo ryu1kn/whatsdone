@@ -45,7 +45,8 @@ var DoneBox = React.createClass({
   },
   render: function() {
     return (
-      <div className="donebox">
+      <div className="donebox container">
+        <h2 className="donebox-title page-header">What's Done?</h2>
         <DoneForm onDoneItemSubmit={this.handleDoneItemSubmit} />
         <DoneHistory data={this.state.data.reverse()} />
       </div>

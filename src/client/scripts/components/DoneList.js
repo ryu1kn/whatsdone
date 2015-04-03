@@ -14,7 +14,7 @@ var DoneList = React.createClass({
     });
     return (
       <div className="donelist">
-        <h2 className="donelist__title">{this.props.title}</h2>
+        <h3 className="donelist__title">{this.props.title}</h3>
         {doneItemNodes}
       </div>
     );
