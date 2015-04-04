@@ -28,7 +28,7 @@ router.get('/', function(req, res) {
     .done();
 });
 
-router.post('/dones.json', function(req, res) {
+router.post('/', function(req, res) {
   Dones.write(req.body)
     .then(function (data) {
       res.setHeader('Content-Type', 'application/json');
