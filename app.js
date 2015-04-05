@@ -1,12 +1,11 @@
 var express = require('express');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var path = require('path');
 // var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-var routes = require('./src/routes/index');
-var dones = require('./src/routes/dones');
 
 var app = express();
 
@@ -21,9 +20,36 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'keyboard cat',
+  saveUninitialized: false,   // don't create session until something stored
+  resave: false,              //don't save session if unmodified
+  store: new MongoStore({
+    url: 'mongodb://localhost/whatsdone',
+    touchAfter: 24 * 3600     // time period in seconds
+  })
+}));
 
-app.use('/', routes);
-app.use('/dones.json', dones);
+app.all('*', function (req, res, next) {
+  if (req.path === '/signin') {
+    if (req.session.isAuthorized) {
+      res.redirect('/');
+    } else {
+      next();
+    }
+  } else {
+    if (req.session.isAuthorized) {
+      next();
+    } else {
+      res.redirect('/signin');
+    }
+  }
+});
+
+app.use('/', require('./src/routes/index'));
+app.use('/signin', require('./src/routes/signin'));
+app.use('/signout', require('./src/routes/signout'));
+app.use('/dones.json', require('./src/routes/dones'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

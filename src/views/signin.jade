@@ -1,0 +1,20 @@
+extends layout
+
+block style
+  link(rel='stylesheet', href='css/signin.css')
+
+block content
+  div(class='container')
+    form(class='form-signin' action='/signin' method='post')
+      h2(class='form-signin-heading') Please sign in
+      label(for='inputEmail' class='sr-only') Email address
+      input(type='email' id='inputEmail' name='email' class='form-control' placeholder='Email address' required autofocus)
+      label(for='inputPassword' class='sr-only') Password
+      input(type='password' id='inputPassword' name='password' class='form-control' placeholder='Password' required)
+      div(class='checkbox')
+        label
+          input(type='checkbox' name='remember-me' value='remember-me')
+          | Remember me
+      button(class='btn btn-lg btn-primary btn-block' type='submit') Sign in
+  // IE10 viewport hack for Surface/desktop Windows 8 bug
+  script(src='../../assets/js/ie10-viewport-bug-workaround.js')
