@@ -7,11 +7,17 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var config = require('./src/config');
+
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'src', 'views'));
 app.set('view engine', 'jade');
+
+config.set('dbConnectUrl',
+    (process.env.DB_URI_KEY && process.env[process.env.DB_URI_KEY]) ||
+    'mongodb://localhost:27017/whatsdone');
 
 // TODO: uncomment after placing a favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -25,7 +31,7 @@ app.use(session({
   saveUninitialized: false,   // don't create session until something stored
   resave: false,              //don't save session if unmodified
   store: new MongoStore({
-    url: 'mongodb://localhost/whatsdone',
+    url: config.get('dbConnectUrl'),
     touchAfter: 24 * 3600     // time period in seconds
   })
 }));

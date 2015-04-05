@@ -2,8 +2,7 @@
 var q = require('q');
 var MongoClient = require('mongodb').MongoClient;
 
-var dbConnectUrl = process.env.DB_URI_KEY &&
-                   process.env[process.env.DB_URI_KEY];
+var config = require('../config');
 
 function getAllDones (db) {
   return q.ninvoke(db.collection('dones').find({}, {_id: 0}), 'toArray')
@@ -16,14 +15,13 @@ function putDone (db, newData) {
 
 module.exports = {
 
-  DbConnectUrl: dbConnectUrl || 'mongodb://localhost:27017/whatsdone',
-
   /**
    * Check if we can connect to the DB.
    * TODO: Move it outside. This shouldn't be placed in a model.
+   * TODO: Create a class to establis db connection
    */
   isAvailable: () =>
-    q.nfcall(MongoClient.connect, this.DbConnectUrl)
+    q.nfcall(MongoClient.connect, config.get('dbConnectUrl'))
       .then((db) => {
         return q.ninvoke(db, 'stats')
           .then((stats) => !!stats)
@@ -37,7 +35,7 @@ module.exports = {
    * @return {Q}
    */
   read: () =>
-    q.nfcall(MongoClient.connect, this.DbConnectUrl)
+    q.nfcall(MongoClient.connect, config.get('dbConnectUrl'))
       .then((db) => {
         return getAllDones(db)
           .catch(() => '[]')
@@ -51,7 +49,7 @@ module.exports = {
    * @return {Q}
    */
   write: (newData) =>
-    q.nfcall(MongoClient.connect, this.DbConnectUrl)
+    q.nfcall(MongoClient.connect, config.get('dbConnectUrl'))
       .then((db) => {
         return putDone(db, newData)
           .then((result) => {

@@ -3,8 +3,7 @@ var q = require('q');
 var sha1 = require('sha1');
 var MongoClient = require('mongodb').MongoClient;
 
-var dbConnectUrl = process.env.DB_URI_KEY &&
-                   process.env[process.env.DB_URI_KEY];
+var config = require('../config');
 
 /**
  * @param {} db
@@ -21,10 +20,8 @@ function authenticate (db, user) {
 
 module.exports = {
 
-  DbConnectUrl: dbConnectUrl || 'mongodb://localhost:27017/whatsdone',
-
   authenticate: (loginInfo) =>
-    q.nfcall(MongoClient.connect, this.DbConnectUrl)
+    q.nfcall(MongoClient.connect, config.get('dbConnectUrl'))
       .then((db) => {
         return authenticate(db, loginInfo)
           .finally(() => {
