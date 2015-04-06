@@ -9,21 +9,20 @@ var config = require('../config');
  * @param {} db
  * @param {email, password} user
  */
-function authenticate (db, user) {
-  return q.ninvoke(db.collection('users').find({
+function findUser(db, user) {
+  return q.ninvoke(db.collection('users'), 'findOne', {
       email: user.email,
       password: sha1(user.password)
-    }), 'toArray')
-    .then((found) => found.length !== 0)
-    .catch(() => '[]');
+    })
+    .catch(() => null);
 }
 
 module.exports = {
 
-  authenticate: (loginInfo) =>
+  findUser: (loginInfo) =>
     q.nfcall(MongoClient.connect, config.get('dbConnectUrl'))
       .then((db) => {
-        return authenticate(db, loginInfo)
+        return findUser(db, loginInfo)
           .finally(() => {
             db.close();
           });

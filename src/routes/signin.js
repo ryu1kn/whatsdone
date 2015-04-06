@@ -10,10 +10,11 @@ router.get('/', function (req, res) {
 });
 
 router.post('/', function (req, res) {
-  Users.authenticate(req.body)
-    .then(function (isAuthorized) {
-      if (isAuthorized) {
+  Users.findUser(req.body)
+    .then(function (user) {
+      if (user) {
         req.session.isAuthorized = true;
+        req.session.userId = user._id;
         res.redirect('/');
       } else {
         res.status(401);

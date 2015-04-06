@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var express = require('express');
 var router = express.Router();
 
@@ -29,7 +30,7 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', function(req, res) {
-  Dones.write(req.body)
+  Dones.write(_.assign({}, req.body, {userId: req.session.userId}))
     .then(function (data) {
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Cache-Control', 'no-cache');

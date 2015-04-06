@@ -45,7 +45,7 @@ module.exports = {
       }),
 
   /**
-   * @param {{doneThing: string, date: string}}
+   * @param {{doneThing: string, date: string, userId: string}} newData
    * @return {Q}
    */
   write: (newData) =>
