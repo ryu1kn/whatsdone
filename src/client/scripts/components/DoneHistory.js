@@ -6,12 +6,29 @@ var DoneList = require('./DoneList');
 
 var DoneHistory = React.createClass({
 
-  oneDay_ms: 24 * 60 * 60 * 1000,
+  OneDay_ms: 24 * 60 * 60 * 1000,
 
-  getDayLabel: function (dateString) {
+  /**
+   * @param {Date} date
+   * @return {string}
+   */
+  getDayLabel: function (date) {
+    return date.toLocaleDateString('en-GB', {
+      weekday: 'short',
+      year   : 'numeric',
+      month  : 'long',
+      day    : 'numeric'
+    });
+  },
+
+  /**
+   * @param {string} dateString
+   * @return {string}
+   */
+  getFriendlyDayLabel: function (dateString) {
     var now = new Date(),
-        today = now.toLocaleDateString(),
-        yesterday = (new Date(now - this.oneDay_ms)).toLocaleDateString();
+        today = this.getDayLabel(now),
+        yesterday = this.getDayLabel(new Date(now - this.OneDay_ms));
     switch (dateString) {
     case today:
       return 'Today';
@@ -24,11 +41,11 @@ var DoneHistory = React.createClass({
 
   render: function () {
     var grouped = _.groupBy(this.props.data, (entry) =>
-                      new Date(entry.date).toLocaleDateString());
+                      this.getDayLabel(new Date(entry.date)));
     return (
       <div className="donehistory">
         {_.pairs(grouped).map((data) =>
-          <DoneList title={this.getDayLabel(data[0])} data={data[1]} />
+          <DoneList title={this.getFriendlyDayLabel(data[0])} data={data[1]} />
         )}
       </div>
     );
