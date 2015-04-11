@@ -19,6 +19,15 @@ config.set('dbConnectUrl',
     (process.env.DB_URI_KEY && process.env[process.env.DB_URI_KEY]) ||
     'mongodb://localhost:27017/whatsdone');
 
+var db = require('./src/util/db');
+db.isAvailable()
+.then((isAvailable) => {
+  if (!isAvailable) {
+    console.error('Cannot connect to the DB. Server doesn\'t start up.');
+    process.exit(1);
+  }
+});
+
 // TODO: uncomment after placing a favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
@@ -29,7 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'keyboard cat',
   saveUninitialized: false,   // don't create session until something stored
-  resave: false,              //don't save session if unmodified
+  resave: false,              // don't save session if unmodified
   store: new MongoStore({
     url: config.get('dbConnectUrl'),
     touchAfter: 24 * 3600     // time period in seconds

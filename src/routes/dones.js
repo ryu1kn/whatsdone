@@ -4,15 +4,6 @@ var router = express.Router();
 
 var Dones = require('../models/Dones');
 
-// XXX: Check db availability at the beginning of app.js
-Dones.isAvailable()
-.then((isAvailable) => {
-  if (!isAvailable) {
-    console.error('Cannot connect to the DB. Server doesn\'t start up.');
-    process.exit(1);
-  }
-});
-
 function error500 (reason, res) {
   console.error(reason);
   res.status(500);

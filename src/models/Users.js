@@ -1,9 +1,8 @@
 
 var q = require('q');
 var sha1 = require('sha1');
-var MongoClient = require('mongodb').MongoClient;
 
-var config = require('../config');
+var db = require('../util/db');
 
 /**
  * @param {} db
@@ -20,12 +19,6 @@ function findUser(db, user) {
 module.exports = {
 
   findUser: (loginInfo) =>
-    q.nfcall(MongoClient.connect, config.get('dbConnectUrl'))
-      .then((db) => {
-        return findUser(db, loginInfo)
-          .finally(() => {
-            db.close();
-          });
-      })
+      db.exec((db) => findUser(db, loginInfo))
 
 };
