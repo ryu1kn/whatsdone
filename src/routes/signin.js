@@ -11,7 +11,7 @@ router.get('/', function (req, res) {
 
 router.post('/', function (req, res) {
   Users.findUser(req.body)
-    .then(function (user) {
+    .then((user) => {
       if (user) {
         req.session.isAuthorized = true;
         req.session.userId = user._id;
