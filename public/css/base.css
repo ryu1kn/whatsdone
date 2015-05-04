@@ -7,11 +7,11 @@ p {
   display: flex;
 }
 .doneform > .form-group {
-  -webkit-flex;
+  display: -webkit-flex;
+  display: flex;
   flex: 1;
   display: block;
   margin-bottom: 0;
-  vertical-align: middle;
 }
 .doneform > .form-group > input {
   width: 100%;
@@ -29,7 +29,23 @@ p {
 }
 
 .doneitem {
+  display: -webkit-flex;
+  display: flex;
   margin-bottom: 15px;
+}
+.doneitem__user {
+  width: 3.5em;
+}
+.doneitem__user-icon {
+  font-size: xx-large;
+  text-align: center;
+  height: 1.2em;
+  width: 1.2em;
+  border-radius: .6em;
+}
+.doneitem__user-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .doneitem__done-thing > p {
   line-height: 1.6em;
