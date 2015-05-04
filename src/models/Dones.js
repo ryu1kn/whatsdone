@@ -1,7 +1,7 @@
 
 var q = require('q');
 
-var db = require('../util/db');
+var dbUtil = require('../util/db');
 
 function getAllDones (db) {
   return q.ninvoke(db.collection('dones').find({}, {_id: 0}), 'toArray')
@@ -17,14 +17,14 @@ module.exports = {
   /**
    * @return {Q}
    */
-  read: () => db.exec((db) => getAllDones(db)),
+  read: () => dbUtil.exec((db) => getAllDones(db)),
 
   /**
    * @param {{doneThing: string, date: string, userId: string}} newData
    * @return {Q}
    */
   write: (newData) =>
-      db.exec((db) =>
+      dbUtil.exec((db) =>
         putDone(db, newData)
         .then((result) => {
           if (result.result.ok === 1) {

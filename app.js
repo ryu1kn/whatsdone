@@ -19,8 +19,8 @@ config.set('dbConnectUrl',
     (process.env.DB_URI_KEY && process.env[process.env.DB_URI_KEY]) ||
     'mongodb://localhost:27017/whatsdone');
 
-var db = require('./src/util/db');
-db.isAvailable()
+var dbUtil = require('./src/util/db');
+dbUtil.isAvailable()
 .then((isAvailable) => {
   if (!isAvailable) {
     console.error('Cannot connect to the DB. Server doesn\'t start up.');

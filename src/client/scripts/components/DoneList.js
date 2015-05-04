@@ -7,7 +7,7 @@ var DoneList = React.createClass({
   render: function() {
     var doneItemNodes = this.props.data.map(function(doneItem, index) {
       return (
-        <DoneItem date={doneItem.date} key={index}>
+        <DoneItem date={doneItem.date} username={doneItem.username} key={index}>
           {doneItem.doneThing}
         </DoneItem>
       );

@@ -1,7 +1,7 @@
 
 var q = require('q');
 var MongoClient = require('mongodb').MongoClient;
-
+var ObjectID = require('mongodb').ObjectID;
 var config = require('../config');
 
 module.exports = {
@@ -14,16 +14,18 @@ module.exports = {
                 .catch(() => false));
   },
 
+  getId: (str) => new ObjectID(str),
+
   exec: (callback, scope) => {
     var dbRef;
     return q.nfcall(MongoClient.connect, config.get('dbConnectUrl'))
       .then((db) => {
-        console.log('DB opened');
+        // console.log('DB opened');
         dbRef = db;
         return callback.call(scope, db);  // should return a promise
       })
       .finally(() => {
-        console.log('DB closing');
+        // console.log('DB closing');
         dbRef.close();
       });
   }
