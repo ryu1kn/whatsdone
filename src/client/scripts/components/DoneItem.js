@@ -6,9 +6,8 @@ var converter = new Showdown.converter();
 
 var DoneItem = React.createClass({
 
-  formatTime: function (isoTimeString) {
-    var date = new Date(isoTimeString),
-        hour = date.getHours(),
+  formatTime: function (date) {
+    var hour = date.getHours(),
         ampm = hour < 12 ? 'am' : 'pm',
         mins = date.getMinutes();
 

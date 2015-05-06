@@ -6,7 +6,8 @@ var DoneHistory = require('./DoneHistory');
 var DoneForm = require('./DoneForm');
 
 var DoneBox = React.createClass({
-  loadDoneItemsFromServer: function() {
+
+  loadDoneItemsFromServer: function () {
     $.ajax({
       url: this.props.url,
       dataType: 'json',
@@ -18,11 +19,12 @@ var DoneBox = React.createClass({
       }.bind(this)
     });
   },
-  handleDoneItemSubmit: function(doneItem) {
+
+  handleDoneItemSubmit: function (doneItem) {
     doneItem.date = new Date().toISOString();
     var doneItems = this.state.data;
     doneItems.push(doneItem);
-    this.setState({data: doneItems}, function() {
+    this.setState({data: doneItems}, function () {
       $.ajax({
         url: this.props.url,
         dataType: 'json',
@@ -37,18 +39,32 @@ var DoneBox = React.createClass({
       });
     });
   },
-  getInitialState: function() {
+
+  getInitialState: function () {
     return {data: []};
   },
-  componentDidMount: function() {
+
+  componentDidMount: function () {
     this.loadDoneItemsFromServer();
   },
-  render: function() {
+  
+  /**
+   * @param {Array.<Object>} dones list of done data
+   * @return {Array.<Object>}
+   */
+  preprocessData: function (dones) {
+    return dones.map((done) => {
+      done.date = new Date(done.date);
+      return done;
+    });
+  },
+
+  render: function () {
     return (
       <div className="donebox container">
         <h2 className="donebox-title page-header">What's Done?</h2>
         <DoneForm onDoneItemSubmit={this.handleDoneItemSubmit} />
-        <DoneHistory data={this.state.data.reverse()} />
+        <DoneHistory data={this.preprocessData(this.state.data)} />
       </div>
     );
   }
