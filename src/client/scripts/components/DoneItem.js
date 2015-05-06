@@ -30,6 +30,10 @@ var DoneItem = React.createClass({
     return name ? util.getColorCode(name) : '#DDDDDD';
   },
 
+  delete: function () {
+    console.log('Delete: ', this.props);
+  },
+
   render: function() {
     var rawMarkup = converter.makeHtml(this.props.children.toString());
     return (
@@ -48,6 +52,8 @@ var DoneItem = React.createClass({
             {this.formatTime(this.props.date)}
           </p>
         </div>
+        <div className="doneitem__delete-action glyphicon glyphicon-remove"
+             onClick={this.delete}></div>
       </div>
     );
   }
