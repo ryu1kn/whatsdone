@@ -1,19 +1,20 @@
 
+var _ = require('lodash');
 var React = require('react');
 
 var DoneItem = require('./DoneItem');
 
 var DoneList = React.createClass({
   render: function() {
-    var doneItemNodes = this.props.data
-                          .sort((a, b) => a.date < b.date)
-                          .map(function(doneItem, index) {
-      return (
-        <DoneItem date={doneItem.date} username={doneItem.username} key={index}>
-          {doneItem.doneThing}
-        </DoneItem>
-      );
-    });
+    var doneItemNodes = 
+          _.sortBy(this.props.data, 'date')
+            .reverse()
+            .map((doneItem, index)  => (
+              <DoneItem date={doneItem.date} username={doneItem.username} key={index}>
+                {doneItem.doneThing}
+              </DoneItem>
+            ));
+
     return (
       <div className="donelist">
         <h3 className="donelist__title">{this.props.title}</h3>
