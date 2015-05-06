@@ -34,7 +34,7 @@ p {
   margin-bottom: 15px;
 }
 .doneitem__user {
-  width: 3.5em;
+  min-width: 3.5em;
 }
 .doneitem__user-icon {
   font-size: xx-large;
