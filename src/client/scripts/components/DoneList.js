@@ -6,7 +6,7 @@ var DoneItem = require('./DoneItem');
 
 var DoneList = React.createClass({
   render: function() {
-    var doneItemNodes = 
+    var doneItemNodes =
           _.sortBy(this.props.data, 'date')
             .reverse()
             .map((doneItem, index)  => (

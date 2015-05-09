@@ -20,11 +20,11 @@ var DoneItem = React.createClass({
 
     return `${hour}:${mins} ${ampm}`;
   },
-  
+
   getFirstLetter: function (name) {
     return (name || '').charAt(0).toUpperCase() || '?';
   },
-  
+
   getIconColor: function (name) {
     return name ? util.getColorCode(name) : '#DDDDDD';
   },

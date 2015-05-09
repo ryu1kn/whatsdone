@@ -47,7 +47,7 @@ var DoneBox = React.createClass({
   componentDidMount: function () {
     this.loadDoneItemsFromServer();
   },
-  
+
   /**
    * @param {Array.<Object>} dones list of done data
    * @return {Array.<Object>}
