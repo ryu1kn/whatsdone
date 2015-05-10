@@ -1,5 +1,6 @@
 
 var $ = require('jquery');
+var _ = require('lodash');
 var React = require('react');
 
 var DoneHistory = require('./DoneHistory');
@@ -21,7 +22,7 @@ var DoneBox = React.createClass({
   },
 
   handleDoneItemSubmit: function (doneItem) {
-    doneItem.date = new Date().toISOString();
+    doneItem.date = new Date();
     var doneItems = this.state.data;
     doneItems.push(doneItem);
     this.setState({data: doneItems}, function () {
@@ -29,7 +30,7 @@ var DoneBox = React.createClass({
         url: this.props.url,
         dataType: 'json',
         type: 'POST',
-        data: doneItem,
+        data: this.getPostData(doneItem),
         success: function(data) {
           this.setState({data: data});
         }.bind(this),
@@ -49,6 +50,20 @@ var DoneBox = React.createClass({
   },
 
   /**
+   * @private
+   * @param {Object} done
+   * @return {Object}
+   */
+  getPostData: function (done) {
+    done = _.clone(done);
+    if (done.date instanceof Date) {
+      done.date = done.date.toISOString();
+    }
+    return done;
+  },
+
+  /**
+   * @private
    * @param {Array.<Object>} dones list of done data
    * @return {Array.<Object>}
    */
