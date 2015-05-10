@@ -35,7 +35,7 @@ var DoneItem = React.createClass({
       <div className="doneitem">
         <div className="doneitem__user">
           <div className="doneitem__user-icon"
-               style={{'background-color': this.getIconColor(this.props.username)}}>
+               style={{backgroundColor: this.getIconColor(this.props.username)}}>
             {this.getFirstLetter(this.props.username)}
           </div>
           <div className="doneiten__user-name">{this.props.username}</div>

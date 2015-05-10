@@ -9,11 +9,16 @@ var DoneHistory = React.createClass({
   ONEDAY_MS: 24 * 60 * 60 * 1000,
 
   /**
-   * @param {Date}
+   * @param {Date} d
    * @return {string} "yyyy-mm-dd" (local time)
    */
-  getLocalDateString: function (date) {
-    return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+  getLocalDateString: function (d) {
+    var month = d.getMonth() + 1,
+        date  = d.getDate();
+    month = month < 10 ? `0${month}` : month;
+    date = date < 10 ? `0${date}` : date;
+
+    return `${d.getFullYear()}-${month}-${date}`;
   },
 
   /**
