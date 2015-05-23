@@ -7,22 +7,20 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var config = require('./src/config');
-
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'src', 'views'));
 app.set('view engine', 'jade');
 
-config.set('dbConnectUrl',
-    (process.env.DB_URI_KEY && process.env[process.env.DB_URI_KEY]) ||
-    'mongodb://localhost:27017/whatsdone');
+var dbConnectUrl =
+      (process.env.DB_URI_KEY && process.env[process.env.DB_URI_KEY]) ||
+      'mongodb://localhost:27017/whatsdone';
 
 var dbUtil = require('./src/util/db');
-dbUtil.isAvailable()
-.then((isAvailable) => {
-  if (!isAvailable) {
+dbUtil.init(dbConnectUrl)
+.then((success) => {
+  if (!success) {
     console.error('Cannot connect to the DB. Server doesn\'t start up.');
     process.exit(1);
   }
@@ -40,7 +38,7 @@ app.use(session({
   saveUninitialized: false,   // don't create session until something stored
   resave: false,              // don't save session if unmodified
   store: new MongoStore({
-    url: config.get('dbConnectUrl'),
+    url: dbConnectUrl,
     touchAfter: 24 * 3600     // time period in seconds
   })
 }));
