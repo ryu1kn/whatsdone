@@ -2,8 +2,6 @@ var _ = require('lodash');
 var express = require('express');
 var router = express.Router();
 
-var q = require('q');
-
 var Dones = require('../models/Dones');
 var Users = require('../models/Users');
 
@@ -14,10 +12,16 @@ function error500(reason, res) {
 }
 
 function setUserName(dones) {
-  return q.all(dones.map((done) =>
-    q(done.userId ? Users.getById(done.userId) : {name: null})
-      .then((user) => _.assign(done, {username: user.name}))
-  ));
+  return Users.getByIds(_.pluck(dones, 'userId'))
+    .then((users) => {
+      var nameMap = _.indexBy(users, '_id');
+      return dones.map((done) => {
+        if (done.userId) {
+          done.username = nameMap[done.userId].name;
+        }
+        return done;
+      });
+    });
 }
 
 router.get('/', function(req, res) {

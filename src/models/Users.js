@@ -1,4 +1,6 @@
 
+var _ = require('lodash');
+
 var q = require('q');
 var sha1 = require('sha1');
 
@@ -29,6 +31,20 @@ module.exports = {
     dbUtil.exec((db) =>
       findUser(db, {
         _id: dbUtil.getId(id)
-      }))
+      })),
+
+  /**
+   * @param {Array.<string>} ids
+   * @return {q}
+   */
+  getByIds: (ids) =>
+    dbUtil.exec((db) =>
+      q.ninvoke(db.collection('users').find({
+        _id: {
+          $in: _.compact(_.uniq(ids))
+                .map((id) => dbUtil.getId(id))
+        }
+      }), 'toArray'))
+      .catch(() => [])
 
 };
