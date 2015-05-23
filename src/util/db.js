@@ -20,12 +20,10 @@ module.exports = {
     var dbRef;
     return q.nfcall(MongoClient.connect, config.get('dbConnectUrl'))
       .then((db) => {
-        // console.log('DB opened');
         dbRef = db;
         return callback.call(scope, db);  // should return a promise
       })
       .finally(() => {
-        // console.log('DB closing');
         dbRef.close();
       });
   }
