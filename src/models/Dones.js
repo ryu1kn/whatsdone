@@ -4,7 +4,12 @@ var q = require('q');
 var dbUtil = require('../util/db');
 
 function getAllDones (db) {
-  return q.ninvoke(db.collection('dones').find({}, {_id: 0}), 'toArray')
+  return q.ninvoke(db.collection('dones').find(), 'toArray')
+    .then((dones) => dones.map((done) => {
+      done.id = done._id;
+      delete done._id;
+      return done;
+    }))
     .catch(() => '[]');
 }
 

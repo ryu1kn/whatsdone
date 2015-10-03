@@ -21,16 +21,18 @@ var DoneItem = React.createClass({
 
     return `${hour}:${mins} ${ampm}`;
   },
-  
+
   getFirstLetter: function (name) {
     return (name || '').charAt(0).toUpperCase() || '?';
   },
-  
+
   getIconColor: function (name) {
     return name ? util.getColorCode(name) : '#DDDDDD';
   },
 
   delete: function () {
+    this.getDOMNode().setAttribute('style', 'display:none;');
+    // TODO: fire event
     console.log('Delete: ', this.props);
   },
 
