@@ -58,8 +58,8 @@ var DoneHistory = React.createClass({
     return (
       <div className="donehistory">
         {_.sortBy(_.pairs(grouped), (pair) => pair[0]).reverse()
-            .map((data) =>
-              <DoneList title={this.getFriendlyDayLabel(data[0])} data={data[1]} />
+            .map((data, index) =>
+              <DoneList title={this.getFriendlyDayLabel(data[0])} data={data[1]} key={index} />
         )}
       </div>
     );
