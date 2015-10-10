@@ -28,36 +28,50 @@ function load() {
   return deferred.promise;
 }
 
+// TODO: Instead of defining normalise functions,
+//       define DoneItem class and make it deal with own data properly
+
 /**
- * Add a DONE item.
- * @param {string} doneItem The content of the DONE
+ * @param {{doneThing: string, date: (string|Date)}} doneItem
+ * @return {{doneThing: string, date: Date}}
  */
-function add(doneItem) {
-  _dones.push(doneItem);
+function normaliseDoneItem(doneItem) {
+  return assign({}, doneItem, {date: new Date(doneItem.date)});
 }
 
 /**
- * Update a DONE item.
- * @param {object} doneItem An object literal containing only the data to be
- *     updated.
+ * @param {Array<{doneThing: string, date: string, ...}> doneItems
+ * @return {Array<{doneThing: string, date: Date, ...}>
+ */
+function normaliseDoneItems(doneItems) {
+  return doneItems.map(normaliseDoneItem);
+}
+
+/**
+ * @param {{doneThing: string, date: string}} doneItem
+ */
+function add(doneItem) {
+  _dones.push(normaliseDoneItem(doneItem));
+}
+
+/**
+ * @param {{doneThing: string, date: string}} doneItem
  */
 function update(doneItem) {
-  var found = _dones.filter(function (done) {
-        return done.date.toISOString() === doneItem.date;
-      });
+  doneItem = normaliseDoneItem(doneItem);
+  var found = _dones.filter((done) =>
+                  done.date.getTime() === doneItem.date.getTime());
   if (found && found.length > 0) {
     assign(found[0], doneItem);
   }
 }
 
 /**
- * Delete a DONE item.
+ * TODO: Make it able to revert. Consider the case of delete request failure
  * @param {string} id
  */
 function destroy(id) {
-  _dones = _dones.filter(function (done) {
-    return done.id !== id;
-  });
+  _dones = _dones.filter((done) => done.id !== id);
 }
 
 var DoneStore = assign({}, EventEmitter.prototype, {
@@ -67,13 +81,16 @@ var DoneStore = assign({}, EventEmitter.prototype, {
    * @return {object}
    */
   getAll: function () {
-    return _dones;
+    return _dones.sort(
+              (a, b) =>
+                  a.date < b.date ?  1 :
+                  a.date > b.date ? -1 : 0);
   },
 
   load: function () {
     var me = this;
-    load().then(function (response) {
-      _dones = response;
+    load().then((response) => {
+      _dones = normaliseDoneItems(response);
       me.emit(CHANGE_EVENT);
     }).catch(function (error) {
       console.error(error);
