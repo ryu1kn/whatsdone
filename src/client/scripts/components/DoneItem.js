@@ -1,6 +1,7 @@
 
 var React = require('react');
 var util = require('../util');
+var DoneAction = require('../actions/DoneAction');
 
 var converter = new Showdown.converter();
 
@@ -29,6 +30,15 @@ var DoneItem = React.createClass({
     return name ? util.getColorCode(name) : '#DDDDDD';
   },
 
+  /**
+   * @param {Event} e
+   */
+  delete: function (e) {
+    e.stopPropagation();
+    this.getDOMNode().setAttribute('style', 'display:none;');
+    DoneAction.destroy(this.props.doneId);
+  },
+
   render: function() {
     var rawMarkup = converter.makeHtml(this.props.children.toString());
     return (
@@ -47,6 +57,8 @@ var DoneItem = React.createClass({
             {this.formatTime(this.props.date)}
           </p>
         </div>
+        <div className="doneitem__delete-action glyphicon glyphicon-remove"
+             onClick={this.delete}></div>
       </div>
     );
   }

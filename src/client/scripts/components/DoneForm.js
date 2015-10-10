@@ -1,16 +1,19 @@
 
 var React = require('react');
+var DoneAction = require('../actions/DoneAction');
 
 var DoneForm = React.createClass({
+
   handleSubmit: function(e) {
     e.preventDefault();
     var doneThing = this.refs.doneThing.getDOMNode().value.trim();
     if (!doneThing) {
       return;
     }
-    this.props.onDoneItemSubmit({doneThing});
+    DoneAction.create(doneThing);
     this.refs.doneThing.getDOMNode().value = '';
   },
+
   render: function() {
     return (
       <form className="form-inline doneform" onSubmit={this.handleSubmit}>

@@ -1,68 +1,49 @@
 
+// XXX: Rename this to DoneApp. This component is a controller-view
+
 var $ = require('jquery');
 var _ = require('lodash');
 var React = require('react');
+var DoneStore = require('../stores/DoneStore');
 
 var DoneHistory = require('./DoneHistory');
 var DoneForm = require('./DoneForm');
 
+
+/**
+ * Retrieve the current DONE data from the DoneStore
+ */
+function getDoneStore() {
+  return {
+    // TODO: sort should be moved to DoneStore
+    data: DoneStore.getAll().sort(function (a, b) {
+      return a.date < b.date ?  1 :
+             a.date > b.date ? -1 : 0;
+    })
+  };
+}
+
 var DoneBox = React.createClass({
 
-  loadDoneItemsFromServer: function () {
-    $.ajax({
-      url: this.props.url,
-      dataType: 'json',
-      success: function(data) {
-        this.setState({data: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
+  getInitialState: function() {
+    DoneStore.load();
+    return getDoneStore();
   },
 
-  handleDoneItemSubmit: function (doneItem) {
-    doneItem.date = new Date();
-    var doneItems = this.state.data;
-    doneItems.push(doneItem);
-    this.setState({data: doneItems}, function () {
-      $.ajax({
-        url: this.props.url,
-        dataType: 'json',
-        type: 'POST',
-        data: this.getPostData(doneItem),
-        success: function(data) {
-          this.setState({data: data});
-        }.bind(this),
-        error: function(xhr, status, err) {
-          console.error(this.props.url, status, err.toString());
-        }.bind(this)
-      });
-    });
+  componentDidMount: function() {
+    DoneStore.addChangeListener(this._onChange);
   },
 
-  getInitialState: function () {
-    return {data: []};
+  componentWillUnmount: function() {
+    DoneStore.removeChangeListener(this._onChange);
   },
 
-  componentDidMount: function () {
-    this.loadDoneItemsFromServer();
+  _onChange: function() {
+    this.setState(getDoneStore());
   },
 
   /**
-   * @private
-   * @param {Object} done
-   * @return {Object}
-   */
-  getPostData: function (done) {
-    done = _.clone(done);
-    if (done.date instanceof Date) {
-      done.date = done.date.toISOString();
-    }
-    return done;
-  },
-
-  /**
+   * TODO: should be moved to DoneStore
    * @private
    * @param {Array.<Object>} dones list of done data
    * @return {Array.<Object>}
@@ -78,11 +59,12 @@ var DoneBox = React.createClass({
     return (
       <div className="donebox container">
         <h2 className="donebox-title page-header">What's Done?</h2>
-        <DoneForm onDoneItemSubmit={this.handleDoneItemSubmit} />
+        <DoneForm />
         <DoneHistory data={this.preprocessData(this.state.data)} />
       </div>
     );
   }
+
 });
 
 module.exports = DoneBox;
