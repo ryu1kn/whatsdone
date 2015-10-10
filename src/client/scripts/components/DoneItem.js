@@ -1,6 +1,7 @@
 
 var React = require('react');
 var util = require('../util');
+var DoneAction = require('../actions/DoneAction');
 
 var converter = new Showdown.converter();
 
@@ -30,10 +31,13 @@ var DoneItem = React.createClass({
     return name ? util.getColorCode(name) : '#DDDDDD';
   },
 
-  delete: function () {
+  /**
+   * @param {Event} e
+   */
+  delete: function (e) {
+    e.stopPropagation();
     this.getDOMNode().setAttribute('style', 'display:none;');
-    // TODO: fire event
-    console.log('Delete: ', this.props);
+    DoneAction.destroy(this.props.doneId);
   },
 
   render: function() {

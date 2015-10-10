@@ -13,16 +13,18 @@ function error500(reason, res) {
   res.send('500: Internal Server Error');
 }
 
-function setUserName(dones) {
-  return q.all(dones.map((done) =>
-    q(done.userId ? Users.getById(done.userId) : {name: null})
-      .then((user) => _.assign(done, {username: user.name}))
-  ));
+function setUserNames(dones) {
+  return q.all(dones.map((done) => setUserName(done)));
+}
+
+function setUserName(done) {
+  return q(done.userId ? Users.getById(done.userId) : {name: null})
+      .then((user) => _.assign(done, {username: user.name}));
 }
 
 router.get('/', function(req, res) {
   Dones.read()
-    .then((dones) => setUserName(dones))
+    .then((dones) => setUserNames(dones))
     .then((dones) => {
       res.setHeader('Content-Type', 'application/json');
       res.send(dones);
@@ -33,11 +35,20 @@ router.get('/', function(req, res) {
 
 router.post('/', function(req, res) {
   Dones.write(_.assign({}, req.body, {userId: req.session.userId}))
-    .then((dones) => setUserName(dones))
-    .then((dones) => {
+    .then((done) => setUserName(done))
+    .then((done) => {
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Cache-Control', 'no-cache');
-      res.send(JSON.stringify(dones));
+      res.send(JSON.stringify(done));
+    })
+    .catch((reason) => { error500(reason, res); })
+    .done();
+});
+
+router.delete('/', function(req, res) {
+  Dones.remove(req.query.id)
+    .then(() => {
+      res.end();
     })
     .catch((reason) => { error500(reason, res); })
     .done();

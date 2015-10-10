@@ -14,6 +14,10 @@ module.exports = {
                 .catch(() => false));
   },
 
+  /**
+   * @param {string} str
+   * @return {ObjectID}
+   */
   getId: (str) => new ObjectID(str),
 
   exec: (callback, scope) => {
