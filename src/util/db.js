@@ -2,17 +2,22 @@
 var q = require('q');
 var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
-var config = require('../config');
+
+var dbRef;
 
 module.exports = {
 
-  // Fail when it's failed to connect to the db
-  isAvailable: function () {
-    return this.exec((db) =>
-              q.ninvoke(db, 'stats')
-                .then((stats) => !!stats)
-                .catch(() => false));
-  },
+  /**
+   * @param {string} dbConnectUrl
+   * @return {q}
+   */
+  init: (dbConnectUrl) =>
+    q.nfcall(MongoClient.connect, dbConnectUrl)
+      .then((db) => {
+        dbRef = db;
+        return true;
+      })
+      .catch(() => false),
 
   /**
    * @param {string} str
@@ -20,18 +25,11 @@ module.exports = {
    */
   getId: (str) => new ObjectID(str),
 
-  exec: (callback, scope) => {
-    var dbRef;
-    return q.nfcall(MongoClient.connect, config.get('dbConnectUrl'))
-      .then((db) => {
-        // console.log('DB opened');
-        dbRef = db;
-        return callback.call(scope, db);  // should return a promise
-      })
-      .finally(() => {
-        // console.log('DB closing');
-        dbRef.close();
-      });
-  }
+  /**
+   * @param {Function} callback
+   * @param {Object} scope
+   * @return {*}
+   */
+  exec: (callback, scope) => callback.call(scope, dbRef)
 
 };

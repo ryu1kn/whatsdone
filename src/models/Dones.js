@@ -27,7 +27,7 @@ function putDone(db, newData) {
 }
 
 function deleteDone(db, id) {
-  return db.collection('dones').deleteOne({_id: dbUtil.getId(id)});
+  return q.ninvoke(db.collection('dones'), 'deleteOne', {_id: dbUtil.getId(id)});
 }
 
 

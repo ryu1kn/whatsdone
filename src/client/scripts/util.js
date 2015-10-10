@@ -5,12 +5,12 @@ function hashCode(str) { // java String#hashCode
        hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
     return hash;
-} 
+}
 
 function intToARGB(i){
-    return ((i>>24)&0xFF).toString(16) + 
-           ((i>>16)&0xFF).toString(16) + 
-           ((i>>8)&0xFF).toString(16) + 
+    return ((i>>24)&0xFF).toString(16) +
+           ((i>>16)&0xFF).toString(16) +
+           ((i>>8)&0xFF).toString(16) +
            (i&0xFF).toString(16);
 }
 

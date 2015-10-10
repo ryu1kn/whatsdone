@@ -43,7 +43,7 @@ function add(doneItem) {
  */
 function update(doneItem) {
   var found = _dones.filter(function (done) {
-        return done.date === doneItem.date;
+        return done.date.toISOString() === doneItem.date;
       });
   if (found && found.length > 0) {
     assign(found[0], doneItem);
