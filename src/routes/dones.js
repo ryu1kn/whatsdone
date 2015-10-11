@@ -6,10 +6,31 @@ var router = express.Router();
 var Dones = require('../models/Dones');
 var Users = require('../models/Users');
 
-function error500(reason, res) {
-  console.error(reason);
-  res.status(500);
-  res.send('500: Internal Server Error');
+function errorResponse(reason, res) {
+  // TODO: Instead of having a rule for error message format
+  //       to destinguish error types, define custom exception classes
+  var parsedInfo = reason.message.match(/^\[([^\]]+)]:(.*)/),
+      errorKind = parsedInfo[1],
+      logMessage = parsedInfo[2],
+      clientMessage;
+
+  switch (errorKind) {
+    case 'AccessDeined':
+      res.status(403);
+      clientMessage = '403: Forbidden';
+      break;
+
+    case 'NotFound':
+      res.status(404);
+      clientMessage = '404: Not Found';
+      break;
+
+    default:
+      res.status(500);
+      clientMessage = '500: Internal Server Error';
+  }
+  console.error(logMessage);
+  res.send(clientMessage);
 }
 
 function setUserName(done) {
@@ -37,7 +58,7 @@ router.get('/', function(req, res) {
       res.setHeader('Content-Type', 'application/json');
       res.send(dones);
     })
-    .catch((reason) => { error500(reason, res); })
+    .catch((reason) => { errorResponse(reason, res); })
     .done();
 });
 
@@ -49,16 +70,18 @@ router.post('/', function(req, res) {
       res.setHeader('Cache-Control', 'no-cache');
       res.send(JSON.stringify(done));
     })
-    .catch((reason) => { error500(reason, res); })
+    .catch((reason) => { errorResponse(reason, res); })
     .done();
 });
 
 router.delete('/', function(req, res) {
-  Dones.remove(req.query.id)
+  Dones.remove(req.query.id, req.session.userId)
     .then(() => {
       res.end();
     })
-    .catch((reason) => { error500(reason, res); })
+    .catch((reason) => {
+      errorResponse(reason, res);
+    })
     .done();
 });
 

@@ -26,8 +26,17 @@ function putDone(db, newData) {
   return q.ninvoke(db.collection('dones'), 'insert', newData);
 }
 
-function deleteDone(db, id) {
-  return q.ninvoke(db.collection('dones'), 'deleteOne', {_id: dbUtil.getId(id)});
+function deleteDone(db, id, currentUserId) {
+  return q.ninvoke(db.collection('dones'), 'findOne', {_id: dbUtil.getId(id)})
+    .then((found) => {
+      if (found === null) {
+        throw new Error('[NotFound]: Done item not found');
+      }
+      if (found.userId !== currentUserId) {
+        throw new Error('[AccessDeined]: You don\'t have the permission to delete this item.');
+      }
+      return q.ninvoke(db.collection('dones'), 'deleteOne', {_id: dbUtil.getId(id)});
+    });
 }
 
 
@@ -55,7 +64,9 @@ module.exports = {
 
   /**
    * @param {string} id
+   * @param {string} currentUserId
    */
-  remove: (id) => dbUtil.exec((db) => deleteDone(db, id))
+  remove: (id, currentUserId) =>
+      dbUtil.exec((db) => deleteDone(db, id, currentUserId))
 
 };
