@@ -6,8 +6,8 @@ var _ = require('lodash');
 var React = require('react');
 var DoneStore = require('../stores/DoneStore');
 
-var DoneHistory = require('./DoneHistory');
-var DoneForm = require('./DoneForm');
+var DoneHistory = require('./DoneHistory.react');
+var DoneForm = require('./DoneForm.react');
 
 
 /**

@@ -2,7 +2,7 @@
 var _ = require('lodash');
 var React = require('react');
 
-var DoneItem = require('./DoneItem');
+var DoneItem = require('./DoneItem.react');
 
 var DoneList = React.createClass({
   render: function() {

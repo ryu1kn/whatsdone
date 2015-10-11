@@ -2,7 +2,7 @@
 var _ = require('lodash');
 var React = require('react');
 
-var DoneList = require('./DoneList');
+var DoneList = require('./DoneList.react');
 
 var DoneHistory = React.createClass({
 
