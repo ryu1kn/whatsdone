@@ -35,14 +35,14 @@ function errorResponse(reason, res) {
 
 function setUserName(done) {
   return q(done.userId ? Users.getById(done.userId) : {name: null})
-      .then((user) => _.assign(done, {username: user.name}));
+      .then(user => _.assign(done, {username: user.name}));
 }
 
 function setUserNames(dones) {
   return Users.getByIds(_.pluck(dones, 'userId'))
-    .then((users) => {
+    .then(users => {
       var nameMap = _.indexBy(users, '_id');
-      return dones.map((done) => {
+      return dones.map(done => {
         if (done.userId) {
           done.username = nameMap[done.userId].name;
         }
@@ -51,38 +51,51 @@ function setUserNames(dones) {
     });
 }
 
-router.get('/', function(req, res) {
-  Dones.read()
-    .then((dones) => setUserNames(dones))
-    .then((dones) => {
-      res.setHeader('Content-Type', 'application/json');
-      res.send(dones);
-    })
-    .catch((reason) => { errorResponse(reason, res); })
-    .done();
-});
+router.route('/')
+  .get((req, res) => {
+    Dones.read()
+      .then(dones => setUserNames(dones))
+      .then(dones => {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(dones);
+      })
+      .catch(reason => { errorResponse(reason, res); })
+      .done();
+  })
+  .post((req, res) => {
+    Dones.write(_.assign({}, req.body, {userId: req.session.userId}))
+      .then(done => setUserName(done))
+      .then(done => {
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Cache-Control', 'no-cache');
+        res.send(JSON.stringify(done));
+      })
+      .catch(reason => { errorResponse(reason, res); })
+      .done();
+  });
 
-router.post('/', function(req, res) {
-  Dones.write(_.assign({}, req.body, {userId: req.session.userId}))
-    .then((done) => setUserName(done))
-    .then((done) => {
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Cache-Control', 'no-cache');
-      res.send(JSON.stringify(done));
-    })
-    .catch((reason) => { errorResponse(reason, res); })
-    .done();
-});
-
-router.delete('/:id', function(req, res) {
-  Dones.remove(req.params.id, req.session.userId)
-    .then(() => {
-      res.end();
-    })
-    .catch((reason) => {
-      errorResponse(reason, res);
-    })
-    .done();
-});
+router.route('/:id')
+  .delete((req, res) => {
+    Dones.remove(req.params.id, req.session.userId)
+      .then(() => {
+        res.end();
+      })
+      .catch((reason) => {
+        errorResponse(reason, res);
+      })
+      .done();
+  })
+  .put((req, res) => {
+    Dones.update(req.params.id, req.session.userId, req.body)
+      .then(done => {
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Cache-Control', 'no-cache');
+        res.send(JSON.stringify(done.getAsPlainObject()));
+      })
+      .catch(reason => {
+        errorResponse(reason, res);
+      })
+      .done();
+  });
 
 module.exports = router;
