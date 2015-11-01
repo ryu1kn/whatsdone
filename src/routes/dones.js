@@ -74,8 +74,8 @@ router.post('/', function(req, res) {
     .done();
 });
 
-router.delete('/', function(req, res) {
-  Dones.remove(req.query.id, req.session.userId)
+router.delete('/:id', function(req, res) {
+  Dones.remove(req.params.id, req.session.userId)
     .then(() => {
       res.end();
     })

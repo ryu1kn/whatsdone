@@ -26,12 +26,7 @@ function postDone(doneItem) {
  */
 function deleteDone(doneId) {
   var deferred = q.defer();
-  request.del({
-      uri: window.location.origin + '/dones.json',
-      qs : {
-        id: doneId
-      }
-    })
+  request.del(`${window.location.origin}/dones.json/${doneId}`)
     .on('error', function (error) {
       deferred.reject(error);
     })
