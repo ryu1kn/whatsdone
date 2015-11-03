@@ -1,50 +1,24 @@
 
-var _ = require('lodash');
-
-var q = require('q');
+var Collection = new (require('./Collection'))('users');
 var sha1 = require('sha1');
-
-var dbUtil = require('../util/db');
-
-/**
- * @param {} db
- * @param {Object} query
- */
-function findUser(db, query) {
-  return q.ninvoke(db.collection('users'), 'findOne', query)
-    .catch(() => null);
-}
 
 module.exports = {
 
-  findUser: (loginInfo) =>
-      dbUtil.exec((db) => findUser(db, {
-        email   : loginInfo.email,
-        password: sha1(loginInfo.password)
-      })),
+  findUser: loginInfo => Collection.getByQuery({
+      email   : loginInfo.email,
+      password: sha1(loginInfo.password)
+    }),
 
   /**
    * @param {string} id
    * @return {q}
    */
-  getById: (id) =>
-    dbUtil.exec((db) =>
-      findUser(db, {
-        _id: dbUtil.getId(id)
-      })),
+  getById: id => Collection.getById(id),
 
   /**
-   * @param {Array.<string>} ids
+   * @param {Array<string>} ids
    * @return {q}
    */
-  getByIds: (ids) =>
-    dbUtil.exec((db) =>
-      q.ninvoke(db.collection('users').find({
-        _id: {
-          $in: _.compact(_.uniq(ids))
-                .map((id) => dbUtil.getId(id))
-        }
-      }), 'toArray'))
-      .catch(() => [])
+  getByIds: ids => Collection.getByIds(ids)
 
 };
