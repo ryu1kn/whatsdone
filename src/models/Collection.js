@@ -88,26 +88,32 @@ Database.prototype = {
   },
 
   getById: function (id) {
+    console.log('in Database.prototype.getAll, this._collectionName =', this._collectionName);
     return dbUtil.exec(db => getItemById(db, id, this._collectionName));
   },
 
   getByIds: function (ids) {
+    console.log('in Database.prototype.getAll, this._collectionName =', this._collectionName);
     return dbUtil.exec(db => getItemsByIds(db, ids, this._collectionName));
   },
 
   getByQuery: function (query) {
+    console.log('in Database.prototype.getAll, this._collectionName =', this._collectionName);
     return dbUtil.exec(db => getItemByQuery(db, query, this._collectionName));
   },
 
   put: function (newData) {
+    console.log('in Database.prototype.getAll, this._collectionName =', this._collectionName);
     return dbUtil.exec(db => putItem(db, this._collectionName, newData));
   },
 
   delete: function (id) {
+    console.log('in Database.prototype.getAll, this._collectionName =', this._collectionName);
     return dbUtil.exec(db => deleteItem(db, this._collectionName, id));
   },
 
   update: function (id, newData) {
+    console.log('in Database.prototype.getAll, this._collectionName =', this._collectionName);
     return dbUtil.exec(db => updateItem(db, this._collectionName, id, newData));
   }
 
