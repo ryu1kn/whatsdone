@@ -15,6 +15,7 @@ function swapIdField(item) {
 }
 
 function getAll(db, collection) {
+  console.log('in Collection.js getAll, collection =', collection);
   return q.ninvoke(db.collection(collection).find(), 'toArray')
     .then(items => items.map(item => swapIdField(item)))
     .catch(() => '[]');
@@ -82,6 +83,7 @@ function Database(collectionName) {
 Database.prototype = {
 
   getAll: function () {
+    console.log('in Database.prototype.getAll, this._collectionName =', this._collectionName);
     return dbUtil.exec(db => getAll(db, this._collectionName));
   },
 
