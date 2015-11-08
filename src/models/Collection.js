@@ -76,6 +76,7 @@ function updateItem(db, collection, id, newData) {
  */
 function Database(collectionName) {
   this._collectionName = collectionName;
+  console.info('Collection `%s` is ready', this._collectionName);
 }
 
 Database.prototype = {

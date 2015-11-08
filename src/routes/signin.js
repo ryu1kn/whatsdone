@@ -9,7 +9,7 @@ router.get('/', function (req, res) {
   });
 });
 
-router.post('/', function (req, res) {
+router.post('/', function (req, res, next) {
   Users.findUser(req.body)
     .then((user) => {
       if (user) {
@@ -21,6 +21,7 @@ router.post('/', function (req, res) {
         res.render('signin');
       }
     })
+    .catch(reason => { next(reason); })
     .done();
 });
 
