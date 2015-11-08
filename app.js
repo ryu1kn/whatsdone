@@ -71,29 +71,37 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// error handlers
+// error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  // TODO: Instead of having a rule for error message format
+  //       to destinguish error types, define custom exception classes
+  var parsedInfo = err.message.match(/^\[([^\]]+)]:.*/);
+  var errorKind = parsedInfo && parsedInfo[1];
+  var clientMessage;
+
+  switch (errorKind) {
+  case 'AccessDeined':
+    res.status(403);
+    clientMessage = '403: Forbidden';
+    break;
+
+  case 'NotFound':
+    res.status(404);
+    clientMessage = '404: Not Found';
+    break;
+
+  default:
     res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
-}
+    clientMessage = '500: Internal Server Error';
+  }
 
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
   res.render('error', {
-    message: err.message,
-    error: {}
+    message: clientMessage,
+    // Print stacktraces only on development
+    error: app.get('env') === 'development' ? err : {}
   });
 });
-
 
 module.exports = app;
