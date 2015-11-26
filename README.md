@@ -1,4 +1,6 @@
 
+[![Code Climate](https://codeclimate.com/github/ryu1kn/whatsdone/badges/gpa.svg)](https://codeclimate.com/github/ryu1kn/whatsdone)
+
 What's this
 ===========
 
