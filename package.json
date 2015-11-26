@@ -2,7 +2,7 @@
   "name": "whatsdone",
   "version": "0.0.0",
   "private": true,
-  "description": "Code from the React tutorial.",
+  "description": "Take a memo of what you've done today",
   "keywords": [
     "react"
   ],
