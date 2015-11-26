@@ -1,4 +1,4 @@
-
+/*global Showdown*/
 var React = require('react');
 var util = require('../util');
 var DoneAction = require('../actions/DoneAction');

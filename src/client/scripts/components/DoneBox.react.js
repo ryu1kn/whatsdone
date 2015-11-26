@@ -1,8 +1,6 @@
 
 // XXX: Rename this to DoneApp. This component is a controller-view
 
-var $ = require('jquery');
-var _ = require('lodash');
 var React = require('react');
 var DoneStore = require('../stores/DoneStore');
 

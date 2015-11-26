@@ -1,5 +1,4 @@
 
-var _ = require('lodash');
 var React = require('react');
 
 var DoneItem = require('./DoneItem.react');

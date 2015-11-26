@@ -63,7 +63,7 @@ var DoneAction = {
         item: updatedItem
       });
     }).catch(function (reason) {
-      console.error(reason);
+      console.error(reason);  // eslint-disable-line no-console
     });
   },
 
