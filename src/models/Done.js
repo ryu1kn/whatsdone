@@ -9,7 +9,7 @@ class Done {
    * @return {Object}
    */
   static getModifiable(done) {
-    return done => _.pick(done, Done._MODIFIABLE_FIELDS);
+    return _.pick(done, this.prototype.constructor._MODIFIABLE_FIELDS);
   }
 
   /**
