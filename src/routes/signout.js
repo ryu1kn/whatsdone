@@ -1,5 +1,7 @@
-var express = require('express');
-var router = express.Router();
+'use strict';
+
+let express = require('express');
+let router = express.Router();
 
 function signout(req, res) {
   delete req.session.isAuthorized;

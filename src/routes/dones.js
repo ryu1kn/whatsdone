@@ -1,10 +1,12 @@
-var _ = require('lodash');
-var q = require('q');
-var express = require('express');
-var router = express.Router();
+'use strict';
 
-var Dones = require('../models/Dones');
-var Users = require('../models/Users');
+let _ = require('lodash');
+let q = require('q');
+let express = require('express');
+let router = express.Router();
+
+let Dones = require('../models/Dones');
+let Users = require('../models/Users');
 
 function setUserName(done) {
   return q(done.userId ? Users.getById(done.userId) : {name: null})
@@ -14,7 +16,7 @@ function setUserName(done) {
 function setUserNames(dones) {
   return Users.getByIds(_.pluck(dones, 'userId'))
     .then(users => {
-      var nameMap = _.indexBy(users, '_id');
+      let nameMap = _.indexBy(users, '_id');
       return dones.map(done => {
         if (done.userId) {
           done.username = nameMap[done.userId].name;

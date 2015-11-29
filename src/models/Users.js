@@ -1,24 +1,33 @@
+'use strict';
 
-var Collection = new (require('./Collection'))('users');
-var sha1 = require('sha1');
+let Collection = new (require('./Collection'))('users');
+let sha1 = require('sha1');
 
-module.exports = {
+class Users {
 
-  findUser: loginInfo => Collection.getByQuery({
-      email   : loginInfo.email,
+  findUser(loginInfo) {
+    return Collection.getByQuery({
+      email: loginInfo.email,
       password: sha1(loginInfo.password)
-    }),
+    });
+  }
 
   /**
    * @param {string} id
    * @return {q}
    */
-  getById: id => Collection.getById(id),
+  getById(id) {
+    return Collection.getById(id);
+  }
 
   /**
    * @param {Array<string>} ids
    * @return {q}
    */
-  getByIds: ids => Collection.getByIds(ids)
+  getByIds(ids) {
+    return Collection.getByIds(ids);
+  }
 
-};
+}
+
+module.exports = new Users();

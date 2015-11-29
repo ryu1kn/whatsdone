@@ -1,35 +1,41 @@
+'use strict';
 
-var q = require('q');
-var MongoClient = require('mongodb').MongoClient;
-var ObjectID = require('mongodb').ObjectID;
+let q = require('q');
+let MongoClient = require('mongodb').MongoClient;
+let ObjectID = require('mongodb').ObjectID;
 
-var dbRef;
-
-module.exports = {
+class DbUtil {
 
   /**
    * @param {string} dbConnectUrl
    * @return {q}
    */
-  init: (dbConnectUrl) =>
-    q.nfcall(MongoClient.connect, dbConnectUrl)
+  init(dbConnectUrl) {
+    return q.nfcall(MongoClient.connect, dbConnectUrl)
       .then((db) => {
-        dbRef = db;
+        this._dbRef = db;
         return true;
       })
-      .catch(() => false),
+      .catch(() => false);
+  }
 
   /**
    * @param {string} str
    * @return {ObjectID}
    */
-  getId: (str) => new ObjectID(str),
+  getId(str) {
+    return new ObjectID(str);
+  }
 
   /**
    * @param {Function} callback
    * @param {Object} scope
    * @return {*}
    */
-  exec: (callback, scope) => callback.call(scope, dbRef)
+  exec(callback, scope) {
+    return callback.call(scope, this._dbRef);
+  }
 
-};
+}
+
+module.exports = new DbUtil();

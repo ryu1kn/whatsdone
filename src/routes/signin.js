@@ -1,7 +1,9 @@
-var express = require('express');
-var router = express.Router();
+'use strict';
 
-var Users = require('../models/Users');
+let express = require('express');
+let router = express.Router();
+
+let Users = require('../models/Users');
 
 router.get('/', function (req, res) {
   res.render('signin', {
