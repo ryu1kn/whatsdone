@@ -111,6 +111,7 @@ rules:
   - 1
   - vars: all
     args: after-used
+    argsIgnorePattern: '^_'
   no-use-before-define: 0
   no-useless-call: 0
   no-void: 0

@@ -72,7 +72,7 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
   console.error(err.stack);
 
   // TODO: Instead of having a rule for error message format
