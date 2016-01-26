@@ -16,10 +16,10 @@ function setUserName(done) {
 function setUserNames(dones) {
   return Users.getByIds(_.pluck(dones, 'userId'))
     .then(users => {
-      let nameMap = _.indexBy(users, '_id');
+      let nameMap = _.indexBy(users, 'id');
       return dones.map(done => {
         if (done.userId) {
-          done.username = nameMap[done.userId].name;
+          done.username = _.get(nameMap, `${done.userId}.name`);
         }
         return done;
       });

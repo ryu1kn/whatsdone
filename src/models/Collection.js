@@ -1,87 +1,106 @@
 'use strict';
 
 let _ = require('lodash');
+let context = require('../service/context');
 let q = require('q');
-let dbUtil = require('../util/db');
-
-const ID_FIELD = 'id';
+var Uuid = require('uuid');
 
 class Database {
 
   constructor(collectionName) {
+    var docClient = context.getDynamoDBDocumentClient();
+    this._getItem = q.nbind(docClient.get, docClient);
+    this._batchGetItems = q.nbind(docClient.batchGet, docClient);
+    this._scanItems = q.nbind(docClient.scan, docClient);
+    this._putItem = q.nbind(docClient.put, docClient);
+    this._deleteItem = q.nbind(docClient.delete, docClient);
+    this._updateItems = q.nbind(docClient.update, docClient);
     this._collectionName = collectionName;
     console.info('Collection `%s` is ready', this._collectionName);
   }
 
   getAll() {
-    return dbUtil.exec(db =>
-      q.ninvoke(db.collection(this._collectionName).find(), 'toArray')
-        .then(items => items.map(item => this._swapIdField(item)))
-        .catch(() => '[]'));   // XXX: Why string?
+    return this._scanItems({
+      TableName : this._collectionName
+    })
+    .then(response => response.Items);
   }
 
   getById(id) {
-    return dbUtil.exec(db =>
-      this._getItemByQuery(db, {_id: dbUtil.getId(id)}, this._collectionName)
-        .then(item => item ? this._swapIdField(item) : null));
+    return this._getItem({
+      TableName: this._collectionName,
+      Key: {id}
+    })
+    .then(response => response.Item);
   }
 
   getByIds(ids) {
-    return dbUtil.exec(db =>
-      q.ninvoke(db.collection(this._collectionName).find({
-        _id: {
-          $in: _.compact(_.uniq(ids))
-                .map((id) => dbUtil.getId(id))
-        }
-      }), 'toArray')
-      .catch(() => []));
+    let params = _.set({},
+                       `RequestItems.${this._collectionName}.Keys`,
+                       _.uniq(ids).map(id => ({id})));
+    return this._batchGetItems(params)
+      .then(response => response.Responses[this._collectionName]);
   }
 
+  // @deprecated
   getByQuery(query) {
-    return dbUtil.exec(db => this._getItemByQuery(db, query, this._collectionName));
+    return this._scanItems(_.assign(this._composeScanQuery(query), {
+      TableName: this._collectionName
+    }))
+    .then(result => _.get(result, 'Items[0]'));
   }
 
   put(newData) {
-    return dbUtil.exec(db =>
-      q.ninvoke(db.collection(this._collectionName), 'insert', newData)
-        .then(result => {
-          if (result.result.ok === 1) {
-            return result.insertedIds[0];
-          } else {
-            throw new Error('Failed to save the given data');
-          }
-        }));
+    let id = this._generateId();
+    return this._putItem({
+      TableName: this._collectionName,
+      Item: _.assign({}, newData, {id})
+    })
+    .then(() => id);
   }
 
   delete(id) {
-    return dbUtil.exec(db =>
-      q.ninvoke(db.collection(this._collectionName), 'deleteOne', {
-        _id: dbUtil.getId(id)
-      }));
+    return this._deleteItem({
+      TableName: this._collectionName,
+      Key: {id}
+    });
   }
 
   update(id, newData) {
-    return dbUtil.exec(db =>
-      q.ninvoke(db.collection(this._collectionName), 'findOneAndUpdate', {
-        _id: dbUtil.getId(id)
-      }, {
-        $set: newData
-      })
-      .then(result => result.value));
+    return this._updateItems({
+      TableName: this._collectionName,
+      Key: {id},
+      AttributeUpdates: this._getAttributeUpdatesValues(newData)
+    })
+    .then(() => this.getById(id));
   }
 
-  _swapIdField(item) {
-    if (!item._id) {
-      return item;
-    }
-    item[ID_FIELD] = item._id;
-    delete item._id;
-    return item;
+  _generateId() {
+    return Uuid.v4();
   }
 
-  _getItemByQuery(db, query, collection) {
-    return q.ninvoke(db.collection(collection), 'findOne', query)
-      .catch(() => null);
+  _getAttributeUpdatesValues(newData) {
+    return Object.keys(newData).reduce((result, key) => {
+      result[key] = {
+        Action: 'PUT',
+        Value: newData[key]
+      }
+      return result;
+    }, {});
+  }
+
+  _composeScanQuery(matchCondition) {
+    let filterExpressions = [];
+    let expressionAttributeValues = {};
+
+    Object.keys(matchCondition).forEach((key) => {
+      filterExpressions.push(`${key} = :${key}`);
+      expressionAttributeValues[`:${key}`] = matchCondition[key];
+    });
+    return {
+      FilterExpression: filterExpressions.join(' AND '),
+      ExpressionAttributeValues: expressionAttributeValues
+    };
   }
 
 }

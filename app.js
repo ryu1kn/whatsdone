@@ -1,30 +1,19 @@
 var express = require('express');
 var session = require('express-session');
-var MongoStore = require('connect-mongo')(session);
+var DynamoDBStore = require('connect-dynamodb')({session});
 var path = require('path');
 // var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var context = require('./src/service/context');
 
 var app = express();
+context.setEnv(process.env);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'src', 'views'));
 app.set('view engine', 'jade');
-
-var dbConnectUrl =
-      (process.env.DB_URI_KEY && process.env[process.env.DB_URI_KEY]) ||
-      'mongodb://localhost:27017/whatsdone';
-
-var dbUtil = require('./src/util/db');
-dbUtil.init(dbConnectUrl)
-.then((success) => {
-  if (!success) {
-    console.error('Cannot connect to the DB. Server doesn\'t start up.');
-    process.exit(1);
-  }
-});
 
 // TODO: uncomment after placing a favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -37,9 +26,9 @@ app.use(session({
   secret: 'keyboard cat',
   saveUninitialized: false,   // don't create session until something stored
   resave: false,              // don't save session if unmodified
-  store: new MongoStore({
-    url: dbConnectUrl,
-    touchAfter: 24 * 3600     // time period in seconds
+  store: new DynamoDBStore({
+    table: 'whatsdone-sessions',
+    client: context.getDynamoDB()
   })
 }));
 

@@ -52,7 +52,7 @@ class Dones {
           throw new Error('[AccessDeined]: You don\'t have the permission to modify this item.');
         }
         return Collection.update(id, Done.getModifiable(newData))
-          .then(item => new Done(item._id, item.userId, item.doneThing, item.date));
+          .then(item => new Done(item.id, item.userId, item.doneThing, item.date));
       });
   }
 

@@ -16,7 +16,7 @@ router.post('/', function (req, res, next) {
     .then((user) => {
       if (user) {
         req.session.isAuthorized = true;
-        req.session.userId = user._id;
+        req.session.userId = user.id;
         res.redirect('/');
       } else {
         res.status(401);
