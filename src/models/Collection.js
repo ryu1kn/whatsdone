@@ -21,14 +21,14 @@ class Database {
 
   getAll() {
     return this._scanItems({
-      TableName : this._collectionName
+      TableName : this._getTableName()
     })
     .then(response => response.Items);
   }
 
   getById(id) {
     return this._getItem({
-      TableName: this._collectionName,
+      TableName: this._getTableName(),
       Key: {id}
     })
     .then(response => response.Item);
@@ -36,16 +36,16 @@ class Database {
 
   getByIds(ids) {
     let params = _.set({},
-                       `RequestItems.${this._collectionName}.Keys`,
+                       `RequestItems.${this._getTableName()}.Keys`,
                        _.uniq(ids).map(id => ({id})));
     return this._batchGetItems(params)
-      .then(response => response.Responses[this._collectionName]);
+      .then(response => response.Responses[this._getTableName()]);
   }
 
   // @deprecated
   getByQuery(query) {
     return this._scanItems(_.assign(this._composeScanQuery(query), {
-      TableName: this._collectionName
+      TableName: this._getTableName()
     }))
     .then(result => _.get(result, 'Items[0]'));
   }
@@ -53,7 +53,7 @@ class Database {
   put(newData) {
     let id = this._generateId();
     return this._putItem({
-      TableName: this._collectionName,
+      TableName: this._getTableName(),
       Item: _.assign({}, newData, {id})
     })
     .then(() => id);
@@ -61,14 +61,14 @@ class Database {
 
   delete(id) {
     return this._deleteItem({
-      TableName: this._collectionName,
+      TableName: this._getTableName(),
       Key: {id}
     });
   }
 
   update(id, newData) {
     return this._updateItems({
-      TableName: this._collectionName,
+      TableName: this._getTableName(),
       Key: {id},
       AttributeUpdates: this._getAttributeUpdatesValues(newData)
     })
@@ -77,6 +77,10 @@ class Database {
 
   _generateId() {
     return Uuid.v4();
+  }
+
+  _getTableName() {
+    return 'whatsdone-' + this._collectionName;
   }
 
   _getAttributeUpdatesValues(newData) {
