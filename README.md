@@ -4,10 +4,7 @@
 What's this
 ===========
 
-Just playing with React.
-
 You can take memos what you've done today with the app.
-
 
 How to Use
 ===========
