@@ -4,7 +4,11 @@
 What's this
 ===========
 
-You can take memos what you've done today with the app.
+Take memos of what you have done today.
+
+- server: heroku
+- backend: Node.js
+- frontend: React
 
 How to Use
 ===========
