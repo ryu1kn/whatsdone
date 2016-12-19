@@ -1,8 +1,7 @@
 
 [![Code Climate](https://codeclimate.com/github/ryu1kn/whatsdone/badges/gpa.svg)](https://codeclimate.com/github/ryu1kn/whatsdone)
 
-What's this
-===========
+# What's Done
 
 Take memos of what you have done today.
 
@@ -10,8 +9,9 @@ Take memos of what you have done today.
 - backend: Node.js
 - frontend: React
 
-How to Use
-===========
+## Notes
+
+### How to use locally
 
 ```sh
 $ npm install
@@ -19,3 +19,7 @@ $ npm start
 ```
 
 Access to `http://localhost:3000` with your web browser.
+
+### Deploy to Heroku
+
+* Just do `git push heroku master`
