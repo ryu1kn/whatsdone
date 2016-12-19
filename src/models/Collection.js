@@ -35,9 +35,14 @@ class Database {
   }
 
   getByIds(ids) {
-    let params = _.set({},
-                       `RequestItems.${this._getTableName()}.Keys`,
-                       _.uniq(ids).map(id => ({id})));
+    const uniqIds = _.uniq(ids).filter(id => id);
+    const params = {
+      RequestItems: {
+        [this._getTableName()]: {
+          Keys: uniqIds.map(id => ({id}))
+        }
+      }
+    };
     return this._batchGetItems(params)
       .then(response => response.Responses[this._getTableName()]);
   }
@@ -54,7 +59,7 @@ class Database {
     let id = this._generateId();
     return this._putItem({
       TableName: this._getTableName(),
-      Item: _.assign({}, newData, {id})
+      Item: Object.assign({}, newData, {id})
     })
     .then(() => id);
   }
