@@ -1,5 +1,8 @@
 package whatsdone_cli;
 
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
@@ -51,12 +54,10 @@ public class DoneRepo {
     }
 
     private String convertToJson(ItemCollection<ScanOutcome> items) {
-        StringBuilder builder = new StringBuilder();
-        items.forEach(item -> {
-            builder.append(item.toJSON()).append(",");
-        });
-        if (builder.length() == 0) return "[]";
-        return "[" + builder.substring(0, builder.length() - 1) + "]";
+        String contents = StreamSupport.stream(items.spliterator(), false)
+                            .map(item -> item.toJSON())
+                            .collect(Collectors.joining(","));
+        return "[" + contents + "]";
     }
 
     String getAll() {
