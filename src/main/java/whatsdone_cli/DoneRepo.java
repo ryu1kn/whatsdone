@@ -7,8 +7,10 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.model.ScanRequest;
-import com.amazonaws.services.dynamodbv2.model.ScanResult;
+import com.amazonaws.services.dynamodbv2.document.ItemCollection;
+import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
+import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.api.ScanApi;
 
 public class DoneRepo {
 
@@ -30,9 +32,8 @@ public class DoneRepo {
 
         try {
             String tableName = "ryuichi-test-db";
-            ScanRequest scanRequest = new ScanRequest(tableName);
-            ScanResult scanResult = dynamoDB.scan(scanRequest);
-            System.out.println("Result: " + scanResult);
+            ScanApi scanApi = new Table(dynamoDB, tableName);
+            System.out.println(convertToJson(scanApi.scan()));
         } catch (AmazonServiceException ase) {
             System.out.println("Caught an AmazonServiceException, which means your request made it "
                     + "to AWS, but was rejected with an error response for some reason.");
@@ -47,6 +48,15 @@ public class DoneRepo {
                     + "such as not being able to access the network.");
             System.out.println("Error Message: " + ace.getMessage());
         }
+    }
+
+    private String convertToJson(ItemCollection<ScanOutcome> items) {
+        StringBuilder builder = new StringBuilder();
+        items.forEach(item -> {
+            builder.append(item.toJSON()).append(",");
+        });
+        if (builder.length() == 0) return "[]";
+        return "[" + builder.substring(0, builder.length() - 1) + "]";
     }
 
     String getAll() {
