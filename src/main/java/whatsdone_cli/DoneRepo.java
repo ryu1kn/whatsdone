@@ -1,33 +1,19 @@
 package whatsdone_cli;
 
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.document.ItemCollection;
-import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
-import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.api.ScanApi;
 
 public class DoneRepo {
 
-    private AmazonDynamoDBClient dynamoDB;
+    private final ScanApi scanApi;
+    private final ScanResultJsonFormatter formatter;
 
-    DoneRepo(AmazonDynamoDBClient dynamoDB) {
-        this.dynamoDB = dynamoDB;
+    DoneRepo(ScanApi scanApi, ScanResultJsonFormatter formatter) {
+        this.scanApi = scanApi;
+        this.formatter = formatter;
     }
 
     String getAll() {
-        String tableName = "ryuichi-test-db";
-        ScanApi scanApi = new Table(dynamoDB, tableName);
-        return convertToJson(scanApi.scan());
-    }
-
-    private String convertToJson(ItemCollection<ScanOutcome> items) {
-        String contents = StreamSupport.stream(items.spliterator(), false)
-                            .map(item -> item.toJSON())
-                            .collect(Collectors.joining(","));
-        return "[" + contents + "]";
+        return formatter.format(scanApi.scan());
     }
 
 }
