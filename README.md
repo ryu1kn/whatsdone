@@ -3,7 +3,7 @@
 
 # What's Done
 
-Take memos of what you have done today.
+Personal activity tracker. Take memos of what I (or we) have done today.
 
 - server: heroku
 - backend: Node.js
