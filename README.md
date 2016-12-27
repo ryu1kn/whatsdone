@@ -13,6 +13,8 @@ Take memos of what you have done today.
 
 ### How to use locally
 
+Set environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and `DB_REGION`) and execute commands:
+
 ```sh
 $ npm install
 $ npm start

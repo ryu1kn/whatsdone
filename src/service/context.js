@@ -1,10 +1,9 @@
 'use strict';
 
-let AWS = require('aws-sdk');
+const AWS = require('aws-sdk');
 
 // Singleton class.
-// TODO: Change it to non-singleton and inject to classes
-//       that need this
+// TODO: Change it to non-singleton
 class Context {
 
   setEnv(env) {
@@ -12,23 +11,13 @@ class Context {
   }
 
   getDynamoDB() {
-    let env = this._env;
-    this._dynamoDB = this._dynamoDB || new AWS.DynamoDB({
-      accessKeyId: env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
-      region: env.AWS_REGION
-    });
+    this._dynamoDB = this._dynamoDB || new AWS.DynamoDB({region: this._env.DB_REGION});
     return this._dynamoDB;
   }
 
   getDynamoDBDocumentClient() {
-    let env = this._env;
     this._documentClient = this._documentClient ||
-        new AWS.DynamoDB.DocumentClient({
-          accessKeyId: env.AWS_ACCESS_KEY_ID,
-          secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
-          region: env.AWS_REGION
-        });
+        new AWS.DynamoDB.DocumentClient({region: this._env.DB_REGION});
     return this._documentClient;
   }
 
