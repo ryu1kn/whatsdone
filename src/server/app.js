@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '..', '..', 'public')));
 app.use(session({
-  secret: 'keyboard cat',
+  secret: process.env.SESSION_SECRET,
   saveUninitialized: false,   // don't create session until something stored
   resave: false,              // don't save session if unmodified
   store: new DynamoDBStore({
