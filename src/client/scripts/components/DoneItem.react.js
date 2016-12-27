@@ -1,9 +1,10 @@
 /*global Showdown*/
-var React = require('react');
-var util = require('../util');
-var DoneAction = require('../actions/DoneAction');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const util = require('../util');
+const DoneAction = require('../actions/DoneAction');
 
-var converter = new Showdown.converter();
+const converter = new Showdown.converter();
 
 var DoneItem = React.createClass({
 
@@ -35,7 +36,7 @@ var DoneItem = React.createClass({
    */
   delete: function (e) {
     e.stopPropagation();
-    this.getDOMNode().setAttribute('style', 'display:none;');
+    ReactDOM.findDOMNode(this).setAttribute('style', 'display:none;');
     DoneAction.destroy(this.props.doneId);
   },
 

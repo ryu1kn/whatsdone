@@ -6,12 +6,12 @@ var DoneForm = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
-    var doneThing = this.refs.doneThing.getDOMNode().value.trim();
+    var doneThing = this.refs.doneThing.value.trim();
     if (!doneThing) {
       return;
     }
     DoneAction.create(doneThing);
-    this.refs.doneThing.getDOMNode().value = '';
+    this.refs.doneThing.value = '';
   },
 
   render: function() {
