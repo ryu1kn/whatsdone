@@ -4,8 +4,8 @@ var React = require('react');
 var DoneItem = require('./DoneItem.react');
 
 var DoneList = React.createClass({
-  render: function() {
-    var doneItemNodes = this.props.data.map(function(doneItem, index) {
+  render: function () {
+    var doneItemNodes = this.props.data.map(function (doneItem, index) {
       return (
         <DoneItem doneId={doneItem.id} date={doneItem.date}
             username={doneItem.username} key={index}>

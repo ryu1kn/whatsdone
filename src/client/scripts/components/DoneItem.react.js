@@ -1,17 +1,17 @@
-/*global Showdown*/
+/* global Showdown */
 const React = require('react');
 const ReactDOM = require('react-dom');
 const util = require('../util');
 const DoneAction = require('../actions/DoneAction');
 
-const converter = new Showdown.converter();
+const converter = new Showdown.converter(); // eslint-disable-line new-cap
 
 var DoneItem = React.createClass({
 
   formatTime: function (date) {
-    var hour = date.getHours(),
-        ampm = hour < 12 ? 'am' : 'pm',
-        mins = date.getMinutes();
+    let hour = date.getHours();
+    let mins = date.getMinutes();
+    const ampm = hour < 12 ? 'am' : 'pm';
 
     if (hour > 12) {
       hour -= 12;
@@ -40,7 +40,7 @@ var DoneItem = React.createClass({
     DoneAction.destroy(this.props.doneId);
   },
 
-  render: function() {
+  render: function () {
     var rawMarkup = converter.makeHtml(this.props.children.toString());
     return (
       <div className="doneitem">

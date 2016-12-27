@@ -21,7 +21,7 @@ class Database {
 
   getAll() {
     return this._scanItems({
-      TableName : this._getTableName()
+      TableName: this._getTableName()
     })
     .then(response => response.Items);
   }
@@ -93,7 +93,7 @@ class Database {
       result[key] = {
         Action: 'PUT',
         Value: newData[key]
-      }
+      };
       return result;
     }, {});
   }
@@ -102,7 +102,7 @@ class Database {
     let filterExpressions = [];
     let expressionAttributeValues = {};
 
-    Object.keys(matchCondition).forEach((key) => {
+    Object.keys(matchCondition).forEach(key => {
       filterExpressions.push(`${key} = :${key}`);
       expressionAttributeValues[`:${key}`] = matchCondition[key];
     });

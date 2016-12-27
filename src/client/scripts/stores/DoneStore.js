@@ -45,8 +45,7 @@ function add(doneItem) {
  */
 function update(doneItem) {
   doneItem = normaliseDoneItem(doneItem);
-  var found = _dones.filter((done) =>
-                  done.date.getTime() === doneItem.date.getTime());
+  var found = _dones.filter(done => done.date.getTime() === doneItem.date.getTime());
   if (found && found.length > 0) {
     Object.assign(found[0], doneItem);
   }
@@ -57,7 +56,7 @@ function update(doneItem) {
  * @param {string} id
  */
 function destroy(id) {
-  _dones = _dones.filter((done) => done.id !== id);
+  _dones = _dones.filter(done => done.id !== id);
 }
 
 var DoneStore = Object.assign({}, EventEmitter.prototype, {
@@ -69,13 +68,13 @@ var DoneStore = Object.assign({}, EventEmitter.prototype, {
   getAll: function () {
     return _dones.sort(
               (a, b) =>
-                  a.date < b.date ?  1 :
+                  a.date < b.date ? 1 :
                   a.date > b.date ? -1 : 0);
   },
 
   load: function () {
     var me = this;
-    load().then((response) => {
+    load().then(response => {
       _dones = normaliseDoneItems(response);
       me.emit(CHANGE_EVENT);
     }).catch(function (error) {
@@ -105,23 +104,23 @@ var DoneStore = Object.assign({}, EventEmitter.prototype, {
 // Register callback to handle all updates
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
-    case DoneConstant.DONE_CREATE:
-      add(action.item);
-      DoneStore.emitChange();
-      break;
+  case DoneConstant.DONE_CREATE:
+    add(action.item);
+    DoneStore.emitChange();
+    break;
 
-    case DoneConstant.DONE_CREATE_COMPLETE:
-      update(action.item);
-      DoneStore.emitChange();
-      break;
+  case DoneConstant.DONE_CREATE_COMPLETE:
+    update(action.item);
+    DoneStore.emitChange();
+    break;
 
-    case DoneConstant.DONE_DESTROY:
-      destroy(action.id);
-      DoneStore.emitChange();
-      break;
+  case DoneConstant.DONE_DESTROY:
+    destroy(action.id);
+    DoneStore.emitChange();
+    break;
 
-    default:
-      // no op
+  default:
+    // no op
   }
 });
 

@@ -13,8 +13,8 @@ var DoneHistory = React.createClass({
    * @return {string} "yyyy-mm-dd" (local time)
    */
   getLocalDateString: function (d) {
-    var month = d.getMonth() + 1,
-        date  = d.getDate();
+    let month = d.getMonth() + 1;
+    let date = d.getDate();
     month = month < 10 ? `0${month}` : month;
     date = date < 10 ? `0${date}` : date;
 
@@ -28,9 +28,9 @@ var DoneHistory = React.createClass({
   getDayLabel: function (date) {
     return date.toLocaleDateString('en-GB', {
       weekday: 'short',
-      year   : 'numeric',
-      month  : 'long',
-      day    : 'numeric'
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     });
   },
 
@@ -39,9 +39,9 @@ var DoneHistory = React.createClass({
    * @return {string}
    */
   getFriendlyDayLabel: function (dateString) {
-    var now = new Date(),
-        today = this.getLocalDateString(now),
-        yesterday = this.getLocalDateString(new Date(now - this.ONEDAY_MS));
+    const now = new Date();
+    const today = this.getLocalDateString(now);
+    const yesterday = this.getLocalDateString(new Date(now - this.ONEDAY_MS));
     switch (dateString) {
     case today:
       return 'Today';
@@ -53,11 +53,11 @@ var DoneHistory = React.createClass({
   },
 
   render: function () {
-    var grouped = _.groupBy(this.props.data, (entry) =>
+    var grouped = _.groupBy(this.props.data, entry =>
                       this.getLocalDateString(entry.date));
     return (
       <div className="donehistory">
-        {_.sortBy(_.toPairs(grouped), (pair) => pair[0]).reverse()
+        {_.sortBy(_.toPairs(grouped), pair => pair[0]).reverse()
             .map((data, index) =>
               <DoneList title={this.getFriendlyDayLabel(data[0])} data={data[1]} key={index} />
         )}

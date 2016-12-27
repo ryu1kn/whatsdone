@@ -1,7 +1,7 @@
 'use strict';
 
 let express = require('express');
-let router = express.Router();
+let router = express.Router();  // eslint-disable-line new-cap
 
 function signout(req, res) {
   delete req.session.isAuthorized;

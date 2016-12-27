@@ -7,7 +7,6 @@ var DoneStore = require('../stores/DoneStore');
 var DoneHistory = require('./DoneHistory.react');
 var DoneForm = require('./DoneForm.react');
 
-
 /**
  * Retrieve the current DONE data from the DoneStore
  */
@@ -19,20 +18,20 @@ function getDoneStore() {
 
 var DoneBox = React.createClass({
 
-  getInitialState: function() {
+  getInitialState: function () {
     DoneStore.load();
     return getDoneStore();
   },
 
-  componentDidMount: function() {
+  componentDidMount: function () {
     DoneStore.addChangeListener(this._onChange);
   },
 
-  componentWillUnmount: function() {
+  componentWillUnmount: function () {
     DoneStore.removeChangeListener(this._onChange);
   },
 
-  _onChange: function() {
+  _onChange: function () {
     this.setState(getDoneStore());
   },
 

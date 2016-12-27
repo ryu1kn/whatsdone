@@ -4,7 +4,7 @@ var DoneAction = require('../actions/DoneAction');
 
 var DoneForm = React.createClass({
 
-  handleSubmit: function(e) {
+  handleSubmit: function (e) {
     e.preventDefault();
     var doneThing = this.refs.doneThing.value.trim();
     if (!doneThing) {
@@ -14,7 +14,7 @@ var DoneForm = React.createClass({
     this.refs.doneThing.value = '';
   },
 
-  render: function() {
+  render: function () {
     return (
       <form className="form-inline doneform" onSubmit={this.handleSubmit}>
         <div className="form-group">

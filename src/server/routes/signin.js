@@ -1,7 +1,7 @@
 'use strict';
 
 let express = require('express');
-let router = express.Router();
+let router = express.Router();  // eslint-disable-line new-cap
 
 let Users = require('../models/Users');
 
@@ -13,7 +13,7 @@ router.get('/', function (req, res) {
 
 router.post('/', function (req, res, next) {
   Users.findUser(req.body)
-    .then((user) => {
+    .then(user => {
       if (user) {
         req.session.isAuthorized = true;
         req.session.userId = user.id;

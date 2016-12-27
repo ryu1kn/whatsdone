@@ -24,7 +24,7 @@ class Done {
     this._doneThing = doneThing;
     this._date = date;
   }
-  
+
   /**
   * @return {{id: string, doneThing: string, date: string, userId: string}}
   */

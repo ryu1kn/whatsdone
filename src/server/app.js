@@ -16,10 +16,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // TODO: uncomment after placing a favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+// app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '..', '..', 'public')));
 app.use(session({
@@ -39,12 +39,10 @@ app.all('*', function (req, res, next) {
     } else {
       next();
     }
+  } else if (req.session.isAuthorized) {
+    next();
   } else {
-    if (req.session.isAuthorized) {
-      next();
-    } else {
-      res.redirect('/signin');
-    }
+    res.redirect('/signin');
   }
 });
 
@@ -54,7 +52,7 @@ app.use('/signout', require('./routes/signout'));
 app.use('/dones.json', require('./routes/dones'));
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);

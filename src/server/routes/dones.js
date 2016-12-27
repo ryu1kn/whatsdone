@@ -3,7 +3,7 @@
 let _ = require('lodash');
 let q = require('q');
 let express = require('express');
-let router = express.Router();
+let router = express.Router();  // eslint-disable-line new-cap
 
 let Dones = require('../models/Dones');
 let Users = require('../models/Users');
