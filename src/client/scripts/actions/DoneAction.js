@@ -1,44 +1,26 @@
 
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var DoneConstant = require('../constants/DoneConstant');
-var request = require('request');
-var q = require('q');
+var request = require('request-promise');
 
 function postDone(doneItem) {
-  var deferred = q.defer();
-  request.post(window.location.origin + '/dones.json').form(doneItem)
-    .on('error', function (error) {
-      deferred.reject(error);
-    })
-    .on('response', function (response) {
-      if (response.statusCode !== 200) {
-        deferred.reject('status code is not 200');
-      }
-    })
-    .on('data', function (body) {
-      deferred.resolve(JSON.parse(body));
-    });
-  return deferred.promise;
+  const options = {
+    method: 'POST',
+    uri: `${window.location.origin}/dones.json`,
+    form: doneItem
+  };
+  return request(options).then(body => JSON.parse(body));
 }
 
 /**
  * @param {string} doneId
  */
 function deleteDone(doneId) {
-  var deferred = q.defer();
-  request.del(`${window.location.origin}/dones.json/${doneId}`)
-    .on('error', function (error) {
-      deferred.reject(error);
-    })
-    .on('response', function (response) {
-      if (response.statusCode !== 200) {
-        deferred.reject('status code is not 200');
-      }
-    })
-    .on('data', function (body) {
-      deferred.resolve(JSON.parse(body));
-    });
-  return deferred.promise;
+  const options = {
+    method: 'DELETE',
+    uri: `${window.location.origin}/dones.json/${doneId}`
+  };
+  return request(options).then(body => JSON.parse(body));
 }
 
 var DoneAction = {

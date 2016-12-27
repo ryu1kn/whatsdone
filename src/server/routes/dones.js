@@ -10,13 +10,13 @@ let Users = require('../models/Users');
 
 function setUserName(done) {
   return q(done.userId ? Users.getById(done.userId) : {name: null})
-      .then(user => _.assign(done, {username: user.name}));
+      .then(user => Object.assign(done, {username: user.name}));
 }
 
 function setUserNames(dones) {
-  return Users.getByIds(_.pluck(dones, 'userId'))
+  return Users.getByIds(_.map(dones, 'userId'))
     .then(users => {
-      let nameMap = _.indexBy(users, 'id');
+      let nameMap = _.keyBy(users, 'id');
       return dones.map(done => {
         if (done.userId) {
           done.username = _.get(nameMap, `${done.userId}.name`);
@@ -38,7 +38,7 @@ router.route('/')
       .done();
   })
   .post((req, res, next) => {
-    Dones.write(_.assign({}, req.body, {userId: req.session.userId}))
+    Dones.write(Object.assign({}, req.body, {userId: req.session.userId}))
       .then(done => setUserName(done))
       .then(done => {
         res.setHeader('Content-Type', 'application/json');

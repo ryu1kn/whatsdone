@@ -57,7 +57,7 @@ var DoneHistory = React.createClass({
                       this.getLocalDateString(entry.date));
     return (
       <div className="donehistory">
-        {_.sortBy(_.pairs(grouped), (pair) => pair[0]).reverse()
+        {_.sortBy(_.toPairs(grouped), (pair) => pair[0]).reverse()
             .map((data, index) =>
               <DoneList title={this.getFriendlyDayLabel(data[0])} data={data[1]} key={index} />
         )}

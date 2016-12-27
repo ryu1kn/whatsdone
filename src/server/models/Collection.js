@@ -49,7 +49,7 @@ class Database {
 
   // @deprecated
   getByQuery(query) {
-    return this._scanItems(_.assign(this._composeScanQuery(query), {
+    return this._scanItems(Object.assign(this._composeScanQuery(query), {
       TableName: this._getTableName()
     }))
     .then(result => _.get(result, 'Items[0]'));

@@ -2,9 +2,7 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var DoneConstant = require('../constants/DoneConstant');
-var assign = require('object-assign');
-var request = require('request');
-var q = require('q');
+var request = require('request-promise');
 
 var CHANGE_EVENT = 'change';
 
@@ -12,20 +10,8 @@ var CHANGE_EVENT = 'change';
 var _dones = [];
 
 function load() {
-  var deferred = q.defer();
-  request.get(window.location.origin + '/dones.json')
-    .on('error', function (error) {
-      deferred.reject(error);
-    })
-    .on('response', function (response) {
-      if (response.statusCode !== 200) {
-        deferred.reject('status code is not 200');
-      }
-    })
-    .on('data', function (body) {
-      deferred.resolve(JSON.parse(body));
-    });
-  return deferred.promise;
+  return request.get(`${window.location.origin}/dones.json`)
+    .then(body => JSON.parse(body));
 }
 
 // TODO: Instead of defining normalise functions,
@@ -36,7 +22,7 @@ function load() {
  * @return {{doneThing: string, date: Date}}
  */
 function normaliseDoneItem(doneItem) {
-  return assign({}, doneItem, {date: new Date(doneItem.date)});
+  return Object.assign({}, doneItem, {date: new Date(doneItem.date)});
 }
 
 /**
@@ -62,7 +48,7 @@ function update(doneItem) {
   var found = _dones.filter((done) =>
                   done.date.getTime() === doneItem.date.getTime());
   if (found && found.length > 0) {
-    assign(found[0], doneItem);
+    Object.assign(found[0], doneItem);
   }
 }
 
@@ -74,7 +60,7 @@ function destroy(id) {
   _dones = _dones.filter((done) => done.id !== id);
 }
 
-var DoneStore = assign({}, EventEmitter.prototype, {
+var DoneStore = Object.assign({}, EventEmitter.prototype, {
 
   /**
    * Get the entire collection of DONEs.
