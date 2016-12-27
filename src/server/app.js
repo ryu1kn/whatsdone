@@ -13,7 +13,7 @@ context.setEnv(process.env);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 // TODO: uncomment after placing a favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
