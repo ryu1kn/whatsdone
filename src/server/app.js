@@ -46,10 +46,10 @@ app.all('*', function (req, res, next) {
   }
 });
 
-app.use('/', require('./routes/index'));
-app.use('/signin', require('./routes/signin'));
-app.use('/signout', require('./routes/signout'));
-app.use('/dones.json', require('./routes/dones'));
+app.use('/', require('./routes/Index'));
+app.use('/signin', require('./routes/Signin'));
+app.use('/signout', require('./routes/Signout'));
+app.use('/dones.json', require('./routes/Dones'));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
