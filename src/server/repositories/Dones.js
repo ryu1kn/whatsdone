@@ -1,7 +1,7 @@
 'use strict';
 
 let Collection = new (require('./Collection'))('dones');
-let Done = require('./Done');
+let Done = require('../Done');
 
 class Dones {
 

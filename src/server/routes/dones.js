@@ -5,8 +5,8 @@ let q = require('q');
 let express = require('express');
 let router = express.Router();  // eslint-disable-line new-cap
 
-let Dones = require('../models/Dones');
-let Users = require('../models/Users');
+let Dones = require('../repositories/Dones');
+let Users = require('../repositories/Users');
 
 function setUserName(done) {
   return q(done.userId ? Users.getById(done.userId) : {name: null})

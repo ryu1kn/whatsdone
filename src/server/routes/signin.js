@@ -3,7 +3,7 @@
 let express = require('express');
 let router = express.Router();  // eslint-disable-line new-cap
 
-let Users = require('../models/Users');
+let Users = require('../repositories/Users');
 
 router.get('/', function (req, res) {
   res.render('signin', {
