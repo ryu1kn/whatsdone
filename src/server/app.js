@@ -6,10 +6,10 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var context = require('./service/context');
+var Context = require('./Context');
 
 var app = express();
-context.setEnv(process.env);
+Context.setEnv(process.env);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,7 +28,7 @@ app.use(session({
   resave: false,              // don't save session if unmodified
   store: new DynamoDBStore({
     table: 'whatsdone-sessions',
-    client: context.getDynamoDB()
+    client: Context.getDynamoDB()
   })
 }));
 
