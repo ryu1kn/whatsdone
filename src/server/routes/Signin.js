@@ -3,7 +3,8 @@
 let express = require('express');
 let router = express.Router();  // eslint-disable-line new-cap
 
-let Users = require('../repositories/Users');
+const ServiceLocator = require('../ServiceLocator');
+const userRepository = ServiceLocator.userRepository;
 
 router.get('/', function (req, res) {
   res.render('signin', {
@@ -12,7 +13,7 @@ router.get('/', function (req, res) {
 });
 
 router.post('/', function (req, res, next) {
-  Users.findUser(req.body)
+  userRepository.findUser(req.body)
     .then(user => {
       if (user) {
         req.session.isAuthorized = true;
