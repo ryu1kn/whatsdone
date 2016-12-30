@@ -2,7 +2,7 @@
 const _ = require('lodash');
 const ServiceLocator = require('../ServiceLocator');
 
-class Database {
+class DynamoTableClient {
 
   constructor(collectionName) {
     this._docClient = ServiceLocator.dynamoDBDocumentClient;
@@ -107,4 +107,4 @@ class Database {
 
 }
 
-module.exports = Database;
+module.exports = DynamoTableClient;

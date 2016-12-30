@@ -21,7 +21,8 @@ class ServiceFactory {
   }
 
   getDoneDynamoTableClient() {
-    return new (require('./repositories/Collection'))('dones');
+    const DynamoTableClient = require('./repositories/DynamoTableClient');
+    return new DynamoTableClient('dones');
   }
 
   getDoneRepository() {
@@ -30,7 +31,8 @@ class ServiceFactory {
   }
 
   getUserDynamoTableClient() {
-    return new (require('./repositories/Collection'))('users');
+    const DynamoTableClient = require('./repositories/DynamoTableClient');
+    return new DynamoTableClient('users');
   }
 
   getUserRepository() {
