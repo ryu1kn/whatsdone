@@ -36,7 +36,7 @@ class ServiceFactory {
   }
 
   getUserRepository() {
-    const UserRepository = require('./repositories/Users');
+    const UserRepository = require('./repositories/User');
     return new UserRepository();
   }
 

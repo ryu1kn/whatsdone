@@ -3,7 +3,7 @@ const ServiceLocator = require('../ServiceLocator');
 const userDynamoTableClient = ServiceLocator.userDynamoTableClient;
 const hashGenerator = ServiceLocator.hashGenerator;
 
-class Users {
+class UserRepository {
 
   findUser(loginInfo) {
     return userDynamoTableClient.getByQuery({
@@ -30,4 +30,4 @@ class Users {
 
 }
 
-module.exports = Users;
+module.exports = UserRepository;
