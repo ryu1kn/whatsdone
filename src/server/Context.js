@@ -1,12 +1,9 @@
-'use strict';
 
 const AWS = require('aws-sdk');
 
-// Singleton class.
-// TODO: Change it to non-singleton
 class Context {
 
-  setEnv(env) {
+  constructor({env}) {
     this._env = env;
   }
 
@@ -31,4 +28,4 @@ class Context {
 
 }
 
-module.exports = new Context();
+module.exports = Context;
