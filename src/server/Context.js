@@ -21,6 +21,14 @@ class Context {
     return this._documentClient;
   }
 
+  getDoneRepository() {
+    return require('./repositories/Dones');
+  }
+
+  getUserRepository() {
+    return require('./repositories/Users');
+  }
+
 }
 
 module.exports = new Context();

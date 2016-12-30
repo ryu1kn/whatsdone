@@ -1,12 +1,8 @@
 
 class ServiceLocator {
 
-  load(serviceMap) {
-    this._serviceMap = serviceMap;
-  }
-
-  _get(serviceName) {
-    return this._serviceMap[serviceName];
+  load(Context) {
+    this._Context = Context;
   }
 
   get userRepository() {
@@ -15,6 +11,16 @@ class ServiceLocator {
 
   get doneRepository() {
     return this._get('doneRepository');
+  }
+
+  _get(serviceName) {
+    const methodName = this._getGetterName(serviceName);
+    return this._Context[methodName]();
+  }
+
+  // fooBar -> getFooBar
+  _getGetterName(name) {
+    return ['get', name[0].toUpperCase(), name.substring(1)].join('');
   }
 
 }

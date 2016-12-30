@@ -12,10 +12,7 @@ var app = express();
 Context.setEnv(process.env);
 
 const ServiceLocator = require('./ServiceLocator');
-ServiceLocator.load({
-  doneRepository: require('./repositories/Dones'),
-  userRepository: require('./repositories/Users')
-});
+ServiceLocator.load(Context);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
