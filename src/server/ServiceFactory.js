@@ -1,7 +1,7 @@
 
 const AWS = require('aws-sdk');
 
-class Context {
+class ServiceFactory {
 
   constructor({env}) {
     this._env = env;
@@ -28,4 +28,4 @@ class Context {
 
 }
 
-module.exports = Context;
+module.exports = ServiceFactory;

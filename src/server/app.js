@@ -6,12 +6,12 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var Context = require('./Context');
+const ServiceFactory = require('./ServiceFactory');
 const ServiceLocator = require('./ServiceLocator');
 
 var app = express();
 
-ServiceLocator.load(new Context({env: process.env}));
+ServiceLocator.load(new ServiceFactory({env: process.env}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

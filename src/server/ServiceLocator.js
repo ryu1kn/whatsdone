@@ -1,8 +1,8 @@
 
 class ServiceLocator {
 
-  load(Context) {
-    this._Context = Context;
+  load(serviceFactory) {
+    this._serviceFactory = serviceFactory;
   }
 
   get userRepository() {
@@ -23,7 +23,7 @@ class ServiceLocator {
 
   _get(serviceName) {
     const methodName = this._getGetterName(serviceName);
-    return this._Context[methodName]();
+    return this._serviceFactory[methodName]();
   }
 
   // fooBar -> getFooBar
