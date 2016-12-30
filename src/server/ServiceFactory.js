@@ -1,5 +1,6 @@
 
 const AWS = require('aws-sdk');
+const Uuid = require('uuid');
 
 class ServiceFactory {
 
@@ -24,6 +25,10 @@ class ServiceFactory {
 
   getUserRepository() {
     return require('./repositories/Users');
+  }
+
+  getUuidGenerator() {
+    return {generate: () => Uuid.v4()};
   }
 
 }

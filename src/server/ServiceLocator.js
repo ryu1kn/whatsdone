@@ -21,6 +21,10 @@ class ServiceLocator {
     return this._get('dynamoDBDocumentClient');
   }
 
+  get uuidGenerator() {
+    return this._get('uuidGenerator');
+  }
+
   _get(serviceName) {
     const methodName = this._getGetterName(serviceName);
     return this._serviceFactory[methodName]();

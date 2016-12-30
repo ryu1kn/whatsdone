@@ -1,13 +1,12 @@
-'use strict';
 
 const _ = require('lodash');
-const Uuid = require('uuid');
 const ServiceLocator = require('../ServiceLocator');
 
 class Database {
 
   constructor(collectionName) {
     this._docClient = ServiceLocator.dynamoDBDocumentClient;
+    this._uuidGenerator = ServiceLocator.uuidGenerator;
     this._collectionName = collectionName;
     console.info('Collection `%s` is ready', this._collectionName);
   }
@@ -51,7 +50,7 @@ class Database {
   }
 
   put(newData) {
-    let id = this._generateId();
+    const id = this._uuidGenerator.generate();
     const params = {
       TableName: this._getTableName(),
       Item: Object.assign({}, newData, {id})
@@ -76,10 +75,6 @@ class Database {
     };
     return this._docClient.update(params).promise()
       .then(() => this.getById(id));
-  }
-
-  _generateId() {
-    return Uuid.v4();
   }
 
   _getTableName() {
