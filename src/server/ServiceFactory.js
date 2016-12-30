@@ -1,6 +1,7 @@
 
 const AWS = require('aws-sdk');
 const Uuid = require('uuid');
+const sha1 = require('sha1');
 
 class ServiceFactory {
 
@@ -29,6 +30,10 @@ class ServiceFactory {
 
   getUserRepository() {
     return require('./repositories/Users');
+  }
+
+  getHashGenerator() {
+    return {generate: sha1};
   }
 
   getUuidGenerator() {

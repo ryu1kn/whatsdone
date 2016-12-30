@@ -1,14 +1,14 @@
 
 const ServiceLocator = require('../ServiceLocator');
 const userDynamoTableClient = ServiceLocator.userDynamoTableClient;
-const sha1 = require('sha1');
+const hashGenerator = ServiceLocator.hashGenerator;
 
 class Users {
 
   findUser(loginInfo) {
     return userDynamoTableClient.getByQuery({
       email: loginInfo.email,
-      password: sha1(loginInfo.password)
+      password: hashGenerator.generate(loginInfo.password)
     });
   }
 
