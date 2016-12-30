@@ -23,6 +23,10 @@ class ServiceFactory {
     return require('./repositories/Dones');
   }
 
+  getUserDynamoTableClient() {
+    return new (require('./repositories/Collection'))('users');
+  }
+
   getUserRepository() {
     return require('./repositories/Users');
   }
