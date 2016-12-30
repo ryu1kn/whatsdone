@@ -29,7 +29,8 @@ class ServiceFactory {
   }
 
   getUserRepository() {
-    return require('./repositories/Users');
+    const UserRepository = require('./repositories/Users');
+    return new UserRepository();
   }
 
   getHashGenerator() {

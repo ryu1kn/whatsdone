@@ -30,4 +30,4 @@ class Users {
 
 }
 
-module.exports = new Users();
+module.exports = Users;
