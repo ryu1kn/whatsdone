@@ -1,37 +1,30 @@
 'use strict';
 
 const _ = require('lodash');
-const q = require('q');
 const Uuid = require('uuid');
 const ServiceLocator = require('../ServiceLocator');
 
 class Database {
 
   constructor(collectionName) {
-    var docClient = ServiceLocator.dynamoDBDocumentClient;
-    this._getItem = q.nbind(docClient.get, docClient);
-    this._batchGetItems = q.nbind(docClient.batchGet, docClient);
-    this._scanItems = q.nbind(docClient.scan, docClient);
-    this._putItem = q.nbind(docClient.put, docClient);
-    this._deleteItem = q.nbind(docClient.delete, docClient);
-    this._updateItems = q.nbind(docClient.update, docClient);
+    this._docClient = ServiceLocator.dynamoDBDocumentClient;
     this._collectionName = collectionName;
     console.info('Collection `%s` is ready', this._collectionName);
   }
 
   getAll() {
-    return this._scanItems({
-      TableName: this._getTableName()
-    })
-    .then(response => response.Items);
+    const params = {TableName: this._getTableName()};
+    return this._docClient.scan(params).promise()
+      .then(response => response.Items);
   }
 
   getById(id) {
-    return this._getItem({
+    const params = {
       TableName: this._getTableName(),
       Key: {id}
-    })
-    .then(response => response.Item);
+    };
+    return this._docClient.get(params).promise()
+      .then(response => response.Item);
   }
 
   getByIds(ids) {
@@ -43,41 +36,46 @@ class Database {
         }
       }
     };
-    return this._batchGetItems(params)
+    return this._docClient.batchGet(params).promise()
       .then(response => response.Responses[this._getTableName()]);
   }
 
   // @deprecated
   getByQuery(query) {
-    return this._scanItems(Object.assign(this._composeScanQuery(query), {
-      TableName: this._getTableName()
-    }))
-    .then(result => _.get(result, 'Items[0]'));
+    const params = Object.assign(
+      this._composeScanQuery(query),
+      {TableName: this._getTableName()}
+    );
+    return this._docClient.scan(params).promise()
+      .then(result => _.get(result, 'Items[0]'));
   }
 
   put(newData) {
     let id = this._generateId();
-    return this._putItem({
+    const params = {
       TableName: this._getTableName(),
       Item: Object.assign({}, newData, {id})
-    })
-    .then(() => id);
+    };
+    return this._docClient.put(params).promise()
+      .then(() => id);
   }
 
   delete(id) {
-    return this._deleteItem({
+    const params = {
       TableName: this._getTableName(),
       Key: {id}
-    });
+    };
+    return this._docClient.delete(params).promise();
   }
 
   update(id, newData) {
-    return this._updateItems({
+    const params = {
       TableName: this._getTableName(),
       Key: {id},
       AttributeUpdates: this._getAttributeUpdatesValues(newData)
-    })
-    .then(() => this.getById(id));
+    };
+    return this._docClient.update(params).promise()
+      .then(() => this.getById(id));
   }
 
   _generateId() {

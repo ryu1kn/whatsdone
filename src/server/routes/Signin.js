@@ -24,8 +24,7 @@ router.post('/', function (req, res, next) {
         res.render('signin');
       }
     })
-    .catch(reason => { next(reason); })
-    .done();
+    .catch(reason => { next(reason); });
 });
 
 module.exports = router;

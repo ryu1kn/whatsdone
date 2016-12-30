@@ -35,8 +35,7 @@ router.route('/')
         res.setHeader('Content-Type', 'application/json');
         res.send(dones);
       })
-      .catch(reason => { next(reason); })
-      .done();
+      .catch(reason => { next(reason); });
   })
   .post((req, res, next) => {
     doneRepository.write(Object.assign({}, req.body, {userId: req.session.userId}))
@@ -46,8 +45,7 @@ router.route('/')
         res.setHeader('Cache-Control', 'no-cache');
         res.send(JSON.stringify(done));
       })
-      .catch(reason => { next(reason); })
-      .done();
+      .catch(reason => { next(reason); });
   });
 
 router.route('/:id')
@@ -56,8 +54,7 @@ router.route('/:id')
       .then(() => {
         res.end();
       })
-      .catch(reason => { next(reason); })
-      .done();
+      .catch(reason => { next(reason); });
   })
   .put((req, res, next) => {
     doneRepository.update(req.params.id, req.session.userId, req.body)
@@ -66,8 +63,7 @@ router.route('/:id')
         res.setHeader('Cache-Control', 'no-cache');
         res.send(JSON.stringify(done.getAsPlainObject()));
       })
-      .catch(reason => { next(reason); })
-      .done();
+      .catch(reason => { next(reason); });
   });
 
 module.exports = router;
