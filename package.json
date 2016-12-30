@@ -54,7 +54,7 @@
     "postinstall": "npm run build",
     "build": "gulp compile",
     "watch": "gulp",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --opts mocha.opts",
     "start": "node ./bin/www",
     "lint": "eslint ."
   },
@@ -67,8 +67,12 @@
   },
   "homepage": "https://github.com/ryu1kn/whatsdone",
   "devDependencies": {
+    "chai": "^3.5.0",
     "eslint": "^3.12.2",
     "eslint-config-xo": "^0.17.0",
-    "eslint-plugin-react": "^6.8.0"
+    "eslint-plugin-react": "^6.8.0",
+    "mocha": "^3.2.0",
+    "sinon": "^1.17.6",
+    "sinon-chai": "^2.8.0"
   }
 }

@@ -37,7 +37,8 @@ class ServiceFactory {
 
   getUserRepository() {
     const UserRepository = require('./repositories/User');
-    return new UserRepository();
+    this._userRepository = this._userRepository || new UserRepository();
+    return this._userRepository;
   }
 
   getHashGenerator() {
