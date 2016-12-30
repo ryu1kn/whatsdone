@@ -26,7 +26,7 @@ class ServiceFactory {
   }
 
   getDoneRepository() {
-    const DoneRepository = require('./repositories/Dones');
+    const DoneRepository = require('./repositories/Done');
     return new DoneRepository();
   }
 

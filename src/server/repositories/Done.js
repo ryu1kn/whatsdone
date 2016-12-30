@@ -3,7 +3,7 @@ const ServiceLocator = require('../ServiceLocator');
 const doneDynamoTableClient = ServiceLocator.doneDynamoTableClient;
 const Done = require('../Done');
 
-class Dones {
+class DoneRepository {
 
   /**
    * @return {Q}
@@ -58,4 +58,4 @@ class Dones {
 
 }
 
-module.exports = Dones;
+module.exports = DoneRepository;
