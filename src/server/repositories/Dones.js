@@ -1,7 +1,7 @@
-'use strict';
 
-let Collection = new (require('./Collection'))('dones');
-let Done = require('../Done');
+const ServiceLocator = require('../ServiceLocator');
+const doneDynamoTableClient = ServiceLocator.doneDynamoTableClient;
+const Done = require('../Done');
 
 class Dones {
 
@@ -9,7 +9,7 @@ class Dones {
    * @return {Q}
    */
   read() {
-    return Collection.getAll();
+    return doneDynamoTableClient.getAll();
   }
 
   /**
@@ -17,7 +17,7 @@ class Dones {
    * @return {Q}
    */
   write(newData) {
-    return Collection.put(newData).then(id => Collection.getById(id));
+    return doneDynamoTableClient.put(newData).then(id => doneDynamoTableClient.getById(id));
   }
 
   /**
@@ -25,7 +25,7 @@ class Dones {
    * @param {string} currentUserId
    */
   remove(id, currentUserId) {
-    return Collection.getById(id)
+    return doneDynamoTableClient.getById(id)
       .then(found => {
         if (found === null) {
           throw new Error('[NotFound]: Done item not found');
@@ -33,7 +33,7 @@ class Dones {
         if (found.userId !== currentUserId) {
           throw new Error('[AccessDeined]: You don\'t have the permission to delete this item.');
         }
-        return Collection.delete(id);
+        return doneDynamoTableClient.delete(id);
       });
   }
 
@@ -43,7 +43,7 @@ class Dones {
    * @param {{doneThing: string, date: string}} newData
    */
   update(id, currentUserId, newData) {
-    return Collection.getById(id)
+    return doneDynamoTableClient.getById(id)
       .then(found => {
         if (found === null) {
           throw new Error('[NotFound]: Done item not found');
@@ -51,7 +51,7 @@ class Dones {
         if (found.userId !== currentUserId) {
           throw new Error('[AccessDeined]: You don\'t have the permission to modify this item.');
         }
-        return Collection.update(id, Done.getModifiable(newData))
+        return doneDynamoTableClient.update(id, Done.getModifiable(newData))
           .then(item => new Done(item.id, item.userId, item.doneThing, item.date));
       });
   }

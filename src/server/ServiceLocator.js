@@ -21,6 +21,10 @@ class ServiceLocator {
     return this._get('dynamoDBDocumentClient');
   }
 
+  get doneDynamoTableClient() {
+    return this._get('doneDynamoTableClient');
+  }
+
   get userDynamoTableClient() {
     return this._get('userDynamoTableClient');
   }

@@ -20,6 +20,10 @@ class ServiceFactory {
     return this._documentClient;
   }
 
+  getDoneDynamoTableClient() {
+    return new (require('./repositories/Collection'))('dones');
+  }
+
   getDoneRepository() {
     return require('./repositories/Dones');
   }
