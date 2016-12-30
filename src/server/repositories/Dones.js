@@ -58,4 +58,4 @@ class Dones {
 
 }
 
-module.exports = new Dones();
+module.exports = Dones;
