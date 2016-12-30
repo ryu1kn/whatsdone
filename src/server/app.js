@@ -31,7 +31,7 @@ app.use(session({
   resave: false,              // don't save session if unmodified
   store: new DynamoDBStore({
     table: 'whatsdone-sessions',
-    client: Context.getDynamoDB()
+    client: ServiceLocator.dynamoDB
   })
 }));
 

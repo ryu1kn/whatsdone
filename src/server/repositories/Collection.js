@@ -1,14 +1,14 @@
 'use strict';
 
-let _ = require('lodash');
-let Context = require('../Context');
-let q = require('q');
-var Uuid = require('uuid');
+const _ = require('lodash');
+const q = require('q');
+const Uuid = require('uuid');
+const ServiceLocator = require('../ServiceLocator');
 
 class Database {
 
   constructor(collectionName) {
-    var docClient = Context.getDynamoDBDocumentClient();
+    var docClient = ServiceLocator.dynamoDBDocumentClient;
     this._getItem = q.nbind(docClient.get, docClient);
     this._batchGetItems = q.nbind(docClient.batchGet, docClient);
     this._scanItems = q.nbind(docClient.scan, docClient);

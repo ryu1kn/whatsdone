@@ -13,6 +13,14 @@ class ServiceLocator {
     return this._get('doneRepository');
   }
 
+  get dynamoDB() {
+    return this._get('dynamoDB');
+  }
+
+  get dynamoDBDocumentClient() {
+    return this._get('dynamoDBDocumentClient');
+  }
+
   _get(serviceName) {
     const methodName = this._getGetterName(serviceName);
     return this._Context[methodName]();
