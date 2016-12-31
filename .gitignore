@@ -2,6 +2,7 @@
 node_modules/
 npm-debug.log
 .module-cache/
+/coverage/
 /public/
 /Procfile
 /.env
