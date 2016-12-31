@@ -6,7 +6,7 @@ describe('Server SchemaBasedRedirectMiddleware', () => {
   it('does nothing if a user is using secure protocol', () => {
     const middleware = new SchemaBasedRedirectMiddleware();
     const req = {
-      protocol: 'https',
+      header: stubWithArgs(['X-Forwarded-Proto'], 'https'),
       hostname: 'HOSTNAME',
       url: '/URL_STRING'
     };
@@ -19,7 +19,7 @@ describe('Server SchemaBasedRedirectMiddleware', () => {
   it('redirects a user to the https compatible page if they are using insecure protocol', () => {
     const middleware = new SchemaBasedRedirectMiddleware();
     const req = {
-      protocol: 'http',
+      header: stubWithArgs(['X-Forwarded-Proto'], 'http'),
       hostname: 'HOSTNAME',
       url: '/URL_STRING'
     };

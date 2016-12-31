@@ -6,9 +6,10 @@ const SECURE_PROTOCOL = 'https';
  */
 class SchemaBasedRedirectMiddleware {
 
+  // Heroku uses `X-Forwarded-Proto` to tell you the original protocol.
+  // See http://stackoverflow.com/questions/7185074/heroku-nodejs-http-to-https-ssl-forced-redirect
   handle(req, res, next) {
-    console.log('Connecting protocol @SchemaBasedRedirectMiddleware:', req.protocol);
-    if (req.protocol === SECURE_PROTOCOL) next();
+    if (req.header('X-Forwarded-Proto') === SECURE_PROTOCOL) next();
     else res.redirect(`${SECURE_PROTOCOL}://${req.hostname}${req.url}`);
   }
 
