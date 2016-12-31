@@ -5,17 +5,16 @@
 class AuthBasedRedirectMiddleware {
 
   handle(req, res, next) {
-    if (req.path === '/signin') {
-      if (req.session.isAuthorized) {
-        res.redirect('/');
-      } else {
-        next();
-      }
-    } else if (req.session.isAuthorized) {
-      next();
-    } else {
-      res.redirect('/signin');
+    const redirectPath = this._getRedirectPath(req.path, req.session.isAuthorized);
+    if (redirectPath) res.redirect(redirectPath);
+    else next();
+  }
+
+  _getRedirectPath(path, isAuthorized) {
+    if (isAuthorized) {
+      return path === '/signin' ? '/' : null;
     }
+    return path === '/signin' ? null : '/signin';
   }
 
 }
