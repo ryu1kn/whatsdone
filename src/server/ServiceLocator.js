@@ -9,6 +9,10 @@ class ServiceLocator {
     return this._get('authBasedRedirectMiddleware');
   }
 
+  get schemaBasedRedirectMiddleware() {
+    return this._get('schemaBasedRedirectMiddleware');
+  }
+
   get userRepository() {
     return this._get('userRepository');
   }

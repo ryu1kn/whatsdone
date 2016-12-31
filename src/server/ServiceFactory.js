@@ -15,6 +15,14 @@ class ServiceFactory {
     return this._authBasedRedirectMiddleware;
   }
 
+  getSchemaBasedRedirectMiddleware() {
+    const SchemaBasedRedirectMiddleware = this._env.NODE_ENV === 'production' ?
+        require('./express-middlewares/SchemaBasedRedirect') :
+        require('./express-middlewares/DevSchemaBasedRedirect');
+    this._schemaBasedRedirectMiddleware = this._schemaBasedRedirectMiddleware || new SchemaBasedRedirectMiddleware();
+    return this._schemaBasedRedirectMiddleware;
+  }
+
   getDynamoDB() {
     this._dynamoDB = this._dynamoDB || new AWS.DynamoDB({region: this._env.DB_REGION});
     return this._dynamoDB;

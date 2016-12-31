@@ -34,6 +34,7 @@ app.use(session({
   })
 }));
 
+app.all('*', (...args) => ServiceLocator.schemaBasedRedirectMiddleware.handle(...args));
 app.all('*', (...args) => ServiceLocator.authBasedRedirectMiddleware.handle(...args));
 
 app.use('/', require('./routes/Index'));
