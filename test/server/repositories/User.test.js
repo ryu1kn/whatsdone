@@ -4,7 +4,6 @@ const UserRepository = require('../../../src/server/repositories/User');
 
 describe('Server UserRepository', () => {
 
-
   it('finds a user', () => {
     const userDynamoTableClient = {
       getByQuery: sinon.stub().returns(Promise.resolve('USER'))
