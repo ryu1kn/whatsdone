@@ -9,6 +9,12 @@ class ServiceFactory {
     this._env = env;
   }
 
+  getAuthBasedRedirectMiddleware() {
+    const AuthBasedRedirectMiddleware = require('./express-middlewares/AuthBasedRedirect');
+    this._authBasedRedirectMiddleware = this._authBasedRedirectMiddleware || new AuthBasedRedirectMiddleware();
+    return this._authBasedRedirectMiddleware;
+  }
+
   getDynamoDB() {
     this._dynamoDB = this._dynamoDB || new AWS.DynamoDB({region: this._env.DB_REGION});
     return this._dynamoDB;

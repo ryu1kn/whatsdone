@@ -5,6 +5,10 @@ class ServiceLocator {
     this._serviceFactory = serviceFactory;
   }
 
+  get authBasedRedirectMiddleware() {
+    return this._get('authBasedRedirectMiddleware');
+  }
+
   get userRepository() {
     return this._get('userRepository');
   }

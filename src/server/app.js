@@ -34,19 +34,7 @@ app.use(session({
   })
 }));
 
-app.all('*', function (req, res, next) {
-  if (req.path === '/signin') {
-    if (req.session.isAuthorized) {
-      res.redirect('/');
-    } else {
-      next();
-    }
-  } else if (req.session.isAuthorized) {
-    next();
-  } else {
-    res.redirect('/signin');
-  }
-});
+app.all('*', (...args) => ServiceLocator.authBasedRedirectMiddleware.handle(...args));
 
 app.use('/', require('./routes/Index'));
 app.use('/signin', require('./routes/Signin'));
