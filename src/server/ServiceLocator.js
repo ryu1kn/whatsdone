@@ -13,6 +13,14 @@ class ServiceLocator {
     return this._get('schemaBasedRedirectMiddleware');
   }
 
+  get getSigninRequestHandler() {
+    return this._get('getSigninRequestHandler');
+  }
+
+  get postSigninRequestHandler() {
+    return this._get('postSigninRequestHandler');
+  }
+
   get userRepository() {
     return this._get('userRepository');
   }

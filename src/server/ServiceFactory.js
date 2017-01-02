@@ -23,6 +23,18 @@ class ServiceFactory {
     return this._schemaBasedRedirectMiddleware;
   }
 
+  getGetSigninRequestHandler() {
+    const GetSigninRequestHandler = require('./express-middlewares/GetSigninRequestHandler');
+    this._getSigninRequestHandler = this._getSigninRequestHandler || new GetSigninRequestHandler();
+    return this._getSigninRequestHandler;
+  }
+
+  getPostSigninRequestHandler() {
+    const PostSigninRequestHandler = require('./express-middlewares/PostSigninRequestHandler');
+    this._postSigninRequestHandler = this._postSigninRequestHandler || new PostSigninRequestHandler();
+    return this._postSigninRequestHandler;
+  }
+
   getDynamoDB() {
     this._dynamoDB = this._dynamoDB || new AWS.DynamoDB({region: this._env.DB_REGION});
     return this._dynamoDB;

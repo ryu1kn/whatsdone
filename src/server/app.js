@@ -38,7 +38,8 @@ app.all('*', (...args) => ServiceLocator.schemaBasedRedirectMiddleware.handle(..
 app.all('*', (...args) => ServiceLocator.authBasedRedirectMiddleware.handle(...args));
 
 app.use('/', require('./routes/Index'));
-app.use('/signin', require('./routes/Signin'));
+app.get('/signin', (...args) => ServiceLocator.getSigninRequestHandler.handle(...args));
+app.post('/signin', (...args) => ServiceLocator.postSigninRequestHandler.handle(...args));
 app.use('/signout', require('./routes/Signout'));
 app.use('/dones.json', require('./routes/Dones'));
 
