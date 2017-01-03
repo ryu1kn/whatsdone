@@ -19,7 +19,7 @@ class PostSigninRequestHandler {
           res.render('signin');
         }
       })
-      .catch(reason => { next(reason); });
+      .catch(next);
   }
 
 }
