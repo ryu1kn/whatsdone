@@ -53,7 +53,8 @@ class ServiceFactory {
 
   getDoneRepository() {
     const DoneRepository = require('./repositories/Done');
-    return new DoneRepository();
+    this._doneRepository = this._doneRepository || new DoneRepository();
+    return this._doneRepository;
   }
 
   getUserDynamoTableClient() {

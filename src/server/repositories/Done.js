@@ -1,15 +1,18 @@
 
 const ServiceLocator = require('../ServiceLocator');
-const doneDynamoTableClient = ServiceLocator.doneDynamoTableClient;
 const Done = require('../Done');
 
 class DoneRepository {
+
+  constructor() {
+    this._doneDynamoTableClient = ServiceLocator.doneDynamoTableClient;
+  }
 
   /**
    * @return {Q}
    */
   read() {
-    return doneDynamoTableClient.getAll();
+    return this._doneDynamoTableClient.getAll();
   }
 
   /**
@@ -17,7 +20,7 @@ class DoneRepository {
    * @return {Q}
    */
   write(newData) {
-    return doneDynamoTableClient.put(newData).then(id => doneDynamoTableClient.getById(id));
+    return this._doneDynamoTableClient.put(newData).then(id => this._doneDynamoTableClient.getById(id));
   }
 
   /**
@@ -25,7 +28,7 @@ class DoneRepository {
    * @param {string} currentUserId
    */
   remove(id, currentUserId) {
-    return doneDynamoTableClient.getById(id)
+    return this._doneDynamoTableClient.getById(id)
       .then(found => {
         if (found === null) {
           throw new Error('[NotFound]: Done item not found');
@@ -33,7 +36,7 @@ class DoneRepository {
         if (found.userId !== currentUserId) {
           throw new Error('[AccessDeined]: You don\'t have the permission to delete this item.');
         }
-        return doneDynamoTableClient.delete(id);
+        return this._doneDynamoTableClient.delete(id);
       });
   }
 
@@ -43,7 +46,7 @@ class DoneRepository {
    * @param {{doneThing: string, date: string}} newData
    */
   update(id, currentUserId, newData) {
-    return doneDynamoTableClient.getById(id)
+    return this._doneDynamoTableClient.getById(id)
       .then(found => {
         if (found === null) {
           throw new Error('[NotFound]: Done item not found');
@@ -51,7 +54,7 @@ class DoneRepository {
         if (found.userId !== currentUserId) {
           throw new Error('[AccessDeined]: You don\'t have the permission to modify this item.');
         }
-        return doneDynamoTableClient.update(id, Done.getModifiable(newData))
+        return this._doneDynamoTableClient.update(id, Done.getModifiable(newData))
           .then(item => new Done(item.id, item.userId, item.doneThing, item.date));
       });
   }
