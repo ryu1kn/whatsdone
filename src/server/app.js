@@ -38,15 +38,14 @@ module.exports = function () {
   app.all('*', (...args) => ServiceLocator.schemaBasedRedirectMiddleware.handle(...args));
   app.all('*', (...args) => ServiceLocator.authBasedRedirectMiddleware.handle(...args));
 
-  // Push these 2 require statements out of this callback
-  // to include them in code coverage report
-  const signoutRouter = require('./routes/Signout');
+  // Push this statement out of this callback to include them in code coverage report
   const donesRouter = require('./routes/Dones');
 
   app.get('/', (...args) => ServiceLocator.getRootPageRequestHandler.handle(...args));
   app.get('/signin', (...args) => ServiceLocator.getSigninRequestHandler.handle(...args));
   app.post('/signin', (...args) => ServiceLocator.postSigninRequestHandler.handle(...args));
-  app.use('/signout', signoutRouter);
+  app.get('/signout', (...args) => ServiceLocator.signoutRequestHandler.handle(...args));
+  app.post('/signout', (...args) => ServiceLocator.signoutRequestHandler.handle(...args));
   app.use('/dones.json', donesRouter);
 
   // catch 404 and forward to error handler

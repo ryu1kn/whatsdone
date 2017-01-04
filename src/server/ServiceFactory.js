@@ -41,6 +41,12 @@ class ServiceFactory {
     return this._postSigninRequestHandler;
   }
 
+  getSignoutRequestHandler() {
+    const SignoutRequestHandler = require('./express-middlewares/SignoutRequestHandler');
+    this._signoutRequestHandler = this._signoutRequestHandler || new SignoutRequestHandler();
+    return this._signoutRequestHandler;
+  }
+
   getDynamoDB() {
     this._dynamoDB = this._dynamoDB || new AWS.DynamoDB({region: this._env.DB_REGION});
     return this._dynamoDB;
