@@ -13,6 +13,10 @@ class ServiceLocator {
     return this._get('schemaBasedRedirectMiddleware');
   }
 
+  get getRootPageRequestHandler() {
+    return this._get('getRootPageRequestHandler');
+  }
+
   get getSigninRequestHandler() {
     return this._get('getSigninRequestHandler');
   }

@@ -38,13 +38,12 @@ module.exports = function () {
   app.all('*', (...args) => ServiceLocator.schemaBasedRedirectMiddleware.handle(...args));
   app.all('*', (...args) => ServiceLocator.authBasedRedirectMiddleware.handle(...args));
 
-  // Push these 3 require statements out of this callback
+  // Push these 2 require statements out of this callback
   // to include them in code coverage report
-  const indexRouter = require('./routes/Index');
   const signoutRouter = require('./routes/Signout');
   const donesRouter = require('./routes/Dones');
 
-  app.use('/', indexRouter);
+  app.get('/', (...args) => ServiceLocator.getRootPageRequestHandler.handle(...args));
   app.get('/signin', (...args) => ServiceLocator.getSigninRequestHandler.handle(...args));
   app.post('/signin', (...args) => ServiceLocator.postSigninRequestHandler.handle(...args));
   app.use('/signout', signoutRouter);

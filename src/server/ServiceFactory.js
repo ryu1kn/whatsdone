@@ -23,6 +23,12 @@ class ServiceFactory {
     return this._schemaBasedRedirectMiddleware;
   }
 
+  getGetRootPageRequestHandler() {
+    const GetRootPageRequestHandler = require('./express-middlewares/GetRootPageRequestHandler');
+    this._getRootPageRequestHandler = this._getRootPageRequestHandler || new GetRootPageRequestHandler();
+    return this._getRootPageRequestHandler;
+  }
+
   getGetSigninRequestHandler() {
     const GetSigninRequestHandler = require('./express-middlewares/GetSigninRequestHandler');
     this._getSigninRequestHandler = this._getSigninRequestHandler || new GetSigninRequestHandler();
