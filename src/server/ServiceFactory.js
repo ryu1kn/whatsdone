@@ -35,6 +35,12 @@ class ServiceFactory {
     return this._getDonesRequestHandler;
   }
 
+  getPostDonesRequestHandler() {
+    const PostDonesRequestHandler = require('./express-middlewares/PostDonesRequestHandler');
+    this._postDonesRequestHandler = this._postDonesRequestHandler || new PostDonesRequestHandler();
+    return this._postDonesRequestHandler;
+  }
+
   getGetSigninRequestHandler() {
     const GetSigninRequestHandler = require('./express-middlewares/GetSigninRequestHandler');
     this._getSigninRequestHandler = this._getSigninRequestHandler || new GetSigninRequestHandler();

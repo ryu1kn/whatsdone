@@ -47,6 +47,7 @@ module.exports = function () {
   app.get('/signout', (...args) => ServiceLocator.signoutRequestHandler.handle(...args));
   app.post('/signout', (...args) => ServiceLocator.signoutRequestHandler.handle(...args));
   app.get('/dones.json', (...args) => ServiceLocator.getDonesRequestHandler.handle(...args));
+  app.post('/dones.json', (...args) => ServiceLocator.postDonesRequestHandler.handle(...args));
   app.use('/dones.json', donesRouter);
 
   // catch 404 and forward to error handler
