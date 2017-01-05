@@ -1,5 +1,4 @@
 
-const q = require('q');
 const ServiceLocator = require('../ServiceLocator');
 
 class PostDonesRequestHandler {
@@ -21,8 +20,8 @@ class PostDonesRequestHandler {
   }
 
   _setUserName(done) {
-    return q(done.userId ? this._userRepository.getById(done.userId) : {name: null})
-        .then(user => Object.assign(done, {username: user.name}));
+    const userPromise = done.userId ? this._userRepository.getById(done.userId) : Promise.resolve({name: null});
+    return userPromise.then(user => Object.assign(done, {username: user.name}));
   }
 
 }
