@@ -35,6 +35,7 @@ global.promisifyExpressMiddleware = function (middleware, req) {
   return new Promise((resolve, reject) => {
     const result = {
       res: {
+        end: sinon.spy(),
         render: sinon.spy(),
         redirect: sinon.spy(),
         send: sinon.spy(),
@@ -51,6 +52,7 @@ global.promisifyExpressMiddleware = function (middleware, req) {
 
     const next = getFakeExpressFn('next');
     const res = {
+      end: getFakeExpressFn('res.end'),
       render: getFakeExpressFn('res.render'),
       redirect: getFakeExpressFn('res.redirect'),
       send: getFakeExpressFn('res.send'),

@@ -7,13 +7,6 @@ const ServiceLocator = require('../ServiceLocator');
 const doneRepository = ServiceLocator.doneRepository;
 
 router.route('/:id')
-  .delete((req, res, next) => {
-    doneRepository.remove(req.params.id, req.session.userId)
-      .then(() => {
-        res.end();
-      })
-      .catch(reason => { next(reason); });
-  })
   .put((req, res, next) => {
     doneRepository.update(req.params.id, req.session.userId, req.body)
       .then(done => {

@@ -25,6 +25,10 @@ class ServiceLocator {
     return this._get('postDonesRequestHandler');
   }
 
+  get deleteDoneRequestHandler() {
+    return this._get('deleteDoneRequestHandler');
+  }
+
   get getSigninRequestHandler() {
     return this._get('getSigninRequestHandler');
   }
