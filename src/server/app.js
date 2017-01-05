@@ -37,10 +37,6 @@ module.exports = function () {
 
   app.all('*', (...args) => ServiceLocator.schemaBasedRedirectMiddleware.handle(...args));
   app.all('*', (...args) => ServiceLocator.authBasedRedirectMiddleware.handle(...args));
-
-  // Push this statement out of this callback to include them in code coverage report
-  const donesRouter = require('./routes/Dones');
-
   app.get('/', (...args) => ServiceLocator.getRootPageRequestHandler.handle(...args));
   app.get('/signin', (...args) => ServiceLocator.getSigninRequestHandler.handle(...args));
   app.post('/signin', (...args) => ServiceLocator.postSigninRequestHandler.handle(...args));
@@ -49,7 +45,7 @@ module.exports = function () {
   app.get('/dones.json', (...args) => ServiceLocator.getDonesRequestHandler.handle(...args));
   app.post('/dones.json', (...args) => ServiceLocator.postDonesRequestHandler.handle(...args));
   app.delete('/dones.json/:id', (...args) => ServiceLocator.deleteDoneRequestHandler.handle(...args));
-  app.use('/dones.json', donesRouter);
+  app.put('/dones.json/:id', (...args) => ServiceLocator.updateDoneRequestHandler.handle(...args));
 
   // catch 404 and forward to error handler
   app.use(function (req, res, next) {
