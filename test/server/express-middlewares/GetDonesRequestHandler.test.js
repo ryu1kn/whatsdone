@@ -24,5 +24,20 @@ describe('Server GetDonesRequestHandler', () => {
     });
   });
 
+  it('propagates error', () => {
+    ServiceLocator.load({
+      getUserRepository: () => {},
+      getDoneRepository: () => ({
+        read: () => Promise.reject(new Error('UNEXPECTED_ERROR'))
+      })
+    });
+    const middleware = new GetDonesRequestHandler();
+
+    const req = {};
+    return promisifyExpressMiddleware(middleware, req).then(({next}) => {
+      expect(next.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');
+    });
+  });
+
 });
 

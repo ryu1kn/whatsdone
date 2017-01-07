@@ -16,7 +16,7 @@ class GetDonesRequestHandler {
         res.setHeader('Content-Type', 'application/json');
         res.send(dones);
       })
-      .catch(reason => { next(reason); });
+      .catch(next);
   }
 
   _setUserNames(dones) {
