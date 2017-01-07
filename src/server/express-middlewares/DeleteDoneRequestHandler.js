@@ -12,7 +12,7 @@ class DeleteDoneRequestHandler {
       .then(() => {
         res.end();
       })
-      .catch(reason => { next(reason); });
+      .catch(next);
   }
 
 }

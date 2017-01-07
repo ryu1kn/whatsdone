@@ -21,5 +21,22 @@ describe('Server DeleteDoneRequestHandler', () => {
     });
   });
 
+  it('propagates error', () => {
+    ServiceLocator.load({
+      getDoneRepository: () => ({
+        remove: () => Promise.reject(new Error('UNEXPECTED_ERROR'))
+      })
+    });
+    const middleware = new DeleteDoneRequestHandler();
+
+    const req = {
+      params: {},
+      session: {}
+    };
+    return promisifyExpressMiddleware(middleware, req).then(({next}) => {
+      expect(next.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');
+    });
+  });
+
 });
 
