@@ -8,25 +8,14 @@ class DoneRepository {
     this._doneDynamoTableClient = ServiceLocator.doneDynamoTableClient;
   }
 
-  /**
-   * @return {Q}
-   */
   read() {
     return this._doneDynamoTableClient.getAll();
   }
 
-  /**
-   * @param {{doneThing: string, date: string, userId: string}} newData
-   * @return {Q}
-   */
   write(newData) {
     return this._doneDynamoTableClient.put(newData).then(id => this._doneDynamoTableClient.getById(id));
   }
 
-  /**
-   * @param {string} id
-   * @param {string} currentUserId
-   */
   remove(id, currentUserId) {
     return this._doneDynamoTableClient.getById(id)
       .then(found => {
@@ -40,11 +29,6 @@ class DoneRepository {
       });
   }
 
-  /**
-   * @param {string} id
-   * @param {string} currentUserId
-   * @param {{doneThing: string, date: string}} newData
-   */
   update(id, currentUserId, newData) {
     return this._doneDynamoTableClient.getById(id)
       .then(found => {
