@@ -54,6 +54,10 @@ class ServiceFactory {
     return this._staticContentsProvider;
   }
 
+  getViewDirectoryPath() {
+    return path.join(__dirname, 'views');
+  }
+
   getAuthBasedRedirectMiddleware() {
     const AuthBasedRedirectMiddleware = require('./express-middlewares/AuthBasedRedirect');
     this._authBasedRedirectMiddleware = this._authBasedRedirectMiddleware || new AuthBasedRedirectMiddleware();

@@ -29,6 +29,10 @@ class ServiceLocator {
     return this._get('staticContentsProvider');
   }
 
+  get viewDirectoryPath() {
+    return this._get('viewDirectoryPath');
+  }
+
   get authBasedRedirectMiddleware() {
     return this._get('authBasedRedirectMiddleware');
   }

@@ -1,16 +1,15 @@
 var express = require('express');
-var path = require('path');
 // var favicon = require('serve-favicon');
 const ServiceFactory = require('./ServiceFactory');
 const ServiceLocator = require('./ServiceLocator');
 
+ServiceLocator.load(new ServiceFactory({env: process.env}));
+
 module.exports = function () {
   var app = express();
 
-  ServiceLocator.load(new ServiceFactory({env: process.env}));
-
   // view engine setup
-  app.set('views', path.join(__dirname, 'views'));
+  app.set('views', ServiceLocator.viewDirectoryPath);
   app.set('view engine', 'pug');
 
   // TODO: uncomment after placing a favicon in /public
