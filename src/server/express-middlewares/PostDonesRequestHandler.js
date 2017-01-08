@@ -16,7 +16,7 @@ class PostDonesRequestHandler {
         res.setHeader('Cache-Control', 'no-cache');
         res.send(JSON.stringify(done));
       })
-      .catch(reason => { next(reason); });
+      .catch(next);
   }
 
   _setUserName(done) {

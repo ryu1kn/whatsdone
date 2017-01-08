@@ -15,7 +15,7 @@ class UpdateDoneRequestHandler {
         res.setHeader('Cache-Control', 'no-cache');
         res.send(this._doneFormatter.format(done));
       })
-      .catch(reason => { next(reason); });
+      .catch(next);
   }
 
 }
