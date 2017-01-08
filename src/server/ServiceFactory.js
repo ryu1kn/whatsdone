@@ -93,6 +93,12 @@ class ServiceFactory {
     return this._doneRepository;
   }
 
+  getDoneFormatter() {
+    const DoneFormatter = require('./DoneFormatter');
+    this._doneFormatter = this._doneFormatter || new DoneFormatter();
+    return this._doneFormatter;
+  }
+
   getUserDynamoTableClient() {
     const DynamoTableClient = require('./repositories/DynamoTableClient');
     return new DynamoTableClient('users');

@@ -1,6 +1,8 @@
 
+const _ = require('lodash');
 const ServiceLocator = require('../ServiceLocator');
-const Done = require('../Done');
+
+const MODIFIABLE_FIELDS = ['date', 'doneThing'];
 
 class DoneRepository {
 
@@ -38,8 +40,7 @@ class DoneRepository {
         if (found.userId !== currentUserId) {
           throw new Error('[AccessDeined]: You don\'t have the permission to modify this item.');
         }
-        return this._doneDynamoTableClient.update(id, Done.getModifiable(newData))
-          .then(item => new Done(item.id, item.userId, item.doneThing, item.date));
+        return this._doneDynamoTableClient.update(id, _.pick(newData, MODIFIABLE_FIELDS));
       });
   }
 

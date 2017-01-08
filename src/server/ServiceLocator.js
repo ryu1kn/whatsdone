@@ -53,6 +53,10 @@ class ServiceLocator {
     return this._get('doneRepository');
   }
 
+  get doneFormatter() {
+    return this._get('doneFormatter');
+  }
+
   get dynamoDB() {
     return this._get('dynamoDB');
   }

@@ -5,6 +5,7 @@ class UpdateDoneRequestHandler {
 
   constructor() {
     this._doneRepository = ServiceLocator.doneRepository;
+    this._doneFormatter = ServiceLocator.doneFormatter;
   }
 
   handle(req, res, next) {
@@ -12,7 +13,7 @@ class UpdateDoneRequestHandler {
       .then(done => {
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Cache-Control', 'no-cache');
-        res.send(JSON.stringify(done.getAsPlainObject()));
+        res.send(this._doneFormatter.format(done));
       })
       .catch(reason => { next(reason); });
   }

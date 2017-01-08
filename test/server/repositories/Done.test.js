@@ -59,15 +59,9 @@ describe('Server DoneRepository', () => {
       doneThing: 'DONE_THING',
       NON_UPDATABLE_KEY: '..'
     };
-    const updatedDone = {
-      id: 'DONE_ID_IN_DB',
-      userId: 'USER_ID_IN_DB',
-      doneThing: 'DONE_THING',
-      date: 'DATE'
-    };
     const doneDynamoTableClient = {
       getById: sinon.stub().returns(Promise.resolve(matchingDone)),
-      update: sinon.stub().returns(Promise.resolve(updatedDone))
+      update: sinon.stub().returns(Promise.resolve('UPDATED_DINE'))
     };
     ServiceLocator.load({
       getDoneDynamoTableClient: () => doneDynamoTableClient
@@ -77,15 +71,10 @@ describe('Server DoneRepository', () => {
     const newData = {
       date: 'NEW_DATE',
       doneThing: 'NEW_DONE_THING',
-      NON_UPDATABLE_KEY: '..'
+      NON_UPDATABLE_KEY: 'NEW ..'
     };
     return repository.update('DONE_ID', 'USER_ID', newData).then(done => {
-      expect(done).to.eql({   // XXX: Don't assert on internal properties
-        _id: 'DONE_ID_IN_DB',
-        _userId: 'USER_ID_IN_DB',
-        _doneThing: 'DONE_THING',
-        _date: 'DATE'
-      });
+      expect(done).to.eql('UPDATED_DINE');
       expect(doneDynamoTableClient.getById).to.have.been.calledWith('DONE_ID');
       expect(doneDynamoTableClient.update).to.have.been.calledWith(
         'DONE_ID', {date: 'NEW_DATE', doneThing: 'NEW_DONE_THING'}
