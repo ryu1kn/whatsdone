@@ -2,7 +2,7 @@
 const DynamoTableClient = require('../../../src/server/repositories/DynamoTableClient');
 const ServiceLocator = require('../../../src/server/ServiceLocator');
 
-describe('DynamoTableClient', () => {
+describe('Server DynamoTableClient', () => {
 
   it('returns all items', () => {
     const dynamoDBDocumentClient = {

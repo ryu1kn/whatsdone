@@ -77,6 +77,17 @@ class ServiceFactory {
     return this._noMatchingRouteRequestHandler;
   }
 
+  getErrorHandler() {
+    const ErrorHandler = require('./express-middlewares/ErrorHandler');
+    this._errorHandler = this._errorHandler || new ErrorHandler();
+    return this._errorHandler;
+  }
+
+  getLogger() {
+    this._logger = this._logger || console;
+    return this._logger;
+  }
+
   getDynamoDB() {
     this._dynamoDB = this._dynamoDB || new AWS.DynamoDB({region: this._env.DB_REGION});
     return this._dynamoDB;

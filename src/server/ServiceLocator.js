@@ -49,6 +49,14 @@ class ServiceLocator {
     return this._get('noMatchingRouteRequestHandler');
   }
 
+  get errorHandler() {
+    return this._get('errorHandler');
+  }
+
+  get logger() {
+    return this._get('logger');
+  }
+
   get userRepository() {
     return this._get('userRepository');
   }

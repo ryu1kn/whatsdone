@@ -49,37 +49,7 @@ module.exports = function () {
   app.all('*', (...args) => ServiceLocator.noMatchingRouteRequestHandler.handle(...args));
 
   // To tell express that this is an error handling middleware, we have to give 4 arguments
-  app.use((err, req, res, _next) => {
-    console.error(err.stack);
-
-    // TODO: Instead of having a rule for error message format
-    //       to destinguish error types, define custom exception classes
-    var parsedInfo = err.message.match(/^\[([^\]]+)]:.*/);
-    var errorKind = parsedInfo && parsedInfo[1];
-    var clientMessage;
-
-    switch (errorKind) {
-    case 'AccessDeined':
-      res.status(403);
-      clientMessage = '403: Forbidden';
-      break;
-
-    case 'NotFound':
-      res.status(404);
-      clientMessage = '404: Not Found';
-      break;
-
-    default:
-      res.status(err.status || 500);
-      clientMessage = '500: Internal Server Error';
-    }
-
-    res.render('error', {
-      message: clientMessage,
-      // Print stacktraces only on development
-      error: app.get('env') === 'development' ? err : {}
-    });
-  });
+  app.use((...args) => ServiceLocator.errorHandler.handle(...args));
 
   return app;
 };

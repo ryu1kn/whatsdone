@@ -31,7 +31,7 @@ global.stubReturns = function () {
   }, sinon.stub());
 };
 
-global.promisifyExpressMiddleware = function (middleware, req) {
+global.promisifyExpressMiddleware = function (middleware, req, err) {
   return new Promise((resolve, reject) => {
     const result = {
       res: {
@@ -60,7 +60,11 @@ global.promisifyExpressMiddleware = function (middleware, req) {
       status: getFakeExpressFn('res.status')
     };
     try {
-      middleware.handle(req, res, next);
+      if (err) {
+        middleware.handle(err, req, res, next);
+      } else {
+        middleware.handle(req, res, next);
+      }
     } catch (e) {
       reject(e);
     }
