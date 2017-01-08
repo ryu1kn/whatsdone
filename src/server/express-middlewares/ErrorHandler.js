@@ -31,10 +31,7 @@ class ErrorHandler {
       res.status(err.status || 500);
       clientMessage = '500: Internal Server Error';
     }
-    res.render('error', {
-      message: clientMessage,
-      error: {}
-    });
+    res.render('error', {message: clientMessage});
   }
 
 }
