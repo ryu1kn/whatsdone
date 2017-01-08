@@ -46,15 +46,9 @@ module.exports = function () {
   app.post('/dones.json', (...args) => ServiceLocator.postDonesRequestHandler.handle(...args));
   app.delete('/dones.json/:id', (...args) => ServiceLocator.deleteDoneRequestHandler.handle(...args));
   app.put('/dones.json/:id', (...args) => ServiceLocator.updateDoneRequestHandler.handle(...args));
+  app.all('*', (...args) => ServiceLocator.noMatchingRouteRequestHandler.handle(...args));
 
-  // catch 404 and forward to error handler
-  app.use(function (req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-  });
-
-  // error handler
+  // To tell express that this is an error handling middleware, we have to give 4 arguments
   app.use((err, req, res, _next) => {
     console.error(err.stack);
 

@@ -45,6 +45,10 @@ class ServiceLocator {
     return this._get('signoutRequestHandler');
   }
 
+  get noMatchingRouteRequestHandler() {
+    return this._get('noMatchingRouteRequestHandler');
+  }
+
   get userRepository() {
     return this._get('userRepository');
   }

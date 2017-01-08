@@ -71,6 +71,12 @@ class ServiceFactory {
     return this._signoutRequestHandler;
   }
 
+  getNoMatchingRouteRequestHandler() {
+    const NoMatchingRouteRequestHandler = require('./express-middlewares/NoMatchingRouteRequestHandler');
+    this._noMatchingRouteRequestHandler = this._noMatchingRouteRequestHandler || new NoMatchingRouteRequestHandler();
+    return this._noMatchingRouteRequestHandler;
+  }
+
   getDynamoDB() {
     this._dynamoDB = this._dynamoDB || new AWS.DynamoDB({region: this._env.DB_REGION});
     return this._dynamoDB;
