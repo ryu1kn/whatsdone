@@ -1,13 +1,10 @@
-var express = require('express');
 // var favicon = require('serve-favicon');
 const ServiceFactory = require('./ServiceFactory');
 const ServiceLocator = require('./ServiceLocator');
 
 ServiceLocator.load(new ServiceFactory({env: process.env}));
 
-module.exports = function () {
-  var app = express();
-
+module.exports = app => {
   // view engine setup
   app.set('views', ServiceLocator.viewDirectoryPath);
   app.set('view engine', 'pug');
@@ -36,6 +33,4 @@ module.exports = function () {
 
   // To tell express that this is an error handling middleware, we have to give 4 arguments
   app.use((...args) => ServiceLocator.errorHandler.handle(...args));
-
-  return app;
 };
