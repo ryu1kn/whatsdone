@@ -15,18 +15,10 @@ class UserRepository {
     });
   }
 
-  /**
-   * @param {string} id
-   * @return {q}
-   */
   getById(id) {
     return this._userDynamoTableClient.getById(id);
   }
 
-  /**
-   * @param {Array<string>} ids
-   * @return {q}
-   */
   getByIds(ids) {
     return this._userDynamoTableClient.getByIds(ids);
   }

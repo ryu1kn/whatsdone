@@ -45,7 +45,7 @@ describe('Server UserRepository', () => {
 
   it('finds users by user IDs', () => {
     const userDynamoTableClient = {
-      getById: sinon.stub().returns(Promise.resolve(['USER_1', 'USER_2']))
+      getByIds: sinon.stub().returns(Promise.resolve(['USER_1', 'USER_2']))
     };
     ServiceLocator.load({
       getUserDynamoTableClient: () => userDynamoTableClient,
@@ -53,9 +53,9 @@ describe('Server UserRepository', () => {
     });
     const userRepository = new UserRepository();
 
-    return userRepository.getById(['USER_ID_1', 'USER_ID_2']).then(users => {
+    return userRepository.getByIds(['USER_ID_1', 'USER_ID_2']).then(users => {
       expect(users).to.eql(['USER_1', 'USER_2']);
-      expect(userDynamoTableClient.getById).to.have.been.calledWith(
+      expect(userDynamoTableClient.getByIds).to.have.been.calledWith(
         ['USER_ID_1', 'USER_ID_2']
       );
     });
