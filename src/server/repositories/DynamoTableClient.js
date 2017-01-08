@@ -8,7 +8,6 @@ class DynamoTableClient {
     this._docClient = ServiceLocator.dynamoDBDocumentClient;
     this._uuidGenerator = ServiceLocator.uuidGenerator;
     this._collectionName = collectionName;
-    console.info('Collection `%s` is ready', this._collectionName);
   }
 
   getAll() {
