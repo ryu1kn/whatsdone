@@ -6,7 +6,7 @@ class ServiceLocator {
   }
 
   get accessLogger() {
-    return this._get('accesslogger');
+    return this._get('accessLogger');
   }
 
   get cookieParser() {

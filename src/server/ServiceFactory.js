@@ -50,7 +50,7 @@ class ServiceFactory {
   }
 
   getStaticContentsProvider() {
-    this._staticContentsProvider = this._staticContentsProvider || express.static(path.join(__dirname, '..', '..', '..', 'public'));
+    this._staticContentsProvider = this._staticContentsProvider || express.static(path.join(__dirname, '..', '..', 'public'));
     return this._staticContentsProvider;
   }
 
