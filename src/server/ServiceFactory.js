@@ -1,12 +1,57 @@
 
 const AWS = require('aws-sdk');
 const Uuid = require('uuid');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const express = require('express');
+const morgan = require('morgan');
+const path = require('path');
 const sha1 = require('sha1');
+const session = require('express-session');
+const DynamoDBStore = require('connect-dynamodb')({session});
 
 class ServiceFactory {
 
   constructor({env}) {
     this._env = env;
+  }
+
+  getAccessLogger() {
+    this._accessLogger = this._accessLogger || morgan('dev');
+    return this._accessLogger;
+  }
+
+  getCookieParser() {
+    this._cookieParser = this._cookieParser || cookieParser();
+    return this._cookieParser;
+  }
+
+  getEncodedUrlParser() {
+    this._encodedUrlParser = this._encodedUrlParser || bodyParser.urlencoded({extended: false});
+    return this._encodedUrlParser;
+  }
+
+  getJsonRequestBodyParser() {
+    this._jsonRequestBodyParser = this._jsonRequestBodyParser || bodyParser.json();
+    return this._jsonRequestBodyParser;
+  }
+
+  getSessionManager() {
+    this._sessionManager = this._sessionManager || session({
+      secret: this._env.SESSION_SECRET,
+      saveUninitialized: false,   // don't create session until something stored
+      resave: false,              // don't save session if unmodified
+      store: new DynamoDBStore({
+        table: 'whatsdone-sessions',
+        client: this._getDynamoDB()
+      })
+    });
+    return this._sessionManager;
+  }
+
+  getStaticContentsProvider() {
+    this._staticContentsProvider = this._staticContentsProvider || express.static(path.join(__dirname, '..', '..', '..', 'public'));
+    return this._staticContentsProvider;
   }
 
   getAuthBasedRedirectMiddleware() {
@@ -88,7 +133,7 @@ class ServiceFactory {
     return this._logger;
   }
 
-  getDynamoDB() {
+  _getDynamoDB() {
     this._dynamoDB = this._dynamoDB || new AWS.DynamoDB({region: this._env.DB_REGION});
     return this._dynamoDB;
   }

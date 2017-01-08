@@ -1,11 +1,6 @@
 var express = require('express');
-var session = require('express-session');
-var DynamoDBStore = require('connect-dynamodb')({session});
 var path = require('path');
 // var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
 const ServiceFactory = require('./ServiceFactory');
 const ServiceLocator = require('./ServiceLocator');
 
@@ -20,20 +15,12 @@ module.exports = function () {
 
   // TODO: uncomment after placing a favicon in /public
   // app.use(favicon(__dirname + '/public/favicon.ico'));
-  app.use(logger('dev'));
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({extended: false}));
-  app.use(cookieParser());
-  app.use(express.static(path.join(__dirname, '..', '..', 'public')));
-  app.use(session({
-    secret: process.env.SESSION_SECRET,
-    saveUninitialized: false,   // don't create session until something stored
-    resave: false,              // don't save session if unmodified
-    store: new DynamoDBStore({
-      table: 'whatsdone-sessions',
-      client: ServiceLocator.dynamoDB
-    })
-  }));
+  app.use(ServiceLocator.accessLogger);
+  app.use(ServiceLocator.jsonRequestBodyParser);
+  app.use(ServiceLocator.encodedUrlParser);
+  app.use(ServiceLocator.cookieParser);
+  app.use(ServiceLocator.staticContentsProvider);
+  app.use(ServiceLocator.sessionManager);
 
   app.all('*', (...args) => ServiceLocator.schemaBasedRedirectMiddleware.handle(...args));
   app.all('*', (...args) => ServiceLocator.authBasedRedirectMiddleware.handle(...args));

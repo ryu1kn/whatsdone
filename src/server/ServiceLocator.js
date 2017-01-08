@@ -5,6 +5,30 @@ class ServiceLocator {
     this._serviceFactory = serviceFactory;
   }
 
+  get accessLogger() {
+    return this._get('accesslogger');
+  }
+
+  get cookieParser() {
+    return this._get('cookieParser');
+  }
+
+  get encodedUrlParser() {
+    return this._get('encodedUrlParser');
+  }
+
+  get jsonRequestBodyParser() {
+    return this._get('jsonRequestBodyParser');
+  }
+
+  get sessionManager() {
+    return this._get('sessionManager');
+  }
+
+  get staticContentsProvider() {
+    return this._get('staticContentsProvider');
+  }
+
   get authBasedRedirectMiddleware() {
     return this._get('authBasedRedirectMiddleware');
   }
@@ -67,10 +91,6 @@ class ServiceLocator {
 
   get doneFormatter() {
     return this._get('doneFormatter');
-  }
-
-  get dynamoDB() {
-    return this._get('dynamoDB');
   }
 
   get dynamoDBDocumentClient() {
