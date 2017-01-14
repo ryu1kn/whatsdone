@@ -17,7 +17,7 @@ describe('Server DynamoTableClient', () => {
     const client = new DynamoTableClient('TABLE_NAME');
     return client.getAll().then(items => {
       expect(items).to.eql('ITEMS');
-      expect(dynamoDBDocumentClient.scan).to.have.been.calledWith({TableName: 'whatsdone-TABLE_NAME'});
+      expect(dynamoDBDocumentClient.scan).to.have.been.calledWith({TableName: 'TABLE_NAME'});
     });
   });
 
@@ -35,7 +35,7 @@ describe('Server DynamoTableClient', () => {
     return client.getById('ITEM_ID').then(item => {
       expect(item).to.eql('ITEM');
       expect(dynamoDBDocumentClient.get).to.have.been.calledWith({
-        TableName: 'whatsdone-TABLE_NAME',
+        TableName: 'TABLE_NAME',
         Key: {id: 'ITEM_ID'}
       });
     });
@@ -46,7 +46,7 @@ describe('Server DynamoTableClient', () => {
       batchGet: sinon.stub().returns({
         promise: () => Promise.resolve({
           Responses: {
-            'whatsdone-TABLE_NAME': ['ITEM_1', 'ITEM_2']
+            TABLE_NAME: ['ITEM_1', 'ITEM_2']
           }
         })
       })
@@ -60,7 +60,7 @@ describe('Server DynamoTableClient', () => {
       expect(items).to.eql(['ITEM_1', 'ITEM_2']);
       expect(dynamoDBDocumentClient.batchGet).to.have.been.calledWith({
         RequestItems: {
-          'whatsdone-TABLE_NAME': {
+          TABLE_NAME: {
             Keys: [{id: 'ITEM_ID_1'}, {id: 'ITEM_ID_2'}]
           }
         }
@@ -88,7 +88,7 @@ describe('Server DynamoTableClient', () => {
     return client.getByQuery(query).then(item => {
       expect(item).to.eql('ITEM');
       expect(dynamoDBDocumentClient.scan).to.have.been.calledWith({
-        TableName: 'whatsdone-TABLE_NAME',
+        TableName: 'TABLE_NAME',
         ExpressionAttributeValues: {
           ':KEY_1': 'VALUE_1',
           ':KEY_2': 'VALUE_2'
@@ -113,7 +113,7 @@ describe('Server DynamoTableClient', () => {
     return client.put(newItem).then(newId => {
       expect(newId).to.eql('UUID');
       expect(dynamoDBDocumentClient.put).to.have.been.calledWith({
-        TableName: 'whatsdone-TABLE_NAME',
+        TableName: 'TABLE_NAME',
         Item: {
           DATA: '..',
           id: 'UUID'
@@ -135,7 +135,7 @@ describe('Server DynamoTableClient', () => {
     const client = new DynamoTableClient('TABLE_NAME');
     return client.delete('ITEM_ID').then(() => {
       expect(dynamoDBDocumentClient.delete).to.have.been.calledWith({
-        TableName: 'whatsdone-TABLE_NAME',
+        TableName: 'TABLE_NAME',
         Key: {id: 'ITEM_ID'}
       });
     });
@@ -159,7 +159,7 @@ describe('Server DynamoTableClient', () => {
     return client.update('ITEM_ID', newData).then(item => {
       expect(item).to.eql('ITEM');
       expect(dynamoDBDocumentClient.update).to.have.been.calledWith({
-        TableName: 'whatsdone-TABLE_NAME',
+        TableName: 'TABLE_NAME',
         Key: {id: 'ITEM_ID'},
         AttributeUpdates: {
           KEY_1: {
@@ -173,7 +173,7 @@ describe('Server DynamoTableClient', () => {
         }
       });
       expect(dynamoDBDocumentClient.get).to.have.been.calledWith({
-        TableName: 'whatsdone-TABLE_NAME',
+        TableName: 'TABLE_NAME',
         Key: {id: 'ITEM_ID'}
       });
     });

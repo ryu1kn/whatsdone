@@ -77,7 +77,7 @@ class DynamoTableClient {
   }
 
   _getTableName() {
-    return 'whatsdone-' + this._collectionName;
+    return this._collectionName;
   }
 
   _getAttributeUpdatesValues(newData) {

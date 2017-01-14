@@ -42,7 +42,7 @@ class ServiceFactory {
       saveUninitialized: false,   // don't create session until something stored
       resave: false,              // don't save session if unmodified
       store: new DynamoDBStore({
-        table: 'whatsdone-sessions',
+        table: this._env.SESSION_TABLE_NAME,
         client: this._getDynamoDB()
       })
     });
@@ -150,7 +150,7 @@ class ServiceFactory {
 
   getDoneDynamoTableClient() {
     const DynamoTableClient = require('./repositories/DynamoTableClient');
-    return new DynamoTableClient('dones');
+    return new DynamoTableClient(this._env.DONE_TABLE_NAME);
   }
 
   getDoneRepository() {
@@ -167,7 +167,7 @@ class ServiceFactory {
 
   getUserDynamoTableClient() {
     const DynamoTableClient = require('./repositories/DynamoTableClient');
-    return new DynamoTableClient('users');
+    return new DynamoTableClient(this._env.USER_TABLE_NAME);
   }
 
   getUserRepository() {
