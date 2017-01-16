@@ -2,10 +2,9 @@
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 const gulp = require('gulp');
+const less = require('gulp-less');
 
-var less = require('gulp-less');
-
-var paths = {
+const paths = {
   js: {
     inEntry: './src/client/scripts/app.js',
     inAll: './src/client/scripts/**/*.js',
@@ -26,25 +25,24 @@ gulp.task('build', ['compile', 'copyImages']);
 
 gulp.task('compile', ['compilejs', 'compilecss']);
 
-gulp.task('compilejs', function () {
-  return browserify(paths.js.inEntry)
-      .bundle()
-      .pipe(source(paths.js.outName))
-      .pipe(gulp.dest(paths.js.outPath));
-});
+gulp.task('compilejs', () =>
+  browserify(paths.js.inEntry).bundle()
+    .pipe(source(paths.js.outName))
+    .pipe(gulp.dest(paths.js.outPath))
+);
 
-gulp.task('compilecss', function () {
-  return gulp.src(paths.css.in)
+gulp.task('compilecss', () =>
+  gulp.src(paths.css.in)
     .pipe(less())
-    .pipe(gulp.dest(paths.css.out));
-});
+    .pipe(gulp.dest(paths.css.out))
+);
 
 gulp.task('copyImages', () =>
   gulp.src(paths.images.in)
     .pipe(gulp.dest(paths.images.out))
 );
 
-gulp.task('watch', function () {
+gulp.task('watch', () => {
   gulp.watch(paths.js.inAll, ['compilejs']);
   gulp.watch(paths.css.in, ['compilecss']);
   gulp.watch(paths.images.in, ['copyImages']);
