@@ -9,12 +9,12 @@ module.exports = app => {
   app.set('views', ServiceLocator.viewDirectoryPath);
   app.set('view engine', 'pug');
 
-  app.use(ServiceLocator.faviconProvider);
   app.use(ServiceLocator.accessLogger);
   app.use(ServiceLocator.jsonRequestBodyParser);
   app.use(ServiceLocator.encodedUrlParser);
   app.use(ServiceLocator.cookieParser);
   app.use(ServiceLocator.staticContentsProvider);
+  app.use(ServiceLocator.faviconProvider);
   app.use(ServiceLocator.sessionManager);
 
   app.all('*', (...args) => ServiceLocator.schemaBasedRedirectMiddleware.handle(...args));
