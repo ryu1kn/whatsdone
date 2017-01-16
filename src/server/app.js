@@ -1,4 +1,4 @@
-// var favicon = require('serve-favicon');
+
 const ServiceFactory = require('./ServiceFactory');
 const ServiceLocator = require('./ServiceLocator');
 
@@ -9,8 +9,7 @@ module.exports = app => {
   app.set('views', ServiceLocator.viewDirectoryPath);
   app.set('view engine', 'pug');
 
-  // TODO: uncomment after placing a favicon in /public
-  // app.use(favicon(__dirname + '/public/favicon.ico'));
+  app.use(ServiceLocator.faviconProvider);
   app.use(ServiceLocator.accessLogger);
   app.use(ServiceLocator.jsonRequestBodyParser);
   app.use(ServiceLocator.encodedUrlParser);

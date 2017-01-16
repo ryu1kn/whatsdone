@@ -17,6 +17,10 @@ class ServiceLocator {
     return this._get('encodedUrlParser');
   }
 
+  get faviconProvider() {
+    return this._get('faviconProvider');
+  }
+
   get jsonRequestBodyParser() {
     return this._get('jsonRequestBodyParser');
   }

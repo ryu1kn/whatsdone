@@ -4,10 +4,12 @@ const Uuid = require('uuid');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const express = require('express');
+const favicon = require('serve-favicon');
 const morgan = require('morgan');
 const path = require('path');
 const sha1 = require('sha1');
 const session = require('express-session');
+
 const DynamoDBStore = require('connect-dynamodb')({session});
 
 class ServiceFactory {
@@ -29,6 +31,11 @@ class ServiceFactory {
   getEncodedUrlParser() {
     this._encodedUrlParser = this._encodedUrlParser || bodyParser.urlencoded({extended: false});
     return this._encodedUrlParser;
+  }
+
+  getFaviconProvider() {
+    this._faviconProvider = this._faviconProvider || favicon(path.join(__dirname, '..', '..', 'public', 'images', 'favicon.ico'));
+    return this._faviconProvider;
   }
 
   getJsonRequestBodyParser() {
