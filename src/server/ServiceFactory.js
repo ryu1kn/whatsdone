@@ -57,7 +57,7 @@ class ServiceFactory {
   }
 
   getStaticContentsProvider() {
-    this._staticContentsProvider = this._staticContentsProvider || express.static(pathUnderPublic('.'));
+    this._staticContentsProvider = this._staticContentsProvider || express.static(pathUnderPublic());
     return this._staticContentsProvider;
   }
 
@@ -195,7 +195,8 @@ class ServiceFactory {
 
 // e.g. images/favicon.ico => /path/to/public/images/favicon.ico
 function pathUnderPublic(pathFromPublic) {
-  return path.join(__dirname, '..', '..', 'public', ...pathFromPublic.split('/'));
+  const pathParts = pathFromPublic ? pathFromPublic.split('/') : [];
+  return path.join(__dirname, '..', '..', 'public', ...pathParts);
 }
 
 module.exports = ServiceFactory;
