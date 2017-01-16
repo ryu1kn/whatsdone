@@ -34,7 +34,7 @@ class ServiceFactory {
   }
 
   getFaviconProvider() {
-    this._faviconProvider = this._faviconProvider || favicon(path.join(__dirname, '..', '..', 'public', 'images', 'favicon.ico'));
+    this._faviconProvider = this._faviconProvider || favicon(pathUnderPublic('images/favicon.ico'));
     return this._faviconProvider;
   }
 
@@ -57,7 +57,7 @@ class ServiceFactory {
   }
 
   getStaticContentsProvider() {
-    this._staticContentsProvider = this._staticContentsProvider || express.static(path.join(__dirname, '..', '..', 'public'));
+    this._staticContentsProvider = this._staticContentsProvider || express.static(pathUnderPublic('.'));
     return this._staticContentsProvider;
   }
 
@@ -191,6 +191,11 @@ class ServiceFactory {
     return {generate: () => Uuid.v4()};
   }
 
+}
+
+// e.g. images/favicon.ico => /path/to/public/images/favicon.ico
+function pathUnderPublic(pathFromPublic) {
+  return path.join(__dirname, '..', '..', 'public', ...pathFromPublic.split('/'));
 }
 
 module.exports = ServiceFactory;
