@@ -50,7 +50,7 @@
   },
   "scripts": {
     "postinstall": "npm run build",
-    "build": "gulp compile",
+    "build": "gulp build",
     "watch": "gulp",
     "test": "mocha --opts mocha.opts",
     "start": "node ./bin/www",

@@ -15,15 +15,16 @@ var paths = {
   css: {
     in: './src/stylesheets/**/*.less',
     out: './public/css'
+  },
+  images: {
+    in: './src/images/**/*',
+    out: './public/images'
   }
 };
 
-gulp.task('compile', ['compilejs', 'compilecss']);
+gulp.task('build', ['compile', 'copyImages']);
 
-gulp.task('watch', function () {
-  gulp.watch(paths.js.inAll, ['compilejs']);
-  gulp.watch(paths.css.in, ['compilecss']);
-});
+gulp.task('compile', ['compilejs', 'compilecss']);
 
 gulp.task('compilejs', function () {
   return browserify(paths.js.inEntry)
@@ -36,6 +37,17 @@ gulp.task('compilecss', function () {
   return gulp.src(paths.css.in)
     .pipe(less())
     .pipe(gulp.dest(paths.css.out));
+});
+
+gulp.task('copyImages', () =>
+  gulp.src(paths.images.in)
+    .pipe(gulp.dest(paths.images.out))
+);
+
+gulp.task('watch', function () {
+  gulp.watch(paths.js.inAll, ['compilejs']);
+  gulp.watch(paths.css.in, ['compilecss']);
+  gulp.watch(paths.images.in, ['copyImages']);
 });
 
 gulp.task('default', ['compilejs', 'compilecss', 'watch']);
