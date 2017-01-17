@@ -7,10 +7,10 @@ describe('Server UpdateDoneRequestHandler', () => {
   it('updates a done item', () => {
     const doneFormatter = {format: sinon.stub().returns('FORMATTED_DONE')};
     ServiceLocator.load({
-      getDoneRepository: () => ({
+      createDoneRepository: () => ({
         update: stubWithArgs(['DONE_ID', 'USER_ID', {DONE_DATA: '..'}], Promise.resolve('UPDATED_DONE'))
       }),
-      getDoneFormatter: () => doneFormatter
+      createDoneFormatter: () => doneFormatter
     });
     const middleware = new UpdateDoneRequestHandler();
 

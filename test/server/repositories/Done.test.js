@@ -9,7 +9,7 @@ describe('Server DoneRepository', () => {
       getAll: () => Promise.resolve('DONES')
     };
     ServiceLocator.load({
-      getDoneDynamoTableClient: () => doneDynamoTableClient
+      createDoneDynamoTableClient: () => doneDynamoTableClient
     });
     const repository = new DoneRepository();
 
@@ -24,7 +24,7 @@ describe('Server DoneRepository', () => {
       getById: sinon.stub().returns(Promise.resolve('NEW_DONE_WITH_ID'))
     };
     ServiceLocator.load({
-      getDoneDynamoTableClient: () => doneDynamoTableClient
+      createDoneDynamoTableClient: () => doneDynamoTableClient
     });
     const repository = new DoneRepository();
 
@@ -42,7 +42,7 @@ describe('Server DoneRepository', () => {
       delete: sinon.spy()
     };
     ServiceLocator.load({
-      getDoneDynamoTableClient: () => doneDynamoTableClient
+      createDoneDynamoTableClient: () => doneDynamoTableClient
     });
     const repository = new DoneRepository();
 
@@ -64,7 +64,7 @@ describe('Server DoneRepository', () => {
       update: sinon.stub().returns(Promise.resolve('UPDATED_DINE'))
     };
     ServiceLocator.load({
-      getDoneDynamoTableClient: () => doneDynamoTableClient
+      createDoneDynamoTableClient: () => doneDynamoTableClient
     });
     const repository = new DoneRepository();
 

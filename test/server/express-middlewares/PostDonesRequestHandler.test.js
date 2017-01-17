@@ -15,8 +15,8 @@ describe('Server PostDonesRequestHandler', () => {
       )
     };
     ServiceLocator.load({
-      getUserRepository: () => userRepository,
-      getDoneRepository: () => doneRepository
+      createUserRepository: () => userRepository,
+      createDoneRepository: () => doneRepository
     });
     const middleware = new PostDonesRequestHandler();
 

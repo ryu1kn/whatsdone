@@ -9,7 +9,7 @@ describe('Server PostSigninRequestHandler', () => {
       findUser: sinon.stub().returns(Promise.resolve({id: 'USER_ID'}))
     };
     ServiceLocator.load({
-      getUserRepository: () => userRepository
+      createUserRepository: () => userRepository
     });
     const middleware = new PostSigninRequestHandler();
 
@@ -29,7 +29,7 @@ describe('Server PostSigninRequestHandler', () => {
 
   it('still shows signin page', () => {
     ServiceLocator.load({
-      getUserRepository: () => ({
+      createUserRepository: () => ({
         findUser: () => Promise.resolve(null)
       })
     });
@@ -45,7 +45,7 @@ describe('Server PostSigninRequestHandler', () => {
 
   it('propagates error', () => {
     ServiceLocator.load({
-      getUserRepository: () => ({
+      createUserRepository: () => ({
         findUser: () => Promise.reject(new Error('UNEXPECTED_ERROR'))
       })
     });

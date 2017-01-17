@@ -11,8 +11,8 @@ describe('Server DynamoTableClient', () => {
       })
     };
     ServiceLocator.load({
-      getDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      getUuidGenerator: () => {}
+      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
+      createUuidGenerator: () => {}
     });
     const client = new DynamoTableClient('TABLE_NAME');
     return client.getAll().then(items => {
@@ -28,8 +28,8 @@ describe('Server DynamoTableClient', () => {
       })
     };
     ServiceLocator.load({
-      getDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      getUuidGenerator: () => {}
+      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
+      createUuidGenerator: () => {}
     });
     const client = new DynamoTableClient('TABLE_NAME');
     return client.getById('ITEM_ID').then(item => {
@@ -52,8 +52,8 @@ describe('Server DynamoTableClient', () => {
       })
     };
     ServiceLocator.load({
-      getDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      getUuidGenerator: () => {}
+      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
+      createUuidGenerator: () => {}
     });
     const client = new DynamoTableClient('TABLE_NAME');
     return client.getByIds(['ITEM_ID_1', 'ITEM_ID_2']).then(items => {
@@ -77,8 +77,8 @@ describe('Server DynamoTableClient', () => {
       })
     };
     ServiceLocator.load({
-      getDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      getUuidGenerator: () => {}
+      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
+      createUuidGenerator: () => {}
     });
     const client = new DynamoTableClient('TABLE_NAME');
     const query = {
@@ -105,8 +105,8 @@ describe('Server DynamoTableClient', () => {
       })
     };
     ServiceLocator.load({
-      getDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      getUuidGenerator: () => ({generate: () => 'UUID'})
+      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
+      createUuidGenerator: () => ({generate: () => 'UUID'})
     });
     const client = new DynamoTableClient('TABLE_NAME');
     const newItem = {DATA: '..'};
@@ -129,8 +129,8 @@ describe('Server DynamoTableClient', () => {
       })
     };
     ServiceLocator.load({
-      getDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      getUuidGenerator: () => {}
+      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
+      createUuidGenerator: () => {}
     });
     const client = new DynamoTableClient('TABLE_NAME');
     return client.delete('ITEM_ID').then(() => {
@@ -151,8 +151,8 @@ describe('Server DynamoTableClient', () => {
       })
     };
     ServiceLocator.load({
-      getDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      getUuidGenerator: () => {}
+      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
+      createUuidGenerator: () => {}
     });
     const client = new DynamoTableClient('TABLE_NAME');
     const newData = {KEY_1: 'VALUE_1', KEY_2: 'VALUE_2'};

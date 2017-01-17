@@ -6,7 +6,7 @@ describe('Server DeleteDoneRequestHandler', () => {
 
   it('deletes a done item', () => {
     ServiceLocator.load({
-      getDoneRepository: () => ({
+      createDoneRepository: () => ({
         remove: stubWithArgs(['DONE_ID', 'USER_ID'], Promise.resolve())
       })
     });
@@ -23,7 +23,7 @@ describe('Server DeleteDoneRequestHandler', () => {
 
   it('propagates error', () => {
     ServiceLocator.load({
-      getDoneRepository: () => ({
+      createDoneRepository: () => ({
         remove: () => Promise.reject(new Error('UNEXPECTED_ERROR'))
       })
     });

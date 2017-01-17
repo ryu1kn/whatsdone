@@ -3,6 +3,7 @@ class ServiceLocator {
 
   load(serviceFactory) {
     this._serviceFactory = serviceFactory;
+    this._cache = {};
   }
 
   get accessLogger() {
@@ -122,13 +123,35 @@ class ServiceLocator {
   }
 
   _get(serviceName) {
-    const methodName = this._getGetterName(serviceName);
+    const cachedInstance = this._getCachedInstance(serviceName);
+    if (cachedInstance) return cachedInstance;
+
+    const instance = this._getFromServiceFactory(serviceName);
+    this._cacheInstance(serviceName, instance);
+    return instance;
+  }
+
+  _getCachedInstance(serviceName) {
+    return this._cache[this._getCacheName(serviceName)];
+  }
+
+  _getFromServiceFactory(serviceName) {
+    const methodName = this._getFactoryName(serviceName);
     return this._serviceFactory[methodName]();
   }
 
   // fooBar -> getFooBar
-  _getGetterName(name) {
-    return ['get', name[0].toUpperCase(), name.substring(1)].join('');
+  _getFactoryName(name) {
+    return ['create', name[0].toUpperCase(), name.substring(1)].join('');
+  }
+
+  _cacheInstance(serviceName, serviceInstance) {
+    const cacheName = this._getCacheName(serviceName);
+    this._cache[cacheName] = serviceInstance;
+  }
+
+  _getCacheName(name) {
+    return `_${name}`;
   }
 
 }

@@ -7,7 +7,7 @@ describe('Server ErrorHandler', () => {
   it('shows NOT FOUND page if error indicates so', () => {
     const logger = {error: sinon.spy()};
     ServiceLocator.load({
-      getLogger: () => logger
+      createLogger: () => logger
     });
     const middleware = new ErrorHandler();
 

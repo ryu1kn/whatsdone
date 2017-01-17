@@ -9,8 +9,8 @@ describe('Server UserRepository', () => {
       getByQuery: sinon.stub().returns(Promise.resolve('USER'))
     };
     ServiceLocator.load({
-      getUserDynamoTableClient: () => userDynamoTableClient,
-      getHashGenerator: () => ({generate: () => 'HASH'})
+      createUserDynamoTableClient: () => userDynamoTableClient,
+      createHashGenerator: () => ({generate: () => 'HASH'})
     });
     const userRepository = new UserRepository();
 
@@ -32,8 +32,8 @@ describe('Server UserRepository', () => {
       getById: sinon.stub().returns(Promise.resolve('USER'))
     };
     ServiceLocator.load({
-      getUserDynamoTableClient: () => userDynamoTableClient,
-      getHashGenerator: () => {}
+      createUserDynamoTableClient: () => userDynamoTableClient,
+      createHashGenerator: () => {}
     });
     const userRepository = new UserRepository();
 
@@ -48,8 +48,8 @@ describe('Server UserRepository', () => {
       getByIds: sinon.stub().returns(Promise.resolve(['USER_1', 'USER_2']))
     };
     ServiceLocator.load({
-      getUserDynamoTableClient: () => userDynamoTableClient,
-      getHashGenerator: () => {}
+      createUserDynamoTableClient: () => userDynamoTableClient,
+      createHashGenerator: () => {}
     });
     const userRepository = new UserRepository();
 

@@ -12,8 +12,8 @@ describe('Server GetDonesRequestHandler', () => {
       read: () => Promise.resolve([{userId: 'USER_ID'}])
     };
     ServiceLocator.load({
-      getUserRepository: () => userRepository,
-      getDoneRepository: () => doneRepository
+      createUserRepository: () => userRepository,
+      createDoneRepository: () => doneRepository
     });
     const middleware = new GetDonesRequestHandler();
 
@@ -26,8 +26,8 @@ describe('Server GetDonesRequestHandler', () => {
 
   it('propagates error', () => {
     ServiceLocator.load({
-      getUserRepository: () => {},
-      getDoneRepository: () => ({
+      createUserRepository: () => {},
+      createDoneRepository: () => ({
         read: () => Promise.reject(new Error('UNEXPECTED_ERROR'))
       })
     });

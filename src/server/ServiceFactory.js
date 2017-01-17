@@ -18,33 +18,28 @@ class ServiceFactory {
     this._env = env;
   }
 
-  getAccessLogger() {
-    this._accessLogger = this._accessLogger || morgan('dev');
-    return this._accessLogger;
+  createAccessLogger() {
+    return morgan('dev');
   }
 
-  getCookieParser() {
-    this._cookieParser = this._cookieParser || cookieParser();
-    return this._cookieParser;
+  createCookieParser() {
+    return cookieParser();
   }
 
-  getEncodedUrlParser() {
-    this._encodedUrlParser = this._encodedUrlParser || bodyParser.urlencoded({extended: false});
-    return this._encodedUrlParser;
+  createEncodedUrlParser() {
+    return bodyParser.urlencoded({extended: false});
   }
 
-  getFaviconProvider() {
-    this._faviconProvider = this._faviconProvider || favicon(pathUnderPublic('images/favicon.ico'));
-    return this._faviconProvider;
+  createFaviconProvider() {
+    return favicon(pathUnderPublic('images/favicon.ico'));
   }
 
-  getJsonRequestBodyParser() {
-    this._jsonRequestBodyParser = this._jsonRequestBodyParser || bodyParser.json();
-    return this._jsonRequestBodyParser;
+  createJsonRequestBodyParser() {
+    return bodyParser.json();
   }
 
-  getSessionManager() {
-    this._sessionManager = this._sessionManager || session({
+  createSessionManager() {
+    return session({
       secret: this._env.SESSION_SECRET,
       saveUninitialized: false,   // don't create session until something stored
       resave: false,              // don't save session if unmodified
@@ -53,141 +48,120 @@ class ServiceFactory {
         client: this._getDynamoDB()
       })
     });
-    return this._sessionManager;
   }
 
-  getStaticContentsProvider() {
-    this._staticContentsProvider = this._staticContentsProvider || express.static(pathUnderPublic());
-    return this._staticContentsProvider;
+  createStaticContentsProvider() {
+    return express.static(pathUnderPublic());
   }
 
-  getViewDirectoryPath() {
+  createViewDirectoryPath() {
     return path.join(__dirname, 'views');
   }
 
-  getAuthBasedRedirectMiddleware() {
+  createAuthBasedRedirectMiddleware() {
     const AuthBasedRedirectMiddleware = require('./express-middlewares/AuthBasedRedirect');
-    this._authBasedRedirectMiddleware = this._authBasedRedirectMiddleware || new AuthBasedRedirectMiddleware();
-    return this._authBasedRedirectMiddleware;
+    return new AuthBasedRedirectMiddleware();
   }
 
-  getSchemaBasedRedirectMiddleware() {
+  createSchemaBasedRedirectMiddleware() {
     const SchemaBasedRedirectMiddleware = this._env.NODE_ENV === 'production' ?
         require('./express-middlewares/SchemaBasedRedirect') :
         require('./express-middlewares/DevSchemaBasedRedirect');
-    this._schemaBasedRedirectMiddleware = this._schemaBasedRedirectMiddleware || new SchemaBasedRedirectMiddleware();
-    return this._schemaBasedRedirectMiddleware;
+    return new SchemaBasedRedirectMiddleware();
   }
 
-  getGetRootPageRequestHandler() {
+  createGetRootPageRequestHandler() {
     const GetRootPageRequestHandler = require('./express-middlewares/GetRootPageRequestHandler');
-    this._getRootPageRequestHandler = this._getRootPageRequestHandler || new GetRootPageRequestHandler();
-    return this._getRootPageRequestHandler;
+    return new GetRootPageRequestHandler();
   }
 
-  getGetDonesRequestHandler() {
+  createGetDonesRequestHandler() {
     const GetDonesRequestHandler = require('./express-middlewares/GetDonesRequestHandler');
-    this._getDonesRequestHandler = this._getDonesRequestHandler || new GetDonesRequestHandler();
-    return this._getDonesRequestHandler;
+    return new GetDonesRequestHandler();
   }
 
-  getPostDonesRequestHandler() {
+  createPostDonesRequestHandler() {
     const PostDonesRequestHandler = require('./express-middlewares/PostDonesRequestHandler');
-    this._postDonesRequestHandler = this._postDonesRequestHandler || new PostDonesRequestHandler();
-    return this._postDonesRequestHandler;
+    return new PostDonesRequestHandler();
   }
 
-  getDeleteDoneRequestHandler() {
+  createDeleteDoneRequestHandler() {
     const DeleteDoneRequestHandler = require('./express-middlewares/DeleteDoneRequestHandler');
-    this._deleteDoneRequestHandler = this._deleteDoneRequestHandler || new DeleteDoneRequestHandler();
-    return this._deleteDoneRequestHandler;
+    return new DeleteDoneRequestHandler();
   }
 
-  getUpdateDoneRequestHandler() {
+  createUpdateDoneRequestHandler() {
     const UpdateDoneRequestHandler = require('./express-middlewares/UpdateDoneRequestHandler');
-    this._updateDoneRequestHandler = this._updateDoneRequestHandler || new UpdateDoneRequestHandler();
-    return this._updateDoneRequestHandler;
+    return new UpdateDoneRequestHandler();
   }
 
-  getGetSigninRequestHandler() {
+  createGetSigninRequestHandler() {
     const GetSigninRequestHandler = require('./express-middlewares/GetSigninRequestHandler');
-    this._getSigninRequestHandler = this._getSigninRequestHandler || new GetSigninRequestHandler();
-    return this._getSigninRequestHandler;
+    return new GetSigninRequestHandler();
   }
 
-  getPostSigninRequestHandler() {
+  createPostSigninRequestHandler() {
     const PostSigninRequestHandler = require('./express-middlewares/PostSigninRequestHandler');
-    this._postSigninRequestHandler = this._postSigninRequestHandler || new PostSigninRequestHandler();
-    return this._postSigninRequestHandler;
+    return new PostSigninRequestHandler();
   }
 
-  getSignoutRequestHandler() {
+  createSignoutRequestHandler() {
     const SignoutRequestHandler = require('./express-middlewares/SignoutRequestHandler');
-    this._signoutRequestHandler = this._signoutRequestHandler || new SignoutRequestHandler();
-    return this._signoutRequestHandler;
+    return new SignoutRequestHandler();
   }
 
-  getNoMatchingRouteRequestHandler() {
+  createNoMatchingRouteRequestHandler() {
     const NoMatchingRouteRequestHandler = require('./express-middlewares/NoMatchingRouteRequestHandler');
-    this._noMatchingRouteRequestHandler = this._noMatchingRouteRequestHandler || new NoMatchingRouteRequestHandler();
-    return this._noMatchingRouteRequestHandler;
+    return new NoMatchingRouteRequestHandler();
   }
 
-  getErrorHandler() {
+  createErrorHandler() {
     const ErrorHandler = require('./express-middlewares/ErrorHandler');
-    this._errorHandler = this._errorHandler || new ErrorHandler();
-    return this._errorHandler;
+    return new ErrorHandler();
   }
 
-  getLogger() {
-    this._logger = this._logger || console;
-    return this._logger;
+  createLogger() {
+    return console;
   }
 
   _getDynamoDB() {
-    this._dynamoDB = this._dynamoDB || new AWS.DynamoDB({region: this._env.DB_REGION});
-    return this._dynamoDB;
+    return new AWS.DynamoDB({region: this._env.DB_REGION});
   }
 
-  getDynamoDBDocumentClient() {
-    this._documentClient = this._documentClient ||
-        new AWS.DynamoDB.DocumentClient({region: this._env.DB_REGION});
-    return this._documentClient;
+  createDynamoDBDocumentClient() {
+    return new AWS.DynamoDB.DocumentClient({region: this._env.DB_REGION});
   }
 
-  getDoneDynamoTableClient() {
+  createDoneDynamoTableClient() {
     const DynamoTableClient = require('./repositories/DynamoTableClient');
     return new DynamoTableClient(this._env.DONE_TABLE_NAME);
   }
 
-  getDoneRepository() {
+  createDoneRepository() {
     const DoneRepository = require('./repositories/Done');
-    this._doneRepository = this._doneRepository || new DoneRepository();
-    return this._doneRepository;
+    return new DoneRepository();
   }
 
-  getDoneFormatter() {
+  createDoneFormatter() {
     const DoneFormatter = require('./DoneFormatter');
-    this._doneFormatter = this._doneFormatter || new DoneFormatter();
-    return this._doneFormatter;
+    return new DoneFormatter();
   }
 
-  getUserDynamoTableClient() {
+  createUserDynamoTableClient() {
     const DynamoTableClient = require('./repositories/DynamoTableClient');
     return new DynamoTableClient(this._env.USER_TABLE_NAME);
   }
 
-  getUserRepository() {
+  createUserRepository() {
     const UserRepository = require('./repositories/User');
-    this._userRepository = this._userRepository || new UserRepository();
-    return this._userRepository;
+    return new UserRepository();
   }
 
-  getHashGenerator() {
+  createHashGenerator() {
     return {generate: sha1};
   }
 
-  getUuidGenerator() {
+  createUuidGenerator() {
     return {generate: () => Uuid.v4()};
   }
 
