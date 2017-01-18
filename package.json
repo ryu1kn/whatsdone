@@ -49,10 +49,10 @@
     "node": "6.9.2"
   },
   "scripts": {
-    "postinstall": "npm run build",
     "build": "gulp build",
     "watch": "gulp",
     "test": "mocha --opts mocha.opts",
+    "prestart": "gulp build",
     "start": "node ./bin/www",
     "lint": "eslint .",
     "coverage": "istanbul cover ./node_modules/.bin/_mocha -- --opts mocha.opts"
