@@ -6,6 +6,7 @@ npm-debug.log
 /public/
 /Procfile
 /.env
+/.kumo
 __*
 
 # Elastic Beanstalk Files

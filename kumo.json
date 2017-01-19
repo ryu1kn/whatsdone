@@ -1,0 +1,10 @@
+{
+  "pluginPacks": {
+    "kumo-plugins": "0.0.28"
+  },
+  "deployer": {
+    "outputsBucket": {
+      "name": "whatsdone-deployment-outputs"
+    }
+  }
+}

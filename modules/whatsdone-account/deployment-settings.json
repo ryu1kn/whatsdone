@@ -1,0 +1,13 @@
+{
+  "moduleName": "whatsdone-account",
+  "tasks": [
+    {
+      "id": "prepare-recordset",
+      "type": "cf-stack",
+      "stackName": "recordset",
+      "stackTemplate": {
+        "script": "cp ./route53.json $KUMO_TEMPLATE_OUTPUT_FILE"
+      }
+    }
+  ]
+}
