@@ -5,15 +5,14 @@
 
 Personal activity tracker. Take memos of what I (or we) have done today.
 
-- server: heroku
-- backend: Node.js
+- backend: Node.js (deployed on ~~heroku~~ AWS)
 - frontend: React
 
 ## Notes
 
 ### How to use locally
 
-Set environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `SESSION_SECRET` and `DB_REGION`) and execute commands:
+Set environment variables (`AWS_PROFILE`, `SESSION_SECRET` and `DB_REGION`) and execute commands:
 
 ```sh
 $ npm install
@@ -22,6 +21,6 @@ $ npm start
 
 Access to `http://localhost:3000` with your web browser.
 
-### Deploy to Heroku
+### Deploy to AWS Elasticbeanstalk
 
-* Just do `git push heroku master`
+* Just do `eb deploy`
