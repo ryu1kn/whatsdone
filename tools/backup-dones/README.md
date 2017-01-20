@@ -1,9 +1,11 @@
 
-# whatsdone-cli
+# Backup Dones
 
-Command line utilities for [What's Done](https://github.com/ryu1kn/whatsdone)
+Backup done items
 
 ## Backup
+
+*TODO*: Change command name to `whatsdone-cli` to `backup-dones`
 
 ```sh
 $ ./whatsdone-cli backup --prop backup.properties
