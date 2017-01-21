@@ -5,7 +5,7 @@
 
 Personal activity tracker. Take memos of what I (or we) have done today.
 
-- backend: Node.js (deployed on ~~heroku~~ AWS)
+- backend: Node.js (deployed on ~~heroku~~ AWS by `kumo`)
 - frontend: React
 
 ## Notes
