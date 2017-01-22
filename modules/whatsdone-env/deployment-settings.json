@@ -1,0 +1,13 @@
+{
+  "moduleName": "whatsdone-env",
+  "tasks": [
+    {
+      "id": "prepare-root-bucket",
+      "type": "cf-stack",
+      "stackName": "rootBucket",
+      "stackTemplate": {
+        "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
+      }
+    }
+  ]
+}

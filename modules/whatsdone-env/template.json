@@ -1,0 +1,21 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "whatsdone service wide resources",
+  "Resources": {
+    "WhatsdoneBucket": {
+      "Type" : "AWS::S3::Bucket",
+      "DeletionPolicy": "Retain",
+      "Properties" : {
+        "BucketName" : "whatsdone"
+      }
+    }
+  },
+  "Outputs": {
+    "WhatsdoneBucket": {
+      "Description": "Bucket for the project",
+      "Value": {
+        "Ref": "WhatsdoneBucket"
+      }
+    }
+  }
+}

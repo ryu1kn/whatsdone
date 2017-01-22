@@ -1,6 +1,11 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Stack for whatsdone service wide resources",
+  "Description": "whatsdone domain",
+  "Parameters": {
+    "CloudFrontDistributionDomainName": {
+      "Type": "String"
+    }
+  },
   "Resources": {
     "RecordSet": {
       "Type": "AWS::Route53::RecordSet",
@@ -9,8 +14,8 @@
         "Name": "whatsdone.ryuichi.io.",
         "Type": "A",
         "AliasTarget": {
-          "DNSName": "prod.3zij2a5i8y.ap-southeast-2.elasticbeanstalk.com",
-          "HostedZoneId": "Z2PCDNR3VC2G1N"
+          "DNSName": {"Ref": "CloudFrontDistributionDomainName"},
+          "HostedZoneId": "Z2FDTNDATAQYW2"
         }
       }
     }

@@ -1,0 +1,17 @@
+{
+  "moduleName": "whatsdone-gateway",
+  "dependsOn": ["../whatsdone-web-cache"],
+  "tasks": [
+    {
+      "id": "prepare-recordset",
+      "type": "cf-stack",
+      "stackName": "recordset",
+      "stackTemplate": {
+        "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
+      },
+      "stackParams": {
+        "CloudFrontDistributionDomainName": {"$ref": "#/_deploymentOutputs/whatsdone-web-cache/CloudFrontDistributionDomainName"}
+      }
+    }
+  ]
+}

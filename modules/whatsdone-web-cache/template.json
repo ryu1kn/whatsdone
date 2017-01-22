@@ -1,0 +1,77 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "whatsdone content delivery",
+  "Parameters": {
+    "WhatsdoneBucket": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "CloudFrontDistribution": {
+      "Type": "AWS::CloudFront::Distribution",
+      "DependsOn": "OriginRecordSet",
+      "Properties": {
+        "DistributionConfig": {
+          "Aliases": ["whatsdone.ryuichi.io"],
+          "DefaultCacheBehavior": {
+            "ForwardedValues": {
+              "Cookies": {
+                "Forward": "all"
+              },
+              "QueryString": true
+            },
+            "AllowedMethods": ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"],
+            "DefaultTTL": 0,
+            "MaxTTL": 0,
+            "MinTTL": 0,
+            "TargetOriginId": "elb-whatsdone",
+            "ViewerProtocolPolicy": "https-only"
+          },
+          "Enabled": true,
+          "Logging": {
+            "Bucket": {"Fn::Sub": "${WhatsdoneBucket}.s3.amazonaws.com"},
+            "Prefix": "cloudfront-whatsdone",
+            "IncludeCookies": true
+          },
+          "Origins": [
+            {
+              "CustomOriginConfig": {
+                "HTTPSPort": "443",
+                "OriginProtocolPolicy": "https-only",
+                "OriginSSLProtocols": ["TLSv1.2"]
+              },
+              "DomainName": {"Ref": "OriginRecordSet"},
+              "Id": "elb-whatsdone"
+            }
+          ],
+          "PriceClass": "PriceClass_All",
+          "ViewerCertificate": {
+            "AcmCertificateArn": "arn:aws:acm:us-east-1:650892143834:certificate/00cb96a1-2a06-4216-a30d-e810f2a6e6a8",
+            "MinimumProtocolVersion": "TLSv1",
+            "SslSupportMethod": "sni-only"
+          }
+        }
+      }
+    },
+    "OriginRecordSet": {
+      "Type": "AWS::Route53::RecordSet",
+      "Properties": {
+        "HostedZoneName": "ryuichi.io.",
+        "Name": "whatsdone-lb.ryuichi.io.",
+        "Type": "A",
+        "AliasTarget": {
+          "DNSName": "prod.3zij2a5i8y.ap-southeast-2.elasticbeanstalk.com",
+          "HostedZoneId": "Z2PCDNR3VC2G1N"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "CloudFrontDistributionDomainName": {
+      "Description": "CloudFront Distribution domain name",
+      "Value": {
+        "Fn::GetAtt": ["CloudFrontDistribution", "DomainName"]
+      }
+    }
+  }
+}

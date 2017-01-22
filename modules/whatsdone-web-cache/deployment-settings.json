@@ -1,0 +1,17 @@
+{
+  "moduleName": "whatsdone-web-cache",
+  "dependsOn": ["../whatsdone-env"],
+  "tasks": [
+    {
+      "id": "prepare-cloudfront",
+      "type": "cf-stack",
+      "stackName": "cloudfront",
+      "stackTemplate": {
+        "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
+      },
+      "stackParams": {
+        "WhatsdoneBucket": {"$ref": "#/_deploymentOutputs/whatsdone-env/WhatsdoneBucket"}
+      }
+    }
+  ]
+}
