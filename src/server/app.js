@@ -17,19 +17,19 @@ module.exports = app => {
   app.use(ServiceLocator.faviconProvider);
   app.use(ServiceLocator.sessionManager);
 
-  app.all('*', (...args) => ServiceLocator.schemaBasedRedirectMiddleware.handle(...args));
-  app.all('*', (...args) => ServiceLocator.authBasedRedirectMiddleware.handle(...args));
-  app.get('/', (...args) => ServiceLocator.getRootPageRequestHandler.handle(...args));
-  app.get('/signin', (...args) => ServiceLocator.getSigninRequestHandler.handle(...args));
-  app.post('/signin', (...args) => ServiceLocator.postSigninRequestHandler.handle(...args));
-  app.get('/signout', (...args) => ServiceLocator.signoutRequestHandler.handle(...args));
-  app.post('/signout', (...args) => ServiceLocator.signoutRequestHandler.handle(...args));
-  app.get('/dones.json', (...args) => ServiceLocator.getDonesRequestHandler.handle(...args));
-  app.post('/dones.json', (...args) => ServiceLocator.postDonesRequestHandler.handle(...args));
-  app.delete('/dones.json/:id', (...args) => ServiceLocator.deleteDoneRequestHandler.handle(...args));
-  app.put('/dones.json/:id', (...args) => ServiceLocator.updateDoneRequestHandler.handle(...args));
-  app.all('*', (...args) => ServiceLocator.noMatchingRouteRequestHandler.handle(...args));
+  app.all('*', ServiceLocator.schemaBasedRedirectMiddleware);
+  app.all('*', ServiceLocator.authBasedRedirectMiddleware);
+  app.get('/', ServiceLocator.getRootPageRequestHandler);
+  app.get('/signin', ServiceLocator.getSigninRequestHandler);
+  app.post('/signin', ServiceLocator.postSigninRequestHandler);
+  app.get('/signout', ServiceLocator.signoutRequestHandler);
+  app.post('/signout', ServiceLocator.signoutRequestHandler);
+  app.get('/dones.json', ServiceLocator.getDonesRequestHandler);
+  app.post('/dones.json', ServiceLocator.postDonesRequestHandler);
+  app.delete('/dones.json/:id', ServiceLocator.deleteDoneRequestHandler);
+  app.put('/dones.json/:id', ServiceLocator.updateDoneRequestHandler);
+  app.all('*', ServiceLocator.noMatchingRouteRequestHandler);
 
   // To tell express that this is an error handling middleware, we have to give 4 arguments
-  app.use((...args) => ServiceLocator.errorHandler.handle(...args));
+  app.use(ServiceLocator.errorHandler);
 };

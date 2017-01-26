@@ -60,64 +60,64 @@ class ServiceFactory {
 
   createAuthBasedRedirectMiddleware() {
     const AuthBasedRedirectMiddleware = require('./express-middlewares/AuthBasedRedirect');
-    return new AuthBasedRedirectMiddleware();
+    return getBoundHandleMethod(new AuthBasedRedirectMiddleware());
   }
 
   createSchemaBasedRedirectMiddleware() {
     const SchemaBasedRedirectMiddleware = this._env.NODE_ENV === 'production' ?
         require('./express-middlewares/SchemaBasedRedirect') :
         require('./express-middlewares/DevSchemaBasedRedirect');
-    return new SchemaBasedRedirectMiddleware();
+    return getBoundHandleMethod(new SchemaBasedRedirectMiddleware());
   }
 
   createGetRootPageRequestHandler() {
     const GetRootPageRequestHandler = require('./express-middlewares/GetRootPageRequestHandler');
-    return new GetRootPageRequestHandler();
+    return getBoundHandleMethod(new GetRootPageRequestHandler());
   }
 
   createGetDonesRequestHandler() {
     const GetDonesRequestHandler = require('./express-middlewares/GetDonesRequestHandler');
-    return new GetDonesRequestHandler();
+    return getBoundHandleMethod(new GetDonesRequestHandler());
   }
 
   createPostDonesRequestHandler() {
     const PostDonesRequestHandler = require('./express-middlewares/PostDonesRequestHandler');
-    return new PostDonesRequestHandler();
+    return getBoundHandleMethod(new PostDonesRequestHandler());
   }
 
   createDeleteDoneRequestHandler() {
     const DeleteDoneRequestHandler = require('./express-middlewares/DeleteDoneRequestHandler');
-    return new DeleteDoneRequestHandler();
+    return getBoundHandleMethod(new DeleteDoneRequestHandler());
   }
 
   createUpdateDoneRequestHandler() {
     const UpdateDoneRequestHandler = require('./express-middlewares/UpdateDoneRequestHandler');
-    return new UpdateDoneRequestHandler();
+    return getBoundHandleMethod(new UpdateDoneRequestHandler());
   }
 
   createGetSigninRequestHandler() {
     const GetSigninRequestHandler = require('./express-middlewares/GetSigninRequestHandler');
-    return new GetSigninRequestHandler();
+    return getBoundHandleMethod(new GetSigninRequestHandler());
   }
 
   createPostSigninRequestHandler() {
     const PostSigninRequestHandler = require('./express-middlewares/PostSigninRequestHandler');
-    return new PostSigninRequestHandler();
+    return getBoundHandleMethod(new PostSigninRequestHandler());
   }
 
   createSignoutRequestHandler() {
     const SignoutRequestHandler = require('./express-middlewares/SignoutRequestHandler');
-    return new SignoutRequestHandler();
+    return getBoundHandleMethod(new SignoutRequestHandler());
   }
 
   createNoMatchingRouteRequestHandler() {
     const NoMatchingRouteRequestHandler = require('./express-middlewares/NoMatchingRouteRequestHandler');
-    return new NoMatchingRouteRequestHandler();
+    return getBoundHandleMethod(new NoMatchingRouteRequestHandler());
   }
 
   createErrorHandler() {
     const ErrorHandler = require('./express-middlewares/ErrorHandler');
-    return new ErrorHandler();
+    return getBoundHandleMethod(new ErrorHandler());
   }
 
   createLogger() {
@@ -171,6 +171,10 @@ class ServiceFactory {
 function pathUnderPublic(pathFromPublic) {
   const pathParts = pathFromPublic ? pathFromPublic.split('/') : [];
   return path.join(__dirname, '..', '..', 'public', ...pathParts);
+}
+
+function getBoundHandleMethod(handler) {
+  return handler.handle.bind(handler);
 }
 
 module.exports = ServiceFactory;
