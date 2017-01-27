@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
 var http = require('http');
 var express = require('express');
-var setupApp = require('../src/server/app');
+var ServiceLocator = require('../src/server/ServiceLocator');
+var ServiceFactory = require('../src/server/ServiceFactory');
 
+ServiceLocator.load(new ServiceFactory({env: process.env}));
+
+var AppInitialiser = require('../src/server/AppInitialiser');
 var app = express();
-setupApp(app);
+new AppInitialiser().initialise(app);
 
 /**
  * Get port from environment and store in Express.
