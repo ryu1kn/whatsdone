@@ -14,8 +14,8 @@ describe('Server ErrorHandler', () => {
     const req = {};
     const err = new Error('[NotFound]: NOT_FOUND');
     return promisifyExpressMiddleware(middleware, req, err).then(({res}) => {
-      res.status(404);
-      res.render('error', {message: ''});
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.render).to.have.been.calledWith('error', {message: '404: Not Found'});
       expect(logger.error.args[0][0]).to.have.string('Error: [NotFound]: NOT_FOUND');
     });
   });
