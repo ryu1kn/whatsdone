@@ -25,7 +25,7 @@ class DoneRepository {
           throw new Error('[NotFound]: Done item not found');
         }
         if (found.userId !== currentUserId) {
-          throw new Error('[AccessDeined]: You don\'t have the permission to delete this item.');
+          throw new Error('[AccessDenied]: You don\'t have the permission to delete this item.');
         }
         return this._doneDynamoTableClient.delete(id);
       });
@@ -38,7 +38,7 @@ class DoneRepository {
           throw new Error('[NotFound]: Done item not found');
         }
         if (found.userId !== currentUserId) {
-          throw new Error('[AccessDeined]: You don\'t have the permission to modify this item.');
+          throw new Error('[AccessDenied]: You don\'t have the permission to modify this item.');
         }
         return this._doneDynamoTableClient.update(id, _.pick(newData, MODIFIABLE_FIELDS));
       });

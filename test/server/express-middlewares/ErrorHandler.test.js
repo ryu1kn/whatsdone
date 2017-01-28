@@ -28,11 +28,11 @@ describe('Server ErrorHandler', () => {
     const middleware = new ErrorHandler();
 
     const req = {};
-    const err = new Error('[AccessDeined]: ACCESS_DENIED');
+    const err = new Error('[AccessDenied]: ACCESS_DENIED');
     return promisifyExpressMiddleware(middleware, req, err).then(({res}) => {
       expect(res.status).to.have.been.calledWith(403);
       expect(res.render).to.have.been.calledWith('error', {message: '403: Forbidden'});
-      expect(logger.error.args[0][0]).to.have.string('Error: [AccessDeined]: ACCESS_DENIED');
+      expect(logger.error.args[0][0]).to.have.string('Error: [AccessDenied]: ACCESS_DENIED');
     });
   });
 

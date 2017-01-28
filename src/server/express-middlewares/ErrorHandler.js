@@ -17,7 +17,7 @@ class ErrorHandler {
     var clientMessage;
 
     switch (errorKind) {
-    case 'AccessDeined':
+    case 'AccessDenied':
       res.status(403);
       clientMessage = '403: Forbidden';
       break;
