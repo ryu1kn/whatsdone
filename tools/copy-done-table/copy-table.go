@@ -16,35 +16,34 @@ func main() {
 	opts := parseCommandOptions()
 
 	fmt.Printf("Copying \"%s\" (%s) -> \"%s\" (%s) ...\n",
-		opts["fromTableName"], opts["fromTableRegion"], opts["toTableName"], opts["toTableRegion"])
+		opts.fromTableName, opts.fromTableRegion, opts.toTableName, opts.toTableRegion)
 
-	dynamoClientFrom := dynamodb.New(session.New(&aws.Config{Region: aws.String(opts["fromTableRegion"])}))
-	items, err := retrieveAllItems(dynamoClientFrom, opts["fromTableName"])
+	dynamoClientFrom := dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.fromTableRegion)}))
+	items, err := retrieveAllItems(dynamoClientFrom, opts.fromTableName)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
-	dynamoClientTo := dynamodb.New(session.New(&aws.Config{Region: aws.String(opts["toTableRegion"])}))
-	err = writeItems(dynamoClientTo, opts["toTableName"], &items)
+	dynamoClientTo := dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.toTableRegion)}))
+	err = writeItems(dynamoClientTo, opts.toTableName, &items)
 	if err != nil {
 		log.Println(err)
 	}
 }
 
-func parseCommandOptions() map[string]string {
+type commandOptions struct {
+	fromTableName, fromTableRegion, toTableName, toTableRegion string
+}
+
+func parseCommandOptions() *commandOptions {
 	fromTableName := flag.String("from-table-name", "", "Table name of the copy source")
 	fromTableRegion := flag.String("from-table-region", "ap-southeast-2", "Table region of the copy source")
 	toTableName := flag.String("to-table-name", "", "Table name of the copy target")
 	toTableRegion := flag.String("to-table-region", "ap-southeast-2", "Table region of the copy target")
 	flag.Parse()
 
-	return map[string]string{
-		"fromTableName":   *fromTableName,
-		"fromTableRegion": *fromTableRegion,
-		"toTableName":     *toTableName,
-		"toTableRegion":   *toTableRegion,
-	}
+	return &commandOptions{*fromTableName, *fromTableRegion, *toTableName, *toTableRegion}
 }
 
 func retrieveAllItems(dynamoClient *dynamodb.DynamoDB, tableName string) ([]map[string]*dynamodb.AttributeValue, error) {
