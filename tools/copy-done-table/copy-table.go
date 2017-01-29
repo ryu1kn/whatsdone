@@ -18,19 +18,19 @@ func main() {
 	fmt.Printf("Copying \"%s\" (%s) -> \"%s\" (%s) ...\n",
 		opts.fromTableName, opts.fromTableRegion, opts.toTableName, opts.toTableRegion)
 
-	dynamoClientFrom := dynamoClient(
+	var dynamoClientFrom dynamodbScanner = &dynamoClient{
 		*dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.fromTableRegion)})),
-	)
-	items, err := retrieveAllItems(&dynamoClientFrom, opts.fromTableName)
+	}
+	items, err := retrieveAllItems(dynamoClientFrom, opts.fromTableName)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
-	dynamoClientTo := dynamoClient(
+	var dynamoClientTo dynamodbWriter = &dynamoClient{
 		*dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.toTableRegion)})),
-	)
-	err = writeItems(&dynamoClientTo, opts.toTableName, &items)
+	}
+	err = writeItems(dynamoClientTo, opts.toTableName, &items)
 	if err != nil {
 		log.Println(err)
 	}
@@ -50,17 +50,19 @@ func parseCommandOptions() *commandOptions {
 	return &commandOptions{*fromTableName, *fromTableRegion, *toTableName, *toTableRegion}
 }
 
-type dynamoClient dynamodb.DynamoDB
+type dynamoClient struct {
+	client dynamodb.DynamoDB
+}
 
 type dynamodbScanner interface {
-	Scan(*dynamodb.ScanInput) []map[string]*dynamodb.AttributeValue
+	Scan(*dynamodb.ScanInput) (*dynamodb.ScanOutput, error)
 }
 
 func (d *dynamoClient) Scan(input *dynamodb.ScanInput) (*dynamodb.ScanOutput, error) {
-	return (*dynamodb.DynamoDB)(d).Scan(input)
+	return d.client.Scan(input)
 }
 
-func retrieveAllItems(dc *dynamoClient, tableName string) ([]map[string]*dynamodb.AttributeValue, error) {
+func retrieveAllItems(dc dynamodbScanner, tableName string) ([]map[string]*dynamodb.AttributeValue, error) {
 	result, err := dc.Scan(&dynamodb.ScanInput{TableName: &tableName})
 	if err != nil {
 		return nil, err
@@ -73,10 +75,10 @@ type dynamodbWriter interface {
 }
 
 func (d *dynamoClient) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
-	return (*dynamodb.DynamoDB)(d).BatchWriteItem(input)
+	return d.client.BatchWriteItem(input)
 }
 
-func writeItems(dc *dynamoClient, toTableName string, items *[]map[string]*dynamodb.AttributeValue) error {
+func writeItems(dc dynamodbWriter, toTableName string, items *[]map[string]*dynamodb.AttributeValue) error {
 	itemCount := len(*items)
 
 	for i := 0; i < itemCount; i += batchWriteMaxItemCount {
