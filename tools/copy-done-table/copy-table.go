@@ -18,15 +18,19 @@ func main() {
 	fmt.Printf("Copying \"%s\" (%s) -> \"%s\" (%s) ...\n",
 		opts.fromTableName, opts.fromTableRegion, opts.toTableName, opts.toTableRegion)
 
-	dynamoClientFrom := dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.fromTableRegion)}))
-	items, err := retrieveAllItems(dynamoClientFrom, opts.fromTableName)
+	dynamoClientFrom := dynamoClient{
+		dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.fromTableRegion)})),
+	}
+	items, err := retrieveAllItems(&dynamoClientFrom, opts.fromTableName)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
-	dynamoClientTo := dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.toTableRegion)}))
-	err = writeItems(dynamoClientTo, opts.toTableName, &items)
+	dynamoClientTo := dynamoClient{
+		dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.toTableRegion)})),
+	}
+	err = writeItems(&dynamoClientTo, opts.toTableName, &items)
 	if err != nil {
 		log.Println(err)
 	}
@@ -46,15 +50,35 @@ func parseCommandOptions() *commandOptions {
 	return &commandOptions{*fromTableName, *fromTableRegion, *toTableName, *toTableRegion}
 }
 
-func retrieveAllItems(dynamoClient *dynamodb.DynamoDB, tableName string) ([]map[string]*dynamodb.AttributeValue, error) {
-	result, err := dynamoClient.Scan(&dynamodb.ScanInput{TableName: &tableName})
+type dynamoClient struct {
+	client *dynamodb.DynamoDB
+}
+
+type dynamodbScanner interface {
+	Scan(*dynamodb.ScanInput) []map[string]*dynamodb.AttributeValue
+}
+
+func (d *dynamoClient) Scan(input *dynamodb.ScanInput) (*dynamodb.ScanOutput, error) {
+	return d.client.Scan(input)
+}
+
+func retrieveAllItems(dc *dynamoClient, tableName string) ([]map[string]*dynamodb.AttributeValue, error) {
+	result, err := dc.Scan(&dynamodb.ScanInput{TableName: &tableName})
 	if err != nil {
 		return nil, err
 	}
 	return result.Items, nil
 }
 
-func writeItems(dynamoClient *dynamodb.DynamoDB, toTableName string, items *[]map[string]*dynamodb.AttributeValue) error {
+type dynamodbWriter interface {
+	BatchWriteItem(*dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error)
+}
+
+func (d *dynamoClient) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
+	return d.client.BatchWriteItem(input)
+}
+
+func writeItems(dc *dynamoClient, toTableName string, items *[]map[string]*dynamodb.AttributeValue) error {
 	itemCount := len(*items)
 
 	for i := 0; i < itemCount; i += batchWriteMaxItemCount {
@@ -74,7 +98,7 @@ func writeItems(dynamoClient *dynamodb.DynamoDB, toTableName string, items *[]ma
 		}
 
 		// XXX: result.UnprocessedItems is not being taken care of
-		_, error := dynamoClient.BatchWriteItem(&dynamodb.BatchWriteItemInput{
+		_, error := dc.BatchWriteItem(&dynamodb.BatchWriteItemInput{
 			RequestItems: map[string][]*dynamodb.WriteRequest{toTableName: writeRequest},
 		})
 		if error != nil {
