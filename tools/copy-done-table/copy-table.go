@@ -18,18 +18,18 @@ func main() {
 	fmt.Printf("Copying \"%s\" (%s) -> \"%s\" (%s) ...\n",
 		opts.fromTableName, opts.fromTableRegion, opts.toTableName, opts.toTableRegion)
 
-	dynamoClientFrom := dynamoClient{
-		dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.fromTableRegion)})),
-	}
+	dynamoClientFrom := dynamoClient(
+		*dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.fromTableRegion)})),
+	)
 	items, err := retrieveAllItems(&dynamoClientFrom, opts.fromTableName)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
-	dynamoClientTo := dynamoClient{
-		dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.toTableRegion)})),
-	}
+	dynamoClientTo := dynamoClient(
+		*dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.toTableRegion)})),
+	)
 	err = writeItems(&dynamoClientTo, opts.toTableName, &items)
 	if err != nil {
 		log.Println(err)
@@ -50,16 +50,14 @@ func parseCommandOptions() *commandOptions {
 	return &commandOptions{*fromTableName, *fromTableRegion, *toTableName, *toTableRegion}
 }
 
-type dynamoClient struct {
-	client *dynamodb.DynamoDB
-}
+type dynamoClient dynamodb.DynamoDB
 
 type dynamodbScanner interface {
 	Scan(*dynamodb.ScanInput) []map[string]*dynamodb.AttributeValue
 }
 
 func (d *dynamoClient) Scan(input *dynamodb.ScanInput) (*dynamodb.ScanOutput, error) {
-	return d.client.Scan(input)
+	return (*dynamodb.DynamoDB)(d).Scan(input)
 }
 
 func retrieveAllItems(dc *dynamoClient, tableName string) ([]map[string]*dynamodb.AttributeValue, error) {
@@ -75,7 +73,7 @@ type dynamodbWriter interface {
 }
 
 func (d *dynamoClient) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
-	return d.client.BatchWriteItem(input)
+	return (*dynamodb.DynamoDB)(d).BatchWriteItem(input)
 }
 
 func writeItems(dc *dynamoClient, toTableName string, items *[]map[string]*dynamodb.AttributeValue) error {
