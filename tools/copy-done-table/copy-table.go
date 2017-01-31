@@ -54,10 +54,6 @@ type dynamoClient struct {
 	client dynamodb.DynamoDB
 }
 
-type dynamodbScanner interface {
-	Scan(*dynamodb.ScanInput) (*dynamodb.ScanOutput, error)
-}
-
 func (d *dynamoClient) Scan(input *dynamodb.ScanInput) (*dynamodb.ScanOutput, error) {
 	return d.client.Scan(input)
 }
@@ -68,10 +64,6 @@ func retrieveAllItems(dc dynamodbScanner, tableName string) ([]map[string]*dynam
 		return nil, err
 	}
 	return result.Items, nil
-}
-
-type dynamodbWriter interface {
-	BatchWriteItem(*dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error)
 }
 
 func (d *dynamoClient) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
