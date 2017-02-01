@@ -18,10 +18,15 @@ func main() {
 	fmt.Printf("Copying \"%s\" (%s) -> \"%s\" (%s) ...\n",
 		opts.fromTableName, opts.fromTableRegion, opts.toTableName, opts.toTableRegion)
 
-	var dynamoClientFrom dynamodbScanner = &dynamoClient{
+	dynamoClientFrom := &dynamoClient{
 		*dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.fromTableRegion)})),
 	}
-	items, err := retrieveAllItems(dynamoClientFrom, opts.fromTableName)
+	reader := &DoneReaderImpl{
+		scanner:   dynamoClientFrom,
+		tableName: opts.fromTableName,
+	}
+
+	items, err := reader.read()
 	if err != nil {
 		log.Println(err)
 		return
@@ -30,7 +35,8 @@ func main() {
 	var dynamoClientTo dynamodbWriter = &dynamoClient{
 		*dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.toTableRegion)})),
 	}
-	err = writeItems(dynamoClientTo, opts.toTableName, &items)
+
+	err = writeItems(dynamoClientTo, opts.toTableName, items)
 	if err != nil {
 		log.Println(err)
 	}
@@ -58,28 +64,25 @@ func (d *dynamoClient) Scan(input *dynamodb.ScanInput) (*dynamodb.ScanOutput, er
 	return d.client.Scan(input)
 }
 
-func retrieveAllItems(dc dynamodbScanner, tableName string) ([]map[string]*dynamodb.AttributeValue, error) {
-	result, err := dc.Scan(&dynamodb.ScanInput{TableName: &tableName})
-	if err != nil {
-		return nil, err
-	}
-	return result.Items, nil
-}
-
 func (d *dynamoClient) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
 	return d.client.BatchWriteItem(input)
 }
 
-func writeItems(dc dynamodbWriter, toTableName string, items *[]map[string]*dynamodb.AttributeValue) error {
-	itemCount := len(*items)
+func writeItems(dc dynamodbWriter, toTableName string, doneItems *[]DoneItem) error {
+	items := make([]map[string]*dynamodb.AttributeValue, len(*doneItems))
+	for i, doneItem := range *doneItems {
+		items[i] = doneItem.(map[string]*dynamodb.AttributeValue)
+	}
+
+	itemCount := len(items)
 
 	for i := 0; i < itemCount; i += batchWriteMaxItemCount {
 		var subList []map[string]*dynamodb.AttributeValue
 
 		if i+batchWriteMaxItemCount >= itemCount {
-			subList = (*items)[i:]
+			subList = items[i:]
 		} else {
-			subList = (*items)[i : i+batchWriteMaxItemCount]
+			subList = items[i : i+batchWriteMaxItemCount]
 		}
 
 		writeRequest := make([]*dynamodb.WriteRequest, len(subList))
