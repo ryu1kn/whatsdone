@@ -24,3 +24,7 @@ Access to `http://localhost:3000` with your web browser.
 ### Deploy to AWS Elasticbeanstalk
 
 * Just do `eb deploy`
+
+### Tools
+
+* Migrate done data from mongodb to dynamodb
