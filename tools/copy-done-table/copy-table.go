@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
 
@@ -13,7 +12,8 @@ import (
 const batchWriteMaxItemCount = 25
 
 func main() {
-	opts := parseCommandOptions()
+	parser := _ArgsParser{&_FlagWrap{}}
+	opts := parser.parse()
 
 	fmt.Printf("Copying \"%s\" (%s) -> \"%s\" (%s) ...\n",
 		opts.fromTableName, opts.fromTableRegion, opts.toTableName, opts.toTableRegion)
@@ -40,20 +40,6 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	}
-}
-
-type _CommandOptions struct {
-	fromTableName, fromTableRegion, toTableName, toTableRegion string
-}
-
-func parseCommandOptions() *_CommandOptions {
-	fromTableName := flag.String("from-table-name", "", "Table name of the copy source")
-	fromTableRegion := flag.String("from-table-region", "ap-southeast-2", "Table region of the copy source")
-	toTableName := flag.String("to-table-name", "", "Table name of the copy target")
-	toTableRegion := flag.String("to-table-region", "ap-southeast-2", "Table region of the copy target")
-	flag.Parse()
-
-	return &_CommandOptions{*fromTableName, *fromTableRegion, *toTableName, *toTableRegion}
 }
 
 type _DynamoDBClient struct {
