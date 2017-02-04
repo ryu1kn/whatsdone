@@ -26,7 +26,7 @@ func main() {
 		tableName: opts.fromTableName,
 	}
 
-	items, err := reader.read()
+	scanOutput, err := reader.read()
 	if err != nil {
 		log.Println(err)
 		return
@@ -36,7 +36,7 @@ func main() {
 		*dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.toTableRegion)})),
 	}
 
-	err = writeItems(dynamoClientTo, opts.toTableName, items)
+	err = writeItems(dynamoClientTo, opts.toTableName, (*scanOutput).Items())
 	if err != nil {
 		log.Println(err)
 	}
@@ -60,8 +60,10 @@ type dynamoClient struct {
 	client dynamodb.DynamoDB
 }
 
-func (d *dynamoClient) Scan(input *dynamodb.ScanInput) (*dynamodb.ScanOutput, error) {
-	return d.client.Scan(input)
+func (d *dynamoClient) Scan(input *dynamodb.ScanInput) (*dynamodbScanOutput, error) {
+	scanOutput, error := d.client.Scan(input)
+	var output dynamodbScanOutput = &dynamodbScanOutputImpl{scanOutput}
+	return &output, error
 }
 
 func (d *dynamoClient) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
