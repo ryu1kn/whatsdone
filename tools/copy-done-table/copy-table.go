@@ -18,10 +18,10 @@ func main() {
 	fmt.Printf("Copying \"%s\" (%s) -> \"%s\" (%s) ...\n",
 		opts.fromTableName, opts.fromTableRegion, opts.toTableName, opts.toTableRegion)
 
-	dynamoClientFrom := &dynamoClient{
+	dynamoClientFrom := &_DynamoDBClient{
 		*dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.fromTableRegion)})),
 	}
-	reader := &DoneReaderImpl{
+	reader := &_DoneReader{
 		scanner:   dynamoClientFrom,
 		tableName: opts.fromTableName,
 	}
@@ -32,7 +32,7 @@ func main() {
 		return
 	}
 
-	var dynamoClientTo dynamodbWriter = &dynamoClient{
+	var dynamoClientTo _IDynamoDBWriter = &_DynamoDBClient{
 		*dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.toTableRegion)})),
 	}
 
@@ -42,35 +42,35 @@ func main() {
 	}
 }
 
-type commandOptions struct {
+type _CommandOptions struct {
 	fromTableName, fromTableRegion, toTableName, toTableRegion string
 }
 
-func parseCommandOptions() *commandOptions {
+func parseCommandOptions() *_CommandOptions {
 	fromTableName := flag.String("from-table-name", "", "Table name of the copy source")
 	fromTableRegion := flag.String("from-table-region", "ap-southeast-2", "Table region of the copy source")
 	toTableName := flag.String("to-table-name", "", "Table name of the copy target")
 	toTableRegion := flag.String("to-table-region", "ap-southeast-2", "Table region of the copy target")
 	flag.Parse()
 
-	return &commandOptions{*fromTableName, *fromTableRegion, *toTableName, *toTableRegion}
+	return &_CommandOptions{*fromTableName, *fromTableRegion, *toTableName, *toTableRegion}
 }
 
-type dynamoClient struct {
+type _DynamoDBClient struct {
 	client dynamodb.DynamoDB
 }
 
-func (d *dynamoClient) Scan(input *dynamodb.ScanInput) (*dynamodbScanOutput, error) {
+func (d *_DynamoDBClient) Scan(input *dynamodb.ScanInput) (*_IDynamoDBScanOutput, error) {
 	scanOutput, error := d.client.Scan(input)
-	var output dynamodbScanOutput = &dynamodbScanOutputImpl{scanOutput}
+	var output _IDynamoDBScanOutput = &_DynamoDBScanner{scanOutput}
 	return &output, error
 }
 
-func (d *dynamoClient) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
+func (d *_DynamoDBClient) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
 	return d.client.BatchWriteItem(input)
 }
 
-func writeItems(dc dynamodbWriter, toTableName string, doneItems *[]DoneItem) error {
+func writeItems(dc _IDynamoDBWriter, toTableName string, doneItems *[]_IDoneItem) error {
 	items := make([]map[string]*dynamodb.AttributeValue, len(*doneItems))
 	for i, doneItem := range *doneItems {
 		items[i] = doneItem.(map[string]*dynamodb.AttributeValue)

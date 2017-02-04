@@ -2,39 +2,39 @@ package main
 
 import "github.com/aws/aws-sdk-go/service/dynamodb"
 
-type DoneItem interface{}
+type _IDoneItem interface{}
 
-type DoneItemImpl map[string]*dynamodb.AttributeValue
+type _DoneItem map[string]*dynamodb.AttributeValue
 
-type DoneReader interface {
-	read() (*dynamodbScanOutput, error)
+type _IDoneReader interface {
+	read() (*_IDynamoDBScanOutput, error)
 }
 
-type DoneReaderImpl struct {
-	scanner   dynamodbScanner
+type _DoneReader struct {
+	scanner   _IDynamoDBScanner
 	tableName string
 }
 
-type dynamodbScanner interface {
-	Scan(*dynamodb.ScanInput) (*dynamodbScanOutput, error)
+type _IDynamoDBScanner interface {
+	Scan(*dynamodb.ScanInput) (*_IDynamoDBScanOutput, error)
 }
 
-type dynamodbScanOutput interface {
-	Items() *[]DoneItem
+type _IDynamoDBScanOutput interface {
+	Items() *[]_IDoneItem
 }
 
-type dynamodbScanOutputImpl struct {
+type _DynamoDBScanner struct {
 	raw *dynamodb.ScanOutput
 }
 
-func (output *dynamodbScanOutputImpl) Items() *[]DoneItem {
-	doneItems := make([]DoneItem, len(output.raw.Items))
+func (output *_DynamoDBScanner) Items() *[]_IDoneItem {
+	doneItems := make([]_IDoneItem, len(output.raw.Items))
 	for i, doneItem := range output.raw.Items {
 		doneItems[i] = doneItem
 	}
 	return &doneItems
 }
 
-func (r DoneReaderImpl) read() (*dynamodbScanOutput, error) {
+func (r _DoneReader) read() (*_IDynamoDBScanOutput, error) {
 	return r.scanner.Scan(&dynamodb.ScanInput{TableName: &r.tableName})
 }

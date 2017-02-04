@@ -7,12 +7,12 @@ import (
 )
 
 func TestRead(t *testing.T) {
-	var reader DoneReader = &DoneReaderImpl{
-		scanner:   &fakeScanner{},
+	var reader _IDoneReader = &_DoneReader{
+		scanner:   &_FakeScanner{},
 		tableName: "TABLE_NAME",
 	}
 
-	expected := &[]DoneItem{fakeDoneItem{"FAKE_ITEM"}}
+	expected := &[]_IDoneItem{_FakeDoneItem{"FAKE_ITEM"}}
 	actual, _ := reader.read()
 
 	if len(*(*actual).Items()) != len(*expected) {
@@ -25,23 +25,23 @@ func TestRead(t *testing.T) {
 	}
 }
 
-type fakeScanner struct{}
+type _FakeScanner struct{}
 
-type fakeDynamodbScanOutput struct{}
+type _FakeDynamodbScanOutput struct{}
 
-func (output fakeDynamodbScanOutput) Items() *[]DoneItem {
-	return &[]DoneItem{fakeDoneItem{"FAKE_ITEM"}}
+func (output _FakeDynamodbScanOutput) Items() *[]_IDoneItem {
+	return &[]_IDoneItem{_FakeDoneItem{"FAKE_ITEM"}}
 }
 
-type fakeDoneItem struct {
+type _FakeDoneItem struct {
 	raw string
 }
 
-func (client *fakeScanner) Scan(input *dynamodb.ScanInput) (*dynamodbScanOutput, error) {
+func (client *_FakeScanner) Scan(input *dynamodb.ScanInput) (*_IDynamoDBScanOutput, error) {
 	if *(input.TableName) != "TABLE_NAME" {
 		return nil, nil
 	}
 
-	var output dynamodbScanOutput = &fakeDynamodbScanOutput{}
+	var output _IDynamoDBScanOutput = &_FakeDynamodbScanOutput{}
 	return &output, nil
 }
