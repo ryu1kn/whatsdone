@@ -18,11 +18,11 @@ func main() {
 	fmt.Printf("Copying \"%s\" (%s) -> \"%s\" (%s) ...\n",
 		opts.fromTableName, opts.fromTableRegion, opts.toTableName, opts.toTableRegion)
 
-	dynamoClientFrom := &_DynamoDBClient{
+	dynamodbScanner := &_DynamoDBScanner{
 		*dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.fromTableRegion)})),
 	}
 	reader := &_DoneReader{
-		scanner:   dynamoClientFrom,
+		scanner:   dynamodbScanner,
 		tableName: opts.fromTableName,
 	}
 
@@ -47,12 +47,6 @@ func main() {
 
 type _DynamoDBClient struct {
 	client dynamodb.DynamoDB
-}
-
-func (d *_DynamoDBClient) Scan(input *dynamodb.ScanInput) (*_IDynamoDBScanOutput, error) {
-	scanOutput, error := d.client.Scan(input)
-	var output _IDynamoDBScanOutput = &_DynamoDBScanOutput{scanOutput}
-	return &output, error
 }
 
 func (d *_DynamoDBClient) BatchWriteItem(input *dynamodb.BatchWriteItemInput) error {
