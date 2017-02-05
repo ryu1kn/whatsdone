@@ -2,17 +2,8 @@ package main
 
 import "github.com/aws/aws-sdk-go/service/dynamodb"
 
-type _IDoneItem interface{}
-
-type _DoneItem map[string]*dynamodb.AttributeValue
-
 type _IDoneReader interface {
 	read() (*_IDynamoDBScanOutput, error)
-}
-
-type _DoneReader struct {
-	scanner   _IDynamoDBScanner
-	tableName string
 }
 
 type _IDynamoDBScanner interface {
@@ -23,9 +14,18 @@ type _IDynamoDBScanOutput interface {
 	Items() *[]_IDoneItem
 }
 
+type _IDoneItem interface{}
+
+type _DoneReader struct {
+	scanner   _IDynamoDBScanner
+	tableName string
+}
+
 type _DynamoDBScanner struct {
 	raw *dynamodb.ScanOutput
 }
+
+type _DoneItem map[string]*dynamodb.AttributeValue
 
 func (output *_DynamoDBScanner) Items() *[]_IDoneItem {
 	doneItems := make([]_IDoneItem, len(output.raw.Items))
