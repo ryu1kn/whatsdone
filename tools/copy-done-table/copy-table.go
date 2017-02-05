@@ -32,12 +32,15 @@ func main() {
 		return
 	}
 
-	var dynamoClientTo _IDynamoDBWriter = &_DynamoDBClient{
+	dynamoClientTo := &_DynamoDBClient{
 		*dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.toTableRegion)})),
 	}
+	writer := &_DoneWriter{
+		batchWriter: dynamoClientTo,
+		tableName:   opts.toTableName,
+	}
 
-	err = writeItems(dynamoClientTo, opts.toTableName, (*scanOutput).Items())
-	if err != nil {
+	if err := writer.write((*scanOutput).Items()); err != nil {
 		log.Println(err)
 	}
 }
@@ -52,42 +55,7 @@ func (d *_DynamoDBClient) Scan(input *dynamodb.ScanInput) (*_IDynamoDBScanOutput
 	return &output, error
 }
 
-func (d *_DynamoDBClient) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
-	return d.client.BatchWriteItem(input)
-}
-
-func writeItems(dc _IDynamoDBWriter, toTableName string, doneItems *[]_IDoneItem) error {
-	items := make([]map[string]*dynamodb.AttributeValue, len(*doneItems))
-	for i, doneItem := range *doneItems {
-		items[i] = doneItem.(map[string]*dynamodb.AttributeValue)
-	}
-
-	itemCount := len(items)
-
-	for i := 0; i < itemCount; i += batchWriteMaxItemCount {
-		var subList []map[string]*dynamodb.AttributeValue
-
-		if i+batchWriteMaxItemCount >= itemCount {
-			subList = items[i:]
-		} else {
-			subList = items[i : i+batchWriteMaxItemCount]
-		}
-
-		writeRequest := make([]*dynamodb.WriteRequest, len(subList))
-		for idx, item := range subList {
-			writeRequest[idx] = &dynamodb.WriteRequest{
-				PutRequest: &dynamodb.PutRequest{Item: item},
-			}
-		}
-
-		// XXX: result.UnprocessedItems is not being taken care of
-		_, error := dc.BatchWriteItem(&dynamodb.BatchWriteItemInput{
-			RequestItems: map[string][]*dynamodb.WriteRequest{toTableName: writeRequest},
-		})
-		if error != nil {
-			return error
-		}
-	}
-
-	return nil
+func (d *_DynamoDBClient) BatchWriteItem(input *dynamodb.BatchWriteItemInput) error {
+	_, error := d.client.BatchWriteItem(input)
+	return error
 }
