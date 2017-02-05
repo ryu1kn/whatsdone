@@ -2,6 +2,8 @@ package main
 
 import "github.com/aws/aws-sdk-go/service/dynamodb"
 
+const batchWriteMaxItemCount = 25
+
 type _IDoneWriter interface {
 	write(*[]_IDoneItem) error
 }

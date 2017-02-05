@@ -9,8 +9,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 )
 
-const batchWriteMaxItemCount = 25
-
 func main() {
 	parser := _ArgsParser{&_FlagWrap{}}
 	opts := parser.parse()
