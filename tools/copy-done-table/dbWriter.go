@@ -6,10 +6,6 @@ type _IDoneWriter interface {
 	write(*[]_IDoneItem) error
 }
 
-type _IDynamoDBBatchWriter interface {
-	BatchWriteItem(*dynamodb.BatchWriteItemInput) error
-}
-
 type _DoneWriter struct {
 	batchWriter _IDynamoDBBatchWriter
 	tableName   string

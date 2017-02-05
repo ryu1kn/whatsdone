@@ -32,24 +32,15 @@ func main() {
 		return
 	}
 
-	dynamoClientTo := &_DynamoDBClient{
+	dynamodbBatchWriter := &_DynamoDBBatchWriter{
 		*dynamodb.New(session.New(&aws.Config{Region: aws.String(opts.toTableRegion)})),
 	}
 	writer := &_DoneWriter{
-		batchWriter: dynamoClientTo,
+		batchWriter: dynamodbBatchWriter,
 		tableName:   opts.toTableName,
 	}
 
 	if err := writer.write((*scanOutput).Items()); err != nil {
 		log.Println(err)
 	}
-}
-
-type _DynamoDBClient struct {
-	client dynamodb.DynamoDB
-}
-
-func (d *_DynamoDBClient) BatchWriteItem(input *dynamodb.BatchWriteItemInput) error {
-	_, error := d.client.BatchWriteItem(input)
-	return error
 }
