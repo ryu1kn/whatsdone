@@ -15,14 +15,14 @@ func main() {
 	context := _Context{options: opts}
 
 	reader := context.doneReader()
-	scanOutput, err := reader.read()
+	items, err := reader.read()
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
 	writer := context.doneWriter()
-	if err := writer.write((*scanOutput).Items()); err != nil {
+	if err := writer.write(items); err != nil {
 		log.Println(err)
 	}
 }

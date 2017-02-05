@@ -7,8 +7,10 @@ type _IDynamoDBScanner interface {
 }
 
 type _IDynamoDBScanOutput interface {
-	Items() *[]_IDoneItem // XXX: Don't refer to app knowledge
+	Items() *[]_IDynamoDBItem
 }
+
+type _IDynamoDBItem interface{}
 
 type _DynamoDBScanner struct {
 	client dynamodb.DynamoDB
@@ -18,4 +20,16 @@ func (d *_DynamoDBScanner) Scan(input *dynamodb.ScanInput) (*_IDynamoDBScanOutpu
 	scanOutput, error := d.client.Scan(input)
 	var output _IDynamoDBScanOutput = &_DynamoDBScanOutput{scanOutput}
 	return &output, error
+}
+
+type _DynamoDBScanOutput struct {
+	raw *dynamodb.ScanOutput
+}
+
+func (output *_DynamoDBScanOutput) Items() *[]_IDynamoDBItem {
+	doneItems := make([]_IDynamoDBItem, len(output.raw.Items))
+	for i, doneItem := range output.raw.Items {
+		doneItems[i] = doneItem
+	}
+	return &doneItems
 }

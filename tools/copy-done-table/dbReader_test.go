@@ -15,10 +15,10 @@ func TestRead(t *testing.T) {
 	expected := &[]_IDoneItem{_FakeDoneItem{"FAKE_ITEM"}}
 	actual, _ := reader.read()
 
-	if len(*(*actual).Items()) != len(*expected) {
+	if len(*actual) != len(*expected) {
 		t.Error("Expected/actual number of elements doesn't match")
 	}
-	for i, aValue := range *(*actual).Items() {
+	for i, aValue := range *actual {
 		if eValue := (*expected)[i]; aValue != eValue {
 			t.Errorf("Expected \"%s\", but got \"%s\"", eValue, aValue)
 		}
@@ -29,8 +29,8 @@ type _FakeScanner struct{}
 
 type _FakeDynamodbScanOutput struct{}
 
-func (output _FakeDynamodbScanOutput) Items() *[]_IDoneItem {
-	return &[]_IDoneItem{_FakeDoneItem{"FAKE_ITEM"}}
+func (output _FakeDynamodbScanOutput) Items() *[]_IDynamoDBItem {
+	return &[]_IDynamoDBItem{_FakeDoneItem{"FAKE_ITEM"}}
 }
 
 type _FakeDoneItem struct {
