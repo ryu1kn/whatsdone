@@ -51,7 +51,7 @@ type _DynamoDBClient struct {
 
 func (d *_DynamoDBClient) Scan(input *dynamodb.ScanInput) (*_IDynamoDBScanOutput, error) {
 	scanOutput, error := d.client.Scan(input)
-	var output _IDynamoDBScanOutput = &_DynamoDBScanner{scanOutput}
+	var output _IDynamoDBScanOutput = &_DynamoDBScanOutput{scanOutput}
 	return &output, error
 }
 
