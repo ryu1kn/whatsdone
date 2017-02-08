@@ -33,8 +33,10 @@ func (client *_FakeBatchWriter) BatchWriteItem(input *dynamodb.BatchWriteItemInp
 		return errors.New("Didn't get the expect table name TABLE_NAME")
 	}
 	item := writeRequests[0].PutRequest.Item
-	if actual := *item["FAKE_KEY"].S; actual != "FAKE_VALUE" {
-		return fmt.Errorf("Expected \"FAKE_VALUE\", but got \"%s\"", actual)
+
+	expected := "FAKE_VALUE"
+	if actual := *item["FAKE_KEY"].S; actual != expected {
+		return fmt.Errorf("Expected \"%s\", but got \"%s\"", expected, actual)
 	}
 	return nil
 }
