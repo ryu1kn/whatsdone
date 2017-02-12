@@ -10,22 +10,11 @@ type _DoneReader struct {
 	scanner   _IScanner
 }
 
-func (r *_DoneReader) readAll() (*dynamodb.ScanOutput, error) {
-	return r.scanner.scan(&dynamodb.ScanInput{TableName: aws.String(r.tableName)})
+func (r *_DoneReader) readAll() (*_ReadAllResult, error) {
+	scanOutput, err := r.scanner.scan(&dynamodb.ScanInput{TableName: aws.String(r.tableName)})
+	return &_ReadAllResult{scanOutput.Items}, err
 }
 
 type _ReadAllResult struct {
-	_items *[]_DoneItem
-}
-
-func (r *_ReadAllResult) count() int {
-	return len(*r.items())
-}
-
-func (r *_ReadAllResult) items() *[]_DoneItem {
-	return r._items
-}
-
-type _DoneItem struct {
-	value string
+	items []map[string]*dynamodb.AttributeValue
 }
