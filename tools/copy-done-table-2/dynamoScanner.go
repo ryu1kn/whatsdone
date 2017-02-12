@@ -8,6 +8,10 @@ type _IDynamoDB interface {
 	Scan(*dynamodb.ScanInput) (*dynamodb.ScanOutput, error)
 }
 
+type _IScanner interface {
+	scan(*dynamodb.ScanInput) (*dynamodb.ScanOutput, error)
+}
+
 type _Scanner struct {
 	dynamoDB _IDynamoDB
 }
