@@ -14,13 +14,12 @@ func TestScan(t *testing.T) {
 	scanner := _Scanner{dynamoClient}
 	scanOutput, err := scanner.scan(&dynamodb.ScanInput{TableName: aws.String("TABLE_NAME")})
 	if err != nil {
-		t.Error(err)
-		return
+		t.Fatal(err)
 	}
 
 	expected := "DATE_VALUE"
 	if item := (*scanOutput).Items[0]; *(item["date"].S) != "DATE_VALUE" {
-		t.Errorf("Expected \"%s\", but got \"%s\"", expected, *(item["date"].S))
+		t.Fatalf("Expected \"%s\", but got \"%s\"", expected, *(item["date"].S))
 	}
 }
 

@@ -18,14 +18,13 @@ func TestFetchAllItems(t *testing.T) {
 	)
 	result, err = reader.readAll()
 	if err != nil {
-		t.Error(err)
-		return
+		t.Fatal(err)
 	}
 	if tableName := scanner.spyTableName; tableName != "TABLE_NAME" {
-		t.Errorf("Expected \"TABLE_NAME\", but got \"%s\"", tableName)
+		t.Fatalf("Expected \"TABLE_NAME\", but got \"%s\"", tableName)
 	}
 	if items := (*result).items; len(items) != 0 { // Shouldn't I assert `result` somehow?
-		t.Errorf("Expected 0, got \"%s\"", len(items))
+		t.Fatalf("Expected 0, got \"%s\"", len(items))
 	}
 }
 
@@ -37,7 +36,7 @@ func TestFetchAllItems_DifferentTable(t *testing.T) {
 	}
 	reader.readAll()
 	if tableName := scanner.spyTableName; tableName != "TABLE_NAME_2" {
-		t.Errorf("Expected \"TABLE_NAME_2\", but got \"%s\"", tableName)
+		t.Fatalf("Expected \"TABLE_NAME_2\", but got \"%s\"", tableName)
 	}
 }
 
