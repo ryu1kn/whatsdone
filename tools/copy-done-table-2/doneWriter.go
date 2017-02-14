@@ -8,10 +8,11 @@ type _DoneWriter struct {
 }
 
 func (dw *_DoneWriter) write(items *[]map[string]*dynamodb.AttributeValue) error {
-	writeRequests := []*dynamodb.WriteRequest{
-		&dynamodb.WriteRequest{
-			PutRequest: &dynamodb.PutRequest{Item: (*items)[0]},
-		},
+	writeRequests := make([]*dynamodb.WriteRequest, len(*items))
+	for i, item := range *items {
+		writeRequests[i] = &dynamodb.WriteRequest{
+			PutRequest: &dynamodb.PutRequest{Item: item},
+		}
 	}
 	writeInput := dynamodb.BatchWriteItemInput{
 		RequestItems: map[string][]*dynamodb.WriteRequest{
