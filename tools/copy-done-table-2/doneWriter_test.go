@@ -3,6 +3,8 @@ package main
 import (
 	"testing"
 
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 )
 
@@ -58,8 +60,7 @@ func TestWrite_WriteMoreThan25Items(t *testing.T) {
 		tableName:           "TABLE_NAME",
 		dynamoDBBatchWriter: &fakeBatchWriter,
 	}
-	numOfItems := 52
-	doneItems := createDoneItems(numOfItems)
+	doneItems := createDoneItems(52)
 	err := doneWriter.write(&doneItems)
 	if err != nil {
 		t.Fatal(err)
@@ -82,7 +83,8 @@ func TestWrite_WriteMoreThan25Items(t *testing.T) {
 func createDoneItems(numOfItems int) []map[string]*dynamodb.AttributeValue {
 	items := make([]map[string]*dynamodb.AttributeValue, numOfItems)
 	for i := 0; i < numOfItems; i++ {
-		items[i] = map[string]*dynamodb.AttributeValue{"SOME_KEY": &dynamodb.AttributeValue{}}
+		keyName := fmt.Sprintf("SOME_KEY_%02d", i)
+		items[i] = map[string]*dynamodb.AttributeValue{keyName: &dynamodb.AttributeValue{}}
 	}
 	return items
 }
@@ -102,5 +104,53 @@ func _NewFakeBatchWriter() _FakeBatchWriter {
 func (bw *_FakeBatchWriter) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
 	bw._inputs[bw._count] = input
 	bw._count++
-	return nil, nil
+	return &dynamodb.BatchWriteItemOutput{}, nil
+}
+
+func TestWrite_ResendUnprocessedItems(t *testing.T) {
+	fakeBatchWriter := _FakeBatchWriterUnprocessedItems{
+		_count:  0,
+		_inputs: make([]*dynamodb.BatchWriteItemInput, 2),
+	}
+	doneWriter := &_DoneWriter{
+		tableName:           "TABLE_NAME",
+		dynamoDBBatchWriter: &fakeBatchWriter,
+	}
+	doneItems := createDoneItems(26)
+	err := doneWriter.write(&doneItems)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	requestItems := fakeBatchWriter._inputs[1].RequestItems
+	writeRequests := requestItems["TABLE_NAME"]
+	if actualItem := (*writeRequests[0]).PutRequest.Item["SOME_KEY_02"]; actualItem == nil {
+		t.Fatal("Expected non nil, but got nil")
+	}
+}
+
+type _FakeBatchWriterUnprocessedItems struct {
+	_count  int
+	_inputs []*dynamodb.BatchWriteItemInput
+}
+
+func (bw *_FakeBatchWriterUnprocessedItems) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
+	bw._inputs[bw._count] = input
+	bw._count++
+	if bw._count != 1 {
+		return &dynamodb.BatchWriteItemOutput{}, nil
+	}
+
+	failedWriteRequests := input.RequestItems["TABLE_NAME"][2:3]
+	output := dynamodb.BatchWriteItemOutput{
+		UnprocessedItems: map[string][]*dynamodb.WriteRequest{
+			"TABLE_NAME": failedWriteRequests,
+		},
+	}
+	return &output, nil
+}
+
+func TestWrite_SendUnprocessedItemsIfThereIsAny(t *testing.T) {
+	// Request to send 25 items, and make 1 of them fail to send
+	// `write` method should retry to send the one
 }

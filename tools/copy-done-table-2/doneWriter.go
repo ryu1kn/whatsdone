@@ -9,35 +9,52 @@ type _DoneWriter struct {
 	dynamoDBBatchWriter _IBatchWriter
 }
 
+// TODO: Receive [] instead of *[]
 func (dw *_DoneWriter) write(items *[]map[string]*dynamodb.AttributeValue) error {
 	numOfItems := len(*items)
-	for i := 0; i < numOfItems; i += _MaxBatchWriteCount {
-		var subList []map[string]*dynamodb.AttributeValue
-		if i+_MaxBatchWriteCount < numOfItems {
-			subList = (*items)[i : i+_MaxBatchWriteCount]
+	retryItems := make([]*dynamodb.WriteRequest, 0)
+	var maxNumOfNewItems int
+
+	for i, numOfRetryItems := 0, 0; i < numOfItems; i += maxNumOfNewItems {
+		maxNumOfNewItems = _MaxBatchWriteCount - numOfRetryItems
+		var newItems []map[string]*dynamodb.AttributeValue
+		if i+maxNumOfNewItems < numOfItems {
+			newItems = (*items)[i : i+maxNumOfNewItems]
 		} else {
-			subList = (*items)[i:]
+			newItems = (*items)[i:]
 		}
-		err := dw._write(&subList)
+		input := dw._buildBatchWriteItemInput(retryItems, newItems)
+		output, err := dw.dynamoDBBatchWriter.BatchWriteItem(input)
 		if err != nil {
 			return err
 		}
+
+		retryItems = dw._extractUnprocessedRequests(output)
+		numOfRetryItems = len(retryItems)
 	}
 	return nil
 }
 
-func (dw *_DoneWriter) _write(items *[]map[string]*dynamodb.AttributeValue) error {
-	writeRequests := make([]*dynamodb.WriteRequest, len(*items))
-	for i, item := range *items {
-		writeRequests[i] = &dynamodb.WriteRequest{
-			PutRequest: &dynamodb.PutRequest{Item: item},
-		}
+func (dw *_DoneWriter) _buildBatchWriteItemInput(retryItems []*dynamodb.WriteRequest, newItems []map[string]*dynamodb.AttributeValue) *dynamodb.BatchWriteItemInput {
+	numOfRequests := len(retryItems) + len(newItems)
+	writeRequests := make([]*dynamodb.WriteRequest, numOfRequests)
+	for i, writeRequest := range retryItems {
+		writeRequests[i] = writeRequest
 	}
-	writeInput := dynamodb.BatchWriteItemInput{
+	for i, item := range newItems {
+		writeRequest := &dynamodb.WriteRequest{PutRequest: &dynamodb.PutRequest{Item: item}}
+		writeRequests[len(retryItems)+i] = writeRequest
+	}
+	return &dynamodb.BatchWriteItemInput{
 		RequestItems: map[string][]*dynamodb.WriteRequest{
 			dw.tableName: writeRequests,
 		},
 	}
-	_, err := dw.dynamoDBBatchWriter.BatchWriteItem(&writeInput)
-	return err
+}
+
+func (dw *_DoneWriter) _extractUnprocessedRequests(output *dynamodb.BatchWriteItemOutput) []*dynamodb.WriteRequest {
+	if output.UnprocessedItems == nil {
+		return make([]*dynamodb.WriteRequest, 0)
+	}
+	return output.UnprocessedItems[dw.tableName]
 }
