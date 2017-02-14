@@ -6,6 +6,10 @@ type _IDynamoDBBatchWriteClient interface {
 	BatchWriteItem(*dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error)
 }
 
+type _IBatchWriter interface {
+	BatchWriteItem(*dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error)
+}
+
 type _BatchWriter struct {
 	dynamoDB _IDynamoDBBatchWriteClient
 }
