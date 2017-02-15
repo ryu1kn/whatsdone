@@ -9,19 +9,19 @@ import (
 )
 
 func TestWrite_Write1Item(t *testing.T) {
-	fakeBatchWriter := _NewFakeBatchWriter()
+	fakeBatchWriter := _FakeBatchWriterWriteItems{}
 	doneWriter := &_DoneWriter{
 		tableName:           "TABLE_NAME",
 		dynamoDBBatchWriter: &fakeBatchWriter,
 	}
 	doneItem := map[string]*dynamodb.AttributeValue{"SOME_KEY": &dynamodb.AttributeValue{}}
 	doneItems := []map[string]*dynamodb.AttributeValue{doneItem}
-	err := doneWriter.write(&doneItems)
+	err := doneWriter.write(doneItems)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	requestItems := fakeBatchWriter._inputs[0].RequestItems
+	requestItems := fakeBatchWriter._input.RequestItems
 	writeRequests := requestItems["TABLE_NAME"]
 	if writeRequests == nil {
 		t.Fatal("Expected a request to the table \"TABLE_NAME\"")
@@ -36,72 +36,68 @@ func TestWrite_Write1Item(t *testing.T) {
 }
 
 func TestWrite_Write2Items(t *testing.T) {
-	fakeBatchWriter := _NewFakeBatchWriter()
+	fakeBatchWriter := _FakeBatchWriterWriteItems{}
 	doneWriter := &_DoneWriter{
 		tableName:           "TABLE_NAME",
 		dynamoDBBatchWriter: &fakeBatchWriter,
 	}
 	doneItems := createDoneItems(2)
-	err := doneWriter.write(&doneItems)
+	err := doneWriter.write(doneItems)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	requestItems := fakeBatchWriter._inputs[0].RequestItems
+	requestItems := fakeBatchWriter._input.RequestItems
 	writeRequests := requestItems["TABLE_NAME"]
 	if len(writeRequests) != 2 {
 		t.Fatalf("Expected 2, but got \"%d\"", len(writeRequests))
 	}
 }
 
+type _FakeBatchWriterWriteItems struct {
+	_input *dynamodb.BatchWriteItemInput
+}
+
+func (bw *_FakeBatchWriterWriteItems) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
+	bw._input = input
+	return &dynamodb.BatchWriteItemOutput{}, nil
+}
+
 func TestWrite_WriteMoreThan25Items(t *testing.T) {
-	fakeBatchWriter := _NewFakeBatchWriter()
+	fakeBatchWriter := _FakeBatchWriterWriteMoreThan25Items{
+		_count:  0,
+		_inputs: make([]*dynamodb.BatchWriteItemInput, 3),
+	}
 	doneWriter := &_DoneWriter{
 		tableName:           "TABLE_NAME",
 		dynamoDBBatchWriter: &fakeBatchWriter,
 	}
 	doneItems := createDoneItems(52)
-	err := doneWriter.write(&doneItems)
+	err := doneWriter.write(doneItems)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	requestItems1 := fakeBatchWriter._inputs[0].RequestItems
-	requestItems2 := fakeBatchWriter._inputs[1].RequestItems
-	requestItems3 := fakeBatchWriter._inputs[2].RequestItems
 	if numOfRequests := len(requestItems1["TABLE_NAME"]); numOfRequests != 25 {
 		t.Fatalf("Expected 25, but got %d", numOfRequests)
 	}
+	requestItems2 := fakeBatchWriter._inputs[1].RequestItems
 	if numOfRequests := len(requestItems2["TABLE_NAME"]); numOfRequests != 25 {
 		t.Fatalf("Expected 25, but got %d", numOfRequests)
 	}
+	requestItems3 := fakeBatchWriter._inputs[2].RequestItems
 	if numOfRequests := len(requestItems3["TABLE_NAME"]); numOfRequests != 2 {
 		t.Fatalf("Expected 2, but got %d", numOfRequests)
 	}
 }
 
-func createDoneItems(numOfItems int) []map[string]*dynamodb.AttributeValue {
-	items := make([]map[string]*dynamodb.AttributeValue, numOfItems)
-	for i := 0; i < numOfItems; i++ {
-		keyName := fmt.Sprintf("SOME_KEY_%02d", i)
-		items[i] = map[string]*dynamodb.AttributeValue{keyName: &dynamodb.AttributeValue{}}
-	}
-	return items
-}
-
-type _FakeBatchWriter struct {
+type _FakeBatchWriterWriteMoreThan25Items struct {
 	_count  int
 	_inputs []*dynamodb.BatchWriteItemInput
 }
 
-func _NewFakeBatchWriter() _FakeBatchWriter {
-	return _FakeBatchWriter{
-		_count:  0,
-		_inputs: make([]*dynamodb.BatchWriteItemInput, 3),
-	}
-}
-
-func (bw *_FakeBatchWriter) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
+func (bw *_FakeBatchWriterWriteMoreThan25Items) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
 	bw._inputs[bw._count] = input
 	bw._count++
 	return &dynamodb.BatchWriteItemOutput{}, nil
@@ -117,7 +113,7 @@ func TestWrite_ResendUnprocessedItems(t *testing.T) {
 		dynamoDBBatchWriter: &fakeBatchWriter,
 	}
 	doneItems := createDoneItems(26)
-	err := doneWriter.write(&doneItems)
+	err := doneWriter.write(doneItems)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -160,7 +156,7 @@ func TestWrite_SendUnprocessedItemsIfThereIsAny(t *testing.T) {
 		dynamoDBBatchWriter: &fakeBatchWriter,
 	}
 	doneItems := createDoneItems(1)
-	err := doneWriter.write(&doneItems)
+	err := doneWriter.write(doneItems)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -191,4 +187,13 @@ func (bw *_FakeBatchWriterUnprocessedItems2) BatchWriteItem(input *dynamodb.Batc
 		},
 	}
 	return &output, nil
+}
+
+func createDoneItems(numOfItems int) []map[string]*dynamodb.AttributeValue {
+	items := make([]map[string]*dynamodb.AttributeValue, numOfItems)
+	for i := 0; i < numOfItems; i++ {
+		keyName := fmt.Sprintf("SOME_KEY_%02d", i)
+		items[i] = map[string]*dynamodb.AttributeValue{keyName: &dynamodb.AttributeValue{}}
+	}
+	return items
 }

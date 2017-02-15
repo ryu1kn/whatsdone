@@ -9,9 +9,8 @@ type _DoneWriter struct {
 	dynamoDBBatchWriter _IBatchWriter
 }
 
-// TODO: Receive [] instead of *[]
-func (dw *_DoneWriter) write(items *[]map[string]*dynamodb.AttributeValue) error {
-	numOfItems := len(*items)
+func (dw *_DoneWriter) write(items []map[string]*dynamodb.AttributeValue) error {
+	numOfItems := len(items)
 	retryItems := make([]*dynamodb.WriteRequest, 0)
 	var maxNumOfNewItems int
 
@@ -19,9 +18,9 @@ func (dw *_DoneWriter) write(items *[]map[string]*dynamodb.AttributeValue) error
 		maxNumOfNewItems = _MaxBatchWriteCount - numOfRetryItems
 		var newItems []map[string]*dynamodb.AttributeValue
 		if i+maxNumOfNewItems < numOfItems {
-			newItems = (*items)[i : i+maxNumOfNewItems]
+			newItems = items[i : i+maxNumOfNewItems]
 		} else if i < numOfItems {
-			newItems = (*items)[i:]
+			newItems = items[i:]
 		} else {
 			newItems = nil
 		}
