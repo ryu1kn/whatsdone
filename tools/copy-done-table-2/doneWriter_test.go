@@ -151,6 +151,44 @@ func (bw *_FakeBatchWriterUnprocessedItems) BatchWriteItem(input *dynamodb.Batch
 }
 
 func TestWrite_SendUnprocessedItemsIfThereIsAny(t *testing.T) {
-	// Request to send 25 items, and make 1 of them fail to send
-	// `write` method should retry to send the one
+	fakeBatchWriter := _FakeBatchWriterUnprocessedItems2{
+		_count:  0,
+		_inputs: make([]*dynamodb.BatchWriteItemInput, 2),
+	}
+	doneWriter := &_DoneWriter{
+		tableName:           "TABLE_NAME",
+		dynamoDBBatchWriter: &fakeBatchWriter,
+	}
+	doneItems := createDoneItems(1)
+	err := doneWriter.write(&doneItems)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	requestItems := fakeBatchWriter._inputs[1].RequestItems
+	writeRequests := requestItems["TABLE_NAME"]
+	if actualItem := (*writeRequests[0]).PutRequest.Item["SOME_KEY_00"]; actualItem == nil {
+		t.Fatal("Expected non nil, but got nil")
+	}
+}
+
+type _FakeBatchWriterUnprocessedItems2 struct {
+	_count  int
+	_inputs []*dynamodb.BatchWriteItemInput
+}
+
+func (bw *_FakeBatchWriterUnprocessedItems2) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
+	bw._inputs[bw._count] = input
+	bw._count++
+	if bw._count != 1 {
+		return &dynamodb.BatchWriteItemOutput{}, nil
+	}
+
+	failedWriteRequests := input.RequestItems["TABLE_NAME"][0:1]
+	output := dynamodb.BatchWriteItemOutput{
+		UnprocessedItems: map[string][]*dynamodb.WriteRequest{
+			"TABLE_NAME": failedWriteRequests,
+		},
+	}
+	return &output, nil
 }

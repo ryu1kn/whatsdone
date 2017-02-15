@@ -15,13 +15,15 @@ func (dw *_DoneWriter) write(items *[]map[string]*dynamodb.AttributeValue) error
 	retryItems := make([]*dynamodb.WriteRequest, 0)
 	var maxNumOfNewItems int
 
-	for i, numOfRetryItems := 0, 0; i < numOfItems; i += maxNumOfNewItems {
+	for i, numOfRetryItems := 0, 0; i < numOfItems || numOfRetryItems != 0; i += maxNumOfNewItems {
 		maxNumOfNewItems = _MaxBatchWriteCount - numOfRetryItems
 		var newItems []map[string]*dynamodb.AttributeValue
 		if i+maxNumOfNewItems < numOfItems {
 			newItems = (*items)[i : i+maxNumOfNewItems]
-		} else {
+		} else if i < numOfItems {
 			newItems = (*items)[i:]
+		} else {
+			newItems = nil
 		}
 		input := dw._buildBatchWriteItemInput(retryItems, newItems)
 		output, err := dw.dynamoDBBatchWriter.BatchWriteItem(input)
