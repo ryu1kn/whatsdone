@@ -16,7 +16,7 @@ func TestWrite_Write1Item(t *testing.T) {
 	}
 	doneItem := map[string]*dynamodb.AttributeValue{"SOME_KEY": &dynamodb.AttributeValue{}}
 	doneItems := []map[string]*dynamodb.AttributeValue{doneItem}
-	err := doneWriter.write(doneItems)
+	err := doneWriter.write(&_DoneCollection{doneItems})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -42,7 +42,7 @@ func TestWrite_Write2Items(t *testing.T) {
 		dynamoDBBatchWriter: &fakeBatchWriter,
 	}
 	doneItems := createDoneItems(2)
-	err := doneWriter.write(doneItems)
+	err := doneWriter.write(&_DoneCollection{doneItems})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -73,7 +73,7 @@ func TestWrite_WriteMoreThan25Items(t *testing.T) {
 		dynamoDBBatchWriter: &fakeBatchWriter,
 	}
 	doneItems := createDoneItems(52)
-	err := doneWriter.write(doneItems)
+	err := doneWriter.write(&_DoneCollection{doneItems})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -113,7 +113,7 @@ func TestWrite_ResendUnprocessedItems(t *testing.T) {
 		dynamoDBBatchWriter: &fakeBatchWriter,
 	}
 	doneItems := createDoneItems(26)
-	err := doneWriter.write(doneItems)
+	err := doneWriter.write(&_DoneCollection{doneItems})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -156,7 +156,7 @@ func TestWrite_SendUnprocessedItemsIfThereIsAny(t *testing.T) {
 		dynamoDBBatchWriter: &fakeBatchWriter,
 	}
 	doneItems := createDoneItems(1)
-	err := doneWriter.write(doneItems)
+	err := doneWriter.write(&_DoneCollection{doneItems})
 	if err != nil {
 		t.Fatal(err)
 	}

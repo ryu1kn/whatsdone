@@ -9,8 +9,8 @@ type _DoneWriter struct {
 	dynamoDBBatchWriter _IBatchWriter
 }
 
-func (dw *_DoneWriter) write(items []map[string]*dynamodb.AttributeValue) error {
-	ic := newItemCollection(items)
+func (dw *_DoneWriter) write(doneCollection *_DoneCollection) error {
+	ic := newItemCollection(doneCollection.items)
 	for writeRequests := ic.nextWriteRequests(); len(writeRequests) != 0; writeRequests = ic.nextWriteRequests() {
 		input := dynamodb.BatchWriteItemInput{
 			RequestItems: map[string][]*dynamodb.WriteRequest{

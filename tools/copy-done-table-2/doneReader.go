@@ -10,11 +10,11 @@ type _DoneReader struct {
 	scanner   _IScanner
 }
 
-func (r *_DoneReader) readAll() (*_ReadAllResult, error) {
+func (r *_DoneReader) readAll() (*_DoneCollection, error) {
 	scanOutput, err := r.scanner.scan(&dynamodb.ScanInput{TableName: aws.String(r.tableName)})
-	return &_ReadAllResult{scanOutput.Items}, err
+	return &_DoneCollection{scanOutput.Items}, err
 }
 
-type _ReadAllResult struct {
+type _DoneCollection struct {
 	items []map[string]*dynamodb.AttributeValue
 }

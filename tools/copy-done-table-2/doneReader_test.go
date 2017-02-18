@@ -13,7 +13,7 @@ func TestFetchAllItems(t *testing.T) {
 		scanner:   &scanner,
 	}
 	var (
-		result *_ReadAllResult
+		result *_DoneCollection
 		err    error
 	)
 	result, err = reader.readAll()
