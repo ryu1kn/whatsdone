@@ -14,7 +14,3 @@ func (r *_DoneReader) readAll() (*_DoneCollection, error) {
 	scanOutput, err := r.scanner.scan(&dynamodb.ScanInput{TableName: aws.String(r.tableName)})
 	return &_DoneCollection{scanOutput.Items}, err
 }
-
-type _DoneCollection struct {
-	items []map[string]*dynamodb.AttributeValue
-}
