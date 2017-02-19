@@ -9,7 +9,7 @@ import (
 func TestBatchWrite(t *testing.T) {
 	fakeOutput := dynamodb.BatchWriteItemOutput{}
 	dynamoClient := &_FakeDynamoDBBatchWriteClient{_fakeOutput: &fakeOutput}
-	batchWriter := _BatchWriter{dynamoClient}
+	batchWriter := _DynamoDBBatchWriter{dynamoClient}
 	batchWriteItemInput := dynamodb.BatchWriteItemInput{}
 	batchWriteOutput, _ := batchWriter.BatchWriteItem(&batchWriteItemInput)
 

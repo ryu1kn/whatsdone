@@ -10,8 +10,8 @@ type _Context struct {
 	options *_CommandOptions
 }
 
-func (c *_Context) dynamoDBScanner() *_Scanner {
-	return &_Scanner{
+func (c *_Context) dynamoDBScanner() *_DynamoDBScanner {
+	return &_DynamoDBScanner{
 		dynamodb.New(session.New(&aws.Config{Region: aws.String(c.options.fromTableRegion)})),
 	}
 }
@@ -23,8 +23,8 @@ func (c *_Context) doneReader() *_DoneReader {
 	}
 }
 
-func (c *_Context) dynamoDBBatchWriter() *_BatchWriter {
-	return &_BatchWriter{
+func (c *_Context) dynamoDBBatchWriter() *_DynamoDBBatchWriter {
+	return &_DynamoDBBatchWriter{
 		dynamodb.New(session.New(&aws.Config{Region: aws.String(c.options.toTableRegion)})),
 	}
 }

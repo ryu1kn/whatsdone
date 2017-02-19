@@ -11,7 +11,7 @@ import (
 
 func TestScan(t *testing.T) {
 	dynamoClient := &_FakeDynamoDB{}
-	scanner := _Scanner{dynamoClient}
+	scanner := _DynamoDBScanner{dynamoClient}
 	scanOutput, err := scanner.scan(&dynamodb.ScanInput{TableName: aws.String("TABLE_NAME")})
 	if err != nil {
 		t.Fatal(err)

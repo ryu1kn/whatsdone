@@ -6,7 +6,7 @@ const _MaxBatchWriteCount = 25
 
 type _DoneWriter struct {
 	tableName           string
-	dynamoDBBatchWriter _IBatchWriter
+	dynamoDBBatchWriter _IDynamoDBBatchWriter
 }
 
 func (dw *_DoneWriter) write(doneCollection *_DoneCollection) error {

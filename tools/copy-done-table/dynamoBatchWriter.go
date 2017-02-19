@@ -6,14 +6,14 @@ type _IDynamoDBBatchWriteClient interface {
 	BatchWriteItem(*dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error)
 }
 
-type _IBatchWriter interface {
+type _IDynamoDBBatchWriter interface {
 	BatchWriteItem(*dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error)
 }
 
-type _BatchWriter struct {
+type _DynamoDBBatchWriter struct {
 	dynamoDB _IDynamoDBBatchWriteClient
 }
 
-func (bw *_BatchWriter) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
+func (bw *_DynamoDBBatchWriter) BatchWriteItem(input *dynamodb.BatchWriteItemInput) (*dynamodb.BatchWriteItemOutput, error) {
 	return bw.dynamoDB.BatchWriteItem(input)
 }

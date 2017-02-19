@@ -7,7 +7,7 @@ import (
 
 type _DoneReader struct {
 	tableName string
-	scanner   _IScanner
+	scanner   _IDynamoDBScanner
 }
 
 func (r *_DoneReader) readAll() (*_DoneCollection, error) {
