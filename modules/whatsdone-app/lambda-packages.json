@@ -1,0 +1,11 @@
+{
+  "uploadBucket": {
+    "name": "lambda-packages-cg3j2bu2"
+  },
+  "packages": [
+    {
+      "name": "whatsdone-app",
+      "package-script": "cd src && zip -q -r9 $KUMO_PACKAGE_OUTPUT_FILE *"
+    }
+  ]
+}

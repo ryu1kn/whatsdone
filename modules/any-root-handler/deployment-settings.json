@@ -1,0 +1,23 @@
+{
+    "moduleName": "any-root-handler",
+    "dependsOn": ["../whatsdone-app"],
+    "config": {
+        "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\""
+    },
+    "tasks": [
+        {
+            "id": "deploy-lambda",
+            "type": "cf-stack",
+            "stackName": "lambda",
+            "stackTemplate": {
+                "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
+            },
+            "stackParams": {
+                "LambdaRole": {"$ref": "#/_deploymentConfig/execution_role"},
+                "LambdaHandler": {"$ref": "#/_deploymentConfig/handler"},
+                "LambdaS3Bucket": {"$ref": "#/_deploymentOutputs/whatsdone-app/packages/whatsdone-app/s3Bucket"},
+                "LambdaS3Key": {"$ref": "#/_deploymentOutputs/whatsdone-app/packages/whatsdone-app/s3Key"}
+            }
+        }
+    ]
+}
