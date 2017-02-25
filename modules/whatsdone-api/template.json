@@ -1,0 +1,95 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "What's Done API",
+  "Parameters": {
+    "LambdaRole": {
+      "Type": "String"
+    },
+    "LambdaS3Bucket": {
+      "Type": "String"
+    },
+    "LambdaS3Key": {
+      "Type": "String"
+    },
+    "LambdaHandler": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "WhatsdoneAppFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": "whatsdone-app",
+        "Handler": {
+          "Ref": "LambdaHandler"
+        },
+        "Role": {
+          "Ref": "LambdaRole"
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "LambdaS3Bucket"
+          },
+          "S3Key": {
+            "Ref": "LambdaS3Key"
+          }
+        },
+        "Runtime": "nodejs4.3",
+        "Timeout": "10"
+      }
+    },
+    "LambdaPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:invokeFunction",
+        "FunctionName": {"Fn::GetAtt": ["WhatsdoneAppFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Join": ["",
+          ["arn:aws:execute-api:ap-southeast-2:", {"Ref": "AWS::AccountId"}, ":", {"Ref": "WhatsdoneApi"}, "/*"]
+        ]}
+      }
+    },
+    "WhatsdoneApi": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": "What's Done",
+        "Description": "API used for What's Done requests",
+        "FailOnWarnings": true,
+        "Body": {
+          "swagger": "2.0",
+          "info": {
+            "version": "2017-02-25T13:40:34Z",
+            "title": "What's Done API"
+          },
+          "schemes": ["https"],
+          "paths": {
+            "/": {
+              "get": {
+                "produces": ["text/html"],
+                "responses": {
+                  "200": {
+                    "description": "200 response"
+                  }
+                },
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": {"Fn::Join": ["",
+                    ["arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/", {"Fn::GetAtt": ["WhatsdoneAppFunction", "Arn"]}, "/invocations"]
+                  ]},
+                  "responses": {
+                    "default": {
+                      "statusCode": "200"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+

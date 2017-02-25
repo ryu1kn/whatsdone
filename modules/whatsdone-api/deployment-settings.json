@@ -1,14 +1,14 @@
 {
-    "moduleName": "any-root-handler",
+    "moduleName": "whatsdone-api",
     "dependsOn": ["../whatsdone-app"],
     "config": {
         "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\""
     },
     "tasks": [
         {
-            "id": "deploy-lambda",
+            "id": "deploy-api",
             "type": "cf-stack",
-            "stackName": "lambda",
+            "stackName": "api",
             "stackTemplate": {
                 "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
             },
