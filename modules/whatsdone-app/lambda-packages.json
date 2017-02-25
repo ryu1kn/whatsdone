@@ -1,7 +1,4 @@
 {
-  "uploadBucket": {
-    "name": "lambda-packages-cg3j2bu2"
-  },
   "packages": [
     {
       "name": "whatsdone-app",
