@@ -13,13 +13,20 @@
     },
     "LambdaHandler": {
       "Type": "String"
+    },
+    "EnvName": {
+      "Type": "String"
+    },
+    "Region": {
+      "Type": "String"
     }
   },
   "Resources": {
     "WhatsdoneAppFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": "whatsdone-app",
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-app"},
+        "Description": "What's Done app",
         "Handler": {
           "Ref": "LambdaHandler"
         },
@@ -44,7 +51,7 @@
         "Action": "lambda:invokeFunction",
         "FunctionName": {"Fn::GetAtt": ["WhatsdoneAppFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:ap-southeast-2:${AWS::AccountId}:${WhatsdoneApi}/*"}
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${WhatsdoneApi}/*"}
       }
     },
     "WhatsdoneApi": {
@@ -73,7 +80,7 @@
                   "type": "aws_proxy",
                   "httpMethod": "POST",
                   "uri": {"Fn::Sub": [
-                    "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
+                    "arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
                     {"LambdaArn": {"Fn::GetAtt": ["WhatsdoneAppFunction", "Arn"]}}
                   ]},
                   "responses": {
@@ -87,8 +94,30 @@
           }
         }
       }
+    },
+    "WhatsdoneApiStage": {
+      "Type": "AWS::ApiGateway::Stage",
+      "Properties": {
+        "DeploymentId": {"Ref": "ApiDeployment"},
+        "MethodSettings": [{
+          "HttpMethod": "*",
+          "ResourcePath": "/*"
+        }],
+        "RestApiId": {"Ref": "WhatsdoneApi"},
+        "StageName": {"Ref": "EnvName"}
+      }
+    },
+    "ApiDeployment": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {"Ref": "WhatsdoneApi"}
+      }
+    }
+  },
+  "Outputs": {
+    "ApiRootUrl": {
+      "Description": "Root URL of What's Done API",
+      "Value": {"Fn::Sub": "https://${WhatsdoneApi}.execute-api.${Region}.amazonaws.com/${EnvName}"}
     }
   }
 }
-
-

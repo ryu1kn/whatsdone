@@ -13,6 +13,8 @@
                 "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
             },
             "stackParams": {
+                "EnvName": {"$ref": "#/_env"},
+                "Region": {"$ref": "#/_taskRegion"},
                 "LambdaRole": {"$ref": "#/_deploymentConfig/execution_role"},
                 "LambdaHandler": {"$ref": "#/_deploymentConfig/handler"},
                 "LambdaS3Bucket": {"$ref": "#/_deploymentOutputs/whatsdone-app/packages/whatsdone-app/s3Bucket"},
