@@ -4,7 +4,7 @@
 /**
  * Do nothing even if a user is using insecure protocol
  */
-class SchemaBasedRedirectMiddleware {
+class HttpSchemeBasedRedirectMiddleware {
 
   handle(req, res, next) {
     next();
@@ -12,4 +12,4 @@ class SchemaBasedRedirectMiddleware {
 
 }
 
-module.exports = SchemaBasedRedirectMiddleware;
+module.exports = HttpSchemeBasedRedirectMiddleware;

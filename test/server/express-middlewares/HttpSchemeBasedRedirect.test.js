@@ -1,10 +1,10 @@
 
-const SchemaBasedRedirectMiddleware = require('../../../src/server/express-middlewares/SchemaBasedRedirect');
+const HttpSchemeBasedRedirectMiddleware = require('../../../src/server/express-middlewares/HttpSchemeBasedRedirect');
 
-describe('Server SchemaBasedRedirectMiddleware', () => {
+describe('Server HttpSchemeBasedRedirectMiddleware', () => {
 
   it('does nothing if a user is using secure protocol', () => {
-    const middleware = new SchemaBasedRedirectMiddleware();
+    const middleware = new HttpSchemeBasedRedirectMiddleware();
     const req = {
       header: stubWithArgs(['X-Forwarded-Proto'], 'https'),
       hostname: 'HOSTNAME',
@@ -17,7 +17,7 @@ describe('Server SchemaBasedRedirectMiddleware', () => {
   });
 
   it('redirects a user to the https compatible page if they are using insecure protocol', () => {
-    const middleware = new SchemaBasedRedirectMiddleware();
+    const middleware = new HttpSchemeBasedRedirectMiddleware();
     const req = {
       header: stubWithArgs(['X-Forwarded-Proto'], 'http'),
       hostname: 'HOSTNAME',

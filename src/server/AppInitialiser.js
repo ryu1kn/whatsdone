@@ -17,7 +17,7 @@ class AppInitialiser {
     app.use(ServiceLocator.faviconProvider);
     app.use(ServiceLocator.sessionManager);
 
-    app.all('*', ServiceLocator.schemaBasedRedirectMiddleware);
+    app.all('*', ServiceLocator.httpSchemeBasedRedirectMiddleware);
     app.all('*', ServiceLocator.authBasedRedirectMiddleware);
     app.get('/', ServiceLocator.getRootPageRequestHandler);
     app.get('/signin', ServiceLocator.getSigninRequestHandler);

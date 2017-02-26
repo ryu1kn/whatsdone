@@ -1,10 +1,10 @@
 
-const DevSchemaBasedRedirectMiddleware = require('../../../src/server/express-middlewares/DevSchemaBasedRedirect');
+const DevHttpSchemeBasedRedirectMiddleware = require('../../../src/server/express-middlewares/DevHttpSchemeBasedRedirect');
 
-describe('Server DevSchemaBasedRedirectMiddleware', () => {
+describe('Server DevHttpSchemeBasedRedirectMiddleware', () => {
 
   it('does nothing even if a user is using insecure protocol', () => {
-    const middleware = new DevSchemaBasedRedirectMiddleware();
+    const middleware = new DevHttpSchemeBasedRedirectMiddleware();
     const req = {protocol: 'http'};
     return promisifyExpressMiddleware(middleware, req).then(result => {
       expect(result.res.redirect).to.have.been.not.called;

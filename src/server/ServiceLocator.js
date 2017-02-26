@@ -44,8 +44,8 @@ class ServiceLocator {
     return this._get('authBasedRedirectMiddleware');
   }
 
-  get schemaBasedRedirectMiddleware() {
-    return this._get('schemaBasedRedirectMiddleware');
+  get httpSchemeBasedRedirectMiddleware() {
+    return this._get('httpSchemeBasedRedirectMiddleware');
   }
 
   get getRootPageRequestHandler() {

@@ -14,7 +14,7 @@ describe('Server AppInitialiser', () => {
       createStaticContentsProvider: () => 'StaticContentsProvider',
       createFaviconProvider: () => 'FaviconProvider',
       createSessionManager: () => 'SessionManager',
-      createSchemaBasedRedirectMiddleware: () => 'SchemaBasedRedirectMiddleware',
+      createHttpSchemeBasedRedirectMiddleware: () => 'HttpSchemeBasedRedirectMiddleware',
       createAuthBasedRedirectMiddleware: () => 'AuthBasedRedirectMiddleware',
       createGetRootPageRequestHandler: () => 'GetRootPageRequestHandler',
       createGetSigninRequestHandler: () => 'GetSigninRequestHandler',
@@ -54,7 +54,7 @@ describe('Server AppInitialiser', () => {
       ['ErrorHandler']
     ]);
     expect(app.all.args).to.eql([
-      ['*', 'SchemaBasedRedirectMiddleware'],
+      ['*', 'HttpSchemeBasedRedirectMiddleware'],
       ['*', 'AuthBasedRedirectMiddleware'],
       ['*', 'NoMatchingRouteRequestHandler']
     ]);
