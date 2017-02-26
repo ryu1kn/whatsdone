@@ -101,7 +101,9 @@
         "DeploymentId": {"Ref": "ApiDeployment"},
         "MethodSettings": [{
           "HttpMethod": "*",
-          "ResourcePath": "/*"
+          "ResourcePath": "/*",
+          "ThrottlingRateLimit": 10,
+          "ThrottlingBurstLimit": 20
         }],
         "RestApiId": {"Ref": "WhatsdoneApi"},
         "StageName": {"Ref": "EnvName"}
