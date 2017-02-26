@@ -44,9 +44,7 @@
         "Action": "lambda:invokeFunction",
         "FunctionName": {"Fn::GetAtt": ["WhatsdoneAppFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Join": ["",
-          ["arn:aws:execute-api:ap-southeast-2:", {"Ref": "AWS::AccountId"}, ":", {"Ref": "WhatsdoneApi"}, "/*"]
-        ]}
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:ap-southeast-2:${AWS::AccountId}:${WhatsdoneApi}/*"}
       }
     },
     "WhatsdoneApi": {
@@ -74,8 +72,9 @@
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": {"Fn::Join": ["",
-                    ["arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/", {"Fn::GetAtt": ["WhatsdoneAppFunction", "Arn"]}, "/invocations"]
+                  "uri": {"Fn::Sub": [
+                    "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
+                    {"LambdaArn": {"Fn::GetAtt": ["WhatsdoneAppFunction", "Arn"]}}
                   ]},
                   "responses": {
                     "default": {
