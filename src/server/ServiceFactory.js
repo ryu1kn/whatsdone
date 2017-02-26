@@ -1,4 +1,6 @@
 
+'use strict';
+
 const AWS = require('aws-sdk');
 const Uuid = require('uuid');
 const bodyParser = require('body-parser');
@@ -14,8 +16,8 @@ const DynamoDBStore = require('connect-dynamodb')({session});
 
 class ServiceFactory {
 
-  constructor({env}) {
-    this._env = env;
+  constructor(params) {
+    this._env = params.env;
   }
 
   createAccessLogger() {
@@ -170,7 +172,8 @@ class ServiceFactory {
 // e.g. images/favicon.ico => /path/to/public/images/favicon.ico
 function pathUnderPublic(pathFromPublic) {
   const pathParts = pathFromPublic ? pathFromPublic.split('/') : [];
-  return path.join(__dirname, '..', '..', 'public', ...pathParts);
+  const pathComponents = [__dirname, '..', '..', 'public'].concat(pathParts);
+  return path.join.apply(path, pathComponents);
 }
 
 function getBoundHandleMethod(handler) {

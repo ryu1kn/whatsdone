@@ -17,8 +17,8 @@ describe('Server PostSigninRequestHandler', () => {
       body: 'REQUEST_BODY',
       session: {}
     };
-    return promisifyExpressMiddleware(middleware, req).then(({res}) => {
-      expect(res.redirect).to.have.been.calledWith('/');
+    return promisifyExpressMiddleware(middleware, req).then(result => {
+      expect(result.res.redirect).to.have.been.calledWith('/');
       expect(req.session).to.eql({
         isAuthorized: true,
         userId: 'USER_ID'
@@ -36,9 +36,9 @@ describe('Server PostSigninRequestHandler', () => {
     const middleware = new PostSigninRequestHandler();
 
     const req = {session: {}};
-    return promisifyExpressMiddleware(middleware, req).then(({res}) => {
-      expect(res.status).to.have.been.calledWith(401);
-      expect(res.render).to.have.been.calledWith('signin');
+    return promisifyExpressMiddleware(middleware, req).then(result => {
+      expect(result.res.status).to.have.been.calledWith(401);
+      expect(result.res.render).to.have.been.calledWith('signin');
       expect(req.session).to.eql({});
     });
   });
@@ -52,8 +52,8 @@ describe('Server PostSigninRequestHandler', () => {
     const middleware = new PostSigninRequestHandler();
 
     const req = {session: {}};
-    return promisifyExpressMiddleware(middleware, req).then(({next}) => {
-      expect(next.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');
+    return promisifyExpressMiddleware(middleware, req).then(result => {
+      expect(result.next.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');
     });
   });
 

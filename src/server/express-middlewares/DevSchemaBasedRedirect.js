@@ -1,4 +1,6 @@
 
+'use strict';
+
 /**
  * Do nothing even if a user is using insecure protocol
  */

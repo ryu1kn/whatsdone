@@ -24,9 +24,9 @@ describe('Server PostDonesRequestHandler', () => {
       session: {userId: 'USER_ID'},
       body: {SOME_DATA: '..'}
     };
-    return promisifyExpressMiddleware(middleware, req).then(({res}) => {
-      expect(res.setHeader).to.have.been.calledWith('Content-Type', 'application/json');
-      expect(res.send).to.have.been.calledWith('{"userId":"USER_ID","SOME_DATA":"..","username":"USER"}');
+    return promisifyExpressMiddleware(middleware, req).then(result => {
+      expect(result.res.setHeader).to.have.been.calledWith('Content-Type', 'application/json');
+      expect(result.res.send).to.have.been.calledWith('{"userId":"USER_ID","SOME_DATA":"..","username":"USER"}');
     });
   });
 

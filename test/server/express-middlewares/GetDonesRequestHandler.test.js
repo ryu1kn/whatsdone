@@ -18,9 +18,9 @@ describe('Server GetDonesRequestHandler', () => {
     const middleware = new GetDonesRequestHandler();
 
     const req = {};
-    return promisifyExpressMiddleware(middleware, req).then(({res}) => {
-      expect(res.setHeader).to.have.been.calledWith('Content-Type', 'application/json');
-      expect(res.send).to.have.been.calledWith([{userId: 'USER_ID', username: 'USER'}]);
+    return promisifyExpressMiddleware(middleware, req).then(result => {
+      expect(result.res.setHeader).to.have.been.calledWith('Content-Type', 'application/json');
+      expect(result.res.send).to.have.been.calledWith([{userId: 'USER_ID', username: 'USER'}]);
     });
   });
 
@@ -34,8 +34,8 @@ describe('Server GetDonesRequestHandler', () => {
     const middleware = new GetDonesRequestHandler();
 
     const req = {};
-    return promisifyExpressMiddleware(middleware, req).then(({next}) => {
-      expect(next.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');
+    return promisifyExpressMiddleware(middleware, req).then(result => {
+      expect(result.next.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');
     });
   });
 

@@ -13,9 +13,9 @@ describe('Server ErrorHandler', () => {
 
     const req = {};
     const err = new Error('[NotFound]: NOT_FOUND');
-    return promisifyExpressMiddleware(middleware, req, err).then(({res}) => {
-      expect(res.status).to.have.been.calledWith(404);
-      expect(res.render).to.have.been.calledWith('error', {message: '404: Not Found'});
+    return promisifyExpressMiddleware(middleware, req, err).then(result => {
+      expect(result.res.status).to.have.been.calledWith(404);
+      expect(result.res.render).to.have.been.calledWith('error', {message: '404: Not Found'});
       expect(logger.error.args[0][0]).to.have.string('Error: [NotFound]: NOT_FOUND');
     });
   });
@@ -29,9 +29,9 @@ describe('Server ErrorHandler', () => {
 
     const req = {};
     const err = new Error('[AccessDenied]: ACCESS_DENIED');
-    return promisifyExpressMiddleware(middleware, req, err).then(({res}) => {
-      expect(res.status).to.have.been.calledWith(403);
-      expect(res.render).to.have.been.calledWith('error', {message: '403: Forbidden'});
+    return promisifyExpressMiddleware(middleware, req, err).then(result => {
+      expect(result.res.status).to.have.been.calledWith(403);
+      expect(result.res.render).to.have.been.calledWith('error', {message: '403: Forbidden'});
       expect(logger.error.args[0][0]).to.have.string('Error: [AccessDenied]: ACCESS_DENIED');
     });
   });
@@ -45,9 +45,9 @@ describe('Server ErrorHandler', () => {
 
     const req = {};
     const err = new Error('UNKNOWN ERROR');
-    return promisifyExpressMiddleware(middleware, req, err).then(({res}) => {
-      expect(res.status).to.have.been.calledWith(500);
-      expect(res.render).to.have.been.calledWith('error', {message: '500: Internal Server Error'});
+    return promisifyExpressMiddleware(middleware, req, err).then(result => {
+      expect(result.res.status).to.have.been.calledWith(500);
+      expect(result.res.render).to.have.been.calledWith('error', {message: '500: Internal Server Error'});
       expect(logger.error.args[0][0]).to.have.string('Error: UNKNOWN');
     });
   });

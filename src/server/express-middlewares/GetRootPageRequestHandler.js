@@ -1,4 +1,6 @@
 
+'use strict';
+
 class GetRootPageRequestHandler {
 
   handle(req, res) {

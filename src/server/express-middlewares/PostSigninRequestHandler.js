@@ -1,4 +1,6 @@
 
+'use strict';
+
 const ServiceLocator = require('../ServiceLocator');
 
 class PostSigninRequestHandler {

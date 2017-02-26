@@ -9,9 +9,9 @@ describe('Server AuthBasedRedirectMiddlware', () => {
       path: '/PATH',
       session: {isAuthorized: true}
     };
-    return promisifyHandler(authBasedRedirectMiddleware, req).then(({res, next}) => {
-      expect(res.redirect).to.have.been.not.called;
-      expect(next).to.have.been.called;
+    return promisifyExpressMiddleware(authBasedRedirectMiddleware, req).then(result => {
+      expect(result.res.redirect).to.have.been.not.called;
+      expect(result.next).to.have.been.called;
     });
   });
 
@@ -21,9 +21,9 @@ describe('Server AuthBasedRedirectMiddlware', () => {
       path: '/signin',
       session: {isAuthorized: false}
     };
-    return promisifyHandler(authBasedRedirectMiddleware, req).then(({res, next}) => {
-      expect(res.redirect).to.have.been.not.called;
-      expect(next).to.have.been.called;
+    return promisifyExpressMiddleware(authBasedRedirectMiddleware, req).then(result => {
+      expect(result.res.redirect).to.have.been.not.called;
+      expect(result.next).to.have.been.called;
     });
   });
 
@@ -33,9 +33,9 @@ describe('Server AuthBasedRedirectMiddlware', () => {
       path: '/signin',
       session: {isAuthorized: true}
     };
-    return promisifyHandler(authBasedRedirectMiddleware, req).then(({res, next}) => {
-      expect(res.redirect).to.have.been.calledWith('/');
-      expect(next).to.have.been.not.called;
+    return promisifyExpressMiddleware(authBasedRedirectMiddleware, req).then(result => {
+      expect(result.res.redirect).to.have.been.calledWith('/');
+      expect(result.next).to.have.been.not.called;
     });
   });
 
@@ -45,35 +45,10 @@ describe('Server AuthBasedRedirectMiddlware', () => {
       path: '/PATH',
       session: {isAuthorized: false}
     };
-    return promisifyHandler(authBasedRedirectMiddleware, req).then(({res, next}) => {
-      expect(res.redirect).to.have.been.calledWith('/signin');
-      expect(next).to.have.been.not.called;
+    return promisifyExpressMiddleware(authBasedRedirectMiddleware, req).then(result => {
+      expect(result.res.redirect).to.have.been.calledWith('/signin');
+      expect(result.next).to.have.been.not.called;
     });
   });
 
 });
-
-function promisifyHandler(authBasedRedirectMiddleware, req) {
-  return new Promise((resolve, reject) => {
-    const result = {
-      res: {redirect: sinon.spy()},
-      next: sinon.spy()
-    };
-    const next = (...args) => {
-      result.next(...args);
-      resolve(result);
-    };
-    const res = {
-      redirect: (...args) => {
-        result.res.redirect(...args);
-        resolve(result);
-      }
-    };
-    try {
-      authBasedRedirectMiddleware.handle(req, res, next);
-    } catch (e) {
-      reject(e);
-    }
-  });
-
-}

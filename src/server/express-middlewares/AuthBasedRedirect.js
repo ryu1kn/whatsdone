@@ -1,4 +1,6 @@
 
+'use strict';
+
 /**
  * Redirect user according to their authentication status
  */

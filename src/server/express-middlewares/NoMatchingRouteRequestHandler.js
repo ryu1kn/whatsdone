@@ -1,4 +1,6 @@
 
+'use strict';
+
 class NoMatchingRouteRequestHandler {
 
   handle(req, res) {

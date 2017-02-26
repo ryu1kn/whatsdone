@@ -1,4 +1,6 @@
 
+'use strict';
+
 class SignoutRequestHandler {
 
   handle(req, res) {

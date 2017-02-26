@@ -19,10 +19,10 @@ describe('Server UpdateDoneRequestHandler', () => {
       params: {id: 'DONE_ID'},
       body: {DONE_DATA: '..'}
     };
-    return promisifyExpressMiddleware(middleware, req).then(({res}) => {
-      expect(res.setHeader).to.have.been.calledWith('Content-Type', 'application/json');
-      expect(res.setHeader).to.have.been.calledWith('Cache-Control', 'no-cache');
-      expect(res.send).to.have.been.calledWith('FORMATTED_DONE');
+    return promisifyExpressMiddleware(middleware, req).then(result => {
+      expect(result.res.setHeader).to.have.been.calledWith('Content-Type', 'application/json');
+      expect(result.res.setHeader).to.have.been.calledWith('Cache-Control', 'no-cache');
+      expect(result.res.send).to.have.been.calledWith('FORMATTED_DONE');
       expect(doneFormatter.format).to.have.been.calledWith('UPDATED_DONE');
     });
   });

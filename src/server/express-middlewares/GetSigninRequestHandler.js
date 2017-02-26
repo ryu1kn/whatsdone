@@ -1,4 +1,6 @@
 
+'use strict';
+
 class GetSigninRequestHandler {
 
   handle(req, res) {

@@ -1,4 +1,6 @@
 
+'use strict';
+
 const SECURE_PROTOCOL = 'https';
 
 /**

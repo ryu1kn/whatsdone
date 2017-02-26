@@ -45,8 +45,10 @@ global.promisifyExpressMiddleware = function (middleware, req, err) {
       next: sinon.spy()
     };
     const getFakeExpressFn = fnPath =>
-        (...args) => {
-          _.get(result, fnPath)(...args);
+        function () {
+          const args = Array.prototype.slice.call(arguments);
+          const fn = _.get(result, fnPath);
+          fn.apply(fn, args);
           resolve(result);
         };
 

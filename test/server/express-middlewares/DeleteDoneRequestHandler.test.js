@@ -16,8 +16,8 @@ describe('Server DeleteDoneRequestHandler', () => {
       session: {userId: 'USER_ID'},
       params: {id: 'DONE_ID'}
     };
-    return promisifyExpressMiddleware(middleware, req).then(({res}) => {
-      expect(res.end).to.have.been.calledWith();
+    return promisifyExpressMiddleware(middleware, req).then(result => {
+      expect(result.res.end).to.have.been.calledWith();
     });
   });
 
@@ -33,8 +33,8 @@ describe('Server DeleteDoneRequestHandler', () => {
       params: {},
       session: {}
     };
-    return promisifyExpressMiddleware(middleware, req).then(({next}) => {
-      expect(next.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');
+    return promisifyExpressMiddleware(middleware, req).then(result => {
+      expect(result.next.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');
     });
   });
 

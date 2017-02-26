@@ -10,9 +10,9 @@ describe('Server SchemaBasedRedirectMiddleware', () => {
       hostname: 'HOSTNAME',
       url: '/URL_STRING'
     };
-    return promisifyExpressMiddleware(middleware, req).then(({res, next}) => {
-      expect(res.redirect).to.have.been.not.called;
-      expect(next).to.have.been.called;
+    return promisifyExpressMiddleware(middleware, req).then(result => {
+      expect(result.res.redirect).to.have.been.not.called;
+      expect(result.next).to.have.been.called;
     });
   });
 
@@ -23,9 +23,9 @@ describe('Server SchemaBasedRedirectMiddleware', () => {
       hostname: 'HOSTNAME',
       url: '/URL_STRING'
     };
-    return promisifyExpressMiddleware(middleware, req).then(({res, next}) => {
-      expect(res.redirect).to.have.been.calledWith('https://HOSTNAME/URL_STRING');
-      expect(next).to.have.been.not.called;
+    return promisifyExpressMiddleware(middleware, req).then(result => {
+      expect(result.res.redirect).to.have.been.calledWith('https://HOSTNAME/URL_STRING');
+      expect(result.next).to.have.been.not.called;
     });
   });
 

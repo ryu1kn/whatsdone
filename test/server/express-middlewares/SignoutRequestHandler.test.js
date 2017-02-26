@@ -8,8 +8,8 @@ describe('Server SignoutRequestHandler', () => {
     const req = {
       session: {isAuthorized: true}
     };
-    return promisifyExpressMiddleware(middleware, req).then(({res}) => {
-      expect(res.redirect).to.have.been.calledWith('/signin');
+    return promisifyExpressMiddleware(middleware, req).then(result => {
+      expect(result.res.redirect).to.have.been.calledWith('/signin');
       expect(req.session).to.eql({});
     });
   });
