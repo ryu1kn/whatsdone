@@ -88,8 +88,24 @@ class ServiceLocator {
     return this._get('errorHandler');
   }
 
+  get expressRequestNormaliser() {
+    return this._get('expressRequestNormaliser');
+  }
+
+  get expressResponseSenderFactory() {
+    return this._get('expressResponseSenderFactory');
+  }
+
   get logger() {
     return this._get('logger');
+  }
+
+  get pug() {
+    return this._get('pug');
+  }
+
+  get htmlPageGenerator() {
+    return this._get('htmlPageGenerator');
   }
 
   get userRepository() {

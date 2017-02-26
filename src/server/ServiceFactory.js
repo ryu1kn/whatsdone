@@ -9,10 +9,12 @@ const express = require('express');
 const favicon = require('serve-favicon');
 const morgan = require('morgan');
 const path = require('path');
+const pug = require('pug');
 const sha1 = require('sha1');
 const session = require('express-session');
 
 const DynamoDBStore = require('connect-dynamodb')({session});
+const ExpressRequestHandler = require('./ExpressRequestHandler');
 
 class ServiceFactory {
 
@@ -73,8 +75,11 @@ class ServiceFactory {
   }
 
   createGetRootPageRequestHandler() {
-    const GetRootPageRequestHandler = require('./express-middlewares/GetRootPageRequestHandler');
-    return getBoundHandleMethod(new GetRootPageRequestHandler());
+    const GetRootPageRequestProcessor = require('./request-processors/GetRootPage');
+    const requestHandler = new ExpressRequestHandler({
+      requestProcessor: new GetRootPageRequestProcessor()
+    });
+    return getBoundHandleMethod(requestHandler);
   }
 
   createGetDonesRequestHandler() {
@@ -122,8 +127,27 @@ class ServiceFactory {
     return getBoundHandleMethod(new ErrorHandler());
   }
 
+  createExpressRequestNormaliser() {
+    const ExpressRequestNormaliser = require('./ExpressRequestNormaliser');
+    return new ExpressRequestNormaliser();
+  }
+
+  createExpressResponseSenderFactory() {
+    const ExpressResponseSender = require('./ExpressResponseSender');
+    return {create: expressRes => new ExpressResponseSender({expressRes})};
+  }
+
   createLogger() {
     return console;
+  }
+
+  createPug() {
+    return pug;
+  }
+
+  createHtmlPageGenerator() {
+    const HtmlPageGenerator = require('./HtmlPageGenerator');
+    return new HtmlPageGenerator();
   }
 
   _getDynamoDB() {
