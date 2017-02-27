@@ -103,8 +103,11 @@ class ServiceFactory {
   }
 
   createGetSigninRequestHandler() {
-    const GetSigninRequestHandler = require('./express-middlewares/GetSigninRequestHandler');
-    return getBoundHandleMethod(new GetSigninRequestHandler());
+    const GetSigninRequestProcessor = require('./request-processors/GetSignin');
+    const requestHandler = new ExpressRequestHandler({
+      requestProcessor: new GetSigninRequestProcessor()
+    });
+    return getBoundHandleMethod(requestHandler);
   }
 
   createPostSigninRequestHandler() {
