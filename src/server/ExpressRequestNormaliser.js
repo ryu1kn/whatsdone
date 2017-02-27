@@ -3,8 +3,12 @@
 
 class ExpressRequestNormaliser {
 
-  normalise(_expressReq) {
-    return {};
+  normalise(expressReq) {
+    return {
+      params: expressReq.params,
+      body: expressReq.body,
+      session: expressReq.session
+    };
   }
 
 }

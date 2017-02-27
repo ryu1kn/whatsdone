@@ -98,8 +98,16 @@ class ServiceFactory {
   }
 
   createUpdateDoneRequestHandler() {
-    const UpdateDoneRequestHandler = require('./express-middlewares/UpdateDoneRequestHandler');
-    return getBoundHandleMethod(new UpdateDoneRequestHandler());
+    const UpdateDoneRequestProcessor = require('./request-processors/UpdateDone');
+    const requestHandler = new ExpressRequestHandler({
+      requestProcessor: new UpdateDoneRequestProcessor()
+    });
+    return getBoundHandleMethod(requestHandler);
+  }
+
+  createUpdateDoneCommand() {
+    const UpdateDoneCommand = require('./commands/UpdateDone');
+    return new UpdateDoneCommand();
   }
 
   createGetSigninRequestHandler() {
@@ -169,11 +177,6 @@ class ServiceFactory {
   createDoneRepository() {
     const DoneRepository = require('./repositories/Done');
     return new DoneRepository();
-  }
-
-  createDoneFormatter() {
-    const DoneFormatter = require('./DoneFormatter');
-    return new DoneFormatter();
   }
 
   createUserDynamoTableClient() {

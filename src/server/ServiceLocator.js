@@ -84,6 +84,10 @@ class ServiceLocator {
     return this._get('noMatchingRouteRequestHandler');
   }
 
+  get updateDoneCommand() {
+    return this._get('updateDoneCommand');
+  }
+
   get errorHandler() {
     return this._get('errorHandler');
   }
@@ -114,10 +118,6 @@ class ServiceLocator {
 
   get doneRepository() {
     return this._get('doneRepository');
-  }
-
-  get doneFormatter() {
-    return this._get('doneFormatter');
   }
 
   get dynamoDBDocumentClient() {
