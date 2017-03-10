@@ -5,8 +5,13 @@
 
 Personal activity tracker. Take memos of what I (or we) have done today.
 
-- backend: Node.js (deployed on ~~heroku~~ AWS by `kumo`)
-- frontend: React
+- infrastructure
+  - ~~heroku~~
+  - AWS Elastic Beanstalk (deployed by `kumo`)
+- backend
+  - Node.js
+- frontend
+  - React + flux
 
 ## Notes
 
