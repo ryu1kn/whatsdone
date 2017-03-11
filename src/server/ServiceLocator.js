@@ -84,6 +84,10 @@ class ServiceLocator {
     return this._get('noMatchingRouteRequestHandler');
   }
 
+  get createDoneCommand() {
+    return this._get('createDoneCommand');
+  }
+
   get updateDoneCommand() {
     return this._get('updateDoneCommand');
   }
