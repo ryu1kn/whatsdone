@@ -6,8 +6,9 @@
 Personal activity tracker. Take memos of what I (or we) have done today.
 
 - infrastructure
-  - ~~heroku~~
-  - AWS Elastic Beanstalk (deployed by `kumo`)
+  - ~~heroku + MongoDB~~
+  - ~~heroku + DynamoDB~~
+  - AWS Elastic Beanstalk (deployed by `kumo`) + DynamoDB
 - backend
   - Node.js
 - frontend
