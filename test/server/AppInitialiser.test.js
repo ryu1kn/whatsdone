@@ -21,7 +21,7 @@ describe('Server AppInitialiser', () => {
       createPostSigninRequestHandler: () => 'PostSigninRequestHandler',
       createSignoutRequestHandler: () => 'SignoutRequestHandler',
       createGetDonesRequestHandler: () => 'GetDonesRequestHandler',
-      createPostDonesRequestHandler: () => 'PostDonesRequestHandler',
+      createPostDoneRequestHandler: () => 'PostDoneRequestHandler',
       createDeleteDoneRequestHandler: () => 'DeleteDoneRequestHandler',
       createUpdateDoneRequestHandler: () => 'UpdateDoneRequestHandler',
       createNoMatchingRouteRequestHandler: () => 'NoMatchingRouteRequestHandler',
@@ -67,7 +67,7 @@ describe('Server AppInitialiser', () => {
     expect(app.post.args).to.eql([
       ['/signin', 'PostSigninRequestHandler'],
       ['/signout', 'SignoutRequestHandler'],
-      ['/dones.json', 'PostDonesRequestHandler']
+      ['/dones.json', 'PostDoneRequestHandler']
     ]);
     expect(app.delete.args).to.eql([
       ['/dones.json/:id', 'DeleteDoneRequestHandler']

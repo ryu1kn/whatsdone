@@ -87,7 +87,7 @@ class ServiceFactory {
     return getBoundHandleMethod(new GetDonesRequestHandler());
   }
 
-  createPostDonesRequestHandler() {
+  createPostDoneRequestHandler() {
     const PostDoneRequestProcessor = require('./request-processors/PostDone');
     const requestHandler = new ExpressRequestHandler({
       requestProcessor: new PostDoneRequestProcessor()

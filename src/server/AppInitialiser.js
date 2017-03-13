@@ -25,7 +25,7 @@ class AppInitialiser {
     app.get('/signout', ServiceLocator.signoutRequestHandler);
     app.post('/signout', ServiceLocator.signoutRequestHandler);
     app.get('/dones.json', ServiceLocator.getDonesRequestHandler);
-    app.post('/dones.json', ServiceLocator.postDonesRequestHandler);
+    app.post('/dones.json', ServiceLocator.postDoneRequestHandler);
     app.delete('/dones.json/:id', ServiceLocator.deleteDoneRequestHandler);
     app.put('/dones.json/:id', ServiceLocator.updateDoneRequestHandler);
     app.all('*', ServiceLocator.noMatchingRouteRequestHandler);
