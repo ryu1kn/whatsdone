@@ -105,6 +105,11 @@ class ServiceFactory {
     return getBoundHandleMethod(requestHandler);
   }
 
+  createCreateDoneCommand() {
+    const CreateDoneCommand = require('./commands/CreateDone');
+    return new CreateDoneCommand();
+  }
+
   createUpdateDoneCommand() {
     const UpdateDoneCommand = require('./commands/UpdateDone');
     return new UpdateDoneCommand();

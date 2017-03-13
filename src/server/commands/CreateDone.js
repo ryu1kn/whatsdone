@@ -3,22 +3,17 @@
 
 const ServiceLocator = require('../ServiceLocator');
 
-class PostDonesRequestHandler {
+class CreateDoneCommand {
 
   constructor() {
     this._userRepository = ServiceLocator.userRepository;
     this._doneRepository = ServiceLocator.doneRepository;
   }
 
-  handle(req, res, next) {
-    this._doneRepository.write(Object.assign({}, req.body, {userId: req.session.userId}))
-      .then(done => this._setUserName(done))
-      .then(done => {
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Cache-Control', 'no-cache');
-        res.send(JSON.stringify(done));
-      })
-      .catch(next);
+  execute(params) {
+    const writeParams = Object.assign({}, params.data, {userId: params.userId});
+    return this._doneRepository.write(writeParams)
+      .then(done => this._setUserName(done));
   }
 
   _setUserName(done) {
@@ -28,4 +23,4 @@ class PostDonesRequestHandler {
 
 }
 
-module.exports = PostDonesRequestHandler;
+module.exports = CreateDoneCommand;

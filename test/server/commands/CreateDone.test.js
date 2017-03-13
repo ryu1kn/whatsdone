@@ -1,8 +1,8 @@
 
-const PostDonesRequestHandler = require('../../../src/server/express-middlewares/PostDonesRequestHandler');
+const CreateDoneCommand = require('../../../src/server/commands/CreateDone');
 const ServiceLocator = require('../../../src/server/ServiceLocator');
 
-describe('Server PostDonesRequestHandler', () => {
+describe('Server CreateDoneCommand', () => {
 
   it('returns list of dones with the names of their owners', () => {
     const userRepository = {
@@ -18,15 +18,18 @@ describe('Server PostDonesRequestHandler', () => {
       createUserRepository: () => userRepository,
       createDoneRepository: () => doneRepository
     });
-    const middleware = new PostDonesRequestHandler();
+    const command = new CreateDoneCommand();
 
-    const req = {
-      session: {userId: 'USER_ID'},
-      body: {SOME_DATA: '..'}
+    const params = {
+      userId: 'USER_ID',
+      data: {SOME_DATA: '..'}
     };
-    return promisifyExpressMiddleware(middleware, req).then(result => {
-      expect(result.res.setHeader).to.have.been.calledWith('Content-Type', 'application/json');
-      expect(result.res.send).to.have.been.calledWith('{"userId":"USER_ID","SOME_DATA":"..","username":"USER"}');
+    return command.execute(params).then(result => {
+      expect(result).to.eql({
+        userId: 'USER_ID',
+        username: 'USER',
+        SOME_DATA: '..'
+      });
     });
   });
 
