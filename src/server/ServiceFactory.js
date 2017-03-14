@@ -127,8 +127,11 @@ class ServiceFactory {
   }
 
   createPostSigninRequestHandler() {
-    const PostSigninRequestHandler = require('./express-middlewares/PostSigninRequestHandler');
-    return getBoundHandleMethod(new PostSigninRequestHandler());
+    const PostSigninRequestProcessor = require('./request-processors/PostSignin');
+    const requestHandler = new ExpressRequestHandler({
+      requestProcessor: new PostSigninRequestProcessor()
+    });
+    return getBoundHandleMethod(requestHandler);
   }
 
   createSignoutRequestHandler() {
