@@ -67,13 +67,6 @@ class ServiceFactory {
     return getBoundHandleMethod(new AuthBasedRedirectMiddleware());
   }
 
-  createHttpSchemeBasedRedirectMiddleware() {
-    const HttpSchemeBasedRedirectMiddleware = this._env.NODE_ENV === 'production' ?
-        require('./express-middlewares/HttpSchemeBasedRedirect') :
-        require('./express-middlewares/DevHttpSchemeBasedRedirect');
-    return getBoundHandleMethod(new HttpSchemeBasedRedirectMiddleware());
-  }
-
   createGetRootPageRequestHandler() {
     const GetRootPageRequestProcessor = require('./request-processors/GetRootPage');
     const requestHandler = new ExpressRequestHandler({
