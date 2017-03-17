@@ -83,8 +83,11 @@ class ServiceFactory {
   }
 
   createGetDonesRequestHandler() {
-    const GetDonesRequestHandler = require('./express-middlewares/GetDonesRequestHandler');
-    return getBoundHandleMethod(new GetDonesRequestHandler());
+    const GetDonesRequestProcessor = require('./request-processors/GetDones');
+    const requestHandler = new ExpressRequestHandler({
+      requestProcessor: new GetDonesRequestProcessor()
+    });
+    return getBoundHandleMethod(requestHandler);
   }
 
   createPostDoneRequestHandler() {
@@ -114,6 +117,11 @@ class ServiceFactory {
   createCreateDoneCommand() {
     const CreateDoneCommand = require('./commands/CreateDone');
     return new CreateDoneCommand();
+  }
+
+  createGetDonesCommand() {
+    const GetDonesCommand = require('./commands/GetDones');
+    return new GetDonesCommand();
   }
 
   createUpdateDoneCommand() {

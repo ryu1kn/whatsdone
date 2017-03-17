@@ -92,6 +92,10 @@ class ServiceLocator {
     return this._get('deleteDoneCommand');
   }
 
+  get getDonesCommand() {
+    return this._get('getDonesCommand');
+  }
+
   get updateDoneCommand() {
     return this._get('updateDoneCommand');
   }

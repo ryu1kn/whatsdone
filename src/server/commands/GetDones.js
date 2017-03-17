@@ -4,21 +4,16 @@
 const _ = require('lodash');
 const ServiceLocator = require('../ServiceLocator');
 
-class GetDonesRequestHandler {
+class GetDonesCommand {
 
   constructor() {
     this._userRepository = ServiceLocator.userRepository;
     this._doneRepository = ServiceLocator.doneRepository;
   }
 
-  handle(req, res, next) {
-    this._doneRepository.read()
-      .then(dones => this._setUserNames(dones))
-      .then(dones => {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(dones);
-      })
-      .catch(next);
+  execute() {
+    return this._doneRepository.read()
+      .then(dones => this._setUserNames(dones));
   }
 
   _setUserNames(dones) {
@@ -36,4 +31,4 @@ class GetDonesRequestHandler {
 
 }
 
-module.exports = GetDonesRequestHandler;
+module.exports = GetDonesCommand;
