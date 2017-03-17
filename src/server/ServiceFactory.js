@@ -96,8 +96,11 @@ class ServiceFactory {
   }
 
   createDeleteDoneRequestHandler() {
-    const DeleteDoneRequestHandler = require('./express-middlewares/DeleteDoneRequestHandler');
-    return getBoundHandleMethod(new DeleteDoneRequestHandler());
+    const DeleteDoneRequestProcessor = require('./request-processors/DeleteDone');
+    const requestHandler = new ExpressRequestHandler({
+      requestProcessor: new DeleteDoneRequestProcessor()
+    });
+    return getBoundHandleMethod(requestHandler);
   }
 
   createUpdateDoneRequestHandler() {
