@@ -13,7 +13,10 @@ describe('Server DeleteDoneRequestProcessor', () => {
       session: {userId: 'USER_ID'},
       params: {id: 'DONE_ID'}
     };
-    return processor.process(request).then(() => {
+    return processor.process(request).then(response => {
+      expect(response).to.eql({
+        statusCode: '200'
+      });
       expect(doneRepository.remove).to.have.been.calledWith('DONE_ID', 'USER_ID');
     });
   });

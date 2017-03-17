@@ -10,7 +10,8 @@ class DeleteDoneRequestHandler {
   }
 
   process(request) {
-    return this._doneRepository.remove(request.params.id, request.session.userId);
+    return this._doneRepository.remove(request.params.id, request.session.userId)
+      .then(() => ({statusCode: '200'}));
   }
 
 }
