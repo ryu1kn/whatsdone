@@ -28,9 +28,6 @@ class AppInitialiser {
     app.delete('/dones.json/:id', ServiceLocator.deleteDoneRequestHandler);
     app.put('/dones.json/:id', ServiceLocator.updateDoneRequestHandler);
     app.all('*', ServiceLocator.noMatchingRouteRequestHandler);
-
-    // To tell express that this is an error handling middleware, we have to give 4 arguments
-    app.use(ServiceLocator.errorHandler);
   }
 
 }

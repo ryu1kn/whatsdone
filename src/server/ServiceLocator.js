@@ -96,8 +96,8 @@ class ServiceLocator {
     return this._get('updateDoneCommand');
   }
 
-  get errorHandler() {
-    return this._get('errorHandler');
+  get requestProcessErrorProcessor() {
+    return this._get('requestProcessErrorProcessor');
   }
 
   get expressRequestNormaliser() {

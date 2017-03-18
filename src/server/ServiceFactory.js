@@ -154,9 +154,9 @@ class ServiceFactory {
     return getBoundHandleMethod(requestHandler);
   }
 
-  createErrorHandler() {
-    const ErrorHandler = require('./express-middlewares/ErrorHandler');
-    return getBoundHandleMethod(new ErrorHandler());
+  createRequestProcessErrorProcessor() {
+    const RequestProcessErrorProcessor = require('./RequestProcessErrorProcessor');
+    return new RequestProcessErrorProcessor();
   }
 
   createExpressRequestNormaliser() {

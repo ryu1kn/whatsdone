@@ -11,7 +11,8 @@ describe('Server ExpressRequestHandler', () => {
     const requestProcessor = {process: sinon.stub().returns(Promise.resolve('RESPONSE'))};
     ServiceLocator.load({
       createExpressRequestNormaliser: () => requestNormaliser,
-      createExpressResponseSenderFactory: () => responseSenderFactory
+      createExpressResponseSenderFactory: () => responseSenderFactory,
+      createRequestProcessErrorProcessor: () => {}
     });
     const handler = new ExpressRequestHandler({requestProcessor});
 
@@ -30,12 +31,32 @@ describe('Server ExpressRequestHandler', () => {
     const requestProcessor = {process: () => 'RESPONSE'};
     ServiceLocator.load({
       createExpressRequestNormaliser: () => requestNormaliser,
-      createExpressResponseSenderFactory: () => responseSenderFactory
+      createExpressResponseSenderFactory: () => responseSenderFactory,
+      createRequestProcessErrorProcessor: () => {}
     });
     const handler = new ExpressRequestHandler({requestProcessor});
 
     return handler.handle('EXPRESS_REQ', 'EXPRESS_RES').then(() => {
       expect(responseSender.send).to.have.been.calledWith('RESPONSE');
+    });
+  });
+
+  it('catches an exception occurred during request process step', () => {
+    const requestNormaliser = {normalise: () => 'NORMALISED_REQUEST'};
+    const responseSender = {send: sinon.spy()};
+    const responseSenderFactory = {create: () => responseSender};
+    const requestProcessor = {process: () => Promise.reject(new Error('UNEXPECTED_ERROR'))};
+    const requestProcessErrorProcessor = {process: sinon.stub().returns('ERROR_RESPONSE')};
+    ServiceLocator.load({
+      createExpressRequestNormaliser: () => requestNormaliser,
+      createExpressResponseSenderFactory: () => responseSenderFactory,
+      createRequestProcessErrorProcessor: () => requestProcessErrorProcessor
+    });
+    const handler = new ExpressRequestHandler({requestProcessor});
+
+    return handler.handle('EXPRESS_REQ', 'EXPRESS_RES').then(() => {
+      expect(responseSender.send).to.have.been.calledWith('ERROR_RESPONSE');
+      expect(requestProcessErrorProcessor.process.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');
     });
   });
 

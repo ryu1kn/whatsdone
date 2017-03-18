@@ -23,8 +23,7 @@ describe('Server AppInitialiser', () => {
       createPostDoneRequestHandler: () => 'PostDoneRequestHandler',
       createDeleteDoneRequestHandler: () => 'DeleteDoneRequestHandler',
       createUpdateDoneRequestHandler: () => 'UpdateDoneRequestHandler',
-      createNoMatchingRouteRequestHandler: () => 'NoMatchingRouteRequestHandler',
-      createErrorHandler: () => 'ErrorHandler'
+      createNoMatchingRouteRequestHandler: () => 'NoMatchingRouteRequestHandler'
     });
     const initiliser = new AppInitialiser();
     const app = {
@@ -49,8 +48,7 @@ describe('Server AppInitialiser', () => {
       ['CookieParser'],
       ['StaticContentsProvider'],
       ['FaviconProvider'],
-      ['SessionManager'],
-      ['ErrorHandler']
+      ['SessionManager']
     ]);
     expect(app.all.args).to.eql([
       ['*', 'AuthBasedRedirectMiddleware'],
