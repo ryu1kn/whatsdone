@@ -5,7 +5,6 @@ globals:
   sinon: true
   stubWithArgs: true
   stubReturns: true
-  promisifyExpressMiddleware: true
   throwError: true
 rules:
   max-len: off

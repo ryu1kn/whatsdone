@@ -7,7 +7,6 @@ class AppInitialiser {
 
   initialise(app) {
     app.set('views', ServiceLocator.viewDirectoryPath);
-    app.set('view engine', 'pug');
 
     app.use(ServiceLocator.accessLogger);
     app.use(ServiceLocator.jsonRequestBodyParser);

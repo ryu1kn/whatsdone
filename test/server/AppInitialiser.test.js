@@ -38,8 +38,7 @@ describe('Server AppInitialiser', () => {
     initiliser.initialise(app);
 
     expect(app.set.args).to.eql([
-      ['views', 'ViewDirectoryPath'],
-      ['view engine', 'pug']
+      ['views', 'ViewDirectoryPath']
     ]);
     expect(app.use.args).to.eql([
       ['AccessLogger'],

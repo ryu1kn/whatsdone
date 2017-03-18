@@ -1,5 +1,4 @@
 
-const _ = require('lodash');
 const chai = require('chai');
 chai.use(require('sinon-chai'));
 
@@ -29,46 +28,4 @@ global.stubReturns = function () {
     stub.onCall(index).returns(arg);
     return stub;
   }, sinon.stub());
-};
-
-global.promisifyExpressMiddleware = function (middleware, req, err) {
-  return new Promise((resolve, reject) => {
-    const result = {
-      res: {
-        end: sinon.spy(),
-        render: sinon.spy(),
-        redirect: sinon.spy(),
-        send: sinon.spy(),
-        setHeader: sinon.spy(),
-        status: sinon.spy()
-      },
-      next: sinon.spy()
-    };
-    const getFakeExpressFn = fnPath =>
-        function () {
-          const args = Array.prototype.slice.call(arguments);
-          const fn = _.get(result, fnPath);
-          fn.apply(fn, args);
-          resolve(result);
-        };
-
-    const next = getFakeExpressFn('next');
-    const res = {
-      end: getFakeExpressFn('res.end'),
-      render: getFakeExpressFn('res.render'),
-      redirect: getFakeExpressFn('res.redirect'),
-      send: getFakeExpressFn('res.send'),
-      setHeader: getFakeExpressFn('res.setHeader'),
-      status: getFakeExpressFn('res.status')
-    };
-    try {
-      if (err) {
-        middleware.handle(err, req, res, next);
-      } else {
-        middleware.handle(req, res, next);
-      }
-    } catch (e) {
-      reject(e);
-    }
-  });
 };
