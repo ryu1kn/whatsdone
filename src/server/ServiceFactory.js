@@ -147,8 +147,11 @@ class ServiceFactory {
   }
 
   createNoMatchingRouteRequestHandler() {
-    const NoMatchingRouteRequestHandler = require('./express-middlewares/NoMatchingRouteRequestHandler');
-    return getBoundHandleMethod(new NoMatchingRouteRequestHandler());
+    const NoMatchingRouteRequestProcessor = require('./request-processors/NoMatchingRoute');
+    const requestHandler = new ExpressRequestHandler({
+      requestProcessor: new NoMatchingRouteRequestProcessor()
+    });
+    return getBoundHandleMethod(requestHandler);
   }
 
   createErrorHandler() {
