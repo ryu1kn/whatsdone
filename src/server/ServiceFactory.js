@@ -139,8 +139,11 @@ class ServiceFactory {
   }
 
   createSignoutRequestHandler() {
-    const SignoutRequestHandler = require('./express-middlewares/SignoutRequestHandler');
-    return getBoundHandleMethod(new SignoutRequestHandler());
+    const SignoutRequestProcessor = require('./request-processors/Signout');
+    const requestHandler = new ExpressRequestHandler({
+      requestProcessor: new SignoutRequestProcessor()
+    });
+    return getBoundHandleMethod(requestHandler);
   }
 
   createNoMatchingRouteRequestHandler() {
