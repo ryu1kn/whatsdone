@@ -62,9 +62,9 @@ class ServiceFactory {
     return path.join(__dirname, 'views');
   }
 
-  createAuthBasedRedirectMiddleware() {
-    const AuthBasedRedirectMiddleware = require('./express-middlewares/AuthBasedRedirect');
-    return getBoundHandleMethod(new AuthBasedRedirectMiddleware());
+  createAuthBasedRedirector() {
+    const AuthBasedRedirector = require('./AuthBasedRedirector');
+    return new AuthBasedRedirector();
   }
 
   createGetRootPageRequestHandler() {

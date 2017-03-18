@@ -51,7 +51,6 @@ describe('Server AppInitialiser', () => {
       ['SessionManager']
     ]);
     expect(app.all.args).to.eql([
-      ['*', 'AuthBasedRedirectMiddleware'],
       ['*', 'NoMatchingRouteRequestHandler']
     ]);
     expect(app.get.args).to.eql([

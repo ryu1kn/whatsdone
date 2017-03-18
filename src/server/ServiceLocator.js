@@ -40,8 +40,8 @@ class ServiceLocator {
     return this._get('viewDirectoryPath');
   }
 
-  get authBasedRedirectMiddleware() {
-    return this._get('authBasedRedirectMiddleware');
+  get authBasedRedirector() {
+    return this._get('authBasedRedirector');
   }
 
   get getRootPageRequestHandler() {
