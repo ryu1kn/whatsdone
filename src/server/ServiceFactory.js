@@ -182,6 +182,11 @@ class ServiceFactory {
     return pug;
   }
 
+  createCookieCodec() {
+    const CookieCodec = require('./CookieCodec');
+    return new CookieCodec({signatureSecret: this._env.SESSION_SECRET});
+  }
+
   createHtmlPageGenerator() {
     const HtmlPageGenerator = require('./HtmlPageGenerator');
     return new HtmlPageGenerator();
