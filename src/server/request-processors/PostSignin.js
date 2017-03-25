@@ -7,18 +7,21 @@ const ServiceLocator = require('../ServiceLocator');
 class PostSigninRequestProcessor {
 
   constructor() {
-    this._userRepository = ServiceLocator.userRepository;
+    this._loginCommand = ServiceLocator.loginCommand;
     this._htmlPageGenerator = ServiceLocator.htmlPageGenerator;
+    this._cookieCodec = ServiceLocator.cookieCodec;
   }
 
   process(request) {
     const params = _.pick(request.body, ['email', 'password']);
-    return this._userRepository.findUser(params).then(user => {
-      if (user) {
-        this._updateSessionInfo(request.session, user.id);
+    return this._loginCommand.execute(params).then(sessionId => {
+      if (sessionId) {
         return {
           statusCode: '303',
-          headers: {Location: '/'}
+          headers: {
+            'Set-cookie': this._cookieCodec.encode({sessionId}),
+            Location: '/'
+          }
         };
       }
       return {
@@ -28,13 +31,6 @@ class PostSigninRequestProcessor {
         },
         body: this._htmlPageGenerator.generate('signin')
       };
-    });
-  }
-
-  _updateSessionInfo(session, userId) {
-    Object.assign(session, {
-      isAuthorized: true,
-      userId: userId
     });
   }
 

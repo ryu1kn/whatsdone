@@ -92,6 +92,10 @@ class ServiceLocator {
     return this._get('getDonesCommand');
   }
 
+  get loginCommand() {
+    return this._get('loginCommand');
+  }
+
   get updateDoneCommand() {
     return this._get('updateDoneCommand');
   }
@@ -116,6 +120,10 @@ class ServiceLocator {
     return this._get('pug');
   }
 
+  get cookieCodec() {
+    return this._get('cookieCodec');
+  }
+
   get htmlPageGenerator() {
     return this._get('htmlPageGenerator');
   }
@@ -126,6 +134,10 @@ class ServiceLocator {
 
   get doneRepository() {
     return this._get('doneRepository');
+  }
+
+  get sessionRepository() {
+    return this._get('sessionRepository');
   }
 
   get dynamoDBDocumentClient() {
