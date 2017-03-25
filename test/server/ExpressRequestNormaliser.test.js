@@ -1,21 +1,24 @@
 
+const ServiceLocator = require('../../src/server/ServiceLocator');
 const ExpressRequestNormaliser = require('../../src/server/ExpressRequestNormaliser');
 
 describe('Server ExpressRequestNormaliser', () => {
 
   it('extracts http request information as a normalised form', () => {
+    const cookieCodec = {extractSessionId: sinon.stub().returns('PARSED_COOKIE')};
+    ServiceLocator.load({createCookieCodec: () => cookieCodec});
     const normaliser = new ExpressRequestNormaliser();
     const req = {
       path: 'PATH',
       params: 'QUERY_PARAMS',
       body: 'REQUEST_BODY',
-      session: 'SESSION'
+      cookies: 'COOKIE'
     };
     expect(normaliser.normalise(req)).to.eql({
       path: 'PATH',
       params: 'QUERY_PARAMS',
       body: 'REQUEST_BODY',
-      session: 'SESSION'
+      sessionId: 'PARSED_COOKIE'
     });
   });
 

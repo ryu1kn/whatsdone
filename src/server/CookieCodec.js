@@ -19,6 +19,12 @@ class CookieCodec {
     return cookie.serialize('connect.sid', `s:${signedSessionId}`, cookieOption);
   }
 
+  extractSessionId(cookieString) {
+    const cookieParsed = cookie.parse(cookieString);
+    const signedSessionId = cookieParsed['connect.sid'].substr(2);
+    return signature.unsign(signedSessionId, this._secret);
+  }
+
 }
 
 module.exports = CookieCodec;

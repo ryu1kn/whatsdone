@@ -124,6 +124,10 @@ class ServiceLocator {
     return this._get('cookieCodec');
   }
 
+  get sessionLoader() {
+    return this._get('sessionLoader');
+  }
+
   get htmlPageGenerator() {
     return this._get('htmlPageGenerator');
   }
