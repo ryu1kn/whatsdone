@@ -9,11 +9,7 @@ describe('Server LoginCommand', () => {
       findUser: sinon.stub().returns(Promise.resolve({id: 'USER_ID'}))
     };
     const sessionRepository = {
-      write: sinon.stub().returns(Promise.resolve({
-        id: 'SESSION_ID',
-        isAuthorized: true,
-        userId: 'USER_ID'
-      }))
+      write: sinon.stub().returns(Promise.resolve('SESSION_ID'))
     };
     ServiceLocator.load({
       createUserRepository: () => userRepository,

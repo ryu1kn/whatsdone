@@ -16,12 +16,10 @@ class LoginCommand {
     return this._userRepository.findUser(findParams).then(user => {
       if (!user) return null;
 
-      const params = {
+      return this._sessionRepository.write({
         userId: user.id,
         isAuthorized: true
-      };
-      return this._sessionRepository.write(params)
-        .then(session => session.id);
+      });
     });
   }
 

@@ -117,6 +117,11 @@ class ServiceFactory {
     return new GetDonesCommand();
   }
 
+  createLoginCommand() {
+    const LoginCommand = require('./commands/Login');
+    return new LoginCommand();
+  }
+
   createUpdateDoneCommand() {
     const UpdateDoneCommand = require('./commands/UpdateDone');
     return new UpdateDoneCommand();
@@ -208,6 +213,16 @@ class ServiceFactory {
   createUserRepository() {
     const UserRepository = require('./repositories/User');
     return new UserRepository();
+  }
+
+  createSessionDynamoTableClient() {
+    const DynamoTableClient = require('./repositories/DynamoTableClient');
+    return new DynamoTableClient(this._env.SESSION_TABLE_NAME);
+  }
+
+  createSessionRepository() {
+    const SessionRepository = require('./repositories/Session');
+    return new SessionRepository();
   }
 
   createHashGenerator() {
