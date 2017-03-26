@@ -17,7 +17,9 @@ class ExpressRequestHandler {
 
   handle(expressReq, expressRes) {
     const normalisedRequest = this._expressRequestNormaliser.normalise(expressReq);
-    return this._sessionRepository.getById(normalisedRequest.sessionId)
+    const sessionId = normalisedRequest.sessionId;
+    const sessionPromise = sessionId ? this._sessionRepository.getById(sessionId) : Promise.resolve();
+    return sessionPromise
       .then(session => this._getResponse(normalisedRequest, session))
       .catch(e => this._requestProcessErrorProcessor.process(e))
       .then(response => {

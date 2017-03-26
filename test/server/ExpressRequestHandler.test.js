@@ -34,6 +34,32 @@ describe('Server ExpressRequestHandler', () => {
     });
   });
 
+  it('does not try to load session if session id is not available', () => {
+    const requestNormaliser = {normalise: sinon.stub().returns({
+      REQUEST_DATA: '..',
+      sessionId: null
+    })};
+    const sessionRepository = {getById: sinon.spy()};
+    const responseSender = {send: sinon.spy()};
+    const responseSenderFactory = {create: sinon.stub().returns(responseSender)};
+    const requestProcessor = {process: sinon.stub().returns(Promise.resolve('RESPONSE'))};
+    ServiceLocator.load({
+      createExpressRequestNormaliser: () => requestNormaliser,
+      createSessionRepository: () => sessionRepository,
+      createExpressResponseSenderFactory: () => responseSenderFactory,
+      createRequestProcessErrorProcessor: () => {},
+      createAuthBasedRedirector: () => ({redirect: () => {}})
+    });
+    const handler = new ExpressRequestHandler({requestProcessor});
+
+    return handler.handle('EXPRESS_REQ', 'EXPRESS_RES').then(() => {
+      expect(sessionRepository.getById).to.have.been.not.called;
+      expect(requestProcessor.process).to.have.been.calledWith({REQUEST_DATA: '..', sessionId: null});
+      expect(responseSenderFactory.create).to.have.been.calledWith('EXPRESS_RES');
+      expect(responseSender.send).to.have.been.calledWith('RESPONSE');
+    });
+  });
+
   it('catches an exception occurred during request process step', () => {
     const requestNormaliser = {normalise: () => 'NORMALISED_REQUEST'};
     const responseSender = {send: sinon.spy()};
