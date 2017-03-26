@@ -20,4 +20,19 @@ describe('Server SessionRepository', () => {
     });
   });
 
+  it('gets session by id', () => {
+    const sessionDynamoTableClient = {
+      getById: sinon.stub().returns(Promise.resolve('SESSION'))
+    };
+    ServiceLocator.load({
+      createSessionDynamoTableClient: () => sessionDynamoTableClient
+    });
+    const repository = new SessionRepository();
+
+    return repository.getById('SESSION_ID').then(user => {
+      expect(user).to.eql('SESSION');
+      expect(sessionDynamoTableClient.getById).to.have.been.calledWith('SESSION_ID');
+    });
+  });
+
 });

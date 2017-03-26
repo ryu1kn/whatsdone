@@ -13,6 +13,10 @@ class SessionRepository {
     return this._sessionDynamoTableClient.put(newData);
   }
 
+  getById(sessionId) {
+    return this._sessionDynamoTableClient.getById(sessionId);
+  }
+
 }
 
 module.exports = SessionRepository;
