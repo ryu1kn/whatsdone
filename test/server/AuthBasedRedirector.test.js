@@ -41,4 +41,15 @@ describe('Server AuthBasedRedirector', () => {
     });
   });
 
+  it('treats session not exists case as non-authenticated', () => {
+    const authBasedRedirector = new AuthBasedRedirector();
+    const request = {path: '/PATH'};
+    const session = null;
+    const result = authBasedRedirector.redirect(request, session);
+    expect(result).to.eql({
+      statusCode: '303',
+      headers: {Location: '/signin'}
+    });
+  });
+
 });
