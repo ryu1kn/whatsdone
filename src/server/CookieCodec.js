@@ -20,6 +20,8 @@ class CookieCodec {
   }
 
   extractSessionId(cookieString) {
+    if (!cookieString) return null;
+
     const cookieParsed = cookie.parse(cookieString);
     const signedSessionId = cookieParsed['connect.sid'].substr(2);
     return signature.unsign(signedSessionId, this._secret);
