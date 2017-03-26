@@ -6,8 +6,8 @@
  */
 class AuthBasedRedirector {
 
-  redirect(request) {
-    const redirectPath = this._getRedirectPath(request.path, request.session.isAuthorized);
+  redirect(request, session) {
+    const redirectPath = this._getRedirectPath(request.path, session.isAuthorized);
     if (!redirectPath) return null;
     return {
       statusCode: '303',
