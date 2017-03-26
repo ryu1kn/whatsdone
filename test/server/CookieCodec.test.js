@@ -15,4 +15,10 @@ describe('Server CookieCodec', () => {
     expect(sessionId).to.eql('SESSION_ID');
   });
 
+  it('returns null as session id if cookie string is not given', () => {
+    const cookieCodec = new CookieCodec({signatureSecret: 'COOKIE_SIGN_SECRET'});
+    const sessionId = cookieCodec.extractSessionId(undefined);
+    expect(sessionId).to.eql(null);
+  });
+
 });
