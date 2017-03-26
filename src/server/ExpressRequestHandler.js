@@ -9,7 +9,7 @@ class ExpressRequestHandler {
     this._requestProcessor = params.requestProcessor;
 
     this._expressRequestNormaliser = ServiceLocator.expressRequestNormaliser;
-    this._sessionLoader = ServiceLocator.sessionLoader;
+    this._sessionRepository = ServiceLocator.sessionRepository;
     this._expressResponseSenderFactory = ServiceLocator.expressResponseSenderFactory;
     this._requestProcessErrorProcessor = ServiceLocator.requestProcessErrorProcessor;
     this._authBasedRedirector = ServiceLocator.authBasedRedirector;
@@ -17,7 +17,7 @@ class ExpressRequestHandler {
 
   handle(expressReq, expressRes) {
     const normalisedRequest = this._expressRequestNormaliser.normalise(expressReq);
-    return this._sessionLoader.load(normalisedRequest.sessionId)
+    return this._sessionRepository.getById(normalisedRequest.sessionId)
       .then(session => this._getResponse(normalisedRequest, session))
       .catch(e => this._requestProcessErrorProcessor.process(e))
       .then(response => {

@@ -9,13 +9,13 @@ describe('Server ExpressRequestHandler', () => {
       REQUEST_DATA: '..',
       sessionId: 'SESSION_ID'
     })};
-    const sessionLoader = {load: sinon.stub().returns(Promise.resolve('SESSION'))};
+    const sessionRepository = {getById: sinon.stub().returns(Promise.resolve('SESSION'))};
     const responseSender = {send: sinon.spy()};
     const responseSenderFactory = {create: sinon.stub().returns(responseSender)};
     const requestProcessor = {process: sinon.stub().returns(Promise.resolve('RESPONSE'))};
     ServiceLocator.load({
       createExpressRequestNormaliser: () => requestNormaliser,
-      createSessionLoader: () => sessionLoader,
+      createSessionRepository: () => sessionRepository,
       createExpressResponseSenderFactory: () => responseSenderFactory,
       createRequestProcessErrorProcessor: () => {},
       createAuthBasedRedirector: () => ({redirect: () => {}})
@@ -24,7 +24,7 @@ describe('Server ExpressRequestHandler', () => {
 
     return handler.handle('EXPRESS_REQ', 'EXPRESS_RES').then(() => {
       expect(requestNormaliser.normalise).to.have.been.calledWith('EXPRESS_REQ');
-      expect(sessionLoader.load).to.have.been.calledWith('SESSION_ID');
+      expect(sessionRepository.getById).to.have.been.calledWith('SESSION_ID');
       expect(requestProcessor.process).to.have.been.calledWith(
         {REQUEST_DATA: '..', sessionId: 'SESSION_ID'},
         'SESSION'
@@ -42,7 +42,7 @@ describe('Server ExpressRequestHandler', () => {
     const requestProcessErrorProcessor = {process: sinon.stub().returns('ERROR_RESPONSE')};
     ServiceLocator.load({
       createExpressRequestNormaliser: () => requestNormaliser,
-      createSessionLoader: () => ({load: () => Promise.resolve()}),
+      createSessionRepository: () => ({getById: () => Promise.resolve()}),
       createExpressResponseSenderFactory: () => responseSenderFactory,
       createRequestProcessErrorProcessor: () => requestProcessErrorProcessor,
       createAuthBasedRedirector: () => ({redirect: () => {}})
@@ -63,7 +63,7 @@ describe('Server ExpressRequestHandler', () => {
     const authBasedRedirector = {redirect: sinon.stub().returns('REDIRECT_RESPONSE')};
     ServiceLocator.load({
       createExpressRequestNormaliser: () => requestNormaliser,
-      createSessionLoader: () => ({load: () => Promise.resolve()}),
+      createSessionRepository: () => ({getById: () => Promise.resolve()}),
       createExpressResponseSenderFactory: () => responseSenderFactory,
       createRequestProcessErrorProcessor: () => {},
       createAuthBasedRedirector: () => authBasedRedirector
