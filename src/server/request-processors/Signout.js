@@ -1,16 +1,22 @@
 
 'use strict';
 
+const ServiceLocator = require('../ServiceLocator');
+
 class SignoutRequestProcessor {
 
-  process(request) {
-    delete request.session.isAuthorized;
-    return {
-      statusCode: '303',
-      headers: {
-        Location: '/signin'
-      }
-    };
+  constructor() {
+    this._sessionRepository = ServiceLocator.sessionRepository;
+  }
+
+  process(request, session) {
+    return this._sessionRepository.remove(session.id)
+      .then(() => ({
+        statusCode: '303',
+        headers: {
+          Location: '/signin'
+        }
+      }));
   }
 
 }

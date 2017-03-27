@@ -17,6 +17,10 @@ class SessionRepository {
     return this._sessionDynamoTableClient.getById(sessionId);
   }
 
+  remove(id) {
+    return this._sessionDynamoTableClient.delete(id);
+  }
+
 }
 
 module.exports = SessionRepository;

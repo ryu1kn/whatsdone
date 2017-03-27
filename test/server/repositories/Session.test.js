@@ -34,4 +34,16 @@ describe('Server SessionRepository', () => {
     });
   });
 
+  it('removes a session', () => {
+    const sessionDynamoTableClient = {delete: sinon.stub().returns(Promise.resolve())};
+    ServiceLocator.load({
+      createSessionDynamoTableClient: () => sessionDynamoTableClient
+    });
+    const repository = new SessionRepository();
+
+    return repository.remove('SESSION_ID').then(() => {
+      expect(sessionDynamoTableClient.delete).to.have.been.calledWith('SESSION_ID');
+    });
+  });
+
 });

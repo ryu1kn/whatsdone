@@ -1,22 +1,25 @@
 
+const ServiceLocator = require('../../../src/server/ServiceLocator');
 const SignoutRequestProcessor = require('../../../src/server/request-processors/Signout');
 
 describe('Server SignoutRequestProcessor', () => {
 
-  it('removes authorised flag and shows user the signin page', () => {
+  it('removes session and shows user the signin page', () => {
+    const sessionRepository = {remove: sinon.stub().returns(Promise.resolve())};
+    ServiceLocator.load({createSessionRepository: () => sessionRepository});
     const processor = new SignoutRequestProcessor();
-    const request = {
-      session: {isAuthorized: true}
-    };
-    const response = processor.process(request);
+    const request = {};
+    const session = {id: 'SESSION_ID'};
 
-    expect(response).to.eql({
-      statusCode: '303',
-      headers: {
-        Location: '/signin'
-      }
+    return processor.process(request, session).then(response => {
+      expect(response).to.eql({
+        statusCode: '303',
+        headers: {
+          Location: '/signin'
+        }
+      });
+      expect(sessionRepository.remove).to.have.been.calledWith('SESSION_ID');
     });
-    expect(request.session).to.eql({});
   });
 
 });
