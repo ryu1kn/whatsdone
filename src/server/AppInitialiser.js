@@ -11,10 +11,8 @@ class AppInitialiser {
     app.use(ServiceLocator.accessLogger);
     app.use(ServiceLocator.jsonRequestBodyParser);
     app.use(ServiceLocator.encodedUrlParser);
-    app.use(ServiceLocator.cookieParser);
     app.use(ServiceLocator.staticContentsProvider);
     app.use(ServiceLocator.faviconProvider);
-    app.use(ServiceLocator.sessionManager);
 
     app.get('/', ServiceLocator.getRootPageRequestHandler);
     app.get('/signin', ServiceLocator.getSigninRequestHandler);

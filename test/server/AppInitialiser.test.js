@@ -10,10 +10,8 @@ describe('Server AppInitialiser', () => {
       createAccessLogger: () => 'AccessLogger',
       createJsonRequestBodyParser: () => 'JsonRequestBodyParser',
       createEncodedUrlParser: () => 'EncodedUrlParser',
-      createCookieParser: () => 'CookieParser',
       createStaticContentsProvider: () => 'StaticContentsProvider',
       createFaviconProvider: () => 'FaviconProvider',
-      createSessionManager: () => 'SessionManager',
       createAuthBasedRedirectMiddleware: () => 'AuthBasedRedirectMiddleware',
       createGetRootPageRequestHandler: () => 'GetRootPageRequestHandler',
       createGetSigninRequestHandler: () => 'GetSigninRequestHandler',
@@ -44,10 +42,8 @@ describe('Server AppInitialiser', () => {
       ['AccessLogger'],
       ['JsonRequestBodyParser'],
       ['EncodedUrlParser'],
-      ['CookieParser'],
       ['StaticContentsProvider'],
-      ['FaviconProvider'],
-      ['SessionManager']
+      ['FaviconProvider']
     ]);
     expect(app.all.args).to.eql([
       ['*', 'NoMatchingRouteRequestHandler']

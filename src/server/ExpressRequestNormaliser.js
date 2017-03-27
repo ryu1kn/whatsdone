@@ -14,7 +14,7 @@ class ExpressRequestNormaliser {
       path: expressReq.path,
       params: expressReq.params,
       body: expressReq.body,
-      sessionId: this._cookieCodec.extractSessionId(expressReq.cookies)
+      sessionId: this._cookieCodec.extractSessionId(expressReq.get('cookie'))
     };
   }
 

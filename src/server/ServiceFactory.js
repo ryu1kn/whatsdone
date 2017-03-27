@@ -4,16 +4,13 @@
 const AWS = require('aws-sdk');
 const Uuid = require('uuid');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 const express = require('express');
 const favicon = require('serve-favicon');
 const morgan = require('morgan');
 const path = require('path');
 const pug = require('pug');
 const sha1 = require('sha1');
-const session = require('express-session');
 
-const DynamoDBStore = require('connect-dynamodb')({session});
 const ExpressRequestHandler = require('./ExpressRequestHandler');
 
 class ServiceFactory {
@@ -26,10 +23,6 @@ class ServiceFactory {
     return morgan('dev');
   }
 
-  createCookieParser() {
-    return cookieParser();
-  }
-
   createEncodedUrlParser() {
     return bodyParser.urlencoded({extended: false});
   }
@@ -40,18 +33,6 @@ class ServiceFactory {
 
   createJsonRequestBodyParser() {
     return bodyParser.json();
-  }
-
-  createSessionManager() {
-    return session({
-      secret: this._env.SESSION_SECRET,
-      saveUninitialized: false,   // don't create session until something stored
-      resave: false,              // don't save session if unmodified
-      store: new DynamoDBStore({
-        table: this._env.SESSION_TABLE_NAME,
-        client: this._getDynamoDB()
-      })
-    });
   }
 
   createStaticContentsProvider() {
@@ -190,10 +171,6 @@ class ServiceFactory {
   createHtmlPageGenerator() {
     const HtmlPageGenerator = require('./HtmlPageGenerator');
     return new HtmlPageGenerator();
-  }
-
-  _getDynamoDB() {
-    return new AWS.DynamoDB({region: this._env.DB_REGION});
   }
 
   createDynamoDBDocumentClient() {

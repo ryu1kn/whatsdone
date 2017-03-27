@@ -12,7 +12,7 @@ describe('Server ExpressRequestNormaliser', () => {
       path: 'PATH',
       params: 'QUERY_PARAMS',
       body: 'REQUEST_BODY',
-      cookies: 'COOKIE'
+      get: headerName => headerName === 'cookie' && 'COOKIE'
     };
     expect(normaliser.normalise(req)).to.eql({
       path: 'PATH',
@@ -20,6 +20,7 @@ describe('Server ExpressRequestNormaliser', () => {
       body: 'REQUEST_BODY',
       sessionId: 'PARSED_COOKIE'
     });
+    expect(cookieCodec.extractSessionId).to.have.been.calledWith('COOKIE');
   });
 
 });
