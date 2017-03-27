@@ -1,5 +1,4 @@
 
-
 const ServiceLocator = require('../../../src/server/ServiceLocator');
 const SessionRepository = require('../../../src/server/repositories/Session');
 
