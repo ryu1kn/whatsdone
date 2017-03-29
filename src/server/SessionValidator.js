@@ -4,7 +4,7 @@
 class SessionValidator {
 
   validate(session) {
-    return session && session.isAuthorized;
+    return !!(session && session.isAuthorized);
   }
 
 }
