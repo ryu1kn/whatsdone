@@ -215,6 +215,10 @@ class ServiceFactory {
     return {generate: () => Uuid.v4()};
   }
 
+  createDateProvider() {
+    return {getCurrentDate: () => new Date()};
+  }
+
 }
 
 // e.g. images/favicon.ico => /path/to/public/images/favicon.ico

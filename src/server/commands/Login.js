@@ -9,6 +9,7 @@ class LoginCommand {
   constructor() {
     this._userRepository = ServiceLocator.userRepository;
     this._sessionRepository = ServiceLocator.sessionRepository;
+    this._dateProvider = ServiceLocator.dateProvider;
   }
 
   execute(params) {
@@ -18,7 +19,7 @@ class LoginCommand {
 
       return this._sessionRepository.write({
         userId: user.id,
-        isAuthorized: true
+        createdAt: this._dateProvider.getCurrentDate().toISOString()
       });
     });
   }

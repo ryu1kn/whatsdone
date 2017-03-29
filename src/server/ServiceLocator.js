@@ -168,6 +168,10 @@ class ServiceLocator {
     return this._get('uuidGenerator');
   }
 
+  get dateProvider() {
+    return this._get('dateProvider');
+  }
+
   _get(serviceName) {
     const cachedInstance = this._getCachedInstance(serviceName);
     if (cachedInstance) return cachedInstance;

@@ -13,7 +13,8 @@ describe('Server LoginCommand', () => {
     };
     ServiceLocator.load({
       createUserRepository: () => userRepository,
-      createSessionRepository: () => sessionRepository
+      createSessionRepository: () => sessionRepository,
+      createDateProvider: () => ({getCurrentDate: () => new Date('2017-03-29T11:39:00Z')})
     });
     const command = new LoginCommand();
 
@@ -28,7 +29,7 @@ describe('Server LoginCommand', () => {
         password: 'PASSWORD'
       });
       expect(sessionRepository.write).to.have.been.calledWith({
-        isAuthorized: true,
+        createdAt: '2017-03-29T11:39:00.000Z',
         userId: 'USER_ID'
       });
     });
@@ -39,7 +40,8 @@ describe('Server LoginCommand', () => {
       createUserRepository: () => ({
         findUser: () => Promise.resolve(null)
       }),
-      createSessionRepository: () => {}
+      createSessionRepository: () => {},
+      createDateProvider: () => {}
     });
     const command = new LoginCommand();
 
