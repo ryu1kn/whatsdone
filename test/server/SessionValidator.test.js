@@ -1,17 +1,24 @@
 
+const ServiceLocator = require('../../src/server/ServiceLocator');
 const SessionValidator = require('../../src/server/SessionValidator');
 
 describe('Server SessionValidator', () => {
 
   it('tells that a session is valid', () => {
+    ServiceLocator.load({
+      createDateProvider: () => ({getCurrentDate: () => new Date('2017-03-29T12:00:00Z')})
+    });
     const sessionValidator = new SessionValidator();
-    const session = {isAuthorized: true};
+    const session = {createdAt: '2017-03-29T11:00:00Z'};
     expect(sessionValidator.validate(session)).to.be.true;
   });
 
-  it('tells that a session is invalid', () => {
+  it('tells that a session is invalid if it is created more than a day ago', () => {
+    ServiceLocator.load({
+      createDateProvider: () => ({getCurrentDate: () => new Date('2017-03-29T12:00:00Z')})
+    });
     const sessionValidator = new SessionValidator();
-    const session = {isAuthorized: false};
+    const session = {createdAt: '2017-03-28T11:00:00Z'};
     expect(sessionValidator.validate(session)).to.be.false;
   });
 
