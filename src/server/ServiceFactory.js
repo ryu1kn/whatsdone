@@ -168,6 +168,11 @@ class ServiceFactory {
     return new CookieCodec({signatureSecret: this._env.SESSION_SECRET});
   }
 
+  createSessionValidator() {
+    const SessionValidator = require('./SessionValidator');
+    return new SessionValidator();
+  }
+
   createHtmlPageGenerator() {
     const HtmlPageGenerator = require('./HtmlPageGenerator');
     return new HtmlPageGenerator();
