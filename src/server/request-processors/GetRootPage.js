@@ -9,7 +9,7 @@ class GetRootPageRequestProcessor {
     this._htmlPageGenerator = ServiceLocator.htmlPageGenerator;
   }
 
-  process(_request) {
+  process(_request, _session) {
     return {
       statusCode: '200',
       body: this._htmlPageGenerator.generate('index', {title: 'What\'s done?'}),

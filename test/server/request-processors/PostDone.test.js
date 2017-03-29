@@ -10,10 +10,10 @@ describe('Server PostDoneRequestProcessor', () => {
     const processor = new PostDoneRequestProcessor();
 
     const request = {
-      session: {userId: 'USER_ID'},
       body: {SOME_DATA: '..'}
     };
-    return processor.process(request).then(response => {
+    const session = {userId: 'USER_ID'};
+    return processor.process(request, session).then(response => {
       expect(response).to.eql({
         statusCode: '200',
         headers: {'Content-Type': 'application/json'},

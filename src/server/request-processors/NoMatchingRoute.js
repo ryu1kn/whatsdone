@@ -9,7 +9,7 @@ class NoMatchingRouteRequestProcessor {
     this._htmlPageGenerator = ServiceLocator.htmlPageGenerator;
   }
 
-  process(_request) {
+  process(_request, _session) {
     return {
       statusCode: '404',
       headers: {'Content-Type': 'text/html'},

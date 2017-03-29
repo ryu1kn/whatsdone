@@ -2,7 +2,7 @@
 const NoMatchingRouteRequestProcessor = require('../../../src/server/request-processors/NoMatchingRoute');
 const ServiceLocator = require('../../../src/server/ServiceLocator');
 
-describe('NoMatchingRouteRequestProcessor', () => {
+describe('Server NoMatchingRouteRequestProcessor', () => {
 
   it('returns NOT FOUND reponses', () => {
     const htmlPageGenerator = {generate: sinon.stub().returns('HTML')};

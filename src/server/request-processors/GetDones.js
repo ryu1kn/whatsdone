@@ -9,7 +9,7 @@ class GetDonesRequestProcessor {
     this._getDonesCommand = ServiceLocator.getDonesCommand;
   }
 
-  process(_request) {
+  process(_request, _session) {
     return this._getDonesCommand.execute().then(dones => ({
       statusCode: '200',
       headers: {'Content-Type': 'application/json'},

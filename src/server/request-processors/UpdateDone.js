@@ -9,11 +9,11 @@ class UpdateDoneRequestProcessor {
     this._updateDoneCommand = ServiceLocator.updateDoneCommand;
   }
 
-  process(req) {
+  process(request, session) {
     const params = {
-      doneId: req.params.id,
-      userId: req.session.userId,
-      data: req.body
+      doneId: request.params.id,
+      userId: session.userId,
+      data: request.body
     };
     return this._updateDoneCommand.execute(params).then(result => ({
       statusCode: '200',

@@ -10,10 +10,10 @@ describe('Server DeleteDoneRequestProcessor', () => {
     const processor = new DeleteDoneRequestProcessor();
 
     const request = {
-      session: {userId: 'USER_ID'},
       params: {id: 'DONE_ID'}
     };
-    return processor.process(request).then(response => {
+    const session = {userId: 'USER_ID'};
+    return processor.process(request, session).then(response => {
       expect(response).to.eql({
         statusCode: '200'
       });
@@ -30,10 +30,10 @@ describe('Server DeleteDoneRequestProcessor', () => {
     const processor = new DeleteDoneRequestProcessor();
 
     const request = {
-      params: {},
-      session: {}
+      params: {}
     };
-    return processor.process(request).then(
+    const session = {};
+    return processor.process(request, session).then(
       throwError,
       e => {
         expect(e).to.have.property('message', 'UNEXPECTED_ERROR');

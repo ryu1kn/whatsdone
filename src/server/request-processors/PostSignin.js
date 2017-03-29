@@ -12,7 +12,7 @@ class PostSigninRequestProcessor {
     this._cookieCodec = ServiceLocator.cookieCodec;
   }
 
-  process(request) {
+  process(request, _session) {
     const params = _.pick(request.body, ['email', 'password']);
     return this._loginCommand.execute(params).then(sessionId => {
       if (sessionId) {

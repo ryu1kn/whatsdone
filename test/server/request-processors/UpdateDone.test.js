@@ -11,12 +11,12 @@ describe('Server UpdateDoneRequestProcessor', () => {
     });
     const processor = new UpdateDoneRequestProcessor();
 
-    const req = {
-      session: {userId: 'USER_ID'},
+    const request = {
       params: {id: 'DONE_ID'},
       body: {DONE_DATA: '..'}
     };
-    return processor.process(req).then(response => {
+    const session = {userId: 'USER_ID'};
+    return processor.process(request, session).then(response => {
       expect(response).to.eql({
         statusCode: '200',
         headers: {

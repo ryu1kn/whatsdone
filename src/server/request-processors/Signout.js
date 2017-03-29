@@ -9,7 +9,7 @@ class SignoutRequestProcessor {
     this._sessionRepository = ServiceLocator.sessionRepository;
   }
 
-  process(request, session) {
+  process(_request, session) {
     return this._sessionRepository.remove(session.id)
       .then(() => ({
         statusCode: '303',
