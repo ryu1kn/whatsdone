@@ -12,10 +12,6 @@ class ServiceLocator {
     return this._get('accessLogger');
   }
 
-  get cookieParser() {
-    return this._get('cookieParser');
-  }
-
   get encodedUrlParser() {
     return this._get('encodedUrlParser');
   }
