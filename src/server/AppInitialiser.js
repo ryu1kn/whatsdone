@@ -6,8 +6,6 @@ const ServiceLocator = require('./ServiceLocator');
 class AppInitialiser {
 
   initialise(app) {
-    app.set('views', ServiceLocator.viewDirectoryPath);
-
     app.use(ServiceLocator.accessLogger);
     app.use(ServiceLocator.jsonRequestBodyParser);
     app.use(ServiceLocator.encodedUrlParser);

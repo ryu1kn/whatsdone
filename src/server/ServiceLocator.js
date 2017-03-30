@@ -36,10 +36,6 @@ class ServiceLocator {
     return this._get('staticContentsProvider');
   }
 
-  get viewDirectoryPath() {
-    return this._get('viewDirectoryPath');
-  }
-
   get authBasedRedirector() {
     return this._get('authBasedRedirector');
   }

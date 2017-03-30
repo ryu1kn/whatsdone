@@ -6,7 +6,6 @@ describe('Server AppInitialiser', () => {
 
   it('initialises express app with variables & middlewares', () => {
     ServiceLocator.load({
-      createViewDirectoryPath: () => 'ViewDirectoryPath',
       createAccessLogger: () => 'AccessLogger',
       createJsonRequestBodyParser: () => 'JsonRequestBodyParser',
       createEncodedUrlParser: () => 'EncodedUrlParser',
@@ -25,7 +24,6 @@ describe('Server AppInitialiser', () => {
     });
     const initiliser = new AppInitialiser();
     const app = {
-      set: sinon.spy(),
       use: sinon.spy(),
       all: sinon.spy(),
       get: sinon.spy(),
@@ -35,9 +33,6 @@ describe('Server AppInitialiser', () => {
     };
     initiliser.initialise(app);
 
-    expect(app.set.args).to.eql([
-      ['views', 'ViewDirectoryPath']
-    ]);
     expect(app.use.args).to.eql([
       ['AccessLogger'],
       ['JsonRequestBodyParser'],
