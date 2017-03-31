@@ -3,40 +3,16 @@
 
 const AWS = require('aws-sdk');
 const Uuid = require('uuid');
-const bodyParser = require('body-parser');
-const express = require('express');
-const favicon = require('serve-favicon');
-const morgan = require('morgan');
 const path = require('path');
 const pug = require('pug');
 const sha1 = require('sha1');
 
-const ExpressRequestHandler = require('./ExpressRequestHandler');
+const LambdaRequestHandler = require('./LambdaRequestHandler');
 
 class ServiceFactory {
 
   constructor(params) {
     this._env = params.env;
-  }
-
-  createAccessLogger() {
-    return morgan('dev');
-  }
-
-  createEncodedUrlParser() {
-    return bodyParser.urlencoded({extended: false});
-  }
-
-  createFaviconProvider() {
-    return favicon(pathUnderPublic('images/favicon.ico'));
-  }
-
-  createJsonRequestBodyParser() {
-    return bodyParser.json();
-  }
-
-  createStaticContentsProvider() {
-    return express.static(pathUnderPublic());
   }
 
   createViewDirectoryPath() {
@@ -50,7 +26,7 @@ class ServiceFactory {
 
   createGetRootPageRequestHandler() {
     const GetRootPageRequestProcessor = require('./request-processors/GetRootPage');
-    const requestHandler = new ExpressRequestHandler({
+    const requestHandler = new LambdaRequestHandler({
       requestProcessor: new GetRootPageRequestProcessor()
     });
     return getBoundHandleMethod(requestHandler);
@@ -58,7 +34,7 @@ class ServiceFactory {
 
   createGetDonesRequestHandler() {
     const GetDonesRequestProcessor = require('./request-processors/GetDones');
-    const requestHandler = new ExpressRequestHandler({
+    const requestHandler = new LambdaRequestHandler({
       requestProcessor: new GetDonesRequestProcessor()
     });
     return getBoundHandleMethod(requestHandler);
@@ -66,7 +42,7 @@ class ServiceFactory {
 
   createPostDoneRequestHandler() {
     const PostDoneRequestProcessor = require('./request-processors/PostDone');
-    const requestHandler = new ExpressRequestHandler({
+    const requestHandler = new LambdaRequestHandler({
       requestProcessor: new PostDoneRequestProcessor()
     });
     return getBoundHandleMethod(requestHandler);
@@ -74,7 +50,7 @@ class ServiceFactory {
 
   createDeleteDoneRequestHandler() {
     const DeleteDoneRequestProcessor = require('./request-processors/DeleteDone');
-    const requestHandler = new ExpressRequestHandler({
+    const requestHandler = new LambdaRequestHandler({
       requestProcessor: new DeleteDoneRequestProcessor()
     });
     return getBoundHandleMethod(requestHandler);
@@ -82,7 +58,7 @@ class ServiceFactory {
 
   createUpdateDoneRequestHandler() {
     const UpdateDoneRequestProcessor = require('./request-processors/UpdateDone');
-    const requestHandler = new ExpressRequestHandler({
+    const requestHandler = new LambdaRequestHandler({
       requestProcessor: new UpdateDoneRequestProcessor()
     });
     return getBoundHandleMethod(requestHandler);
@@ -110,7 +86,7 @@ class ServiceFactory {
 
   createGetSigninRequestHandler() {
     const GetSigninRequestProcessor = require('./request-processors/GetSignin');
-    const requestHandler = new ExpressRequestHandler({
+    const requestHandler = new LambdaRequestHandler({
       requestProcessor: new GetSigninRequestProcessor()
     });
     return getBoundHandleMethod(requestHandler);
@@ -118,7 +94,7 @@ class ServiceFactory {
 
   createPostSigninRequestHandler() {
     const PostSigninRequestProcessor = require('./request-processors/PostSignin');
-    const requestHandler = new ExpressRequestHandler({
+    const requestHandler = new LambdaRequestHandler({
       requestProcessor: new PostSigninRequestProcessor()
     });
     return getBoundHandleMethod(requestHandler);
@@ -126,7 +102,7 @@ class ServiceFactory {
 
   createSignoutRequestHandler() {
     const SignoutRequestProcessor = require('./request-processors/Signout');
-    const requestHandler = new ExpressRequestHandler({
+    const requestHandler = new LambdaRequestHandler({
       requestProcessor: new SignoutRequestProcessor()
     });
     return getBoundHandleMethod(requestHandler);
@@ -134,7 +110,7 @@ class ServiceFactory {
 
   createNoMatchingRouteRequestHandler() {
     const NoMatchingRouteRequestProcessor = require('./request-processors/NoMatchingRoute');
-    const requestHandler = new ExpressRequestHandler({
+    const requestHandler = new LambdaRequestHandler({
       requestProcessor: new NoMatchingRouteRequestProcessor()
     });
     return getBoundHandleMethod(requestHandler);
@@ -145,14 +121,14 @@ class ServiceFactory {
     return new RequestProcessErrorProcessor();
   }
 
-  createExpressRequestNormaliser() {
-    const ExpressRequestNormaliser = require('./ExpressRequestNormaliser');
-    return new ExpressRequestNormaliser();
+  createLambdaRequestNormaliser() {
+    const LambdaRequestNormaliser = require('./LambdaRequestNormaliser');
+    return new LambdaRequestNormaliser();
   }
 
-  createExpressResponseSenderFactory() {
-    const ExpressResponseSender = require('./ExpressResponseSender');
-    return {create: expressRes => new ExpressResponseSender({expressRes})};
+  createLambdaResponseFormatter() {
+    const LambdaResponseFormatter = require('./LambdaResponseFormatter');
+    return new LambdaResponseFormatter();
   }
 
   createLogger() {
@@ -224,13 +200,6 @@ class ServiceFactory {
     return {getCurrentDate: () => new Date()};
   }
 
-}
-
-// e.g. images/favicon.ico => /path/to/public/images/favicon.ico
-function pathUnderPublic(pathFromPublic) {
-  const pathParts = pathFromPublic ? pathFromPublic.split('/') : [];
-  const pathComponents = [__dirname, '..', '..', 'public'].concat(pathParts);
-  return path.join.apply(path, pathComponents);
 }
 
 function getBoundHandleMethod(handler) {

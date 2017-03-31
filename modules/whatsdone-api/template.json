@@ -22,14 +22,12 @@
     }
   },
   "Resources": {
-    "WhatsdoneAppFunction": {
+    "GetRootPageFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-app"},
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetRootPageFunction"},
         "Description": "What's Done app",
-        "Handler": {
-          "Ref": "LambdaHandler"
-        },
+        "Handler": "getRootPageRequestHandler",
         "Role": {
           "Ref": "LambdaRole"
         },
@@ -41,15 +39,105 @@
             "Ref": "LambdaS3Key"
           }
         },
-        "Runtime": "nodejs4.3",
+        "Runtime": "nodejs6.10",
         "Timeout": "10"
       }
     },
-    "LambdaPermission": {
+    "GetRootPageLambdaPermission": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:invokeFunction",
-        "FunctionName": {"Fn::GetAtt": ["WhatsdoneAppFunction", "Arn"]},
+        "FunctionName": {"Fn::GetAtt": ["GetRootPageFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${WhatsdoneApi}/*"}
+      }
+    },
+    "GetSigninFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetSigninFunction"},
+        "Description": "What's Done app",
+        "Handler": "getSigninRequestHandler",
+        "Role": {
+          "Ref": "LambdaRole"
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "LambdaS3Bucket"
+          },
+          "S3Key": {
+            "Ref": "LambdaS3Key"
+          }
+        },
+        "Runtime": "nodejs6.10",
+        "Timeout": "10"
+      }
+    },
+    "GetSigninLambdaPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:invokeFunction",
+        "FunctionName": {"Fn::GetAtt": ["GetSigninFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${WhatsdoneApi}/*"}
+      }
+    },
+    "PostSigninFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-PostSigninFunction"},
+        "Description": "What's Done app",
+        "Handler": "postSigninRequestHandler",
+        "Role": {
+          "Ref": "LambdaRole"
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "LambdaS3Bucket"
+          },
+          "S3Key": {
+            "Ref": "LambdaS3Key"
+          }
+        },
+        "Runtime": "nodejs6.10",
+        "Timeout": "10"
+      }
+    },
+    "PostSigninLambdaPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:invokeFunction",
+        "FunctionName": {"Fn::GetAtt": ["PostSigninFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${WhatsdoneApi}/*"}
+      }
+    },
+    "GetDonesFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetDonesFunction"},
+        "Description": "What's Done app",
+        "Handler": "getDonesRequestHandler",
+        "Role": {
+          "Ref": "LambdaRole"
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "LambdaS3Bucket"
+          },
+          "S3Key": {
+            "Ref": "LambdaS3Key"
+          }
+        },
+        "Runtime": "nodejs6.10",
+        "Timeout": "10"
+      }
+    },
+    "GetDonesLambdaPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:invokeFunction",
+        "FunctionName": {"Fn::GetAtt": ["GetDonesFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${WhatsdoneApi}/*"}
       }
@@ -81,7 +169,74 @@
                   "httpMethod": "POST",
                   "uri": {"Fn::Sub": [
                     "arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
-                    {"LambdaArn": {"Fn::GetAtt": ["WhatsdoneAppFunction", "Arn"]}}
+                    {"LambdaArn": {"Fn::GetAtt": ["GetRootPageFunction", "Arn"]}}
+                  ]},
+                  "responses": {
+                    "default": {
+                      "statusCode": "200"
+                    }
+                  }
+                }
+              }
+            },
+            "/signin": {
+              "get": {
+                "produces": ["text/html"],
+                "responses": {
+                  "200": {
+                    "description": "200 response"
+                  }
+                },
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": {"Fn::Sub": [
+                    "arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
+                    {"LambdaArn": {"Fn::GetAtt": ["GetSigninFunction", "Arn"]}}
+                  ]},
+                  "responses": {
+                    "default": {
+                      "statusCode": "200"
+                    }
+                  }
+                }
+              },
+              "post": {
+                "produces": ["text/html"],
+                "responses": {
+                  "200": {
+                    "description": "200 response"
+                  }
+                },
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": {"Fn::Sub": [
+                    "arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
+                    {"LambdaArn": {"Fn::GetAtt": ["PostSigninFunction", "Arn"]}}
+                  ]},
+                  "responses": {
+                    "default": {
+                      "statusCode": "200"
+                    }
+                  }
+                }
+              }
+            },
+            "/dones": {
+              "get": {
+                "produces": ["application/json"],
+                "responses": {
+                  "200": {
+                    "description": "200 response"
+                  }
+                },
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": {"Fn::Sub": [
+                    "arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
+                    {"LambdaArn": {"Fn::GetAtt": ["GetDonesFunction", "Arn"]}}
                   ]},
                   "responses": {
                     "default": {

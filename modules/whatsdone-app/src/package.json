@@ -1,0 +1,23 @@
+{
+  "name": "whatsdone-app",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Take a memo of what you've done today",
+  "keywords": [
+    "react"
+  ],
+  "author": "Ryuichi Inagaki",
+  "main": "index.js",
+  "dependencies": {
+    "aws-sdk": "~2.7.19",
+    "cookie": "~0.3.1",
+    "cookie-signature": "~1.0.6",
+    "lodash": "~4.17.3",
+    "pug": "~2.0.0-beta6",
+    "sha1": "~1.1.1",
+    "uuid": "~3.0.1"
+  },
+  "engines": {
+    "node": "6.10"
+  }
+}

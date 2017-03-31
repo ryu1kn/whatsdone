@@ -3,29 +3,27 @@
 
 const ServiceLocator = require('./ServiceLocator');
 
-class ExpressRequestHandler {
+class LambdaRequestHandler {
 
   constructor(params) {
     this._requestProcessor = params.requestProcessor;
 
-    this._expressRequestNormaliser = ServiceLocator.expressRequestNormaliser;
     this._sessionRepository = ServiceLocator.sessionRepository;
-    this._expressResponseSenderFactory = ServiceLocator.expressResponseSenderFactory;
+    this._lambdaRequestNormaliser = ServiceLocator.lambdaRequestNormaliser;
+    this._lambdaResponseFormatter = ServiceLocator.lambdaResponseFormatter;
     this._requestProcessErrorProcessor = ServiceLocator.requestProcessErrorProcessor;
     this._authBasedRedirector = ServiceLocator.authBasedRedirector;
   }
 
-  handle(expressReq, expressRes) {
-    const normalisedRequest = this._expressRequestNormaliser.normalise(expressReq);
+  handle(event, context, callback) {
+    const normalisedRequest = this._lambdaRequestNormaliser.normalise(event, context);
     const sessionId = normalisedRequest.sessionId;
     const sessionPromise = sessionId ? this._sessionRepository.getById(sessionId) : Promise.resolve();
     return sessionPromise
       .then(session => this._getResponse(normalisedRequest, session))
       .catch(e => this._requestProcessErrorProcessor.process(e))
-      .then(response => {
-        const responseSender = this._expressResponseSenderFactory.create(expressRes);
-        return responseSender.send(response);
-      });
+      .then(response => callback(null, this._lambdaResponseFormatter.format(response)))
+      .catch(e => callback(e));
   }
 
   _getResponse(request, session) {
@@ -35,4 +33,4 @@ class ExpressRequestHandler {
 
 }
 
-module.exports = ExpressRequestHandler;
+module.exports = LambdaRequestHandler;

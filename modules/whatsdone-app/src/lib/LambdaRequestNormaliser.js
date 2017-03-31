@@ -3,13 +3,13 @@
 
 const ServiceLocator = require('./ServiceLocator');
 
-class ExpressRequestNormaliser {
+class LambdaRequestNormaliser {
 
   constructor() {
     this._cookieCodec = ServiceLocator.cookieCodec;
   }
 
-  normalise(expressReq) {
+  normalise(event, _lambdaContext) {
     return {
       path: expressReq.path,
       params: expressReq.params,
@@ -20,4 +20,4 @@ class ExpressRequestNormaliser {
 
 }
 
-module.exports = ExpressRequestNormaliser;
+module.exports = LambdaRequestNormaliser;

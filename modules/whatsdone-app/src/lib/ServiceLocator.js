@@ -96,12 +96,12 @@ class ServiceLocator {
     return this._get('requestProcessErrorProcessor');
   }
 
-  get expressRequestNormaliser() {
-    return this._get('expressRequestNormaliser');
+  get lambdaRequestNormaliser() {
+    return this._get('lambdaRequestNormaliser');
   }
 
-  get expressResponseSenderFactory() {
-    return this._get('expressResponseSenderFactory');
+  get lambdaResponseFormatter() {
+    return this._get('lambdaResponseFormatter');
   }
 
   get logger() {
