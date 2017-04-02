@@ -14,22 +14,10 @@ exports.handler = (event, context, callback) => {
   });
 };
 
-exports.getRootPageRequestHandler = (event, context, callback) => {
-  const requestHandler = ServiceLocator.getRootPageRequestHandler;
-  requestHandler.handle(event, context, callback);
-};
+exports.getRootPageRequestHandler = ServiceLocator.getRootPageRequestHandler;
 
-exports.getSigninRequestHandler = (event, context, callback) => {
-  const requestHandler = ServiceLocator.getSigninRequestHandler;
-  requestHandler.handle(event, context, callback);
-};
+exports.getSigninRequestHandler = ServiceLocator.getSigninRequestHandler;
 
-exports.postSigninRequestHandler = (event, context, callback) => {
-  const requestHandler = ServiceLocator.postSigninRequestHandler;
-  requestHandler.handle(event, context, callback);
-};
+exports.postSigninRequestHandler = ServiceLocator.postSigninRequestHandler;
 
-exports.getDonesRequestHandler = (event, context, callback) => {
-  const requestHandler = ServiceLocator.getDonesRequestHandler;
-  requestHandler.handle(event, context, callback);
-};
+exports.getDonesRequestHandler = ServiceLocator.getDonesRequestHandler;
