@@ -1,6 +1,8 @@
 
 'use strict';
 
+const querystring = require('querystring');
+
 const ServiceLocator = require('./ServiceLocator');
 
 class LambdaRequestNormaliser {
@@ -11,10 +13,10 @@ class LambdaRequestNormaliser {
 
   normalise(event, _lambdaContext) {
     return {
-      path: expressReq.path,
-      params: expressReq.params,
-      body: expressReq.body,
-      sessionId: this._cookieCodec.extractSessionId(expressReq.get('cookie'))
+      path: event.path,
+      params: event.pathParameters,
+      body: querystring.parse(event.body || ''),
+      sessionId: this._cookieCodec.extractSessionId(event.headers.Cookie)
     };
   }
 
