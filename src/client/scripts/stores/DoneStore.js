@@ -10,7 +10,7 @@ var CHANGE_EVENT = 'change';
 var _dones = [];
 
 function load() {
-  return request.get(`${window.location.origin}/dones.json`)
+  return request.get(`${window.location.origin}/dones`)
     .then(body => JSON.parse(body));
 }
 

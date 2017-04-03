@@ -6,7 +6,7 @@ var request = require('request-promise');
 function postDone(doneItem) {
   const options = {
     method: 'POST',
-    uri: `${window.location.origin}/dones.json`,
+    uri: `${window.location.origin}/dones`,
     form: doneItem
   };
   return request(options).then(body => JSON.parse(body));
@@ -18,7 +18,7 @@ function postDone(doneItem) {
 function deleteDone(doneId) {
   const options = {
     method: 'DELETE',
-    uri: `${window.location.origin}/dones.json/${doneId}`
+    uri: `${window.location.origin}/dones/${doneId}`
   };
   return request(options).then(body => JSON.parse(body));
 }
