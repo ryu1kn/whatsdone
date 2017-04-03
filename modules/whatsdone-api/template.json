@@ -11,7 +11,7 @@
     "LambdaS3Key": {
       "Type": "String"
     },
-    "LambdaHandler": {
+    "SessionSecret": {
       "Type": "String"
     },
     "EnvName": {
@@ -27,7 +27,7 @@
       "Properties": {
         "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetRootPageFunction"},
         "Description": "What's Done app",
-        "Handler": "getRootPageRequestHandler",
+        "Handler": "index.getRootPageRequestHandler",
         "Role": {
           "Ref": "LambdaRole"
         },
@@ -37,6 +37,16 @@
           },
           "S3Key": {
             "Ref": "LambdaS3Key"
+          }
+        },
+        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
+        "Environment": {
+          "Variables": {
+            "DB_REGION": "ap-southeast-2",
+            "SESSION_SECRET": {"Ref": "SessionSecret"},
+            "DONE_TABLE_NAME": "whatsdone-dones",
+            "USER_TABLE_NAME": "whatsdone-users",
+            "SESSION_TABLE_NAME": "whatsdone-sessions"
           }
         },
         "Runtime": "nodejs6.10",
@@ -57,7 +67,7 @@
       "Properties": {
         "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetSigninFunction"},
         "Description": "What's Done app",
-        "Handler": "getSigninRequestHandler",
+        "Handler": "index.getSigninRequestHandler",
         "Role": {
           "Ref": "LambdaRole"
         },
@@ -67,6 +77,16 @@
           },
           "S3Key": {
             "Ref": "LambdaS3Key"
+          }
+        },
+        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
+        "Environment": {
+          "Variables": {
+            "DB_REGION": "ap-southeast-2",
+            "SESSION_SECRET": {"Ref": "SessionSecret"},
+            "DONE_TABLE_NAME": "whatsdone-dones",
+            "USER_TABLE_NAME": "whatsdone-users",
+            "SESSION_TABLE_NAME": "whatsdone-sessions"
           }
         },
         "Runtime": "nodejs6.10",
@@ -87,7 +107,7 @@
       "Properties": {
         "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-PostSigninFunction"},
         "Description": "What's Done app",
-        "Handler": "postSigninRequestHandler",
+        "Handler": "index.postSigninRequestHandler",
         "Role": {
           "Ref": "LambdaRole"
         },
@@ -97,6 +117,16 @@
           },
           "S3Key": {
             "Ref": "LambdaS3Key"
+          }
+        },
+        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
+        "Environment": {
+          "Variables": {
+            "DB_REGION": "ap-southeast-2",
+            "SESSION_SECRET": {"Ref": "SessionSecret"},
+            "DONE_TABLE_NAME": "whatsdone-dones",
+            "USER_TABLE_NAME": "whatsdone-users",
+            "SESSION_TABLE_NAME": "whatsdone-sessions"
           }
         },
         "Runtime": "nodejs6.10",
@@ -117,7 +147,7 @@
       "Properties": {
         "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetDonesFunction"},
         "Description": "What's Done app",
-        "Handler": "getDonesRequestHandler",
+        "Handler": "index.getDonesRequestHandler",
         "Role": {
           "Ref": "LambdaRole"
         },
@@ -127,6 +157,16 @@
           },
           "S3Key": {
             "Ref": "LambdaS3Key"
+          }
+        },
+        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
+        "Environment": {
+          "Variables": {
+            "DB_REGION": "ap-southeast-2",
+            "SESSION_SECRET": {"Ref": "SessionSecret"},
+            "DONE_TABLE_NAME": "whatsdone-dones",
+            "USER_TABLE_NAME": "whatsdone-users",
+            "SESSION_TABLE_NAME": "whatsdone-sessions"
           }
         },
         "Runtime": "nodejs6.10",
