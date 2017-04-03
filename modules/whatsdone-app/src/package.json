@@ -7,7 +7,15 @@
     "react"
   ],
   "author": "Ryuichi Inagaki",
+  "engines": {
+    "node": "6.10"
+  },
   "main": "index.js",
+  "scripts": {
+    "test": "mocha --opts mocha.opts",
+    "lint": "eslint .",
+    "coverage": "istanbul cover ./node_modules/.bin/_mocha -- --opts mocha.opts"
+  },
   "dependencies": {
     "aws-sdk": "~2.7.19",
     "cookie": "~0.3.1",
@@ -17,7 +25,14 @@
     "sha1": "~1.1.1",
     "uuid": "~3.0.1"
   },
-  "engines": {
-    "node": "6.10"
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "codeclimate-test-reporter": "^0.4.0",
+    "eslint": "^3.12.2",
+    "eslint-config-xo": "^0.17.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
+    "sinon": "^1.17.6",
+    "sinon-chai": "^2.8.0"
   }
 }
