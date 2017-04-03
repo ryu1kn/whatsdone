@@ -7,7 +7,6 @@
     "react"
   ],
   "author": "Ryuichi Inagaki",
-  "main": "server.js",
   "dependencies": {
     "aws-sdk": "~2.7.19",
     "body-parser": "~1.15.2",
@@ -45,14 +44,12 @@
     ]
   },
   "engines": {
-    "node": "6.9.1"
+    "node": "6.10"
   },
   "scripts": {
     "build": "gulp build",
     "watch": "gulp",
     "test": "mocha --opts mocha.opts",
-    "prestart": "gulp build",
-    "start": "node ./bin/www",
     "lint": "eslint .",
     "coverage": "istanbul cover ./node_modules/.bin/_mocha -- --opts mocha.opts"
   },

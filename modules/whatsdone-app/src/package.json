@@ -14,6 +14,7 @@
   "scripts": {
     "test": "mocha --opts mocha.opts",
     "lint": "eslint .",
+    "precoverage": "npm install",
     "coverage": "istanbul cover ./node_modules/.bin/_mocha -- --opts mocha.opts"
   },
   "dependencies": {
