@@ -182,6 +182,46 @@
         "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${WhatsdoneApi}/*"}
       }
     },
+    "PostDoneFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-PostDoneFunction"},
+        "Description": "What's Done app",
+        "Handler": "index.postDoneRequestHandler",
+        "Role": {
+          "Ref": "LambdaRole"
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "LambdaS3Bucket"
+          },
+          "S3Key": {
+            "Ref": "LambdaS3Key"
+          }
+        },
+        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
+        "Environment": {
+          "Variables": {
+            "DB_REGION": "ap-southeast-2",
+            "SESSION_SECRET": {"Ref": "SessionSecret"},
+            "DONE_TABLE_NAME": "whatsdone-dones",
+            "USER_TABLE_NAME": "whatsdone-users",
+            "SESSION_TABLE_NAME": "whatsdone-sessions"
+          }
+        },
+        "Runtime": "nodejs6.10",
+        "Timeout": "10"
+      }
+    },
+    "PostDoneLambdaPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:invokeFunction",
+        "FunctionName": {"Fn::GetAtt": ["PostDoneFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${WhatsdoneApi}/*"}
+      }
+    },
     "WhatsdoneApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
@@ -277,6 +317,27 @@
                   "uri": {"Fn::Sub": [
                     "arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
                     {"LambdaArn": {"Fn::GetAtt": ["GetDonesFunction", "Arn"]}}
+                  ]},
+                  "responses": {
+                    "default": {
+                      "statusCode": "200"
+                    }
+                  }
+                }
+              },
+              "post": {
+                "produces": ["application/json"],
+                "responses": {
+                  "200": {
+                    "description": "200 response"
+                  }
+                },
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": {"Fn::Sub": [
+                    "arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
+                    {"LambdaArn": {"Fn::GetAtt": ["PostDoneFunction", "Arn"]}}
                   ]},
                   "responses": {
                     "default": {

@@ -5,6 +5,10 @@ const querystring = require('querystring');
 
 const ServiceLocator = require('./ServiceLocator');
 
+const ContentType = {
+  JSON: 'application/json'
+};
+
 class LambdaRequestNormaliser {
 
   constructor() {
@@ -15,9 +19,15 @@ class LambdaRequestNormaliser {
     return {
       path: event.path,
       params: event.pathParameters,
-      body: querystring.parse(event.body || ''),
+      body: this._parseBody(event.body, event.headers['Content-Type']),
       sessionId: this._cookieCodec.extractSessionId(event.headers.Cookie)
     };
+  }
+
+  _parseBody(bodyString, contentType) {
+    return contentType === ContentType.JSON ?
+        JSON.parse(bodyString) :
+        querystring.parse(bodyString || '');
   }
 
 }

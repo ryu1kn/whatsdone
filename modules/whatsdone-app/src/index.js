@@ -11,3 +11,5 @@ exports.getSigninRequestHandler = ServiceLocator.getSigninRequestHandler;
 exports.postSigninRequestHandler = ServiceLocator.postSigninRequestHandler;
 
 exports.getDonesRequestHandler = ServiceLocator.getDonesRequestHandler;
+
+exports.postDoneRequestHandler = ServiceLocator.postDoneRequestHandler;
