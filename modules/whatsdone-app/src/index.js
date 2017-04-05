@@ -10,6 +10,12 @@ exports.getSigninRequestHandler = ServiceLocator.getSigninRequestHandler;
 
 exports.postSigninRequestHandler = ServiceLocator.postSigninRequestHandler;
 
+exports.signoutRequestHandler = ServiceLocator.signoutRequestHandler;
+
 exports.getDonesRequestHandler = ServiceLocator.getDonesRequestHandler;
 
 exports.postDoneRequestHandler = ServiceLocator.postDoneRequestHandler;
+
+exports.deleteDoneRequestHandler = ServiceLocator.deleteDoneRequestHandler;
+
+exports.updateDoneRequestHandler = ServiceLocator.updateDoneRequestHandler;
