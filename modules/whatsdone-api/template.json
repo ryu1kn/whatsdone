@@ -11,6 +11,15 @@
     "LambdaS3Key": {
       "Type": "String"
     },
+    "DoneTableName": {
+      "Type": "String"
+    },
+    "UserTableName": {
+      "Type": "String"
+    },
+    "SessionTableName": {
+      "Type": "String"
+    },
     "SessionSecret": {
       "Type": "String"
     },
@@ -42,11 +51,11 @@
         "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
         "Environment": {
           "Variables": {
-            "DB_REGION": "ap-southeast-2",
+            "DB_REGION": {"Ref": "Region"},
             "SESSION_SECRET": {"Ref": "SessionSecret"},
-            "DONE_TABLE_NAME": "whatsdone-dones",
-            "USER_TABLE_NAME": "whatsdone-users",
-            "SESSION_TABLE_NAME": "whatsdone-sessions"
+            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
+            "USER_TABLE_NAME": {"Ref": "UserTableName"},
+            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
           }
         },
         "Runtime": "nodejs6.10",
@@ -82,11 +91,11 @@
         "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
         "Environment": {
           "Variables": {
-            "DB_REGION": "ap-southeast-2",
+            "DB_REGION": {"Ref": "Region"},
             "SESSION_SECRET": {"Ref": "SessionSecret"},
-            "DONE_TABLE_NAME": "whatsdone-dones",
-            "USER_TABLE_NAME": "whatsdone-users",
-            "SESSION_TABLE_NAME": "whatsdone-sessions"
+            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
+            "USER_TABLE_NAME": {"Ref": "UserTableName"},
+            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
           }
         },
         "Runtime": "nodejs6.10",
@@ -122,11 +131,11 @@
         "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
         "Environment": {
           "Variables": {
-            "DB_REGION": "ap-southeast-2",
+            "DB_REGION": {"Ref": "Region"},
             "SESSION_SECRET": {"Ref": "SessionSecret"},
-            "DONE_TABLE_NAME": "whatsdone-dones",
-            "USER_TABLE_NAME": "whatsdone-users",
-            "SESSION_TABLE_NAME": "whatsdone-sessions"
+            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
+            "USER_TABLE_NAME": {"Ref": "UserTableName"},
+            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
           }
         },
         "Runtime": "nodejs6.10",
@@ -162,11 +171,11 @@
         "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
         "Environment": {
           "Variables": {
-            "DB_REGION": "ap-southeast-2",
+            "DB_REGION": {"Ref": "Region"},
             "SESSION_SECRET": {"Ref": "SessionSecret"},
-            "DONE_TABLE_NAME": "whatsdone-dones",
-            "USER_TABLE_NAME": "whatsdone-users",
-            "SESSION_TABLE_NAME": "whatsdone-sessions"
+            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
+            "USER_TABLE_NAME": {"Ref": "UserTableName"},
+            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
           }
         },
         "Runtime": "nodejs6.10",
@@ -202,11 +211,11 @@
         "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
         "Environment": {
           "Variables": {
-            "DB_REGION": "ap-southeast-2",
+            "DB_REGION": {"Ref": "Region"},
             "SESSION_SECRET": {"Ref": "SessionSecret"},
-            "DONE_TABLE_NAME": "whatsdone-dones",
-            "USER_TABLE_NAME": "whatsdone-users",
-            "SESSION_TABLE_NAME": "whatsdone-sessions"
+            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
+            "USER_TABLE_NAME": {"Ref": "UserTableName"},
+            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
           }
         },
         "Runtime": "nodejs6.10",

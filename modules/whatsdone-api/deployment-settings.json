@@ -15,6 +15,9 @@
             "stackParams": {
                 "EnvName": {"$ref": "#/_env"},
                 "Region": {"$ref": "#/_taskRegion"},
+                "DoneTableName": {"$ref": "doneTableName"},
+                "UserTableName": {"$ref": "userTableName"},
+                "SessionTableName": {"$ref": "sessionTableName"},
                 "SessionSecret": {"$ref": "#/_deploymentConfig/sessionSecret"},
                 "LambdaRole": {"$ref": "#/_deploymentConfig/executionRole"},
                 "LambdaS3Bucket": {"$ref": "#/_deploymentOutputs/whatsdone-app/packages/whatsdone-app/s3Bucket"},
