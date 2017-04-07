@@ -2,7 +2,7 @@
   "packages": [
     {
       "name": "whatsdone-app",
-      "package-script": "cd src && zip -q -r9 $KUMO_PACKAGE_OUTPUT_FILE *"
+      "package-script": "cd dist && zip -q -r9 $KUMO_PACKAGE_OUTPUT_FILE *"
     }
   ]
 }

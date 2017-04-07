@@ -1,12 +1,21 @@
 
-exports.handler = (event, context, callback) => {
-  console.log('JSON.stringify(event):', JSON.stringify(event));
-  console.log('JSON.stringify(context):', JSON.stringify(context));
-  return callback(null, {
-    statusCode: '200',
-    body: '<html><head><title>TITLE</title></head><body>Hello World</body></html>',
-    headers: {
-      'Content-Type': 'text/html'
-    }
-  });
-};
+const ServiceLocator = require('./lib/ServiceLocator');
+const ServiceFactory = require('./lib/ServiceFactory');
+
+ServiceLocator.load(new ServiceFactory({env: process.env}));
+
+exports.getRootPageRequestHandler = ServiceLocator.getRootPageRequestHandler;
+
+exports.getSigninRequestHandler = ServiceLocator.getSigninRequestHandler;
+
+exports.postSigninRequestHandler = ServiceLocator.postSigninRequestHandler;
+
+exports.signoutRequestHandler = ServiceLocator.signoutRequestHandler;
+
+exports.getDonesRequestHandler = ServiceLocator.getDonesRequestHandler;
+
+exports.postDoneRequestHandler = ServiceLocator.postDoneRequestHandler;
+
+exports.deleteDoneRequestHandler = ServiceLocator.deleteDoneRequestHandler;
+
+exports.updateDoneRequestHandler = ServiceLocator.updateDoneRequestHandler;

@@ -2,7 +2,7 @@
     "moduleName": "whatsdone-api",
     "dependsOn": ["../whatsdone-app"],
     "config": {
-        "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\""
+        "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\" | kumo decrypt --profile $KUMO_ENV --inputFormat json"
     },
     "tasks": [
         {
@@ -15,8 +15,11 @@
             "stackParams": {
                 "EnvName": {"$ref": "#/_env"},
                 "Region": {"$ref": "#/_taskRegion"},
-                "LambdaRole": {"$ref": "#/_deploymentConfig/execution_role"},
-                "LambdaHandler": {"$ref": "#/_deploymentConfig/handler"},
+                "DoneTableName": {"$ref": "#/_deploymentConfig/doneTableName"},
+                "UserTableName": {"$ref": "#/_deploymentConfig/userTableName"},
+                "SessionTableName": {"$ref": "#/_deploymentConfig/sessionTableName"},
+                "SessionSecret": {"$ref": "#/_deploymentConfig/sessionSecret"},
+                "LambdaRole": {"$ref": "#/_deploymentConfig/executionRole"},
                 "LambdaS3Bucket": {"$ref": "#/_deploymentOutputs/whatsdone-app/packages/whatsdone-app/s3Bucket"},
                 "LambdaS3Key": {"$ref": "#/_deploymentOutputs/whatsdone-app/packages/whatsdone-app/s3Key"}
             }

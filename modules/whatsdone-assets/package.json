@@ -1,0 +1,75 @@
+{
+  "name": "whatsdone",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Take a memo of what you've done today",
+  "keywords": [
+    "react"
+  ],
+  "author": "Ryuichi Inagaki",
+  "dependencies": {
+    "aws-sdk": "~2.7.19",
+    "body-parser": "~1.15.2",
+    "browserify": "~13.1.1",
+    "cookie": "~0.3.1",
+    "cookie-signature": "~1.0.6",
+    "express": "~4.14.0",
+    "flux": "~3.1.2",
+    "gulp": "~3.9.1",
+    "gulp-less": "~3.3.0",
+    "jquery": "~3.1.1",
+    "keymirror": "~0.1.1",
+    "lodash": "~4.17.3",
+    "morgan": "~1.7.0",
+    "pug": "~2.0.0-beta6",
+    "react": "~15.4.1",
+    "react-dom": "~15.4.1",
+    "reactify": "~1.1.1",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1",
+    "serve-favicon": "~2.3.2",
+    "sha1": "~1.1.1",
+    "uuid": "~3.0.1",
+    "vinyl-source-stream": "~1.1.0"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "reactify",
+        {
+          "es6": true,
+          "target": "es5"
+        }
+      ]
+    ]
+  },
+  "engines": {
+    "node": "6.10"
+  },
+  "scripts": {
+    "build": "gulp build",
+    "watch": "gulp",
+    "test": "mocha --opts mocha.opts",
+    "lint": "eslint .",
+    "coverage": "istanbul cover ./node_modules/.bin/_mocha -- --opts mocha.opts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryu1kn/whatsdone.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ryu1kn/whatsdone/issues"
+  },
+  "homepage": "https://github.com/ryu1kn/whatsdone",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "codeclimate-test-reporter": "^0.4.0",
+    "eslint": "^3.12.2",
+    "eslint-config-xo": "^0.17.0",
+    "eslint-plugin-react": "^6.8.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
+    "sinon": "^1.17.6",
+    "sinon-chai": "^2.8.0"
+  }
+}

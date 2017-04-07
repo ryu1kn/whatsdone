@@ -5,6 +5,13 @@
     },
     "tasks": [
         {
+            "id": "build-lambda-app",
+            "type": "custom",
+            "run": {
+                "script": "./build.sh"
+            }
+        },
+        {
             "id": "package-lambda",
             "type": "custom",
             "run": {

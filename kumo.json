@@ -1,10 +1,19 @@
 {
   "pluginPacks": {
-    "kumo-plugins": "0.0.30"
+    "kumo-plugins": "0.0.32"
   },
   "deployer": {
     "outputsBucket": {
       "name": "whatsdone-deployment-outputs"
+    }
+  },
+  "crypto": {
+    "profiles": {
+      "prod": {
+        "provider": "kms",
+        "keyId": "alias/whatsdone-app",
+        "region": "ap-southeast-2"
+      }
     }
   }
 }

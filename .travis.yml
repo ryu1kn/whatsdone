@@ -9,6 +9,6 @@ install:
   - npm install
 script:
   - npm run lint
-  - npm run coverage  # coverage also runs unit tests internally
+  - (cd modules/whatsdone-app/src && npm run coverage)
 after_script:
-  - codeclimate-test-reporter < coverage/lcov.info
+  - (cd modules/whatsdone-app/src && codeclimate-test-reporter < coverage/lcov.info)

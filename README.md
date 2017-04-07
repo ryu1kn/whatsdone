@@ -8,28 +8,12 @@ Personal activity tracker. Take memos of what I (or we) have done today.
 - infrastructure
   - ~~heroku + MongoDB~~
   - ~~heroku + DynamoDB~~
-  - AWS Elastic Beanstalk (deployed by `kumo`) + DynamoDB
+  - ~~AWS Elastic Beanstalk (deployed with `kumo`) + DynamoDB~~
+  - API Gateway + Lambda + DynamoDB (all deployed with `kumo`)
 - backend
   - Node.js
 - frontend
   - React + flux
-
-## Notes
-
-### How to use locally
-
-Set environment variables (`AWS_PROFILE`, `SESSION_SECRET` and `DB_REGION`) and execute commands:
-
-```sh
-$ npm install
-$ npm start
-```
-
-Access to `http://localhost:3000` with your web browser.
-
-### Deploy to AWS Elasticbeanstalk
-
-* Just do `eb deploy`
 
 ### Tools
 
