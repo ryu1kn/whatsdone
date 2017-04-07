@@ -1,0 +1,43 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "What's done app static assets",
+  "Parameters": {
+    "BucketName": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "S3Bucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": {"Ref": "BucketName"},
+        "AccessControl": "PublicRead"
+      }
+    },
+    "S3BucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {"Ref": "S3Bucket"},
+        "PolicyDocument": {
+          "Version": "2008-10-17",
+          "Statement": [{
+            "Sid": "AllowPublicRead",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": ["s3:GetObject"],
+            "Resource": {"Fn::Sub": "arn:aws:s3:::${S3Bucket}/*"}
+          }]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "AssetsBucket": {
+      "Description": "Bucket for What's done app assets",
+      "Value": {"Fn::Join": ["", [
+        "https://",
+        {"Fn::GetAtt": ["S3Bucket", "DomainName"]}
+      ]]}
+    }
+  }
+}

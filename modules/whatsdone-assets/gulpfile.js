@@ -4,20 +4,23 @@ const source = require('vinyl-source-stream');
 const gulp = require('gulp');
 const less = require('gulp-less');
 
+const SRC_DIR = './src';
+const DIST_DIR = './dist';
+
 const paths = {
   js: {
-    inEntry: './src/client/scripts/app.js',
-    inAll: './src/client/scripts/**/*.js',
+    inEntry: SRC_DIR + '/client/scripts/app.js',
+    inAll: SRC_DIR + '/client/scripts/**/*.js',
     outName: 'app.js',
-    outPath: './public/scripts'
+    outPath: DIST_DIR + '/scripts'
   },
   css: {
-    in: './src/stylesheets/**/*.less',
-    out: './public/css'
+    in: SRC_DIR + '/stylesheets/**/*.less',
+    out: DIST_DIR + '/css'
   },
   images: {
-    in: './src/images/**/*',
-    out: './public/images'
+    in: SRC_DIR + '/images/**/*',
+    out: DIST_DIR + '/images'
   }
 };
 
