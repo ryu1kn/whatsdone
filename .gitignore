@@ -1,10 +1,4 @@
 .DS_Store
 npm-debug.log
-/.env
 /.kumo
 __*
-
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
