@@ -1,12 +1,5 @@
 {
   "name": "whatsdone-app",
-  "version": "0.0.1",
-  "private": true,
-  "description": "Take a memo of what you've done today",
-  "keywords": [
-    "react"
-  ],
-  "author": "Ryuichi Inagaki",
   "engines": {
     "node": "6.10"
   },
@@ -14,8 +7,9 @@
   "scripts": {
     "test": "mocha --opts mocha.opts",
     "lint": "eslint .",
-    "precoverage": "npm install",
-    "coverage": "istanbul cover ./node_modules/.bin/_mocha -- --opts mocha.opts"
+    "coverage": "istanbul cover ./node_modules/.bin/_mocha -- --opts mocha.opts",
+    "prereport-coverage": "npm run coverage",
+    "report-coverage": "codeclimate-test-reporter < coverage/lcov.info"
   },
   "dependencies": {
     "aws-sdk": "~2.7.19",

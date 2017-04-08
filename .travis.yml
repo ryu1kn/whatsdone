@@ -9,6 +9,5 @@ install:
   - npm install
 script:
   - npm run lint
-  - (cd modules/whatsdone-app/src && npm run coverage)
 after_script:
-  - (cd modules/whatsdone-app/src && codeclimate-test-reporter < coverage/lcov.info)
+  - npm run coverage-backend
