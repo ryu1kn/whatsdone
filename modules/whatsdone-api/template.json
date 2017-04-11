@@ -479,6 +479,25 @@
               },
               "post": {
                 "produces": ["application/json"],
+                "parameters": [
+                  {
+                    "in": "body",
+                    "name": "body",
+                    "required": true,
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "doneThing": {
+                          "type": "string"
+                        },
+                        "date": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                ],
                 "responses": {
                   "200": {
                     "description": "200 response"
