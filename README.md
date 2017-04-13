@@ -17,4 +17,4 @@ Personal activity tracker. Take memos of what I (or we) have done today.
 
 ### Tools
 
-* Migrate done data from mongodb to dynamodb (written in Go)
+* Migrate done data from mongodb to dynamodb (written in Go). See its [README](./tools/copy-done-table/README.md)
