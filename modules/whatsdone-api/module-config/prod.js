@@ -1,5 +1,4 @@
 module.exports = {
-  executionRole: 'arn:aws:iam::650892143834:role/whatsdone-app',
   doneTableName: 'whatsdone-dones',
   userTableName: 'whatsdone-users',
   sessionTableName: 'whatsdone-sessions',

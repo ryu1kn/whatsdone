@@ -10,18 +10,17 @@
             "type": "cf-stack",
             "stackName": "api",
             "stackTemplate": {
-                "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
+              "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
             },
             "stackParams": {
-                "EnvName": {"$ref": "#/_env"},
-                "Region": {"$ref": "#/_taskRegion"},
-                "DoneTableName": {"$ref": "#/_deploymentConfig/doneTableName"},
-                "UserTableName": {"$ref": "#/_deploymentConfig/userTableName"},
-                "SessionTableName": {"$ref": "#/_deploymentConfig/sessionTableName"},
-                "SessionSecret": {"$ref": "#/_deploymentConfig/sessionSecret"},
-                "LambdaRole": {"$ref": "#/_deploymentConfig/executionRole"},
-                "LambdaS3Bucket": {"$ref": "#/_deploymentOutputs/whatsdone-app/packages/whatsdone-app/s3Bucket"},
-                "LambdaS3Key": {"$ref": "#/_deploymentOutputs/whatsdone-app/packages/whatsdone-app/s3Key"}
+              "EnvName": {"$ref": "#/_env"},
+              "Region": {"$ref": "#/_taskRegion"},
+              "DoneTableName": {"$ref": "#/_deploymentConfig/doneTableName"},
+              "UserTableName": {"$ref": "#/_deploymentConfig/userTableName"},
+              "SessionTableName": {"$ref": "#/_deploymentConfig/sessionTableName"},
+              "SessionSecret": {"$ref": "#/_deploymentConfig/sessionSecret"},
+              "LambdaS3Bucket": {"$ref": "#/_deploymentOutputs/whatsdone-app/packages/whatsdone-app/s3Bucket"},
+              "LambdaS3Key": {"$ref": "#/_deploymentOutputs/whatsdone-app/packages/whatsdone-app/s3Key"}
             }
         }
     ]
