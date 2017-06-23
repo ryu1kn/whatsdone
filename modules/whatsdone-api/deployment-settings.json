@@ -14,7 +14,7 @@
             },
             "stackParams": {
               "EnvName": {"$ref": "#/_env"},
-              "Region": {"$ref": "#/_taskRegion"},
+              "DbRegion": {"$ref": "#/_taskRegion"},
               "DoneTableName": {"$ref": "#/_deploymentConfig/doneTableName"},
               "UserTableName": {"$ref": "#/_deploymentConfig/userTableName"},
               "SessionTableName": {"$ref": "#/_deploymentConfig/sessionTableName"},

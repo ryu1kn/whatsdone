@@ -23,15 +23,22 @@
     "EnvName": {
       "Type": "String"
     },
-    "Region": {
+    "DbRegion": {
       "Type": "String"
+    }
+  },
+  "Mappings": {
+    "Variables": {
+      "Api": {
+        "StageName": "default"
+      }
     }
   },
   "Resources": {
     "RestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "What's Done",
+        "Name": {"Fn::Sub": "What's Done - ${EnvName}"},
         "Description": "API used for What's Done requests",
         "FailOnWarnings": true,
         "Body": {
@@ -54,7 +61,7 @@
                   "type": "aws_proxy",
                   "httpMethod": "POST",
                   "uri": {"Fn::Sub": [
-                    "arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
+                    "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
                     {"LambdaArn": {"Fn::GetAtt": ["GetRootPageFunction", "Arn"]}}
                   ]},
                   "responses": {
@@ -77,7 +84,7 @@
                   "type": "aws_proxy",
                   "httpMethod": "POST",
                   "uri": {"Fn::Sub": [
-                    "arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
+                    "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
                     {"LambdaArn": {"Fn::GetAtt": ["GetSigninFunction", "Arn"]}}
                   ]},
                   "responses": {
@@ -98,7 +105,7 @@
                   "type": "aws_proxy",
                   "httpMethod": "POST",
                   "uri": {"Fn::Sub": [
-                    "arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
+                    "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
                     {"LambdaArn": {"Fn::GetAtt": ["PostSigninFunction", "Arn"]}}
                   ]},
                   "responses": {
@@ -121,7 +128,7 @@
                   "type": "aws_proxy",
                   "httpMethod": "POST",
                   "uri": {"Fn::Sub": [
-                    "arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
+                    "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
                     {"LambdaArn": {"Fn::GetAtt": ["GetSignoutFunction", "Arn"]}}
                   ]},
                   "responses": {
@@ -144,7 +151,7 @@
                   "type": "aws_proxy",
                   "httpMethod": "POST",
                   "uri": {"Fn::Sub": [
-                    "arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
+                    "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
                     {"LambdaArn": {"Fn::GetAtt": ["GetDonesFunction", "Arn"]}}
                   ]},
                   "responses": {
@@ -184,7 +191,7 @@
                   "type": "aws_proxy",
                   "httpMethod": "POST",
                   "uri": {"Fn::Sub": [
-                    "arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
+                    "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
                     {"LambdaArn": {"Fn::GetAtt": ["PostDoneFunction", "Arn"]}}
                   ]},
                   "responses": {
@@ -215,7 +222,7 @@
                   "type": "aws_proxy",
                   "httpMethod": "POST",
                   "uri": {"Fn::Sub": [
-                    "arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
+                    "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
                     {"LambdaArn": {"Fn::GetAtt": ["DeleteDoneFunction", "Arn"]}}
                   ]},
                   "responses": {
@@ -244,7 +251,7 @@
                   "type": "aws_proxy",
                   "httpMethod": "POST",
                   "uri": {"Fn::Sub": [
-                    "arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
+                    "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
                     {"LambdaArn": {"Fn::GetAtt": ["UpdateDoneFunction", "Arn"]}}
                   ]},
                   "responses": {
@@ -270,7 +277,7 @@
           "ThrottlingBurstLimit": 20
         }],
         "RestApiId": {"Ref": "RestApi"},
-        "StageName": {"Ref": "EnvName"}
+        "StageName": {"Fn::FindInMap": ["Variables", "Api", "StageName"]}
       }
     },
     "ApiDeployment": {
@@ -359,7 +366,7 @@
     "GetRootPageFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetRootPageFunction"},
+        "FunctionName": "whatsdone-GetRootPageFunction",
         "Description": "What's Done app",
         "Handler": "index.getRootPageRequestHandler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -374,7 +381,7 @@
         "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
         "Environment": {
           "Variables": {
-            "DB_REGION": {"Ref": "Region"},
+            "DB_REGION": {"Ref": "DbRegion"},
             "SESSION_SECRET": {"Ref": "SessionSecret"},
             "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
             "USER_TABLE_NAME": {"Ref": "UserTableName"},
@@ -391,13 +398,13 @@
         "Action": "lambda:invokeFunction",
         "FunctionName": {"Fn::GetAtt": ["GetRootPageFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${RestApi}/*"}
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*"}
       }
     },
     "GetSigninFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetSigninFunction"},
+        "FunctionName": "whatsdone-GetSigninFunction",
         "Description": "What's Done app",
         "Handler": "index.getSigninRequestHandler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -412,7 +419,7 @@
         "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
         "Environment": {
           "Variables": {
-            "DB_REGION": {"Ref": "Region"},
+            "DB_REGION": {"Ref": "DbRegion"},
             "SESSION_SECRET": {"Ref": "SessionSecret"},
             "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
             "USER_TABLE_NAME": {"Ref": "UserTableName"},
@@ -429,13 +436,13 @@
         "Action": "lambda:invokeFunction",
         "FunctionName": {"Fn::GetAtt": ["GetSigninFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${RestApi}/*"}
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*"}
       }
     },
     "PostSigninFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-PostSigninFunction"},
+        "FunctionName": "whatsdone-PostSigninFunction",
         "Description": "What's Done app",
         "Handler": "index.postSigninRequestHandler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -450,7 +457,7 @@
         "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
         "Environment": {
           "Variables": {
-            "DB_REGION": {"Ref": "Region"},
+            "DB_REGION": {"Ref": "DbRegion"},
             "SESSION_SECRET": {"Ref": "SessionSecret"},
             "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
             "USER_TABLE_NAME": {"Ref": "UserTableName"},
@@ -467,13 +474,13 @@
         "Action": "lambda:invokeFunction",
         "FunctionName": {"Fn::GetAtt": ["PostSigninFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${RestApi}/*"}
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*"}
       }
     },
     "GetSignoutFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetSignoutFunction"},
+        "FunctionName": "whatsdone-GetSignoutFunction",
         "Description": "What's Done app",
         "Handler": "index.signoutRequestHandler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -488,7 +495,7 @@
         "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
         "Environment": {
           "Variables": {
-            "DB_REGION": {"Ref": "Region"},
+            "DB_REGION": {"Ref": "DbRegion"},
             "SESSION_SECRET": {"Ref": "SessionSecret"},
             "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
             "USER_TABLE_NAME": {"Ref": "UserTableName"},
@@ -505,13 +512,13 @@
         "Action": "lambda:invokeFunction",
         "FunctionName": {"Fn::GetAtt": ["GetSignoutFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${RestApi}/*"}
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*"}
       }
     },
     "GetDonesFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetDonesFunction"},
+        "FunctionName": "whatsdone-GetDonesFunction",
         "Description": "What's Done app",
         "Handler": "index.getDonesRequestHandler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -526,7 +533,7 @@
         "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
         "Environment": {
           "Variables": {
-            "DB_REGION": {"Ref": "Region"},
+            "DB_REGION": {"Ref": "DbRegion"},
             "SESSION_SECRET": {"Ref": "SessionSecret"},
             "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
             "USER_TABLE_NAME": {"Ref": "UserTableName"},
@@ -543,13 +550,13 @@
         "Action": "lambda:invokeFunction",
         "FunctionName": {"Fn::GetAtt": ["GetDonesFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${RestApi}/*"}
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*"}
       }
     },
     "PostDoneFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-PostDoneFunction"},
+        "FunctionName": "whatsdone-PostDoneFunction",
         "Description": "What's Done app",
         "Handler": "index.postDoneRequestHandler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -564,7 +571,7 @@
         "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
         "Environment": {
           "Variables": {
-            "DB_REGION": {"Ref": "Region"},
+            "DB_REGION": {"Ref": "DbRegion"},
             "SESSION_SECRET": {"Ref": "SessionSecret"},
             "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
             "USER_TABLE_NAME": {"Ref": "UserTableName"},
@@ -581,13 +588,13 @@
         "Action": "lambda:invokeFunction",
         "FunctionName": {"Fn::GetAtt": ["PostDoneFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${RestApi}/*"}
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*"}
       }
     },
     "DeleteDoneFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-DeleteDoneFunction"},
+        "FunctionName": "whatsdone-DeleteDoneFunction",
         "Description": "What's Done app",
         "Handler": "index.deleteDoneRequestHandler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -602,7 +609,7 @@
         "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
         "Environment": {
           "Variables": {
-            "DB_REGION": {"Ref": "Region"},
+            "DB_REGION": {"Ref": "DbRegion"},
             "SESSION_SECRET": {"Ref": "SessionSecret"},
             "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
             "USER_TABLE_NAME": {"Ref": "UserTableName"},
@@ -619,13 +626,13 @@
         "Action": "lambda:invokeFunction",
         "FunctionName": {"Fn::GetAtt": ["DeleteDoneFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${RestApi}/*"}
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*"}
       }
     },
     "UpdateDoneFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-UpdateDoneFunction"},
+        "FunctionName": "whatsdone-UpdateDoneFunction",
         "Description": "What's Done app",
         "Handler": "index.updateDoneRequestHandler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -640,7 +647,7 @@
         "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
         "Environment": {
           "Variables": {
-            "DB_REGION": {"Ref": "Region"},
+            "DB_REGION": {"Ref": "DbRegion"},
             "SESSION_SECRET": {"Ref": "SessionSecret"},
             "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
             "USER_TABLE_NAME": {"Ref": "UserTableName"},
@@ -657,14 +664,16 @@
         "Action": "lambda:invokeFunction",
         "FunctionName": {"Fn::GetAtt": ["UpdateDoneFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${RestApi}/*"}
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*"}
       }
     }
   },
   "Outputs": {
     "ApiRootUrl": {
       "Description": "Root URL of What's Done API",
-      "Value": {"Fn::Sub": "https://${RestApi}.execute-api.${Region}.amazonaws.com/${EnvName}"}
+      "Value": {"Fn::Sub": ["https://${RestApi}.execute-api.${AWS::Region}.amazonaws.com/${StageName}", {
+        "StageName": {"Fn::FindInMap": ["Variables", "Api", "StageName"]}
+      }]}
     }
   }
 }
