@@ -28,388 +28,7 @@
     }
   },
   "Resources": {
-    "LambdaFunctionRole": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": {
-                "Service": [
-                  "lambda.amazonaws.com"
-                ]
-              },
-              "Action": [
-                "sts:AssumeRole"
-              ]
-            }
-          ]
-        },
-        "Path": "/",
-        "Policies": [
-          {
-            "PolicyName": "root",
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "logs:CreateLogGroup",
-                    "logs:CreateLogStream",
-                    "logs:DescribeLogStreams",
-                    "logs:PutLogEvents"
-                  ],
-                  "Resource": {
-                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
-                  }
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "ec2:CreateNetworkInterface",
-                    "ec2:DescribeNetworkInterfaces",
-                    "ec2:DeleteNetworkInterface"
-                  ],
-                  "Resource": "*"
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "cloudwatch:*"
-                  ],
-                  "Resource": "*"
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "dynamodb:*",
-                    "dax:*"
-                  ],
-                  "Resource": "*"
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "kms:Describe*",
-                    "kms:Get*",
-                    "kms:List*"
-                  ],
-                  "Resource": "*"
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    "GetRootPageFunction": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetRootPageFunction"},
-        "Description": "What's Done app",
-        "Handler": "index.getRootPageRequestHandler",
-        "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
-        "Code": {
-          "S3Bucket": {
-            "Ref": "LambdaS3Bucket"
-          },
-          "S3Key": {
-            "Ref": "LambdaS3Key"
-          }
-        },
-        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
-        "Environment": {
-          "Variables": {
-            "DB_REGION": {"Ref": "Region"},
-            "SESSION_SECRET": {"Ref": "SessionSecret"},
-            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
-            "USER_TABLE_NAME": {"Ref": "UserTableName"},
-            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
-          }
-        },
-        "Runtime": "nodejs6.10",
-        "Timeout": "10"
-      }
-    },
-    "GetRootPageLambdaPermission": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "Action": "lambda:invokeFunction",
-        "FunctionName": {"Fn::GetAtt": ["GetRootPageFunction", "Arn"]},
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${WhatsdoneApi}/*"}
-      }
-    },
-    "GetSigninFunction": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetSigninFunction"},
-        "Description": "What's Done app",
-        "Handler": "index.getSigninRequestHandler",
-        "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
-        "Code": {
-          "S3Bucket": {
-            "Ref": "LambdaS3Bucket"
-          },
-          "S3Key": {
-            "Ref": "LambdaS3Key"
-          }
-        },
-        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
-        "Environment": {
-          "Variables": {
-            "DB_REGION": {"Ref": "Region"},
-            "SESSION_SECRET": {"Ref": "SessionSecret"},
-            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
-            "USER_TABLE_NAME": {"Ref": "UserTableName"},
-            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
-          }
-        },
-        "Runtime": "nodejs6.10",
-        "Timeout": "10"
-      }
-    },
-    "GetSigninLambdaPermission": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "Action": "lambda:invokeFunction",
-        "FunctionName": {"Fn::GetAtt": ["GetSigninFunction", "Arn"]},
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${WhatsdoneApi}/*"}
-      }
-    },
-    "PostSigninFunction": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-PostSigninFunction"},
-        "Description": "What's Done app",
-        "Handler": "index.postSigninRequestHandler",
-        "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
-        "Code": {
-          "S3Bucket": {
-            "Ref": "LambdaS3Bucket"
-          },
-          "S3Key": {
-            "Ref": "LambdaS3Key"
-          }
-        },
-        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
-        "Environment": {
-          "Variables": {
-            "DB_REGION": {"Ref": "Region"},
-            "SESSION_SECRET": {"Ref": "SessionSecret"},
-            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
-            "USER_TABLE_NAME": {"Ref": "UserTableName"},
-            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
-          }
-        },
-        "Runtime": "nodejs6.10",
-        "Timeout": "10"
-      }
-    },
-    "PostSigninLambdaPermission": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "Action": "lambda:invokeFunction",
-        "FunctionName": {"Fn::GetAtt": ["PostSigninFunction", "Arn"]},
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${WhatsdoneApi}/*"}
-      }
-    },
-    "GetSignoutFunction": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetSignoutFunction"},
-        "Description": "What's Done app",
-        "Handler": "index.signoutRequestHandler",
-        "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
-        "Code": {
-          "S3Bucket": {
-            "Ref": "LambdaS3Bucket"
-          },
-          "S3Key": {
-            "Ref": "LambdaS3Key"
-          }
-        },
-        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
-        "Environment": {
-          "Variables": {
-            "DB_REGION": {"Ref": "Region"},
-            "SESSION_SECRET": {"Ref": "SessionSecret"},
-            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
-            "USER_TABLE_NAME": {"Ref": "UserTableName"},
-            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
-          }
-        },
-        "Runtime": "nodejs6.10",
-        "Timeout": "10"
-      }
-    },
-    "GetSignoutLambdaPermission": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "Action": "lambda:invokeFunction",
-        "FunctionName": {"Fn::GetAtt": ["GetSignoutFunction", "Arn"]},
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${WhatsdoneApi}/*"}
-      }
-    },
-    "GetDonesFunction": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetDonesFunction"},
-        "Description": "What's Done app",
-        "Handler": "index.getDonesRequestHandler",
-        "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
-        "Code": {
-          "S3Bucket": {
-            "Ref": "LambdaS3Bucket"
-          },
-          "S3Key": {
-            "Ref": "LambdaS3Key"
-          }
-        },
-        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
-        "Environment": {
-          "Variables": {
-            "DB_REGION": {"Ref": "Region"},
-            "SESSION_SECRET": {"Ref": "SessionSecret"},
-            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
-            "USER_TABLE_NAME": {"Ref": "UserTableName"},
-            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
-          }
-        },
-        "Runtime": "nodejs6.10",
-        "Timeout": "10"
-      }
-    },
-    "GetDonesLambdaPermission": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "Action": "lambda:invokeFunction",
-        "FunctionName": {"Fn::GetAtt": ["GetDonesFunction", "Arn"]},
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${WhatsdoneApi}/*"}
-      }
-    },
-    "PostDoneFunction": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-PostDoneFunction"},
-        "Description": "What's Done app",
-        "Handler": "index.postDoneRequestHandler",
-        "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
-        "Code": {
-          "S3Bucket": {
-            "Ref": "LambdaS3Bucket"
-          },
-          "S3Key": {
-            "Ref": "LambdaS3Key"
-          }
-        },
-        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
-        "Environment": {
-          "Variables": {
-            "DB_REGION": {"Ref": "Region"},
-            "SESSION_SECRET": {"Ref": "SessionSecret"},
-            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
-            "USER_TABLE_NAME": {"Ref": "UserTableName"},
-            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
-          }
-        },
-        "Runtime": "nodejs6.10",
-        "Timeout": "10"
-      }
-    },
-    "PostDoneLambdaPermission": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "Action": "lambda:invokeFunction",
-        "FunctionName": {"Fn::GetAtt": ["PostDoneFunction", "Arn"]},
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${WhatsdoneApi}/*"}
-      }
-    },
-    "DeleteDoneFunction": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-DeleteDoneFunction"},
-        "Description": "What's Done app",
-        "Handler": "index.deleteDoneRequestHandler",
-        "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
-        "Code": {
-          "S3Bucket": {
-            "Ref": "LambdaS3Bucket"
-          },
-          "S3Key": {
-            "Ref": "LambdaS3Key"
-          }
-        },
-        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
-        "Environment": {
-          "Variables": {
-            "DB_REGION": {"Ref": "Region"},
-            "SESSION_SECRET": {"Ref": "SessionSecret"},
-            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
-            "USER_TABLE_NAME": {"Ref": "UserTableName"},
-            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
-          }
-        },
-        "Runtime": "nodejs6.10",
-        "Timeout": "10"
-      }
-    },
-    "DeleteDoneLambdaPermission": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "Action": "lambda:invokeFunction",
-        "FunctionName": {"Fn::GetAtt": ["DeleteDoneFunction", "Arn"]},
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${WhatsdoneApi}/*"}
-      }
-    },
-    "UpdateDoneFunction": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-UpdateDoneFunction"},
-        "Description": "What's Done app",
-        "Handler": "index.updateDoneRequestHandler",
-        "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
-        "Code": {
-          "S3Bucket": {
-            "Ref": "LambdaS3Bucket"
-          },
-          "S3Key": {
-            "Ref": "LambdaS3Key"
-          }
-        },
-        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
-        "Environment": {
-          "Variables": {
-            "DB_REGION": {"Ref": "Region"},
-            "SESSION_SECRET": {"Ref": "SessionSecret"},
-            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
-            "USER_TABLE_NAME": {"Ref": "UserTableName"},
-            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
-          }
-        },
-        "Runtime": "nodejs6.10",
-        "Timeout": "10"
-      }
-    },
-    "UpdateDoneLambdaPermission": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "Action": "lambda:invokeFunction",
-        "FunctionName": {"Fn::GetAtt": ["UpdateDoneFunction", "Arn"]},
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${WhatsdoneApi}/*"}
-      }
-    },
-    "WhatsdoneApi": {
+    "RestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
         "Name": "What's Done",
@@ -640,7 +259,7 @@
         }
       }
     },
-    "WhatsdoneApiStage": {
+    "ApiStage": {
       "Type": "AWS::ApiGateway::Stage",
       "Properties": {
         "DeploymentId": {"Ref": "ApiDeployment"},
@@ -650,21 +269,402 @@
           "ThrottlingRateLimit": 10,
           "ThrottlingBurstLimit": 20
         }],
-        "RestApiId": {"Ref": "WhatsdoneApi"},
+        "RestApiId": {"Ref": "RestApi"},
         "StageName": {"Ref": "EnvName"}
       }
     },
     "ApiDeployment": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
-        "RestApiId": {"Ref": "WhatsdoneApi"}
+        "RestApiId": {"Ref": "RestApi"}
+      }
+    },
+    "LambdaFunctionRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyName": "root",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:DescribeLogStreams",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ec2:CreateNetworkInterface",
+                    "ec2:DescribeNetworkInterfaces",
+                    "ec2:DeleteNetworkInterface"
+                  ],
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "cloudwatch:*"
+                  ],
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:*",
+                    "dax:*"
+                  ],
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "kms:Describe*",
+                    "kms:Get*",
+                    "kms:List*"
+                  ],
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "GetRootPageFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetRootPageFunction"},
+        "Description": "What's Done app",
+        "Handler": "index.getRootPageRequestHandler",
+        "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
+        "Code": {
+          "S3Bucket": {
+            "Ref": "LambdaS3Bucket"
+          },
+          "S3Key": {
+            "Ref": "LambdaS3Key"
+          }
+        },
+        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
+        "Environment": {
+          "Variables": {
+            "DB_REGION": {"Ref": "Region"},
+            "SESSION_SECRET": {"Ref": "SessionSecret"},
+            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
+            "USER_TABLE_NAME": {"Ref": "UserTableName"},
+            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
+          }
+        },
+        "Runtime": "nodejs6.10",
+        "Timeout": "10"
+      }
+    },
+    "GetRootPageLambdaPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:invokeFunction",
+        "FunctionName": {"Fn::GetAtt": ["GetRootPageFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${RestApi}/*"}
+      }
+    },
+    "GetSigninFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetSigninFunction"},
+        "Description": "What's Done app",
+        "Handler": "index.getSigninRequestHandler",
+        "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
+        "Code": {
+          "S3Bucket": {
+            "Ref": "LambdaS3Bucket"
+          },
+          "S3Key": {
+            "Ref": "LambdaS3Key"
+          }
+        },
+        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
+        "Environment": {
+          "Variables": {
+            "DB_REGION": {"Ref": "Region"},
+            "SESSION_SECRET": {"Ref": "SessionSecret"},
+            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
+            "USER_TABLE_NAME": {"Ref": "UserTableName"},
+            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
+          }
+        },
+        "Runtime": "nodejs6.10",
+        "Timeout": "10"
+      }
+    },
+    "GetSigninLambdaPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:invokeFunction",
+        "FunctionName": {"Fn::GetAtt": ["GetSigninFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${RestApi}/*"}
+      }
+    },
+    "PostSigninFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-PostSigninFunction"},
+        "Description": "What's Done app",
+        "Handler": "index.postSigninRequestHandler",
+        "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
+        "Code": {
+          "S3Bucket": {
+            "Ref": "LambdaS3Bucket"
+          },
+          "S3Key": {
+            "Ref": "LambdaS3Key"
+          }
+        },
+        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
+        "Environment": {
+          "Variables": {
+            "DB_REGION": {"Ref": "Region"},
+            "SESSION_SECRET": {"Ref": "SessionSecret"},
+            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
+            "USER_TABLE_NAME": {"Ref": "UserTableName"},
+            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
+          }
+        },
+        "Runtime": "nodejs6.10",
+        "Timeout": "10"
+      }
+    },
+    "PostSigninLambdaPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:invokeFunction",
+        "FunctionName": {"Fn::GetAtt": ["PostSigninFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${RestApi}/*"}
+      }
+    },
+    "GetSignoutFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetSignoutFunction"},
+        "Description": "What's Done app",
+        "Handler": "index.signoutRequestHandler",
+        "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
+        "Code": {
+          "S3Bucket": {
+            "Ref": "LambdaS3Bucket"
+          },
+          "S3Key": {
+            "Ref": "LambdaS3Key"
+          }
+        },
+        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
+        "Environment": {
+          "Variables": {
+            "DB_REGION": {"Ref": "Region"},
+            "SESSION_SECRET": {"Ref": "SessionSecret"},
+            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
+            "USER_TABLE_NAME": {"Ref": "UserTableName"},
+            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
+          }
+        },
+        "Runtime": "nodejs6.10",
+        "Timeout": "10"
+      }
+    },
+    "GetSignoutLambdaPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:invokeFunction",
+        "FunctionName": {"Fn::GetAtt": ["GetSignoutFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${RestApi}/*"}
+      }
+    },
+    "GetDonesFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetDonesFunction"},
+        "Description": "What's Done app",
+        "Handler": "index.getDonesRequestHandler",
+        "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
+        "Code": {
+          "S3Bucket": {
+            "Ref": "LambdaS3Bucket"
+          },
+          "S3Key": {
+            "Ref": "LambdaS3Key"
+          }
+        },
+        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
+        "Environment": {
+          "Variables": {
+            "DB_REGION": {"Ref": "Region"},
+            "SESSION_SECRET": {"Ref": "SessionSecret"},
+            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
+            "USER_TABLE_NAME": {"Ref": "UserTableName"},
+            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
+          }
+        },
+        "Runtime": "nodejs6.10",
+        "Timeout": "10"
+      }
+    },
+    "GetDonesLambdaPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:invokeFunction",
+        "FunctionName": {"Fn::GetAtt": ["GetDonesFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${RestApi}/*"}
+      }
+    },
+    "PostDoneFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-PostDoneFunction"},
+        "Description": "What's Done app",
+        "Handler": "index.postDoneRequestHandler",
+        "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
+        "Code": {
+          "S3Bucket": {
+            "Ref": "LambdaS3Bucket"
+          },
+          "S3Key": {
+            "Ref": "LambdaS3Key"
+          }
+        },
+        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
+        "Environment": {
+          "Variables": {
+            "DB_REGION": {"Ref": "Region"},
+            "SESSION_SECRET": {"Ref": "SessionSecret"},
+            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
+            "USER_TABLE_NAME": {"Ref": "UserTableName"},
+            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
+          }
+        },
+        "Runtime": "nodejs6.10",
+        "Timeout": "10"
+      }
+    },
+    "PostDoneLambdaPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:invokeFunction",
+        "FunctionName": {"Fn::GetAtt": ["PostDoneFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${RestApi}/*"}
+      }
+    },
+    "DeleteDoneFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-DeleteDoneFunction"},
+        "Description": "What's Done app",
+        "Handler": "index.deleteDoneRequestHandler",
+        "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
+        "Code": {
+          "S3Bucket": {
+            "Ref": "LambdaS3Bucket"
+          },
+          "S3Key": {
+            "Ref": "LambdaS3Key"
+          }
+        },
+        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
+        "Environment": {
+          "Variables": {
+            "DB_REGION": {"Ref": "Region"},
+            "SESSION_SECRET": {"Ref": "SessionSecret"},
+            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
+            "USER_TABLE_NAME": {"Ref": "UserTableName"},
+            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
+          }
+        },
+        "Runtime": "nodejs6.10",
+        "Timeout": "10"
+      }
+    },
+    "DeleteDoneLambdaPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:invokeFunction",
+        "FunctionName": {"Fn::GetAtt": ["DeleteDoneFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${RestApi}/*"}
+      }
+    },
+    "UpdateDoneFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-UpdateDoneFunction"},
+        "Description": "What's Done app",
+        "Handler": "index.updateDoneRequestHandler",
+        "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
+        "Code": {
+          "S3Bucket": {
+            "Ref": "LambdaS3Bucket"
+          },
+          "S3Key": {
+            "Ref": "LambdaS3Key"
+          }
+        },
+        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
+        "Environment": {
+          "Variables": {
+            "DB_REGION": {"Ref": "Region"},
+            "SESSION_SECRET": {"Ref": "SessionSecret"},
+            "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
+            "USER_TABLE_NAME": {"Ref": "UserTableName"},
+            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
+          }
+        },
+        "Runtime": "nodejs6.10",
+        "Timeout": "10"
+      }
+    },
+    "UpdateDoneLambdaPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:invokeFunction",
+        "FunctionName": {"Fn::GetAtt": ["UpdateDoneFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${Region}:${AWS::AccountId}:${RestApi}/*"}
       }
     }
   },
   "Outputs": {
     "ApiRootUrl": {
       "Description": "Root URL of What's Done API",
-      "Value": {"Fn::Sub": "https://${WhatsdoneApi}.execute-api.${Region}.amazonaws.com/${EnvName}"}
+      "Value": {"Fn::Sub": "https://${RestApi}.execute-api.${Region}.amazonaws.com/${EnvName}"}
     }
   }
 }
