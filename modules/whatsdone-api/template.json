@@ -366,7 +366,7 @@
     "GetRootPageFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": "whatsdone-GetRootPageFunction",
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetRootPageFunction"},
         "Description": "What's Done app",
         "Handler": "index.getRootPageRequestHandler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -404,7 +404,7 @@
     "GetSigninFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": "whatsdone-GetSigninFunction",
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetSigninFunction"},
         "Description": "What's Done app",
         "Handler": "index.getSigninRequestHandler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -442,7 +442,7 @@
     "PostSigninFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": "whatsdone-PostSigninFunction",
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-PostSigninFunction"},
         "Description": "What's Done app",
         "Handler": "index.postSigninRequestHandler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -480,7 +480,7 @@
     "GetSignoutFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": "whatsdone-GetSignoutFunction",
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetSignoutFunction"},
         "Description": "What's Done app",
         "Handler": "index.signoutRequestHandler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -518,7 +518,7 @@
     "GetDonesFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": "whatsdone-GetDonesFunction",
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetDonesFunction"},
         "Description": "What's Done app",
         "Handler": "index.getDonesRequestHandler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -556,7 +556,7 @@
     "PostDoneFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": "whatsdone-PostDoneFunction",
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-PostDoneFunction"},
         "Description": "What's Done app",
         "Handler": "index.postDoneRequestHandler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -594,7 +594,7 @@
     "DeleteDoneFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": "whatsdone-DeleteDoneFunction",
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-DeleteDoneFunction"},
         "Description": "What's Done app",
         "Handler": "index.deleteDoneRequestHandler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -632,7 +632,7 @@
     "UpdateDoneFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": "whatsdone-UpdateDoneFunction",
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-UpdateDoneFunction"},
         "Description": "What's Done app",
         "Handler": "index.updateDoneRequestHandler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
