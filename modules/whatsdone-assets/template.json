@@ -7,17 +7,21 @@
     }
   },
   "Resources": {
-    "S3Bucket": {
+    "Bucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "BucketName": {"Ref": "BucketName"},
-        "AccessControl": "PublicRead"
+        "AccessControl": "PublicRead",
+        "WebsiteConfiguration": {
+          "ErrorDocument": "error.html",
+          "IndexDocument": "index.html"
+        }
       }
     },
-    "S3BucketPolicy": {
+    "BucketPolicy": {
       "Type": "AWS::S3::BucketPolicy",
       "Properties": {
-        "Bucket": {"Ref": "S3Bucket"},
+        "Bucket": {"Ref": "Bucket"},
         "PolicyDocument": {
           "Version": "2008-10-17",
           "Statement": [{
@@ -25,19 +29,16 @@
             "Effect": "Allow",
             "Principal": "*",
             "Action": ["s3:GetObject"],
-            "Resource": {"Fn::Sub": "arn:aws:s3:::${S3Bucket}/*"}
+            "Resource": {"Fn::Sub": "arn:aws:s3:::${Bucket}/*"}
           }]
         }
       }
     }
   },
   "Outputs": {
-    "AssetsBucket": {
-      "Description": "Bucket for What's done app assets",
-      "Value": {"Fn::Join": ["", [
-        "https://",
-        {"Fn::GetAtt": ["S3Bucket", "DomainName"]}
-      ]]}
+    "BucketDomain": {
+      "Description": "Domain of the Bucket for What's done app assets",
+      "Value": {"Fn::GetAtt": ["Bucket", "DomainName"]}
     }
   }
 }

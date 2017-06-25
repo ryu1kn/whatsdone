@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "What's Done Ccontent Delivery",
+  "Description": "What's Done Content Delivery",
   "Parameters": {
     "CloudFrontOriginAccessIdentity": {
       "Type": "String"
@@ -57,6 +57,7 @@
               }
             }
           ],
+          "DefaultRootObject": "index.html",
           "PriceClass": "PriceClass_All",
           "ViewerCertificate": {
             "AcmCertificateArn": "arn:aws:acm:us-east-1:650892143834:certificate/00cb96a1-2a06-4216-a30d-e810f2a6e6a8",

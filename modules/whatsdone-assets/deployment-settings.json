@@ -7,7 +7,7 @@
     {
       "id": "create-assets-bucket",
       "type": "cf-stack",
-      "stackName": "assetsBucket",
+      "stackName": "module",
       "stackTemplate": {
         "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
       },

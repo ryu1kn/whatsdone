@@ -21,10 +21,14 @@ const paths = {
   images: {
     in: SRC_DIR + '/images/**/*',
     out: DIST_DIR + '/images'
+  },
+  html: {
+    in: SRC_DIR + '/index.html',
+    out: DIST_DIR
   }
 };
 
-gulp.task('build', ['compile', 'copyImages']);
+gulp.task('build', ['compile', 'copyHtml', 'copyImages']);
 
 gulp.task('compile', ['compilejs', 'compilecss']);
 
@@ -38,6 +42,11 @@ gulp.task('compilecss', () =>
   gulp.src(paths.css.in)
     .pipe(less())
     .pipe(gulp.dest(paths.css.out))
+);
+
+gulp.task('copyHtml', () =>
+  gulp.src(paths.html.in)
+    .pipe(gulp.dest(paths.html.out))
 );
 
 gulp.task('copyImages', () =>
