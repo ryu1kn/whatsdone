@@ -29,6 +29,7 @@
     "node": "6.10"
   },
   "scripts": {
+    "deploy": "kumo deploy-module --verbose",
     "build": "gulp build",
     "watch": "gulp",
     "lint": "eslint src"

@@ -1,0 +1,6 @@
+{
+  "name": "whatsdone-env",
+  "scripts": {
+    "deploy": "kumo deploy-module --verbose"
+  }
+}

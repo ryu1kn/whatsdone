@@ -15,6 +15,14 @@ Personal activity tracker. Take memos of what I (or we) have done today.
 - frontend
   - React + flux
 
+### Deploying module
+
+For example, if you want to deploy whatsdone-api module, execute following:
+
+```sh
+$ AWS_PROFILE=your-profile ./deploy-module.sh -m whatsdone-api -- --env prod --region ap-southeast-2
+```
+
 ### Tools
 
 * Migrate done data from mongodb to dynamodb (written in Go). See its [README](./tools/copy-done-table/README.md)

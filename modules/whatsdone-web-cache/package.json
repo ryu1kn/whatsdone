@@ -1,0 +1,6 @@
+{
+  "name": "whatsdone-web-cache",
+  "scripts": {
+    "deploy": "kumo deploy-module --verbose"
+  }
+}

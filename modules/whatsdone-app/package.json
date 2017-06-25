@@ -1,0 +1,6 @@
+{
+  "name": "whatsdone-app",
+  "scripts": {
+    "deploy": "kumo deploy-module --verbose"
+  }
+}
