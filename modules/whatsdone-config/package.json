@@ -1,0 +1,9 @@
+{
+  "name": "whatsdone-config",
+  "scripts": {
+    "deploy": "kumo deploy-module --verbose"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.77.0"
+  }
+}

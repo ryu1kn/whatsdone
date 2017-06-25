@@ -1,8 +1,8 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "whatsdone service wide resources",
+  "Description": "What's Done Service Wide Resources",
   "Resources": {
-    "WhatsdoneBucket": {
+    "Bucket": {
       "Type" : "AWS::S3::Bucket",
       "DeletionPolicy": "Retain",
       "Properties" : {
@@ -11,10 +11,10 @@
     }
   },
   "Outputs": {
-    "WhatsdoneBucket": {
+    "Bucket": {
       "Description": "Bucket for the project",
       "Value": {
-        "Ref": "WhatsdoneBucket"
+        "Ref": "Bucket"
       }
     }
   }

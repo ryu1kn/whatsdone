@@ -1,0 +1,12 @@
+{
+  "moduleName": "whatsdone-config",
+  "tasks": [
+    {
+      "id": "export-configs",
+      "type": "custom",
+      "run": {
+        "script": "node ./create-cloudfront-originaccessidentity > $KUMO_TASK_OUTPUTS_FILE"
+      }
+    }
+  ]
+}

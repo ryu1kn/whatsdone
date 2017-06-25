@@ -1,16 +1,36 @@
 {
   "moduleName": "whatsdone-web-cache",
-  "dependsOn": ["../whatsdone-env"],
+  "dependsOn": [
+    "../whatsdone-config",
+    "../whatsdone-env",
+    "../whatsdone-assets"
+  ],
+  "config": {
+    "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\""
+  },
   "tasks": [
+    {
+      "id": "export-public-domain-name",
+      "type": "custom",
+      "run": {
+        "script": "echo \"{\\\"publicDomain\\\":\\\"$PUBLIC_DOMAIN_NAME\\\"}\" > $KUMO_TASK_OUTPUTS_FILE",
+        "envVars": {
+          "PUBLIC_DOMAIN_NAME": {"$ref": "#/_deploymentConfig/publicDomain"}
+        }
+      }
+    },
     {
       "id": "prepare-cloudfront",
       "type": "cf-stack",
-      "stackName": "cloudfront",
+      "stackName": "module",
       "stackTemplate": {
         "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
       },
       "stackParams": {
-        "WhatsdoneBucket": {"$ref": "#/_deploymentOutputs/whatsdone-env/WhatsdoneBucket"}
+        "PublicDomain": {"$ref": "#/_deploymentConfig/publicDomain"},
+        "CloudFrontOriginAccessIdentity": {"$ref": "#/_deploymentOutputs/whatsdone-config/CloudFrontOriginAccessIdentity/Id"},
+        "LoggingBucket": {"$ref": "#/_deploymentOutputs/whatsdone-env/Bucket"},
+        "AssetBucketDomain": {"$ref": "#/_deploymentOutputs/whatsdone-assets/BucketDomain"}
       }
     }
   ]

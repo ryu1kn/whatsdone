@@ -1,15 +1,20 @@
 {
   "moduleName": "whatsdone-gateway",
   "dependsOn": ["../whatsdone-web-cache"],
+  "config": {
+    "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\""
+  },
   "tasks": [
     {
       "id": "prepare-recordset",
       "type": "cf-stack",
-      "stackName": "recordset",
+      "stackName": "module",
       "stackTemplate": {
         "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
       },
       "stackParams": {
+        "HostedZoneId": {"$ref": "#/_deploymentConfig/hostedZoneId"},
+        "DomainName": {"$ref": "#/_deploymentOutputs/whatsdone-web-cache/publicDomain"},
         "CloudFrontDistributionDomainName": {"$ref": "#/_deploymentOutputs/whatsdone-web-cache/CloudFrontDistributionDomainName"}
       }
     }

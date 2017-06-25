@@ -4,7 +4,7 @@
     {
       "id": "prepare-root-bucket",
       "type": "cf-stack",
-      "stackName": "rootBucket",
+      "stackName": "module",
       "stackTemplate": {
         "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
       }
