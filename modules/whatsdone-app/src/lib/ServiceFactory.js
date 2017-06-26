@@ -15,6 +15,12 @@ class ServiceFactory {
     this._env = params.env;
   }
 
+  createConfig() {
+    return {
+      webappDomain: process.env.WEBAPP_DOMAIN
+    };
+  }
+
   createViewDirectoryPath() {
     return path.join(__dirname, 'views');
   }

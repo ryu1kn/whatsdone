@@ -8,6 +8,10 @@ class ServiceLocator {
     this._cache = {};
   }
 
+  get config() {
+    return this._get('config');
+  }
+
   get accessLogger() {
     return this._get('accessLogger');
   }

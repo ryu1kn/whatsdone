@@ -1,6 +1,9 @@
 {
     "moduleName": "whatsdone-api",
-    "dependsOn": ["../whatsdone-app"],
+    "dependsOn": [
+      "../whatsdone-app",
+      "../whatsdone-web-cache"
+    ],
     "config": {
         "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\" | kumo decrypt --profile $KUMO_ENV --inputFormat json"
     },
@@ -15,6 +18,7 @@
             "stackParams": {
               "EnvName": {"$ref": "#/_env"},
               "DbRegion": {"$ref": "#/_taskRegion"},
+              "WebappDomain": {"$ref": "#/_deploymentOutputs/whatsdone-web-cache/publicDomain"},
               "DoneTableName": {"$ref": "#/_deploymentConfig/doneTableName"},
               "UserTableName": {"$ref": "#/_deploymentConfig/userTableName"},
               "SessionTableName": {"$ref": "#/_deploymentConfig/sessionTableName"},
