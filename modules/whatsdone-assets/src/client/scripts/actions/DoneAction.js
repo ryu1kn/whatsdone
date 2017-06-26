@@ -1,12 +1,14 @@
 
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var DoneConstant = require('../constants/DoneConstant');
-var request = require('request-promise');
+const AppDispatcher = require('../dispatcher/AppDispatcher');
+const Const = require('../Const');
+const DoneConstant = require('../constants/DoneConstant');
+const request = require('request-promise');
+const url = require('url');
 
 function postDone(doneItem) {
   const options = {
     method: 'POST',
-    uri: `${window.location.origin}/dones`,
+    uri: url.resolve(Const.API_ORIGIN, '/dones'),
     form: doneItem
   };
   return request(options).then(body => JSON.parse(body));
@@ -18,7 +20,7 @@ function postDone(doneItem) {
 function deleteDone(doneId) {
   const options = {
     method: 'DELETE',
-    uri: `${window.location.origin}/dones/${doneId}`
+    uri: url.resolve(Const.API_ORIGIN, `/dones/${doneId}`)
   };
   return request(options).then(body => JSON.parse(body));
 }

@@ -1,8 +1,10 @@
 
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var DoneConstant = require('../constants/DoneConstant');
-var request = require('request-promise');
+const AppDispatcher = require('../dispatcher/AppDispatcher');
+const Const = require('../Const');
+const EventEmitter = require('events').EventEmitter;
+const DoneConstant = require('../constants/DoneConstant');
+const request = require('request-promise');
+const url = require('url');
 
 var CHANGE_EVENT = 'change';
 
@@ -10,7 +12,7 @@ var CHANGE_EVENT = 'change';
 var _dones = [];
 
 function load() {
-  return request.get(`${window.location.origin}/dones`)
+  return request.get(url.resolve(Const.API_ORIGIN, '/dones'))
     .then(body => JSON.parse(body));
 }
 
