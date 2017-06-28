@@ -1,9 +1,12 @@
 
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 const SRC_DIR = path.resolve(__dirname, 'src');
 const BUILD_DIR = path.resolve(__dirname, 'dist');
+
+const extractLess = new ExtractTextPlugin('style.css');
 
 module.exports = {
   entry: [
@@ -18,8 +21,15 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        include: SRC_DIR,
+        include: `${SRC_DIR}/client`,
         loader: 'babel-loader'
+      },
+      {
+        test: /\.less$/,
+        use: extractLess.extract({
+          use: ['css-loader', 'less-loader'],
+          fallback: 'style-loader'
+        })
       }
     ]
   },
@@ -27,6 +37,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: `${SRC_DIR}/index.ejs`,
       filename: `${BUILD_DIR}/index.html`
-    })
+    }),
+    extractLess
   ]
 };
