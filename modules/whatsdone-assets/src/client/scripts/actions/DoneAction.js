@@ -2,27 +2,23 @@
 const AppDispatcher = require('../dispatcher/AppDispatcher');
 const Const = require('../Const');
 const DoneConstant = require('../constants/DoneConstant');
-const request = require('request-promise');
 const url = require('url');
 
 function postDone(doneItem) {
-  const options = {
+  const uri = url.resolve(Const.API_ORIGIN, '/dones');
+  const params = {
     method: 'POST',
-    uri: url.resolve(Const.API_ORIGIN, '/dones'),
-    form: doneItem
+    body: new FormData(doneItem)
   };
-  return request(options).then(body => JSON.parse(body));
+  return fetch(uri, params).then(response => response.json());
 }
 
 /**
  * @param {string} doneId
  */
 function deleteDone(doneId) {
-  const options = {
-    method: 'DELETE',
-    uri: url.resolve(Const.API_ORIGIN, `/dones/${doneId}`)
-  };
-  return request(options).then(body => JSON.parse(body));
+  const uri = url.resolve(Const.API_ORIGIN, `/dones/${doneId}`);
+  return fetch(uri, {method: 'DELETE'}).then(response => response.json());
 }
 
 var DoneAction = {

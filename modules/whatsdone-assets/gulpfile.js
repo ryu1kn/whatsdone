@@ -1,6 +1,4 @@
 
-const browserify = require('browserify');
-const source = require('vinyl-source-stream');
 const gulp = require('gulp');
 const less = require('gulp-less');
 
@@ -8,12 +6,6 @@ const SRC_DIR = './src';
 const DIST_DIR = './dist';
 
 const paths = {
-  js: {
-    inEntry: SRC_DIR + '/client/scripts/app.js',
-    inAll: SRC_DIR + '/client/scripts/**/*.js',
-    outName: 'app.js',
-    outPath: DIST_DIR + '/scripts'
-  },
   css: {
     in: SRC_DIR + '/stylesheets/**/*.less',
     out: DIST_DIR + '/css'
@@ -28,15 +20,7 @@ const paths = {
   }
 };
 
-gulp.task('build', ['compile', 'copyHtml', 'copyImages']);
-
-gulp.task('compile', ['compilejs', 'compilecss']);
-
-gulp.task('compilejs', () =>
-  browserify(paths.js.inEntry).bundle()
-    .pipe(source(paths.js.outName))
-    .pipe(gulp.dest(paths.js.outPath))
-);
+gulp.task('build', ['compilecss', 'copyHtml', 'copyImages']);
 
 gulp.task('compilecss', () =>
   gulp.src(paths.css.in)
@@ -55,9 +39,8 @@ gulp.task('copyImages', () =>
 );
 
 gulp.task('watch', () => {
-  gulp.watch(paths.js.inAll, ['compilejs']);
   gulp.watch(paths.css.in, ['compilecss']);
   gulp.watch(paths.images.in, ['copyImages']);
 });
 
-gulp.task('default', ['compilejs', 'compilecss', 'watch']);
+gulp.task('default', ['compilecss', 'watch']);
