@@ -1,5 +1,6 @@
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
@@ -38,6 +39,7 @@ module.exports = {
       template: `${SRC_DIR}/index.ejs`,
       filename: `${BUILD_DIR}/index.html`
     }),
+    new FaviconsWebpackPlugin(`${SRC_DIR}/images/favicon.png`),
     extractLess
   ]
 };

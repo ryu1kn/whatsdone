@@ -14,10 +14,7 @@
   "scripts": {
     "deploy": "kumo deploy-module --verbose",
     "prebuild": "rm -rf ./dist",
-    "build": "npm run build:js && npm run build:nonjs",
-    "build:js": "webpack",
-    "build:nonjs": "gulp build",
-    "build:nonjs-watch": "gulp",
+    "build": "webpack",
     "lint": "eslint src"
   },
   "devDependencies": {
@@ -30,7 +27,7 @@
     "eslint-config-xo": "^0.17.0",
     "eslint-plugin-react": "^6.8.0",
     "extract-text-webpack-plugin": "^2.1.2",
-    "gulp": "~3.9.1",
+    "favicons-webpack-plugin": "0.0.7",
     "html-webpack-plugin": "^2.29.0",
     "less": "^2.7.2",
     "less-loader": "^4.0.4",
