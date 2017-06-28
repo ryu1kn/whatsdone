@@ -11,9 +11,12 @@
   "engines": {
     "node": "6.10"
   },
+  "config": {
+    "buildDir": "./dist"
+  },
   "scripts": {
     "deploy": "kumo deploy-module --verbose",
-    "prebuild": "rm -rf ./dist",
+    "prebuild": "rm -rf $npm_package_config_buildDir",
     "build": "webpack",
     "lint": "eslint src"
   },
