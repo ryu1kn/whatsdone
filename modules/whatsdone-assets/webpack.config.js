@@ -1,4 +1,5 @@
 
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 const SRC_DIR = path.resolve(__dirname, 'src');
@@ -21,5 +22,11 @@ module.exports = {
         loader: 'babel-loader'
       }
     ]
-  }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: `${SRC_DIR}/index.ejs`,
+      filename: `${BUILD_DIR}/index.html`
+    })
+  ]
 };
