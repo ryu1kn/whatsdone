@@ -11,7 +11,7 @@
         {
             "id": "deploy-api",
             "type": "cf-stack",
-            "stackName": "api",
+            "stackName": "module",
             "stackTemplate": {
               "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
             },
