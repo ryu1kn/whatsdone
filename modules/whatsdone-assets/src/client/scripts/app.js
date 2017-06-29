@@ -1,7 +1,7 @@
 
 require('../../stylesheets/base.less');
 
-var React = require('react');   // eslint-disable-line no-unused-vars
+var React = require('react');
 var ReactDOM = require('react-dom');
 
 var DoneBox = require('./components/DoneBox.react');

@@ -60,3 +60,6 @@ rules:
   - error
   - anonymous: always
     named: never
+  padded-blocks:
+  - error
+  - classes: always
