@@ -17,7 +17,7 @@
   "scripts": {
     "deploy": "kumo deploy-module --verbose",
     "prebuild": "rm -rf $npm_package_config_buildDir",
-    "build": "webpack",
+    "build": "webpack --optimize-minimize",
     "lint": "eslint src"
   },
   "devDependencies": {
