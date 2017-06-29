@@ -36,6 +36,7 @@
               "QueryString": true
             },
             "AllowedMethods": ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"],
+            "Compress": true,
             "DefaultTTL": 0,
             "MaxTTL": 0,
             "MinTTL": 0,
@@ -43,6 +44,7 @@
             "ViewerProtocolPolicy": "https-only"
           },
           "Enabled": true,
+          "HttpVersion": "http2",
           "Logging": {
             "Bucket": {"Fn::Sub": "${LoggingBucket}.s3.amazonaws.com"},
             "Prefix": "cloudfront-whatsdone",

@@ -11,7 +11,11 @@ var CHANGE_EVENT = 'change';
 var _dones = [];
 
 function load() {
-  return fetch(url.resolve(Const.API_ORIGIN, '/dones'))
+  const uri = url.resolve(Const.API_ORIGIN, '/dones');
+  const options = {
+    headers: {'Accept-Encoding': 'gzip, deflate'}
+  };
+  return fetch(uri, options)
     .then(response => response.json());
 }
 

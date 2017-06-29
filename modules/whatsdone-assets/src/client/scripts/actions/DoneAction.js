@@ -8,6 +8,7 @@ function postDone(doneItem) {
   const uri = url.resolve(Const.API_ORIGIN, '/dones');
   const params = {
     method: 'POST',
+    headers: {'Accept-Encoding': 'gzip, deflate'},
     body: new FormData(doneItem)
   };
   return fetch(uri, params).then(response => response.json());
@@ -18,7 +19,11 @@ function postDone(doneItem) {
  */
 function deleteDone(doneId) {
   const uri = url.resolve(Const.API_ORIGIN, `/dones/${doneId}`);
-  return fetch(uri, {method: 'DELETE'}).then(response => response.json());
+  const options = {
+    method: 'DELETE',
+    headers: {'Accept-Encoding': 'gzip, deflate'}
+  };
+  return fetch(uri, options).then(response => response.json());
 }
 
 var DoneAction = {
