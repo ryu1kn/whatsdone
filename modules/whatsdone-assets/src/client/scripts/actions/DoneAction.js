@@ -1,12 +1,11 @@
 
 const AppDispatcher = require('../dispatcher/AppDispatcher');
-const Const = require('../Const');
 const DoneConstant = require('../constants/DoneConstant');
 const url = require('url');
 const sendAjax = require('../SendAjax');
 
 function postDone(doneItem) {
-  const uri = url.resolve(Const.API_ORIGIN, '/dones');
+  const uri = url.resolve(WhatsDone.API_ORIGIN, '/dones');
   const options = {
     method: 'POST',
     body: new FormData(doneItem)
@@ -18,7 +17,7 @@ function postDone(doneItem) {
  * @param {string} doneId
  */
 function deleteDone(doneId) {
-  const uri = url.resolve(Const.API_ORIGIN, `/dones/${doneId}`);
+  const uri = url.resolve(WhatsDone.API_ORIGIN, `/dones/${doneId}`);
   const options = {method: 'DELETE'};
   return sendAjax(uri, options);
 }
