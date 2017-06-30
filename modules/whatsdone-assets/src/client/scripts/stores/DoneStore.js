@@ -3,6 +3,7 @@ const AppDispatcher = require('../dispatcher/AppDispatcher');
 const Const = require('../Const');
 const EventEmitter = require('events').EventEmitter;
 const DoneConstant = require('../constants/DoneConstant');
+const sendAjax = require('../SendAjax');
 const url = require('url');
 
 var CHANGE_EVENT = 'change';
@@ -11,12 +12,7 @@ var CHANGE_EVENT = 'change';
 var _dones = [];
 
 function load() {
-  const uri = url.resolve(Const.API_ORIGIN, '/dones');
-  const options = {
-    headers: {'Accept-Encoding': 'gzip, deflate'}
-  };
-  return fetch(uri, options)
-    .then(response => response.json());
+  return sendAjax(url.resolve(Const.API_ORIGIN, '/dones'));
 }
 
 // TODO: Instead of defining normalise functions,
@@ -82,8 +78,8 @@ var DoneStore = Object.assign({}, EventEmitter.prototype, {
     load().then(response => {
       _dones = normaliseDoneItems(response);
       me.emit(CHANGE_EVENT);
-    }).catch(function (error) {
-      console.error(error);
+    }).catch(e => {
+      console.error(e.stack);
     });
   },
 

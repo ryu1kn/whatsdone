@@ -3,15 +3,15 @@ const AppDispatcher = require('../dispatcher/AppDispatcher');
 const Const = require('../Const');
 const DoneConstant = require('../constants/DoneConstant');
 const url = require('url');
+const sendAjax = require('../SendAjax');
 
 function postDone(doneItem) {
   const uri = url.resolve(Const.API_ORIGIN, '/dones');
-  const params = {
+  const options = {
     method: 'POST',
-    headers: {'Accept-Encoding': 'gzip, deflate'},
     body: new FormData(doneItem)
   };
-  return fetch(uri, params).then(response => response.json());
+  return sendAjax(uri, options);
 }
 
 /**
@@ -19,11 +19,8 @@ function postDone(doneItem) {
  */
 function deleteDone(doneId) {
   const uri = url.resolve(Const.API_ORIGIN, `/dones/${doneId}`);
-  const options = {
-    method: 'DELETE',
-    headers: {'Accept-Encoding': 'gzip, deflate'}
-  };
-  return fetch(uri, options).then(response => response.json());
+  const options = {method: 'DELETE'};
+  return sendAjax(uri, options);
 }
 
 var DoneAction = {
@@ -47,8 +44,8 @@ var DoneAction = {
         actionType: DoneConstant.DONE_CREATE_COMPLETE,
         item: updatedItem
       });
-    }).catch(function (reason) {
-      console.error(reason);  // eslint-disable-line no-console
+    }).catch(e => {
+      console.error(e.stack);  // eslint-disable-line no-console
     });
   },
 

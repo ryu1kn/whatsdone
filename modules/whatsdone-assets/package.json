@@ -15,7 +15,7 @@
     "buildDir": "./dist"
   },
   "scripts": {
-    "dev-server": "webpack-dev-server --content-base $npm_package_config_buildDir",
+    "start:dev": "webpack-dev-server --content-base $npm_package_config_buildDir",
     "deploy": "kumo deploy-module --verbose",
     "prebuild": "rm -rf $npm_package_config_buildDir",
     "build": "webpack --optimize-minimize",
