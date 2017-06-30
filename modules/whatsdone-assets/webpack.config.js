@@ -10,16 +10,13 @@ const BUILD_DIR = path.resolve(__dirname, process.env.npm_package_config_buildDi
 const extractLess = new ExtractTextPlugin('style.css');
 
 module.exports = {
-  entry: {
-    config: path.resolve(__dirname, 'app.config.js'),
-    build: [
-      'whatwg-fetch',
-      `${SRC_DIR}/client/scripts/app.js`
-    ]
-  },
+  entry: [
+    'whatwg-fetch',
+    `${SRC_DIR}/client/scripts/app.js`
+  ],
   output: {
     path: BUILD_DIR,
-    filename: '[name].js'
+    filename: 'build.js'
   },
   module: {
     rules: [

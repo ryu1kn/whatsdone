@@ -1,4 +1,5 @@
+/* globals window */
 
-global.WhatsDone = {
+window.WhatsDone = {
   API_ORIGIN: 'http://localhost:8081'
 };
