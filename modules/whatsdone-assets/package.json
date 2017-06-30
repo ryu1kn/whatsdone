@@ -15,11 +15,14 @@
     "buildDir": "./dist"
   },
   "scripts": {
+    "prestart:dev": "npm run webpack",
     "start:dev": "webpack-dev-server --content-base $npm_package_config_buildDir",
+    "start:api": "node api-server.js",
     "deploy": "kumo deploy-module --verbose",
     "prebuild": "rm -rf $npm_package_config_buildDir",
-    "build": "webpack --optimize-minimize",
-    "postbuild": "cp app.config.js $npm_package_config_buildDir",
+    "build": "npm run webpack",
+    "webpack": "webpack --optimize-minimize",
+    "postbuild": "cp app.config.js src/signin.html $npm_package_config_buildDir",
     "lint": "eslint src"
   },
   "devDependencies": {
@@ -27,10 +30,12 @@
     "babel-loader": "^7.1.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "cors": "^2.8.3",
     "css-loader": "^0.28.4",
     "eslint": "^3.12.2",
     "eslint-config-xo": "^0.17.0",
     "eslint-plugin-react": "^6.8.0",
+    "express": "^4.15.3",
     "extract-text-webpack-plugin": "^2.1.2",
     "favicons-webpack-plugin": "0.0.7",
     "html-webpack-plugin": "^2.29.0",
