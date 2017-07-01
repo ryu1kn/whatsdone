@@ -1,11 +1,15 @@
 
+const DEFAULT_OPTIONS = {
+  mode: 'cors',
+  credentials: 'include'
+};
 const DEFAULT_HEADERS = {
   'Accept-Encoding': 'gzip, deflate'
 };
 
 module.exports = (url, options = {}) => {
-  const headers = Object.assign({}, options.headers, DEFAULT_HEADERS);
-  const finalOptions = Object.assign({}, options, {headers});
+  const headers = Object.assign({}, DEFAULT_HEADERS, options.headers);
+  const finalOptions = Object.assign({}, DEFAULT_OPTIONS, options, {headers});
   return fetch(url, finalOptions)
     .then(response => parse(response, getParseOptions(options)));
 };
