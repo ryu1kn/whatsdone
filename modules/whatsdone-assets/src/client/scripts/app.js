@@ -1,13 +1,22 @@
 
-require('../../stylesheets/base.less');
-require('../../stylesheets/signin.less');
+import '../../stylesheets/base.less';
+import '../../stylesheets/signin.less';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
-var DoneBox = require('./components/DoneBox.react');
+import SigninPage from './components/Signin.react';
+import DoneBox from './components/DoneBox.react';
 
 ReactDOM.render(
-  <DoneBox />,
+  (
+    <Router>
+      <Switch>
+        <Route exact path="/" component={DoneBox} />
+        <Route path="/signin" component={SigninPage} />
+      </Switch>
+    </Router>
+  ),
   document.getElementById('content')
 );

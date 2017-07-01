@@ -12,6 +12,10 @@ app.get('/dones', cors(corsOptions), (req, res) => {
   res.sendStatus(303);
 });
 
+app.post('/signin', cors(corsOptions), (req, res) => {
+  res.sendStatus(200);
+});
+
 app.get('*', function (req, res) {
   res.sendStatus(404);
 });

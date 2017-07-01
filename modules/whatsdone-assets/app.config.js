@@ -1,5 +1,5 @@
 /* globals window */
 
 window.WhatsDone = {
-  API_ORIGIN: 'http://localhost:8081'
+  API_ORIGIN: 'https://whatsdone-api.ryuichi.io'
 };

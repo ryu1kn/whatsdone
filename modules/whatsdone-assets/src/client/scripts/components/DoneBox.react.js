@@ -1,11 +1,12 @@
 
 // XXX: Rename this to DoneApp. This component is a controller-view
 
-var React = require('react');
-var DoneStore = require('../stores/DoneStore');
+import React from 'react';
+import {Link} from 'react-router-dom';
+import DoneStore from '../stores/DoneStore';
 
-var DoneHistory = require('./DoneHistory.react');
-var DoneForm = require('./DoneForm.react');
+import DoneHistory from './DoneHistory.react';
+import DoneForm from './DoneForm.react';
 
 /**
  * Retrieve the current DONE data from the DoneStore
@@ -38,6 +39,7 @@ var DoneBox = React.createClass({
   render: function () {
     return (
       <div className="donebox container">
+        <Link to="/signin">To Sign in</Link>
         <h2 className="donebox-title page-header">What's Done?</h2>
         <DoneForm />
         <DoneHistory data={this.state.data} />
