@@ -74,7 +74,7 @@
                       "responseParameters": {
                         "method.response.header.Access-Control-Allow-Methods": "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'",
                         "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
-                        "method.response.header.Access-Control-Allow-Origin": {"Fn::Sub": "'${WebappDomain}'"}
+                        "method.response.header.Access-Control-Allow-Origin": {"Fn::Sub": "'https://${WebappDomain}'"}
                       }
                     }
                   },
@@ -245,7 +245,7 @@
         "Environment": {
           "Variables": {
             "DB_REGION": {"Ref": "DbRegion"},
-            "WEBAPP_DOMAIN": {"Ref": "WebappDomain"},
+            "WEBAPP_ORIGIN": {"Fn::Sub": "https://${WebappDomain}"},
             "SESSION_SECRET": {"Ref": "SessionSecret"},
             "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
             "USER_TABLE_NAME": {"Ref": "UserTableName"},

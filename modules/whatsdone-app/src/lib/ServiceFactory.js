@@ -17,7 +17,7 @@ class ServiceFactory {
 
   createConfig() {
     return {
-      webappDomain: process.env.WEBAPP_DOMAIN
+      webappOrigin: process.env.WEBAPP_ORIGIN
     };
   }
 

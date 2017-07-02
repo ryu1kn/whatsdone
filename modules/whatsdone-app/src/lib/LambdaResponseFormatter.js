@@ -1,6 +1,5 @@
 
 const ServiceLocator = require('./ServiceLocator');
-const url = require('url');
 
 class LambdaResponseFormatter {
 
@@ -13,7 +12,7 @@ class LambdaResponseFormatter {
       'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key',
       'Access-Control-Allow-Methods': '*',
       'Access-Control-Allow-Credentials': 'true',
-      'Access-Control-Allow-Origin': url.format({hostname: this._config.webappDomain, protocol: 'https'})
+      'Access-Control-Allow-Origin': this._config.webappOrigin
     });
     return Object.assign({}, response, {headers});
   }
