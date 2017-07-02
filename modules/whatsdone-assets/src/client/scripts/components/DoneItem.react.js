@@ -1,14 +1,15 @@
 /* global Showdown */
-const React = require('react');
-const ReactDOM = require('react-dom');
-const util = require('../util');
-const DoneAction = require('../actions/DoneAction');
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import util from '../util';
+import DoneAction from '../actions/DoneAction';
 
 const converter = new Showdown.converter(); // eslint-disable-line new-cap
 
-var DoneItem = React.createClass({
+class DoneItem extends React.Component {
 
-  formatTime: function (date) {
+  formatTime(date) {
     let hour = date.getHours();
     let mins = date.getMinutes();
     const ampm = hour < 12 ? 'am' : 'pm';
@@ -21,26 +22,23 @@ var DoneItem = React.createClass({
     }
 
     return `${hour}:${mins} ${ampm}`;
-  },
+  }
 
-  getFirstLetter: function (name) {
+  getFirstLetter(name) {
     return (name || '').charAt(0).toUpperCase() || '?';
-  },
+  }
 
-  getIconColor: function (name) {
+  getIconColor(name) {
     return name ? util.getColorCode(name) : '#DDDDDD';
-  },
+  }
 
-  /**
-   * @param {Event} e
-   */
-  delete: function (e) {
+  delete(e) {
     e.stopPropagation();
     ReactDOM.findDOMNode(this).setAttribute('style', 'display:none;');
     DoneAction.destroy(this.props.doneId);
-  },
+  }
 
-  render: function () {
+  render() {
     var rawMarkup = converter.makeHtml(this.props.children.toString());
     return (
       <div className="doneitem">
@@ -59,10 +57,11 @@ var DoneItem = React.createClass({
           </p>
         </div>
         <div className="doneitem__delete-action glyphicon glyphicon-remove"
-             onClick={this.delete}></div>
+             onClick={this.delete.bind(this)}></div>
       </div>
     );
   }
-});
+
+}
 
 module.exports = DoneItem;

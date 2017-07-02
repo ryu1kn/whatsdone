@@ -1,11 +1,12 @@
 
-var React = require('react');
+import React from 'react';
 
-var DoneItem = require('./DoneItem.react');
+import DoneItem from './DoneItem.react';
 
-var DoneList = React.createClass({
-  render: function () {
-    var doneItemNodes = this.props.data.map(function (doneItem, index) {
+class DoneList extends React.Component {
+
+  render() {
+    const doneItemNodes = this.props.data.map(function (doneItem, index) {
       return (
         <DoneItem doneId={doneItem.id} date={doneItem.date}
             username={doneItem.username} key={index}>
@@ -20,6 +21,7 @@ var DoneList = React.createClass({
       </div>
     );
   }
-});
+
+}
 
 module.exports = DoneList;

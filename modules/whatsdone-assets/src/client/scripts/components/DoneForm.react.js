@@ -1,10 +1,10 @@
 
-var React = require('react');
-var DoneAction = require('../actions/DoneAction');
+import React from 'react';
+import DoneAction from '../actions/DoneAction';
 
-var DoneForm = React.createClass({
+class DoneForm extends React.Component {
 
-  handleSubmit: function (e) {
+  handleSubmit(e) {
     e.preventDefault();
     var doneThing = this.refs.doneThing.value.trim();
     if (!doneThing) {
@@ -12,11 +12,11 @@ var DoneForm = React.createClass({
     }
     DoneAction.create(doneThing);
     this.refs.doneThing.value = '';
-  },
+  }
 
-  render: function () {
+  render() {
     return (
-      <form className="form-inline doneform" onSubmit={this.handleSubmit}>
+      <form className="form-inline doneform" onSubmit={this.handleSubmit.bind(this)}>
         <div className="form-group">
           <label className="sr-only" htmlFor="doneInput">Done Thing</label>
           <input type="text" className="form-control" id="doneInput"
@@ -26,6 +26,7 @@ var DoneForm = React.createClass({
       </form>
     );
   }
-});
+
+}
 
 module.exports = DoneForm;

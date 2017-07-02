@@ -8,35 +8,28 @@ import DoneStore from '../stores/DoneStore';
 import DoneHistory from './DoneHistory.react';
 import DoneForm from './DoneForm.react';
 
-/**
- * Retrieve the current DONE data from the DoneStore
- */
-function getDoneStore() {
-  return {
-    data: DoneStore.getAll()
-  };
-}
+class DoneBox extends React.Component {
 
-var DoneBox = React.createClass({
+  constructor(params) {
+    super(params);
 
-  getInitialState: function () {
+    this.state = {data: []};
     DoneStore.load();
-    return getDoneStore();
-  },
+  }
 
-  componentDidMount: function () {
-    DoneStore.addChangeListener(this._onChange);
-  },
+  componentDidMount() {
+    DoneStore.addChangeListener(this._onChange.bind(this));
+  }
 
-  componentWillUnmount: function () {
-    DoneStore.removeChangeListener(this._onChange);
-  },
+  componentWillUnmount() {
+    DoneStore.removeChangeListener(this._onChange.bind(this));
+  }
 
-  _onChange: function () {
-    this.setState(getDoneStore());
-  },
+  _onChange() {
+    this.setState({data: DoneStore.getAll()});
+  }
 
-  render: function () {
+  render() {
     return (
       <div className="donebox container">
         <Link to="/signin">To Sign in</Link>
@@ -47,6 +40,6 @@ var DoneBox = React.createClass({
     );
   }
 
-});
+}
 
 module.exports = DoneBox;
