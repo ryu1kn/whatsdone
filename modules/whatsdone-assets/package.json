@@ -23,7 +23,7 @@
     "prebuild": "rm -rf $npm_package_config_buildDir",
     "build": "npm run webpack",
     "webpack": "webpack --optimize-minimize",
-    "postbuild": "cp app.config.js src/signin.html $npm_package_config_buildDir",
+    "postbuild": "cp src/signin.html $npm_package_config_buildDir",
     "lint": "eslint src"
   },
   "devDependencies": {
