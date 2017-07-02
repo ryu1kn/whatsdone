@@ -20,7 +20,7 @@ class Signin extends React.Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container signin">
         <form className="form-signin" onSubmit={this.handleSubmit}>
           <h2 className="form-signin-heading">Please sign in</h2>
           <label className="sr-only" htmlFor="inputEmail">Email address</label>
