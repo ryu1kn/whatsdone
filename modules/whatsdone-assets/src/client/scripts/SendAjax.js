@@ -11,24 +11,10 @@ module.exports = (url, options = {}) => {
   const headers = Object.assign({}, DEFAULT_HEADERS, options.headers);
   const finalOptions = Object.assign({}, DEFAULT_OPTIONS, options, {headers});
   return fetch(url, finalOptions)
-    .then(response => parse(response, getParseOptions(options)));
+    .then(response => parse(response));
 };
 
-function parse(response, parseOptions) {
+function parse(response) {
   const contentType = response.headers.get('Content-Type').toLowerCase();
-  if (shouldLogin(contentType, parseOptions)) {
-    window.location = '/signin.html';
-  }
   return contentType === 'application/json' ? response.json() : response.text();
-}
-
-function getParseOptions(options) {
-  return {
-    expectedContentType: (options.expectedContentType || '').toLowerCase()
-  };
-}
-
-function shouldLogin(contentType, parseOptions) {
-  return parseOptions.expectedContentType &&
-      parseOptions.expectedContentType !== contentType;
 }
