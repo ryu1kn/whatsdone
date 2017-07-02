@@ -8,9 +8,18 @@ function postDone(doneItem) {
   const uri = url.resolve(WhatsDone.API_ORIGIN, '/dones');
   const options = {
     method: 'POST',
-    body: new FormData(doneItem)
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    },
+    body: composeFormData(doneItem)
   };
   return sendAjax(uri, options);
+}
+
+function composeFormData(data) {
+  return Object.keys(data)
+    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
+    .join('&');
 }
 
 /**
