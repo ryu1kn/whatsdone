@@ -16,7 +16,7 @@
     "buildDir": "./dist"
   },
   "scripts": {
-    "prestart:dev": "npm run webpack",
+    "prestart:dev": "npm run webpack && cp app-config/default.js $npm_package_config_buildDir/app.config.js",
     "start:dev": "webpack-dev-server --content-base $npm_package_config_buildDir",
     "start:api": "node api-server.js",
     "deploy": "kumo deploy-module --verbose",
