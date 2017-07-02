@@ -1,6 +1,7 @@
 
 const ServiceLocator = require('./lib/ServiceLocator');
 const ServiceFactory = require('./lib/ServiceFactory');
+const Route = require('route-parser');
 
 ServiceLocator.load(new ServiceFactory({env: process.env}));
 
@@ -19,8 +20,14 @@ class Router {
 
   route(event, context, callback) {
     const method = event.httpMethod.toLowerCase();
-    const handlerItem = this._handlers[method].find(handlerItem => handlerItem.pattern === event.path); // XXX: Incomplete
-    if (handlerItem) return handlerItem.handler(event, context, callback);
+    const handlerItem = this._handlers[method].find(
+      handlerItem => handlerItem.pattern.match(event.path)
+    );
+    if (handlerItem) {
+      const pathParameters = handlerItem.pattern.match(event.path);
+      const finalEvent = Object.assign({}, event, {pathParameters});
+      return handlerItem.handler(finalEvent, context, callback);
+    }
     callback(null, {
       statusCode: '404',
       headers: {'Content-Type': 'text/html'},
@@ -29,19 +36,26 @@ class Router {
   }
 
   get(pattern, handler) {
-    this._handlers.get.push({pattern, handler});
+    this._registerHandler('get', pattern, handler);
   }
 
   post(pattern, handler) {
-    this._handlers.post.push({pattern, handler});
+    this._registerHandler('post', pattern, handler);
   }
 
   delete(pattern, handler) {
-    this._handlers.delete.push({pattern, handler});
+    this._registerHandler('delete', pattern, handler);
   }
 
   put(pattern, handler) {
-    this._handlers.put.push({pattern, handler});
+    this._registerHandler('put', pattern, handler);
+  }
+
+  _registerHandler(method, pattern, handler) {
+    this._handlers[method].push({
+      pattern: new Route(pattern),
+      handler
+    });
   }
 
 }
