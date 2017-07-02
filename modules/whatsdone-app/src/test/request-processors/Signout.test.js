@@ -4,7 +4,7 @@ const SignoutRequestProcessor = require('../../lib/request-processors/Signout');
 
 describe('Server SignoutRequestProcessor', () => {
 
-  it('removes session and shows user the signin page', () => {
+  it('removes session', () => {
     const sessionRepository = {remove: sinon.stub().returns(Promise.resolve())};
     ServiceLocator.load({createSessionRepository: () => sessionRepository});
     const processor = new SignoutRequestProcessor();
@@ -13,10 +13,7 @@ describe('Server SignoutRequestProcessor', () => {
 
     return processor.process(request, session).then(response => {
       expect(response).to.eql({
-        statusCode: '303',
-        headers: {
-          Location: '/signin'
-        }
+        statusCode: '200'
       });
       expect(sessionRepository.remove).to.have.been.calledWith('SESSION_ID');
     });

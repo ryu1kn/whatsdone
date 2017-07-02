@@ -1,10 +1,8 @@
 
-'use strict';
-
 const ServiceLocator = require('./ServiceLocator');
 
 /**
- * Redirect user according to their authentication status
+ * TODO: Rename the class as it no longer redirects
  */
 class AuthBasedRedirector {
 
@@ -14,19 +12,10 @@ class AuthBasedRedirector {
 
   redirect(request, session) {
     const isValidSession = this._sessionValidator.validate(session);
-    const redirectPath = this._getRedirectPath(request.path, isValidSession);
-    if (!redirectPath) return null;
+    if (isValidSession || request.path === '/signin') return null;
     return {
-      statusCode: '303',
-      headers: {Location: redirectPath}
+      statusCode: '401'
     };
-  }
-
-  _getRedirectPath(path, isValidSession) {
-    if (isValidSession) {
-      return path === '/signin' ? '/' : null;
-    }
-    return path === '/signin' ? null : '/signin';
   }
 
 }

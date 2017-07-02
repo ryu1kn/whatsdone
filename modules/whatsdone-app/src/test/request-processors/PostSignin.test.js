@@ -4,7 +4,7 @@ const ServiceLocator = require('../../lib/ServiceLocator');
 
 describe('Server PostSigninRequestProcessor', () => {
 
-  it('takes user to the root page and update session info if the user exists', () => {
+  it('updates session info if the user exists', () => {
     const loginCommand = {execute: sinon.stub().returns(Promise.resolve('SESSION_ID'))};
     const cookieCodec = {encode: sinon.stub().returns('SESSION_EMBEDDED_COOKIE')};
     ServiceLocator.load({
@@ -22,9 +22,8 @@ describe('Server PostSigninRequestProcessor', () => {
     };
     return processor.process(request).then(result => {
       expect(result).to.eql({
-        statusCode: '303',
+        statusCode: '200',
         headers: {
-          Location: '/',
           'Set-cookie': 'SESSION_EMBEDDED_COOKIE'
         }
       });
@@ -38,13 +37,11 @@ describe('Server PostSigninRequestProcessor', () => {
     });
   });
 
-  it('still shows signin page', () => {
-    const htmlPageGenerator = {generate: sinon.stub().returns('HTML')};
+  it('returns 401 Not Authenticated', () => {
     ServiceLocator.load({
       createLoginCommand: () => ({
         execute: () => Promise.resolve(null)
       }),
-      createHtmlPageGenerator: () => htmlPageGenerator,
       createCookieCodec: () => {}
     });
     const processor = new PostSigninRequestProcessor();
@@ -52,11 +49,8 @@ describe('Server PostSigninRequestProcessor', () => {
     const request = {session: {}};
     return processor.process(request).then(result => {
       expect(result).to.eql({
-        statusCode: '401',
-        headers: {'Content-Type': 'text/html'},
-        body: 'HTML'
+        statusCode: '401'
       });
-      expect(htmlPageGenerator.generate).to.have.been.calledWith('signin');
     });
   });
 

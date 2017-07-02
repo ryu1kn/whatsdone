@@ -1,6 +1,4 @@
 
-'use strict';
-
 const ServiceLocator = require('../ServiceLocator');
 
 class SignoutRequestProcessor {
@@ -12,10 +10,7 @@ class SignoutRequestProcessor {
   process(_request, session) {
     return this._sessionRepository.remove(session.id)
       .then(() => ({
-        statusCode: '303',
-        headers: {
-          Location: '/signin'
-        }
+        statusCode: '200'
       }));
   }
 

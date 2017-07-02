@@ -9,7 +9,7 @@ var corsOptions = {
 };
 
 app.get('/dones', cors(corsOptions), (req, res) => {
-  res.sendStatus(303);
+  res.sendStatus(401);
 });
 
 app.post('/signin', cors(corsOptions), (req, res) => {
