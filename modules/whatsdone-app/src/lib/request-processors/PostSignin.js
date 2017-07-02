@@ -16,7 +16,8 @@ class PostSigninRequestProcessor {
         return {
           statusCode: '200',
           headers: {
-            'Set-cookie': this._cookieCodec.encode({sessionId})
+            'Set-cookie': this._cookieCodec.encode({sessionId}),
+            'Content-Type': 'text/plain'
           }
         };
       }
