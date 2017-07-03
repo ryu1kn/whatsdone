@@ -1,6 +1,10 @@
 /gradle
-/.classpath
 /.gradle
-/.settings
 /bin
 /build
+
+# IntelliJ
+/*.iml
+/*.ipr
+/*.iws
+/.idea
