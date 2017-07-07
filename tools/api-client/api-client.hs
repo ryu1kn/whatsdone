@@ -1,5 +1,9 @@
 #!/usr/bin/env stack
-{- stack --install-ghc --resolver lts-5.13 runghc
+{- stack --install-ghc --resolver lts-8.21 runghc
+    --package http-conduit
+    --package yaml
+    --package tls-1.3.11
+    --package cryptonite-0.21
 -}
 {-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
 
@@ -7,9 +11,13 @@ module Main (main) where
 
 import Control.Applicative
 import Control.Monad
+import Control.Monad.IO.Class (liftIO)
+import Control.Monad.Trans.Resource (runResourceT)
 import Data.Aeson
 import Data.Text
+import Data.Text.Encoding
 import GHC.Generics
+import Network.HTTP.Conduit
 import System.Console.GetOpt
 import System.Environment
 import System.Exit
@@ -48,6 +56,7 @@ options =
         "Show help"
     ]
 
+main :: IO ()
 main = do
     args <- getArgs
 
@@ -60,11 +69,18 @@ main = do
 
     d <- (eitherDecode <$> B.readFile config) :: IO (Either String LoginInfo)
 
+    manager <- newManager tlsManagerSettings
+    req <- parseRequest "https://whatsdone-api.ryuichi.io/signin"
+
     putStrLn $ "Action: " ++ action
     case d of
         Left err -> putStrLn err
-        Right ps -> print ps
-
+        Right ps -> runResourceT $ do
+            let reqHead = urlEncodedBody [("email", encodeUtf8 $ email ps), ("password", encodeUtf8 $ password ps)] req
+            res <- http reqHead manager
+            liftIO $ do
+                print $ responseStatus res
+                mapM_ print $ responseHeaders res
 
 data LoginInfo = LoginInfo { email :: Text
                            , password :: Text
