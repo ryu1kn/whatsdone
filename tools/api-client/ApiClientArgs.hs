@@ -7,38 +7,32 @@ import System.Exit
 import System.IO
 
 data Options = Options  { optConfig     :: String
-                        , optAction     :: String
                         }
 
 startOptions :: Options
 startOptions = Options  { optConfig     = ""
-                        , optAction     = ""
                         }
 
-options :: [ OptDescr (Options -> IO Options) ]
-options =
+optionDefinitions :: [ OptDescr (Options -> IO Options) ]
+optionDefinitions =
     [ Option "c" ["config"]
         (ReqArg
             (\arg opt -> return opt { optConfig = arg })
             "FILE")
         "Config file"
 
-    , Option "a" ["action"]
-        (ReqArg
-            (\arg opt -> return opt { optAction = arg })
-            "ACTION_NAME")
-        "Action name. Currently only \"login\""
-
     , Option "h" ["help"]
         (NoArg
             (\_ -> do
                 prg <- getProgName
-                hPutStrLn stderr (usageInfo prg options)
+                hPutStrLn stderr (usageInfo prg optionDefinitions)
                 exitSuccess))
         "Show help"
     ]
 
-parse :: [String] -> IO Options
-parse commandArgs = do
-    let (actions, nonOptions, errors) = getOpt RequireOrder options commandArgs
-    Prelude.foldl (>>=) (return startOptions) actions
+parse :: [String] -> IO (String, Options)
+parse args = do
+    let (options, nonOptions, errors) = getOpt Permute optionDefinitions args
+    let action = head nonOptions
+    opts <- Prelude.foldl (>>=) (return startOptions) options
+    return (action, opts)

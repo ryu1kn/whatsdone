@@ -27,14 +27,14 @@ apiEndpoint = "https://whatsdone-api.ryuichi.io/signin"
 
 main :: IO ()
 main = do
-    opts <- getArgs >>= parse
+    (action, opts) <- getArgs >>= parse
 
     d <- (eitherDecode <$> B.readFile (optConfig opts :: FilePath)) :: IO (Either String LoginInfo)
 
     manager <- newManager tlsManagerSettings
     req <- parseRequest apiEndpoint
 
-    putStrLn $ "Action: " ++ optAction opts
+    putStrLn $ "Action: " ++ action
     case d of
         Left err -> putStrLn err
         Right ps -> runResourceT $ do
