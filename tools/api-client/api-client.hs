@@ -5,7 +5,7 @@
     --package tls-1.3.11
     --package cryptonite-0.21
 -}
-{-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Main (main) where
 
@@ -21,7 +21,7 @@ import System.Console.GetOpt
 import System.Environment
 import qualified Data.ByteString.Lazy as B
 import ApiClientArgs
-import LoginInfo
+import AppConfig
 
 apiEndpoint = "https://whatsdone-api.ryuichi.io/signin"
 
@@ -29,17 +29,29 @@ main :: IO ()
 main = do
     (action, opts) <- getArgs >>= parse
 
-    d <- (eitherDecode <$> B.readFile (optConfig opts :: FilePath)) :: IO (Either String LoginInfo)
+    if action == "login"
+        then login opts
+        else putStrLn "Only \"login\" action is currently supported"
 
+loadConfig :: FilePath -> IO (Either String AppConfig)
+loadConfig path = eitherDecode <$> B.readFile path
+
+login :: Options -> IO ()
+login opts = do
     manager <- newManager tlsManagerSettings
-    req <- parseRequest apiEndpoint
-
-    putStrLn $ "Action: " ++ action
+    d <- loadConfig $ optConfig opts
     case d of
         Left err -> putStrLn err
-        Right ps -> runResourceT $ do
-            let reqHead = urlEncodedBody [("email", encodeUtf8 $ email ps), ("password", encodeUtf8 $ password ps)] req
-            res <- http reqHead manager
+        Right config -> runResourceT $ do
+            res <- requestLogin ( email config
+                                , password config
+                                , manager
+                                )
             liftIO $ do
                 print $ responseStatus res
                 mapM_ print $ responseHeaders res
+
+requestLogin (email, password, manager) = do
+    req <- parseRequest apiEndpoint
+    let reqHead = urlEncodedBody [("email", encodeUtf8 email), ("password", encodeUtf8 password)] req
+    http reqHead manager

@@ -1,14 +1,14 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module LoginInfo where
+module AppConfig where
 
 import Data.Aeson
 import Data.Text
 import GHC.Generics
 
-data LoginInfo = LoginInfo { email :: Text
+data AppConfig = AppConfig { email :: Text
                            , password :: Text
                            } deriving (Show, Generic)
 
-instance FromJSON LoginInfo
-instance ToJSON LoginInfo
+instance FromJSON AppConfig
+instance ToJSON AppConfig
