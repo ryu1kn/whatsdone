@@ -21,8 +21,8 @@
     "start:api": "node api-server.js",
     "deploy": "kumo deploy-module --verbose",
     "prebuild": "rm -rf $npm_package_config_buildDir",
-    "build": "npm run webpack",
-    "webpack": "webpack --optimize-minimize",
+    "build:dev": "NODE_ENV=dev webpack",
+    "build:production": "NODE_ENV=production webpack",
     "lint": "eslint src"
   },
   "devDependencies": {

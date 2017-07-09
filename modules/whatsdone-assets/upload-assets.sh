@@ -8,7 +8,7 @@ APP_CONFIG_DIR=./app-config
 DIST_DIR=$npm_package_config_buildDir
 
 main() {
-  npm run build
+  npm run build:production
 
   APP_CONFIG_PATH=`getConfigName`
   cp $APP_CONFIG_PATH $DIST_DIR/app.config.js

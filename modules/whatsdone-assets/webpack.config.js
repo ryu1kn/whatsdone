@@ -3,11 +3,18 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const webpack = require('webpack');
 
 const SRC_DIR = path.resolve(__dirname, 'src');
 const BUILD_DIR = path.resolve(__dirname, process.env.npm_package_config_buildDir);
 
 const extractLess = new ExtractTextPlugin('style.css');
+const jsMinifyPlugins = process.env.NODE_ENV === 'production' ? [
+  new webpack.DefinePlugin({
+    'process.env': {NODE_ENV: JSON.stringify('production')}
+  }),
+  new webpack.optimize.UglifyJsPlugin()
+] : [];
 
 module.exports = {
   entry: [
@@ -40,6 +47,7 @@ module.exports = {
       filename: `${BUILD_DIR}/index.html`
     }),
     new FaviconsWebpackPlugin(`${SRC_DIR}/images/favicon.png`),
-    extractLess
+    extractLess,
+    ...jsMinifyPlugins
   ]
 };
