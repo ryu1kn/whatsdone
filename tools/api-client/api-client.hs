@@ -14,12 +14,14 @@ import Control.Monad
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Trans.Resource (runResourceT)
 import Data.Aeson
+import qualified Data.List as L
 import Data.Text
 import Data.Text.Encoding
 import Network.HTTP.Conduit
 import System.Console.GetOpt
 import System.Environment
-import qualified Data.ByteString.Lazy as B
+import qualified Data.ByteString.Lazy as BL
+import qualified Data.ByteString as B
 import ApiClientArgs
 import AppConfig
 
@@ -34,7 +36,7 @@ main = do
         else putStrLn "Only \"login\" action is currently supported"
 
 loadConfig :: FilePath -> IO (Either String AppConfig)
-loadConfig path = eitherDecode <$> B.readFile path
+loadConfig path = eitherDecode <$> BL.readFile path
 
 login :: Options -> IO ()
 login opts = do
@@ -49,7 +51,8 @@ login opts = do
                                 )
             liftIO $ do
                 print $ responseStatus res
-                mapM_ print $ responseHeaders res
+                let Just (_, cookie) = L.find (\(x, y) -> x == "Set-Cookie") $ responseHeaders res
+                B.writeFile "session.txt" cookie
 
 requestLogin (email, password, manager) = do
     req <- parseRequest apiEndpoint
