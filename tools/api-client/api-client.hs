@@ -26,6 +26,7 @@ import ApiClientArgs
 import AppConfig
 
 apiEndpoint = "https://whatsdone-api.ryuichi.io"
+sessionFile = "__session.txt"
 
 main :: IO ()
 main = do
@@ -50,9 +51,9 @@ login opts = do
                                 , manager
                                 )
             liftIO $ do
-                print $ responseStatus res
                 let Just (_, cookie) = L.find (\(x, y) -> x == "Set-Cookie") $ responseHeaders res
-                B.writeFile "session.txt" cookie
+                B.writeFile sessionFile cookie
+                putStrLn $ "Login successful, session id stored in " ++ sessionFile
 
 requestLogin (email, password, manager) = do
     req <- parseRequest $ apiEndpoint ++ "/signin"
