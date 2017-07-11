@@ -25,15 +25,15 @@ import qualified Data.ByteString as B
 import ApiClientArgs
 import AppConfig
 
-apiEndpoint = "https://whatsdone-api.ryuichi.io/signin"
+apiEndpoint = "https://whatsdone-api.ryuichi.io"
 
 main :: IO ()
 main = do
     (action, opts) <- getArgs >>= parse
 
-    if action == "login"
-        then login opts
-        else putStrLn "Only \"login\" action is currently supported"
+    case action of
+        "login" -> login opts
+        _       -> putStrLn "Only \"login\" action is currently supported"
 
 loadConfig :: FilePath -> IO (Either String AppConfig)
 loadConfig path = eitherDecode <$> BL.readFile path
@@ -55,6 +55,6 @@ login opts = do
                 B.writeFile "session.txt" cookie
 
 requestLogin (email, password, manager) = do
-    req <- parseRequest apiEndpoint
+    req <- parseRequest $ apiEndpoint ++ "/signin"
     let reqHead = urlEncodedBody [("email", encodeUtf8 email), ("password", encodeUtf8 password)] req
     http reqHead manager
