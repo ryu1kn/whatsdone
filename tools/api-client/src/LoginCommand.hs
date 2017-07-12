@@ -11,7 +11,6 @@ import qualified Data.List as L
 import Data.Text
 import Data.Text.Encoding
 import Network.HTTP.Conduit
-import Network.HTTP.Simple
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString as B
 import ApiClientArgs
