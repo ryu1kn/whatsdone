@@ -1,10 +1,3 @@
-#!/usr/bin/env stack
-{- stack --install-ghc --resolver lts-8.21 runghc
-    --package http-conduit
-    --package yaml
-    --package tls-1.3.11
-    --package cryptonite-0.21
--}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main (main) where

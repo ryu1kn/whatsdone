@@ -3,3 +3,4 @@ npm-debug.log
 /.kumo
 __*
 modules/*/node_modules
+.stack-work
