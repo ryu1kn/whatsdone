@@ -5,6 +5,7 @@ module GetDonesCommand where
 
 import qualified Data.ByteString.Char8 as C
 import Network.HTTP.Simple
+import Data.Aeson
 import ApiClientArgs
 import AppConfig
 
@@ -21,4 +22,5 @@ getDones_ config = do
     initReq <- parseRequest $ apiEndpoint config ++ "/dones"
     let req = addRequestHeader "Cookie" (C.pack sessionId) initReq
     res <- httpJSON req
-    putStrLn $ getResponseBody res
+    let responseBody = getResponseBody res :: Value
+    print responseBody
