@@ -1,17 +1,25 @@
 # What's Done API Client
 
-WIP
-
-To see the usage:
+## Build
 
 ```sh
-$ ./api-client -h
+$ make build
 ```
 
-```sh
-$ ./api-client login --config config.json
-```
+## Usage
 
 ```sh
-$ ./api-client get-dones --session-id XXXXXXXXXXXXX
+$ ./apiClient --help
 ```
+
+* Login
+
+    ```sh
+    $ ./apiClient login --config config.json
+    ```
+
+* Get all dones
+
+    ```sh
+    $ ./apiClient get-dones --config config.json
+    ```
