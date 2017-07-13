@@ -8,6 +8,12 @@
     "LambdaS3Key": {
       "Type": "String"
     },
+    "DomainName": {
+      "Type": "String"
+    },
+    "CertificateArn": {
+      "Type": "String"
+    },
     "DoneTableName": {
       "Type": "String"
     },
@@ -149,6 +155,13 @@
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {"Ref": "RestApi"}
+      }
+    },
+    "ApiDomainName": {
+      "Type": "AWS::ApiGateway::DomainName",
+      "Properties": {
+        "CertificateArn": {"Ref": "CertificateArn"},
+        "DomainName": {"Ref": "DomainName"}
       }
     },
     "LambdaFunctionRole": {

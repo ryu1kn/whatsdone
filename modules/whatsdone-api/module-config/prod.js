@@ -1,4 +1,5 @@
 module.exports = {
+  domainName: 'whatsdone-api.ryuichi.io',
   doneTableName: 'whatsdone-dones',
   userTableName: 'whatsdone-users',
   sessionTableName: 'whatsdone-sessions',

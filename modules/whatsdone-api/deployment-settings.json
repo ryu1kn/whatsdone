@@ -9,6 +9,13 @@
     },
     "tasks": [
         {
+            "id": "fetch-certificate-arn",
+            "type": "custom",
+            "run": {
+              "script": "aws acm list-certificates --query CertificateSummaryList | jq '{certificateArn: map(select(.DomainName == \"*.ryuichi.io\") | .CertificateArn)[0]}' > $KUMO_TASK_OUTPUTS_FILE"
+            }
+        },
+        {
             "id": "deploy-api",
             "type": "cf-stack",
             "stackName": "module",
@@ -17,6 +24,8 @@
             },
             "stackParams": {
               "EnvName": {"$ref": "#/_env"},
+              "DomainName": {"$ref": "#/_deploymentConfig/domainName"},
+              "CertificateArn": {"$ref": "#/_deploymentOutputs/whatsdone-api/certificateArn"},
               "DbRegion": {"$ref": "#/_taskRegion"},
               "WebappDomain": {"$ref": "#/_deploymentOutputs/whatsdone-web-cache/publicDomain"},
               "DoneTableName": {"$ref": "#/_deploymentConfig/doneTableName"},
