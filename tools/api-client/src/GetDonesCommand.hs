@@ -3,7 +3,7 @@
 
 module GetDonesCommand where
 
-import Data.Text
+import qualified Data.ByteString.Char8 as C
 import Network.HTTP.Simple
 import ApiClientArgs
 import AppConfig
@@ -19,10 +19,8 @@ getDones opts = do
 
 getDones_ :: AppConfig -> IO ()
 getDones_ config = do
-    requestDones config "connect.sid=s%3A3fc5d5c8-6f50-4da3-b361-854456cad538.W3xzaA6XPAgLhuPPxKy97tE1c0BQBkLvZLTRfRYfVyo"
-
-requestDones config sessionId = do
+    sessionId <- readFile sessionFile
     initReq <- parseRequest $ apiEndpoint config ++ "/dones"
-    let req = addRequestHeader "Cookie" sessionId initReq
+    let req = addRequestHeader "Cookie" (C.pack sessionId) initReq
     res <- httpJSON req
     putStrLn $ getResponseBody res
