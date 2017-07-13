@@ -14,8 +14,6 @@ import qualified Data.ByteString.Char8 as C
 import ApiClientArgs
 import AppConfig
 
-sessionFile = "__session.txt"
-
 login :: Options -> IO ()
 login opts = do
     manager <- newManager tlsManagerSettings
@@ -31,9 +29,7 @@ login_ config manager = runResourceT $ do
         let maybeCookie = L.find (\(x, y) -> x == "Set-Cookie") $ responseHeaders res
         case maybeCookie of
             Nothing -> return ()
-            Just (_, cookie) -> do
-                B.writeFile sessionFile (extractSessionId cookie)
-                Prelude.putStrLn $ "Login successful, session id stored in " ++ sessionFile
+            Just (_, cookie) -> B.writeFile (sessionFile config) (extractSessionId cookie)
 
 requestLogin config manager = do
     req <- parseRequest $ apiEndpoint config ++ "/signin"

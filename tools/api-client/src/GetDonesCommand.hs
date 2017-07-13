@@ -8,8 +8,6 @@ import Network.HTTP.Simple
 import ApiClientArgs
 import AppConfig
 
-sessionFile = "__session.txt"
-
 getDones :: Options -> IO ()
 getDones opts = do
     d <- loadConfig $ optConfig opts
@@ -19,7 +17,7 @@ getDones opts = do
 
 getDones_ :: AppConfig -> IO ()
 getDones_ config = do
-    sessionId <- readFile sessionFile
+    sessionId <- readFile $ sessionFile config
     initReq <- parseRequest $ apiEndpoint config ++ "/dones"
     let req = addRequestHeader "Cookie" (C.pack sessionId) initReq
     res <- httpJSON req
