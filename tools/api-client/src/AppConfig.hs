@@ -8,6 +8,7 @@ import GHC.Generics
 
 data AppConfig = AppConfig { email :: Text
                            , password :: Text
+                           , apiEndpoint :: Text
                            } deriving (Show, Generic)
 
 instance FromJSON AppConfig

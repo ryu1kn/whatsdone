@@ -16,7 +16,6 @@ import qualified Data.ByteString as B
 import ApiClientArgs
 import AppConfig
 
-apiEndpoint = "https://whatsdone-api.ryuichi.io"
 sessionFile = "__session.txt"
 
 login :: Options -> IO ()
@@ -26,8 +25,7 @@ login opts = do
     case d of
         Left err -> putStrLn err
         Right config -> runResourceT $ do
-            res <- requestLogin ( email config
-                                , password config
+            res <- requestLogin ( config
                                 , manager
                                 )
             liftIO $ do
@@ -38,7 +36,8 @@ login opts = do
 loadConfig :: FilePath -> IO (Either String AppConfig)
 loadConfig path = eitherDecode <$> BL.readFile path
 
-requestLogin (email, password, manager) = do
-    req <- parseRequest $ apiEndpoint ++ "/signin"
-    let reqHead = urlEncodedBody [("email", encodeUtf8 email), ("password", encodeUtf8 password)] req
+requestLogin (config, manager) = do
+    req <- parseRequest $ unpack (apiEndpoint config) ++ "/signin"
+    let reqHead = urlEncodedBody [ ("email", encodeUtf8 $ email config)
+                                 , ("password", encodeUtf8 $ password config) ] req
     http reqHead manager
