@@ -11,7 +11,6 @@ import qualified Data.List as L
 import Data.Text
 import Data.Text.Encoding
 import Network.HTTP.Conduit
-import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString as B
 import ApiClientArgs
 import AppConfig
@@ -23,20 +22,21 @@ login opts = do
     manager <- newManager tlsManagerSettings
     d <- loadConfig $ optConfig opts
     case d of
-        Left err -> putStrLn err
-        Right config -> runResourceT $ do
-            res <- requestLogin ( config
-                                , manager
-                                )
-            liftIO $ do
-                let Just (_, cookie) = L.find (\(x, y) -> x == "Set-Cookie") $ responseHeaders res
+        Left  err    -> putStrLn err
+        Right config -> login_ config manager
+
+login_ :: AppConfig -> Manager -> IO ()
+login_ config manager = runResourceT $ do
+    res <- requestLogin config manager
+    liftIO $ do
+        let maybeCookie = L.find (\(x, y) -> x == "Set-Cookie") $ responseHeaders res
+        case maybeCookie of
+            Nothing -> return ()
+            Just (_, cookie) -> do
                 B.writeFile sessionFile cookie
                 putStrLn $ "Login successful, session id stored in " ++ sessionFile
 
-loadConfig :: FilePath -> IO (Either String AppConfig)
-loadConfig path = eitherDecode <$> BL.readFile path
-
-requestLogin (config, manager) = do
+requestLogin config manager = do
     req <- parseRequest $ unpack (apiEndpoint config) ++ "/signin"
     let reqHead = urlEncodedBody [ ("email", encodeUtf8 $ email config)
                                  , ("password", encodeUtf8 $ password config) ] req
