@@ -9,8 +9,8 @@ import Control.Monad.Trans.Resource (runResourceT)
 import Data.Aeson
 import qualified Data.List as L
 import Network.HTTP.Conduit
-import Data.ByteString.Char8
 import qualified Data.ByteString as B
+import qualified Data.ByteString.Char8 as C
 import ApiClientArgs
 import AppConfig
 
@@ -32,11 +32,14 @@ login_ config manager = runResourceT $ do
         case maybeCookie of
             Nothing -> return ()
             Just (_, cookie) -> do
-                B.writeFile sessionFile cookie
+                B.writeFile sessionFile (extractSessionId cookie)
                 Prelude.putStrLn $ "Login successful, session id stored in " ++ sessionFile
 
 requestLogin config manager = do
     req <- parseRequest $ apiEndpoint config ++ "/signin"
-    let reqHead = urlEncodedBody [ ("email", pack $ email config)
-                                 , ("password", pack $ password config) ] req
+    let reqHead = urlEncodedBody [ ("email", C.pack $ email config)
+                                 , ("password", C.pack $ password config) ] req
     http reqHead manager
+
+extractSessionId :: B.ByteString -> B.ByteString
+extractSessionId = C.takeWhile (/= ';')
