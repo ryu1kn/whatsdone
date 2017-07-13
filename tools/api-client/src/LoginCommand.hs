@@ -8,9 +8,8 @@ import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Trans.Resource (runResourceT)
 import Data.Aeson
 import qualified Data.List as L
-import Data.Text
-import Data.Text.Encoding
 import Network.HTTP.Conduit
+import Data.ByteString.Char8
 import qualified Data.ByteString as B
 import ApiClientArgs
 import AppConfig
@@ -22,7 +21,7 @@ login opts = do
     manager <- newManager tlsManagerSettings
     d <- loadConfig $ optConfig opts
     case d of
-        Left  err    -> putStrLn err
+        Left  err    -> Prelude.putStrLn err
         Right config -> login_ config manager
 
 login_ :: AppConfig -> Manager -> IO ()
@@ -34,10 +33,10 @@ login_ config manager = runResourceT $ do
             Nothing -> return ()
             Just (_, cookie) -> do
                 B.writeFile sessionFile cookie
-                putStrLn $ "Login successful, session id stored in " ++ sessionFile
+                Prelude.putStrLn $ "Login successful, session id stored in " ++ sessionFile
 
 requestLogin config manager = do
-    req <- parseRequest $ unpack (apiEndpoint config) ++ "/signin"
-    let reqHead = urlEncodedBody [ ("email", encodeUtf8 $ email config)
-                                 , ("password", encodeUtf8 $ password config) ] req
+    req <- parseRequest $ apiEndpoint config ++ "/signin"
+    let reqHead = urlEncodedBody [ ("email", pack $ email config)
+                                 , ("password", pack $ password config) ] req
     http reqHead manager

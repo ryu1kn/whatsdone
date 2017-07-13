@@ -3,13 +3,12 @@
 module AppConfig where
 
 import Data.Aeson
-import Data.Text
 import GHC.Generics
 import qualified Data.ByteString.Lazy as BL
 
-data AppConfig = AppConfig { email :: Text
-                           , password :: Text
-                           , apiEndpoint :: Text
+data AppConfig = AppConfig { email :: String
+                           , password :: String
+                           , apiEndpoint :: String
                            } deriving (Show, Generic)
 
 instance FromJSON AppConfig
