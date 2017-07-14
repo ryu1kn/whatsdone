@@ -132,7 +132,7 @@
                   },
                   "uri": {"Fn::Sub": [
                     "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations",
-                    {"LambdaArn": {"Fn::GetAtt": ["GetDonesFunction", "Arn"]}}
+                    {"LambdaArn": {"Fn::GetAtt": ["ProxyLambdaFunction", "Arn"]}}
                   ]},
                   "passthroughBehavior": "when_no_match",
                   "httpMethod": "POST",
@@ -259,10 +259,10 @@
         ]
       }
     },
-    "GetDonesFunction": {
+    "ProxyLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-GetDonesFunction"},
+        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-ProxyLambdaFunction"},
         "Description": "What's Done app",
         "Handler": "index.handler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -293,7 +293,7 @@
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:invokeFunction",
-        "FunctionName": {"Fn::GetAtt": ["GetDonesFunction", "Arn"]},
+        "FunctionName": {"Fn::GetAtt": ["ProxyLambdaFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*"}
       }
