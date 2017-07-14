@@ -1,6 +1,8 @@
 
+import './style.less';
+
 import React from 'react';
-import LoginStatusAction from '../actions/LoginStatusAction';
+import LoginStatusAction from '../../actions/LoginStatusAction';
 
 class Signin extends React.Component {
 

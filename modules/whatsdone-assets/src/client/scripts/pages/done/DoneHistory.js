@@ -2,7 +2,7 @@
 import _ from 'lodash';
 import React from 'react';
 
-import DoneList from './DoneList.react';
+import DoneList from './DoneList';
 
 const ONEDAY_MS = 24 * 60 * 60 * 1000;
 

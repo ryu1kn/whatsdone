@@ -1,6 +1,6 @@
 
 import React from 'react';
-import DoneAction from '../actions/DoneAction';
+import DoneAction from '../../actions/DoneAction';
 
 class DoneForm extends React.Component {
 

@@ -16,5 +16,5 @@ module.exports = (url, options = {}) => {
 
 function parse(response) {
   const contentType = response.headers.get('Content-Type').toLowerCase();
-  return contentType === 'application/json' ? response.json() : response.text();
+  return contentType.startsWith('application/json') ? response.json() : response.text();
 }

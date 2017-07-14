@@ -1,19 +1,16 @@
 
-import '../../stylesheets/base.less';
-import '../../stylesheets/signin.less';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
-import SigninPage from './components/Signin.react';
-import DoneBox from './components/DoneBox.react';
+import SigninPage from './pages/signin/index';
+import DonePage from './pages/done/index';
 
 ReactDOM.render(
   (
     <Router>
       <Switch>
-        <Route exact path="/" component={DoneBox} />
+        <Route exact path="/" component={DonePage} />
         <Route path="/signin" component={SigninPage} />
       </Switch>
     </Router>

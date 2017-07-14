@@ -1,14 +1,15 @@
 
 // XXX: Rename this to DoneApp. This component is a controller-view
+import './style.less';
 
 import React from 'react';
 import {Link} from 'react-router-dom';
-import DoneStore from '../stores/DoneStore';
+import DoneStore from '../../stores/DoneStore';
 
-import DoneHistory from './DoneHistory.react';
-import DoneForm from './DoneForm.react';
+import DoneHistory from './DoneHistory';
+import DoneForm from './DoneForm';
 
-class DoneBox extends React.Component {
+class DonePage extends React.Component {
 
   constructor(params) {
     super(params);
@@ -42,4 +43,4 @@ class DoneBox extends React.Component {
 
 }
 
-module.exports = DoneBox;
+module.exports = DonePage;
