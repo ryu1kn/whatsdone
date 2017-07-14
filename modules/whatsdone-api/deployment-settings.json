@@ -12,8 +12,9 @@
             "id": "fetch-certificate-arn",
             "type": "custom",
             "run": {
-              "script": "aws acm list-certificates --query CertificateSummaryList | jq '{certificateArn: map(select(.DomainName == \"*.ryuichi.io\") | .CertificateArn)[0]}' > $KUMO_TASK_OUTPUTS_FILE"
-            }
+              "script": "aws acm list-certificates --region us-east-1 --query CertificateSummaryList | jq 'map(select(.DomainName == \"*.ryuichi.io\") | .CertificateArn)[0]' > $KUMO_TASK_OUTPUTS_FILE"
+            },
+            "outputsName": "certificateArn"
         },
         {
             "id": "deploy-api",
