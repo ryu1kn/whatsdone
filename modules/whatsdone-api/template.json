@@ -62,6 +62,22 @@
         }
       }
     },
+    "ApiDomainName": {
+      "Type": "AWS::ApiGateway::DomainName",
+      "Properties": {
+        "CertificateArn": {"Ref": "CertificateArn"},
+        "DomainName": {"Ref": "DomainName"}
+      }
+    },
+    "ApiBasePathMapping": {
+      "Type": "AWS::ApiGateway::BasePathMapping",
+      "Properties": {
+        "BasePath": "",
+        "DomainName": {"Ref": "ApiDomainName"},
+        "RestApiId": {"Ref": "RestApi"},
+        "Stage": {"Ref": "ApiStage"}
+      }
+    },
     "RestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
@@ -173,13 +189,6 @@
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {"Ref": "RestApi"}
-      }
-    },
-    "ApiDomainName": {
-      "Type": "AWS::ApiGateway::DomainName",
-      "Properties": {
-        "CertificateArn": {"Ref": "CertificateArn"},
-        "DomainName": {"Ref": "DomainName"}
       }
     },
     "LambdaFunctionRole": {
