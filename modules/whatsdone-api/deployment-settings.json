@@ -26,6 +26,7 @@
             "stackParams": {
               "EnvName": {"$ref": "#/_env"},
               "DomainName": {"$ref": "#/_deploymentConfig/domainName"},
+              "HostedZoneId": {"$ref": "#/_deploymentConfig/hostedZoneId"},
               "CertificateArn": {"$ref": "#/_deploymentOutputs/whatsdone-api/certificateArn"},
               "DbRegion": {"$ref": "#/_taskRegion"},
               "WebappDomain": {"$ref": "#/_deploymentOutputs/whatsdone-web-cache/publicDomain"},

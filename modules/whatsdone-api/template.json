@@ -11,6 +11,9 @@
     "DomainName": {
       "Type": "String"
     },
+    "HostedZoneId": {
+      "Type": "String"
+    },
     "CertificateArn": {
       "Type": "String"
     },
@@ -40,10 +43,25 @@
     "Variables": {
       "Api": {
         "StageName": "default"
+      },
+      "CloudFrontDistribution": {
+        "HostedZoneId": "Z2FDTNDATAQYW2"
       }
     }
   },
   "Resources": {
+    "RecordSet": {
+      "Type": "AWS::Route53::RecordSet",
+      "Properties": {
+        "HostedZoneId": {"Ref": "HostedZoneId"},
+        "Name": {"Fn::Sub": "${DomainName}."},
+        "Type": "A",
+        "AliasTarget": {
+          "DNSName": {"Fn::GetAtt": ["ApiDomainName", "DistributionDomainName"]},
+          "HostedZoneId": {"Fn::FindInMap": ["Variables", "CloudFrontDistribution", "HostedZoneId"]}
+        }
+      }
+    },
     "RestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {

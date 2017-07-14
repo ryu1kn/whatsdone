@@ -1,5 +1,9 @@
+
+const projectConfig = require('../../../config/prod');
+
 module.exports = {
   domainName: 'whatsdone-api.ryuichi.io',
+  hostedZoneId: projectConfig.hostedZoneId,
   doneTableName: 'whatsdone-dones',
   userTableName: 'whatsdone-users',
   sessionTableName: 'whatsdone-sessions',
