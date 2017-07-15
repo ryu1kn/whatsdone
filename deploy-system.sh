@@ -10,9 +10,9 @@ MODULES__ENV=(
 )
 
 for MODULE in ${MODULES__NO_ENV[*]} ; do
-    (cd modules/no-env/$MODULE_NAME && npm run deploy -- --region ap-southeast-2)
+    (cd modules/no-env/$MODULE && npm run deploy -- --region ap-southeast-2)
 done
 
 for MODULE in ${MODULES__ENV[*]} ; do
-    (cd modules/env/$MODULE_NAME && npm run deploy -- --env $ENV_NAME --region ap-southeast-2)
+    (cd modules/env/$MODULE && npm run deploy -- --env $ENV_NAME --region ap-southeast-2)
 done

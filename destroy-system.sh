@@ -7,5 +7,5 @@ MODULES__ENV=(
 )
 
 for MODULE in ${MODULES__ENV[*]} ; do
-    (cd modules/env/$MODULE_NAME && npm run destroy -- --env $ENV_NAME --region ap-southeast-2)
+    (cd modules/env/$MODULE && npm run destroy -- --env $ENV_NAME --region ap-southeast-2)
 done
