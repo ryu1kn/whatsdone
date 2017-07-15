@@ -1,4 +1,7 @@
 
+const projectConfig = require('../../../../config/prod');
+
 module.exports = {
-  bucketName: 'whatsdone'
+  bucketName: 'whatsdone',
+  bucketDeletionPolicy: projectConfig.customDeletionPolicy
 };

@@ -1,4 +1,7 @@
 
+const projectConfig = require('../../../../config/sit');
+
 module.exports = {
-  bucketName: 'whatsdone-assets-sit'
+  bucketName: 'whatsdone-assets-sit',
+  bucketDeletionPolicy: projectConfig.customDeletionPolicy
 };

@@ -13,7 +13,7 @@
       "id": "export-public-domain-name",
       "type": "custom",
       "run": {
-        "script": "echo $PUBLIC_DOMAIN_NAME > $KUMO_TASK_OUTPUTS_FILE",
+        "script": "echo \\\"$PUBLIC_DOMAIN_NAME\\\" > $KUMO_TASK_OUTPUTS_FILE",
         "envVars": {
           "PUBLIC_DOMAIN_NAME": {"$ref": "#/_deploymentConfig/publicDomain"}
         }

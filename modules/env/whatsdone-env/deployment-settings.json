@@ -9,7 +9,10 @@
       "type": "cf-stack",
       "stackName": "module",
       "stackTemplate": {
-        "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
+        "script": "sed \"s/__DELETION_POLICY__/$DELETION_POLICY/\" ./template.json > $KUMO_TEMPLATE_OUTPUT_FILE",
+        "envVars": {
+          "DELETION_POLICY": {"$ref": "#/_deploymentConfig/bucketDeletionPolicy"}
+        }
       },
       "stackParams": {
         "BucketName": {"$ref": "#/_deploymentConfig/bucketName"}

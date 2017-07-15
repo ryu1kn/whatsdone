@@ -1,4 +1,5 @@
 
 module.exports = {
-  hostedZoneId: 'Z1ZSF9275QJEQQ'
+  hostedZoneId: 'Z1ZSF9275QJEQQ',
+  customDeletionPolicy: 'Delete'
 };
