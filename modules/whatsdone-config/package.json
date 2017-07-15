@@ -1,7 +1,8 @@
 {
   "name": "whatsdone-config",
   "scripts": {
-    "deploy": "kumo deploy-module --verbose"
+    "deploy": "kumo deploy-module --verbose",
+    "destroy": "kumo destroy-module --verbose"
   },
   "dependencies": {
     "aws-sdk": "^2.77.0"

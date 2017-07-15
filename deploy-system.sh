@@ -3,15 +3,9 @@
 set -euo pipefail
 
 MODULES=(
-    whatsdone-config
-    whatsdone-env
-    whatsdone-assets
-    whatsdone-web-cache
-    whatsdone-app
-    whatsdone-api
-    whatsdone-gateway
+    `cat ./module-deploy-order.txt`
 )
 
 for MODULE in ${MODULES[*]} ; do
-    ./deploy-module.sh -m $MODULE -- --env $ENV_NAME --region ap-southeast-2
+    (cd modules/$MODULE_NAME && npm run deploy -- --env $ENV_NAME --region ap-southeast-2)
 done

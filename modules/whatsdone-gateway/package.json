@@ -1,6 +1,7 @@
 {
   "name": "whatsdone-gateway",
   "scripts": {
-    "deploy": "kumo deploy-module --verbose"
+    "deploy": "kumo deploy-module --verbose",
+    "destroy": "kumo destroy-module --verbose"
   }
 }
