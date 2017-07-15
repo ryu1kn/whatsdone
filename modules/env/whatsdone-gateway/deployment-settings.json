@@ -14,7 +14,7 @@
       },
       "stackParams": {
         "HostedZoneId": {"$ref": "#/_deploymentConfig/hostedZoneId"},
-        "DomainName": {"$ref": "#/_deploymentOutputs/whatsdone-web-cache/publicDomain"},
+        "DomainName": {"$ref": "#/_deploymentOutputs/whatsdone-web-cache/PublicDomain"},
         "CloudFrontDistributionDomainName": {"$ref": "#/_deploymentOutputs/whatsdone-web-cache/CloudFrontDistributionDomainName"}
       }
     }

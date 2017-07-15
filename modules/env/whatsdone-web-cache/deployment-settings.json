@@ -13,11 +13,12 @@
       "id": "export-public-domain-name",
       "type": "custom",
       "run": {
-        "script": "echo \"{\\\"publicDomain\\\":\\\"$PUBLIC_DOMAIN_NAME\\\"}\" > $KUMO_TASK_OUTPUTS_FILE",
+        "script": "echo $PUBLIC_DOMAIN_NAME > $KUMO_TASK_OUTPUTS_FILE",
         "envVars": {
           "PUBLIC_DOMAIN_NAME": {"$ref": "#/_deploymentConfig/publicDomain"}
         }
-      }
+      },
+      "outputsName": "PublicDomain"
     },
     {
       "id": "prepare-cloudfront",
@@ -27,7 +28,7 @@
         "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
       },
       "stackParams": {
-        "PublicDomain": {"$ref": "#/_deploymentConfig/publicDomain"},
+        "PublicDomain": {"$ref": "#/_deploymentOutputs/whatsdone-web-cache/PublicDomain"},
         "CloudFrontOriginAccessIdentity": {"$ref": "#/_deploymentOutputs/whatsdone-config/CloudFrontOriginAccessIdentity/Id"},
         "LoggingBucket": {"$ref": "#/_deploymentOutputs/whatsdone-env/Bucket"},
         "AssetBucketDomain": {"$ref": "#/_deploymentOutputs/whatsdone-assets/BucketDomain"}
