@@ -1,8 +1,5 @@
 {
     "moduleName": "whatsdone-app",
-    "config": {
-        "script": "echo {}"
-    },
     "tasks": [
         {
             "id": "build-lambda-app",
