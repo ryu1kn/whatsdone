@@ -1,5 +1,5 @@
 
-const projectConfig = require('../../../config/sit');
+const projectConfig = require('../../../../config/sit');
 
 module.exports = {
   domainName: 'whatsdone-sit-api.ryuichi.io',
