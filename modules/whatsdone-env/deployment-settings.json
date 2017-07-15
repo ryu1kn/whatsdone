@@ -1,5 +1,8 @@
 {
   "moduleName": "whatsdone-env",
+  "config": {
+    "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\""
+  },
   "tasks": [
     {
       "id": "prepare-root-bucket",
@@ -7,6 +10,9 @@
       "stackName": "module",
       "stackTemplate": {
         "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
+      },
+      "stackParams": {
+        "BucketName": {"$ref": "#/_deploymentConfig/bucketName"}
       }
     }
   ]
