@@ -1,7 +1,7 @@
 {
   "moduleName": "whatsdone-web-cache",
   "dependsOn": [
-    "../whatsdone-config",
+    "../../no-env/whatsdone-config",
     "../whatsdone-env",
     "../whatsdone-assets"
   ],

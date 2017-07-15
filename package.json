@@ -11,10 +11,10 @@
     "node": "6.10"
   },
   "scripts": {
-    "test": "(cd modules/whatsdone-app/src && npm install && npm test)",
-    "coverage-backend": "(cd modules/whatsdone-app/src && npm install && npm run report-coverage)",
+    "test": "(cd modules/env/whatsdone-app/src && npm install && npm test)",
+    "coverage-backend": "(cd modules/env/whatsdone-app/src && npm install && npm run report-coverage)",
     "lint": "npm run lint-backend && npm run lint-frontend",
-    "lint-backend": "(cd modules/whatsdone-app/src && npm install && npm run lint)",
-    "lint-frontend": "(cd modules/whatsdone-assets && npm install && npm run lint)"
+    "lint-backend": "(cd modules/env/whatsdone-app/src && npm install && npm run lint)",
+    "lint-frontend": "(cd modules/env/whatsdone-assets && npm install && npm run lint)"
   }
 }
