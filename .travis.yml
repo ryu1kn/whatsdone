@@ -8,4 +8,4 @@ addons:
 install:
   - npm install
 script:
-  - '[[ "$TRAVIS_EVENT_TYPE" = "cron" ]] && npm run build:cron || npm run build:commit'
+  - npm run travis-trigger
