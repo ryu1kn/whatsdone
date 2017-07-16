@@ -24,7 +24,8 @@ describe('Server PostSigninRequestProcessor', () => {
       expect(result).to.eql({
         statusCode: '200',
         headers: {
-          'Set-cookie': 'SESSION_EMBEDDED_COOKIE'
+          'Set-cookie': 'SESSION_EMBEDDED_COOKIE',
+          'Content-Type': 'text/plain'
         }
       });
       expect(loginCommand.execute).to.have.been.calledWith({
