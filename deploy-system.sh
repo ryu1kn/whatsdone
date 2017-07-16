@@ -16,3 +16,5 @@ done
 for MODULE in ${MODULES__ENV[*]} ; do
     (cd modules/env/$MODULE && npm run deploy -- --env $ENV_NAME --region ap-southeast-2)
 done
+
+(cd modules/env/whatsdone-assets && npm install && npm run build && npm run deploy:app )
