@@ -42,7 +42,7 @@
             "id": "create-new-deployment",
             "type": "custom",
             "run": {
-              "script": "aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name $STAGE_NAME",
+              "script": "aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name $STAGE_NAME --region $KUMO_TASK_REGION",
               "envVars": {
                 "REST_API_ID": {"$ref": "#/_deploymentOutputs/whatsdone-api/RestApiId"},
                 "STAGE_NAME": {"$ref": "#/_deploymentOutputs/whatsdone-api/ApiStageName"}

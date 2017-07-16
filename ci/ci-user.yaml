@@ -25,10 +25,26 @@ Resources:
               - Sid: Stmt1489901204000
                 Effect: Allow
                 Action:
-                  - s3:AbortMultipartUpload
-                  - s3:DeleteObject
-                  - s3:GetObject
-                  - s3:GetObjectAcl
-                  - s3:PutObject
-                  - s3:PutObjectAcl
+                  - acm:DescribeCertificate
+                  - acm:GetCertificate
+                  - acm:ListCertificates
+                  - acm:ListTagsForCertificate
+                  - apigateway:POST
+                  - cloudformation:CreateStack
+                  - cloudformation:DeleteStack
+                  - cloudformation:DescribeStacks
+                  - cloudformation:UpdateStack
+                  - cloudfront:CreateCloudFrontOriginAccessIdentity
+                  - iam:GetRole
+                  - kms:Decrypt
+                  - lambda:CreateFunction
+                  - lambda:DeleteFunction
+                  - lambda:GetFunctionConfiguration
+                  - lambda:UpdateFunctionCode
+                  - logs:CreateLogGroup
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:DescribeLogStreams
+                  - logs:PutLogEvents
+                  - s3:*
                 Resource: "*"
