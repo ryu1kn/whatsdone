@@ -220,13 +220,13 @@
                 {
                   "Effect": "Allow",
                   "Action": [
-                    "logs:CreateLogGroup",
-                    "logs:CreateLogStream",
-                    "logs:DescribeLogStreams",
-                    "logs:PutLogEvents"
+                      "logs:CreateLogGroup",
+                      "logs:CreateLogStream",
+                      "logs:DescribeLogStreams",
+                      "logs:PutLogEvents"
                   ],
                   "Resource": {
-                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
                   }
                 },
                 {
@@ -271,7 +271,7 @@
     "ProxyLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
-        "FunctionName": {"Fn::Sub": "${EnvName}-whatsdone-ProxyLambdaFunction"},
+        "FunctionName": {"Fn::Sub": "whatsdone-${EnvName}-ProxyLambdaFunction"},
         "Description": "What's Done app",
         "Handler": "index.handler",
         "Role": {"Fn::GetAtt": ["LambdaFunctionRole", "Arn"]},
@@ -298,13 +298,20 @@
         "Timeout": "10"
       }
     },
-    "GetDonesLambdaPermission": {
+    "ProxyLambdaPermission": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:invokeFunction",
         "FunctionName": {"Fn::GetAtt": ["ProxyLambdaFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {"Fn::Sub": "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*"}
+      }
+    },
+    "ProxyLambdaLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+          "LogGroupName": {"Fn::Sub": "/aws/lambda/${ProxyLambdaFunction}"},
+          "RetentionInDays": 14
       }
     }
   },
