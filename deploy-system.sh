@@ -10,11 +10,11 @@ MODULES__ENV=(
 )
 
 for MODULE in ${MODULES__NO_ENV[*]} ; do
-    (cd modules/no-env/$MODULE && npm run deploy -- --region ap-southeast-2)
+    (cd modules/no-env/$MODULE && npm run deploy -- --region $AWS_REGION)
 done
 
 for MODULE in ${MODULES__ENV[*]} ; do
-    (cd modules/env/$MODULE && npm run deploy -- --env $ENV_NAME --region ap-southeast-2)
+    (cd modules/env/$MODULE && npm run deploy -- --env $ENV_NAME --region $AWS_REGION)
 done
 
 (cd modules/env/whatsdone-assets && npm install && npm run build && npm run deploy:app )

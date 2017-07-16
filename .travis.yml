@@ -14,3 +14,5 @@ install:
 - npm install
 script:
 - npm run travis-trigger
+after_success:
+- "BUILD_NUMBER=$TRAVIS_BUILD_NUMBER ENV_NAME=prod npm run deploy-system"
