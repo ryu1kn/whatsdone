@@ -17,6 +17,17 @@
       "stackParams": {
         "BucketName": {"$ref": "#/_deploymentConfig/bucketName"}
       }
+    },
+    {
+      "id": "empty-bucket",
+      "type": "custom",
+      "undo": {
+        "script": "[[ \"$DELETION_POLICY\" == Delete ]] && aws s3 rm s3://$BUCKET_NAME --recursive",
+        "envVars": {
+          "BUCKET_NAME": {"$ref": "#/_deploymentConfig/bucketName"},
+          "DELETION_POLICY": {"$ref": "#/_deploymentConfig/bucketDeletionPolicy"}
+        }
+      }
     }
   ]
 }
