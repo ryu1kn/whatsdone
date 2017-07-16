@@ -11,8 +11,8 @@
     "node": "6.10"
   },
   "scripts": {
-    "travis-trigger": "./travis-trigger.sh",
-    "deploy-system": "echo testing script in travis.yml",
+    "travis-build": "BUILD_NUMBER=$TRAVIS_BUILD_NUMBER npm run build",
+    "travis-deploy": "./travis-deploy.sh",
     "build": "npm run lint && npm run coverage:backend",
     "test": "(cd modules/env/whatsdone-app/src && npm install && npm test)",
     "coverage:backend": "(cd modules/env/whatsdone-app/src && npm install && npm run report-coverage)",
