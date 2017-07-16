@@ -3,7 +3,7 @@
   "dependsOn": [
     "../../no-env/whatsdone-config",
     "../whatsdone-env",
-    "../whatsdone-assets"
+    "../whatsdone-assets/ops"
   ],
   "config": {
     "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\""
