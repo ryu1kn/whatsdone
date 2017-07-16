@@ -3,7 +3,7 @@
 set -euo pipefail
 
 MODULES__ENV=(
-    `cat ./module-deploy-order--env.txt | tail -r`
+    `cat ./module-deploy-order--env.txt | grep -v '^#' | tail -r`
 )
 
 for MODULE in ${MODULES__ENV[*]} ; do

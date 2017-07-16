@@ -3,7 +3,7 @@
 set -euo pipefail
 
 MODULES__NO_ENV=(
-    `cat ./module-deploy-order--no-env.txt`
+    `cat ./module-deploy-order--no-env.txt | grep -v '^#'`
 )
 MODULES__ENV=(
     `cat ./module-deploy-order--env.txt`
