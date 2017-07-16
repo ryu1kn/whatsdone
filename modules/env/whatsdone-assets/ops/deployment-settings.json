@@ -1,7 +1,7 @@
 {
   "moduleName": "whatsdone-assets",
   "config": {
-    "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\""
+    "script": "node -p \"JSON.stringify(require('../module-config/$KUMO_ENV.js'))\""
   },
   "tasks": [
     {

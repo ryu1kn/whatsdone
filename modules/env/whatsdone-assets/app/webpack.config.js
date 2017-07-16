@@ -19,7 +19,7 @@ const jsMinifyPlugins = process.env.NODE_ENV === 'production' ? [
 module.exports = {
   entry: [
     'whatwg-fetch',
-    `${SRC_DIR}/client/scripts/app.js`
+    `${SRC_DIR}/app.js`
   ],
   output: {
     path: BUILD_DIR,
@@ -29,7 +29,7 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        include: `${SRC_DIR}/client`,
+        include: `${SRC_DIR}`,
         loader: 'babel-loader'
       },
       {
@@ -43,10 +43,10 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: `${SRC_DIR}/index.ejs`,
+      template: `${__dirname}/index.ejs`,
       filename: `${BUILD_DIR}/index.html`
     }),
-    new FaviconsWebpackPlugin(`${SRC_DIR}/images/favicon.png`),
+    new FaviconsWebpackPlugin(`${__dirname}/images/favicon.png`),
     extractLess,
     ...jsMinifyPlugins
   ]
