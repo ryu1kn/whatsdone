@@ -30,10 +30,10 @@
       }
     },
     {
-      "id": "upload-assets",
+      "id": "deploy-assets",
       "type": "custom",
       "run": {
-        "script": "./upload-assets.sh $KUMO_DEPLOYMENT_CONFIG"
+        "script": "./deploy-assets.sh $KUMO_DEPLOYMENT_CONFIG"
       }
     }
   ]
