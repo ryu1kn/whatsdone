@@ -1,5 +1,9 @@
 
-module.exports = {
-  hostedZoneId: 'Z1ZSF9275QJEQQ',
-  customDeletionPolicy: 'Delete'
-};
+const commonConfig = require('./common');
+
+module.exports = Object.assign({},
+  commonConfig,
+  {
+    customDeletionPolicy: 'Delete'
+  }
+);

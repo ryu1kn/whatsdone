@@ -3,5 +3,6 @@ const projectConfig = require('../../../../config/sit');
 
 module.exports = {
   bucketName: 'whatsdone-assets-sit',
-  bucketDeletionPolicy: projectConfig.customDeletionPolicy
+  bucketDeletionPolicy: projectConfig.customDeletionPolicy,
+  artifactBucket: projectConfig.artifactBucket
 };

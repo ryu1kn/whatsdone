@@ -1,0 +1,19 @@
+{
+  "moduleName": "artifact-store",
+  "config": {
+    "script": "node -p \"JSON.stringify(require('./module-config.js'))\""
+  },
+  "tasks": [
+    {
+      "id": "artifact-bucket",
+      "type": "cf-stack",
+      "stackName": "bucket",
+      "stackTemplate": {
+        "script": "cp ./template.json > $KUMO_TEMPLATE_OUTPUT_FILE"
+      },
+      "stackParams": {
+        "BucketName": {"$ref": "#/_deploymentConfig/artifactBucket"}
+      }
+    }
+  ]
+}
