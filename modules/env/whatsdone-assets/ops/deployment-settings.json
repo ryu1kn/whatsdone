@@ -28,13 +28,6 @@
           "DELETION_POLICY": {"$ref": "#/_deploymentConfig/bucketDeletionPolicy"}
         }
       }
-    },
-    {
-      "id": "deploy-assets",
-      "type": "custom",
-      "run": {
-        "script": "./deploy-assets.sh $KUMO_DEPLOYMENT_CONFIG"
-      }
     }
   ]
 }

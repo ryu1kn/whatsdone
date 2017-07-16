@@ -1,6 +1,7 @@
 {
   "name": "whatsdone-assets",
   "config": {
+    "BUILD_DIR": ".build",
     "APP_BUILD_DIR": "app/dist"
   },
   "scripts": {
@@ -8,6 +9,7 @@
     "postbuild": "node ./upload-artifact",
     "deploy": "cd ops && kumo deploy-module --verbose",
     "destroy": "cd ops && kumo destroy-module --verbose",
+    "deploy:app": "./deploy-app.sh",
     "lint": "eslint ."
   },
   "devDependencies": {
