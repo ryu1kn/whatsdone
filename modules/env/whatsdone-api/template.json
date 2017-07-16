@@ -316,6 +316,13 @@
     }
   },
   "Outputs": {
+    "RestApiId": {
+      "Description": "Root URL of What's Done API",
+      "Value": {"Ref": "RestApi"}
+    },
+    "ApiStageName": {
+      "Value": {"Fn::FindInMap": ["Variables", "Api", "StageName"]}
+    },
     "ApiRootUrl": {
       "Description": "Root URL of What's Done API",
       "Value": {"Fn::Sub": ["https://${RestApi}.execute-api.${AWS::Region}.amazonaws.com/${StageName}", {

@@ -37,6 +37,17 @@
               "LambdaS3Bucket": {"$ref": "#/_deploymentOutputs/whatsdone-app/packages/whatsdone-app/s3Bucket"},
               "LambdaS3Key": {"$ref": "#/_deploymentOutputs/whatsdone-app/packages/whatsdone-app/s3Key"}
             }
+        },
+        {
+            "id": "create-new-deployment",
+            "type": "custom",
+            "run": {
+              "script": "aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name $STAGE_NAME",
+              "envVars": {
+                "REST_API_ID": {"$ref": "#/_deploymentOutputs/whatsdone-api/RestApiId"},
+                "STAGE_NAME": {"$ref": "#/_deploymentOutputs/whatsdone-api/ApiStageName"}
+              }
+            }
         }
     ]
 }
