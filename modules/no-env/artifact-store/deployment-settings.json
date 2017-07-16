@@ -9,7 +9,7 @@
       "type": "cf-stack",
       "stackName": "bucket",
       "stackTemplate": {
-        "script": "cp ./template.json > $KUMO_TEMPLATE_OUTPUT_FILE"
+        "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
       },
       "stackParams": {
         "BucketName": {"$ref": "#/_deploymentConfig/artifactBucket"}
