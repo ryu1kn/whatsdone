@@ -1,11 +1,9 @@
 
 const AppDispatcher = require('../dispatcher/AppDispatcher');
 const DoneConstant = require('../constants/DoneConstant');
-const url = require('url');
-const sendAjax = require('../SendAjax');
+const fetchFromWhatsdone = require('../FetchFromWhatsdone');
 
 function postDone(doneItem) {
-  const uri = url.resolve(WhatsDone.API_ORIGIN, '/dones');
   const options = {
     method: 'POST',
     headers: {
@@ -13,7 +11,7 @@ function postDone(doneItem) {
     },
     body: composeFormData(doneItem)
   };
-  return sendAjax(uri, options);
+  return fetchFromWhatsdone('/dones', options);
 }
 
 function composeFormData(data) {
@@ -26,9 +24,8 @@ function composeFormData(data) {
  * @param {string} doneId
  */
 function deleteDone(doneId) {
-  const uri = url.resolve(WhatsDone.API_ORIGIN, `/dones/${doneId}`);
   const options = {method: 'DELETE'};
-  return sendAjax(uri, options);
+  return fetchFromWhatsdone(`/dones/${doneId}`, options);
 }
 
 var DoneAction = {

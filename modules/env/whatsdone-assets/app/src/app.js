@@ -6,12 +6,6 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import SigninPage from './pages/signin/index';
 import DonePage from './pages/done/index';
 
-fetch('/appConfig.json')
-  .then(response => response.json())
-  .then(response => {
-    console.log('- - - - - - - - - response', response)
-  });
-
 ReactDOM.render(
   (
     <Router>

@@ -2,8 +2,7 @@
 const AppDispatcher = require('../dispatcher/AppDispatcher');
 const EventEmitter = require('events').EventEmitter;
 const DoneConstant = require('../constants/DoneConstant');
-const sendAjax = require('../SendAjax');
-const url = require('url');
+const fetchFromWhatsdone = require('../FetchFromWhatsdone');
 
 var CHANGE_EVENT = 'change';
 
@@ -11,7 +10,7 @@ var CHANGE_EVENT = 'change';
 var _dones = [];
 
 function load() {
-  return sendAjax(url.resolve(WhatsDone.API_ORIGIN, '/dones'));
+  return fetchFromWhatsdone('/dones');
 }
 
 // TODO: Instead of defining normalise functions,

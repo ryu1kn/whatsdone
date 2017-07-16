@@ -1,8 +1,7 @@
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import {LoginStatusEvent} from '../Const';
-import sendAjax from '../SendAjax';
-import url from 'url';
+import fetchFromWhatsdone from '../FetchFromWhatsdone';
 
 const LoginStatusAction = {
 
@@ -24,7 +23,6 @@ const LoginStatusAction = {
 };
 
 function login(formData) {
-  const uri = url.resolve(WhatsDone.API_ORIGIN, '/signin');
   const options = {
     method: 'POST',
     headers: {
@@ -32,7 +30,7 @@ function login(formData) {
     },
     body: composeSearchParams(formData)
   };
-  return sendAjax(uri, options);
+  return fetchFromWhatsdone('/signin', options);
 }
 
 function composeSearchParams(formData) {
