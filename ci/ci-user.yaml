@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: What's Done CI group/user
+Parameters:
+  CiUserName:
+    Description: User name for CI
+    Type: String
+Resources:
+  CiUser:
+    Type: "AWS::IAM::User"
+    Properties:
+      Groups:
+        - !Ref WhatsDoneCiGroup
+      Path: "/"
+      UserName: !Ref CiUserName
+  WhatsDoneCiGroup:
+    Type: "AWS::IAM::Group"
+    Properties:
+      GroupName: whatsdone-ci
+      Path: "/"
+      Policies:
+        - PolicyName: whatsdone-ci-20170716
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: Stmt1489901204000
+                Effect: Allow
+                Action:
+                  - s3:AbortMultipartUpload
+                  - s3:DeleteObject
+                  - s3:GetObject
+                  - s3:GetObjectAcl
+                  - s3:PutObject
+                  - s3:PutObjectAcl
+                Resource: "*"
