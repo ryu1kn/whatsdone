@@ -8,6 +8,4 @@ addons:
 install:
   - npm install
 script:
-  - npm run lint
-after_script:
-  - npm run coverage-backend
+  - [[ "$TRAVIS_EVENT_TYPE" = "cron" ]] && npm run build:cron || npm run build:commit
