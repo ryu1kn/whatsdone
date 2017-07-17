@@ -1,0 +1,7 @@
+{
+  "name": "test-cr",
+  "scripts": {
+    "deploy": "kumo deploy-module --verbose",
+    "destroy": "kumo destroy-module --verbose"
+  }
+}

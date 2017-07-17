@@ -1,0 +1,6 @@
+{
+  "name": "cr-apigateway-deployment",
+  "dependencies": {
+    "node-fetch": "^1.7.1"
+  }
+}
