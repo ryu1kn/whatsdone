@@ -14,11 +14,9 @@
     "lint": "eslint ."
   },
   "devDependencies": {
-    "archiver": "^2.0.0",
-    "aws-sdk": "^2.85.0",
+    "directory-s3uploader": "file:../../../local-npm/directory-s3uploader",
     "eslint": "^3.12.2",
     "eslint-config-xo": "^0.17.0",
-    "eslint-plugin-react": "^6.8.0",
-    "s3-upload-stream": "^1.0.7"
+    "eslint-plugin-react": "^6.8.0"
   }
 }

@@ -1,0 +1,10 @@
+{
+  "name": "directory-s3uploader",
+  "version": "0.0.1",
+  "main": "index.js",
+  "dependencies": {
+    "archiver": "^2.0.0",
+    "aws-sdk": "^2.85.0",
+    "s3-upload-stream": "^1.0.7"
+  }
+}
