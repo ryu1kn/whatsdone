@@ -29,7 +29,13 @@ Resources:
                   - acm:GetCertificate
                   - acm:ListCertificates
                   - acm:ListTagsForCertificate
+                  - apigateway:DELETE
+                  - apigateway:GET
+                  - apigateway:HEAD
+                  - apigateway:OPTIONS
+                  - apigateway:PATCH
                   - apigateway:POST
+                  - apigateway:PUT
                   - cloudformation:CreateStack
                   - cloudformation:DeleteStack
                   - cloudformation:DescribeStacks
@@ -40,16 +46,29 @@ Resources:
                   - cloudfront:GetDistribution
                   - cloudfront:GetDistributionConfig
                   - cloudfront:UpdateDistribution
+                  - iam:CreateRole
+                  - iam:DeleteRole
                   - iam:GetRole
+                  - iam:DeleteRolePolicy
+                  - iam:PassRole
+                  - iam:PutRolePolicy
+                  - kms:CreateGrant
+                  - kms:Encrypt
                   - kms:Decrypt
+                  - lambda:AddPermission
                   - lambda:CreateFunction
                   - lambda:DeleteFunction
+                  - lambda:GetFunction
                   - lambda:GetFunctionConfiguration
+                  - lambda:RemovePermission
                   - lambda:UpdateFunctionCode
                   - logs:CreateLogGroup
-                  - logs:CreateLogGroup
                   - logs:CreateLogStream
+                  - logs:DeleteLogGroup
+                  - logs:DeleteLogStream
+                  - logs:DescribeLogGroups
                   - logs:DescribeLogStreams
                   - logs:PutLogEvents
+                  - logs:PutRetentionPolicy
                   - s3:*
                 Resource: "*"
