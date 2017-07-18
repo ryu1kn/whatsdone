@@ -23,21 +23,24 @@ function uploadZip(state) {
     Bucket: state.s3bucket,
     Key: state.s3key
   };
-  return new Promise((resolve, reject) => {
-    pipeStreams([state.zipStream, s3Stream.upload(params)], reject)
-      .on('finish', resolve);
-  });
+  return pipeStreams(state.zipStream, s3Stream.upload(params));
 }
 
-function pipeStreams(streams, reject) {
-  streams.forEach(stream => {
-    stream.on('error', reject);
+function pipeStreams(...streams) {
+  return new Promise((resolve, reject) => {
+    streams.forEach(stream => {
+      stream.on('error', errorMessage => {
+        reject(new Error(errorMessage));
+      });
+    });
+
+    const [firstStream, ...restStreams] = streams;
+    const pipedStream = restStreams.reduce(
+      (joinedStream, stream) => joinedStream.pipe(stream),
+      firstStream
+    );
+    pipedStream.on('close', resolve);
   });
-  const [firstStream, ...restStreams] = streams;
-  return restStreams.reduce(
-    (joinedStream, stream) => joinedStream.pipe(stream),
-    firstStream
-  );
 }
 
 function dropReturnValue() {}
