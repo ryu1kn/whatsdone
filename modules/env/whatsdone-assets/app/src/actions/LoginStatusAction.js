@@ -10,7 +10,7 @@ const LoginStatusAction = {
       actionType: LoginStatusEvent.LOGIN_INITIATED
     });
 
-    login(params.formData).then(() => {
+    login(params.loginDetails).then(() => {
       AppDispatcher.dispatch({
         actionType: LoginStatusEvent.LOGIN_SUCCESSFUL
       });
@@ -22,23 +22,21 @@ const LoginStatusAction = {
 
 };
 
-function login(formData) {
+function login(loginDetails) {
   const options = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
     },
-    body: composeSearchParams(formData)
+    body: composeSearchParams(loginDetails)
   };
   return fetchFromWhatsdone('/signin', options);
 }
 
-function composeSearchParams(formData) {
-  const paramArray = [];
-  for (var [key, value] of formData.entries()) {
-    paramArray.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
-  }
-  return paramArray.join('&');
+function composeSearchParams(loginDetails) {
+  return Object.keys(loginDetails)
+    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(loginDetails[key])}`)
+    .join('&');
 }
 
 module.exports = LoginStatusAction;

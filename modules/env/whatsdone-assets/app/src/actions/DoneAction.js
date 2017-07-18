@@ -9,12 +9,12 @@ function postDone(doneItem) {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
     },
-    body: composeFormData(doneItem)
+    body: composeSearchParams(doneItem)
   };
   return fetchFromWhatsdone('/dones', options);
 }
 
-function composeFormData(data) {
+function composeSearchParams(data) {
   return Object.keys(data)
     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
     .join('&');
