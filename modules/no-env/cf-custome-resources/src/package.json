@@ -1,5 +1,5 @@
 {
-  "name": "cr-apigateway-deployment",
+  "name": "cf-custom-resources",
   "dependencies": {
     "node-fetch": "^1.7.1"
   }

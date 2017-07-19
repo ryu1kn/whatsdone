@@ -1,5 +1,5 @@
 {
-  "name": "cr-apigateway-deployment",
+  "name": "cf-custom-resources",
   "scripts": {
     "deploy": "kumo deploy-module --verbose",
     "destroy": "kumo destroy-module --verbose"
