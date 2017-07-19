@@ -70,5 +70,8 @@ Resources:
                   - logs:DescribeLogStreams
                   - logs:PutLogEvents
                   - logs:PutRetentionPolicy
+                  - route53:ChangeResourceRecordSets
+                  - route53:GetChange
+                  - route53:GetHostedZone
                   - s3:*
                 Resource: "*"
