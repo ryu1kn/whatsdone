@@ -1,11 +1,11 @@
 
 const uploadDirectory = require('directory-s3uploader');
-const argv = require('minimist')(process.argv.slice(2));
+const config = require('./module-config');
 
 const params = {
-  directoryPath: argv['target-dir'],
-  s3bucket: argv.s3bucket,
-  s3key: argv.s3key
+  directoryPath: process.env.npm_package_config_SRC_DIR,
+  s3bucket: config.artifactBucket,
+  s3key: `cf-custom-resources/${process.env.BUILD_NUMBER}.zip`
 };
 uploadDirectory(params)
   .then(() => outputUploadLocation(params))

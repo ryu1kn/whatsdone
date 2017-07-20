@@ -1,0 +1,16 @@
+{
+  "name": "cf-custom-resources",
+  "config": {
+    "SRC_DIR": "./src"
+  },
+  "scripts": {
+    "prebuild": "npm install && (cd $npm_package_config_SRC_DIR && npm install --production)",
+    "build": "npm test",
+    "postbuild": "node upload-lambda",
+    "deploy": "cd ops && kumo deploy-module --verbose",
+    "destroy": "cd ops && kumo destroy-module --verbose"
+  },
+  "devDependencies": {
+    "directory-s3uploader": "file:../../../local-npm/directory-s3uploader"
+  }
+}
