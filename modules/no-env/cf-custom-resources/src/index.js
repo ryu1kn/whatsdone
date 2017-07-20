@@ -1,37 +1,18 @@
 
-const fetch = require('node-fetch');
+const handlerMap = Object.create(null);
 
-exports.handler = (event, context, callback) => {
+exports.handler = createHandler('handler', './sample');
+exports.apiGatewayDeploymentHandler = createHandler('apiGatewayDeploymentHandler', './apigateway-deployment');
 
-  console.log('Received event', JSON.stringify(event));
-
-  const shouldFail = event.ResourceProperties.shouldFail && event.RequestType !== 'Delete';
-
-  const body = JSON.stringify({
-    Status: shouldFail ? 'FAILED' : 'SUCCESS',
-    Reason: shouldFail ? '' : 'Failed',
-    PhysicalResourceId: 'testResource',
-    StackId: event.StackId,
-    RequestId: event.RequestId,
-    LogicalResourceId: event.LogicalResourceId,
-    Data: shouldFail ? {} : {foo: 'bar'}
-  });
-
-  const options = {
-    method: 'put',
-    body,
-    headers: {
-      'content-type': '',
-      'content-length': body.length
+function createHandler(handlerId, handlerPath) {
+  return (...args) => {
+    try {
+      if (!handlerMap[handlerId]) {
+        handlerMap[handlerId] = require(handlerPath);
+      }
+      handlerMap[handlerId](...args);
+    } catch (e) {
+      callback(e);
     }
   };
-  fetch(event.ResponseURL, options)
-    .then(response => {
-      if (response.status !== 200) throw new Error(`Invalid response code ${response.status}`);
-      return response.text();
-    })
-    .then(responseText => {
-      console.log('Response text:', responseText);
-    })
-    .catch(callback);
-};
+}
