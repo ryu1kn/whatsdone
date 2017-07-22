@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import SigninPage from './page';
-import apiClient from '../../WhatsdoneApiClient';
+import ServiceLocator from '../../ServiceLocator';
 
 const containerState = {};
 
@@ -12,7 +12,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = _dispatch => {
   return {
     onSubmit: loginDetails => {
-      apiClient.login(loginDetails)
+      ServiceLocator.whatsdoneApiClient.login(loginDetails)
         .then(() => {
           containerState.ownProps.history.push('/');
         })
