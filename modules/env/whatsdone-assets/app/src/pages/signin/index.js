@@ -1,52 +1,28 @@
-
-import './style.less';
-
-import React from 'react';
+import {connect} from 'react-redux';
+import SigninPage from './page';
 import LoginStatusAction from '../../actions/LoginStatusAction';
 
-class Signin extends React.Component {
+const containerState = {};
 
-  constructor(params) {
-    super(params);
+const mapStateToProps = (state, ownProps) => {
+  containerState.ownProps = ownProps;
+  return {};
+};
 
-    this.state = {
-      email: '',
-      password: ''
-    };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-  }
+const mapDispatchToProps = _dispatch => {
+  return {
+    onSubmit: loginDetails => {
+      LoginStatusAction.login(loginDetails)
+        .then(() => {
+          containerState.ownProps.history.push('/');
+        })
+        .catch(e => {
+          console.error(e.stack);   // eslint-disable-line no-console
+        });
+    }
+  };
+};
 
-  handleSubmit(event) {
-    event.preventDefault();
-    LoginStatusAction.login({
-      historyRef: this.props.history,
-      loginDetails: this.state
-    });
-  }
+const SigninPageContainer = connect(mapStateToProps, mapDispatchToProps)(SigninPage);
 
-  handleChange(event) {
-    this.setState({[event.target.name]: event.target.value.trim()});
-  }
-
-  render() {
-    return (
-      <div className="container signin">
-        <form className="form-signin" onSubmit={this.handleSubmit}>
-          <h2 className="form-signin-heading">Please sign in</h2>
-          <label className="sr-only" htmlFor="inputEmail">Email address</label>
-          <input className="form-control" type="email" id="inputEmail" name="email" value={this.state.email} onChange={this.handleChange} placeholder="Email address" required autoFocus />
-          <label className="sr-only" htmlFor="inputPassword">Password</label>
-          <input className="form-control" type="password" id="inputPassword" name="password" value={this.state.password} onChange={this.handleChange} placeholder="Password" required />
-          <div className="checkbox">
-            <label><input type="checkbox" name="rememberMe" />Remember me</label>
-          </div>
-          <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-        </form>
-      </div>
-    );
-  }
-
-}
-
-export default Signin;
+export default SigninPageContainer;
