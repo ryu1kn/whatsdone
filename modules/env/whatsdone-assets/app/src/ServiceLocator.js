@@ -6,8 +6,8 @@ class ServiceLocator {
     this._cache = Object.create(null);
   }
 
-  get fetchFromWhatsdone() {
-    return this._get('fetchFromWhatsdone');
+  get smartFetch() {
+    return this._get('smartFetch');
   }
 
   get whatsdoneApiClient() {

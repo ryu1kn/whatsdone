@@ -1,14 +1,20 @@
 
 import ServiceLocator from './ServiceLocator';
+import url from 'url';
+
+const DEFAULT_OPTIONS = {
+  mode: 'cors',
+  credentials: 'include'
+};
 
 class WhatsdoneApiClient {
 
   constructor() {
-    this._fetchFromWhatsdone = ServiceLocator.fetchFromWhatsdone;
+    this._smartFetch = ServiceLocator.smartFetch;
   }
 
   login(loginDetails) {
-    return this._fetchFromWhatsdone('/signin', this._buildPostOption(loginDetails));
+    return this._relayFetch('/signin', this._buildPostOption(loginDetails));
   }
 
   _buildPostOption(data) {
@@ -28,15 +34,33 @@ class WhatsdoneApiClient {
   }
 
   getDones() {
-    return this._fetchFromWhatsdone('/dones');
+    return this._relayFetch('/dones');
   }
 
   postDone(doneItem) {
-    return this._fetchFromWhatsdone('/dones', this._buildPostOption(doneItem));
+    return this._relayFetch('/dones', this._buildPostOption(doneItem));
   }
 
   deleteDone(doneId) {
-    return this._fetchFromWhatsdone(`/dones/${doneId}`, {method: 'DELETE'});
+    return this._relayFetch(`/dones/${doneId}`, {method: 'DELETE'});
+  }
+
+  _relayFetch(path, options) {
+    return this._getApiOrigin().then(apiOrigin => {
+      const uri = url.resolve(apiOrigin, path);
+      const finalOptions = Object.assign({}, DEFAULT_OPTIONS, options);
+      return this._smartFetch(uri, finalOptions);
+    });
+  }
+
+  // HACK: Temporally placing the retrieval of application config here
+  _getApiOrigin() {
+    if (this._API_ORIGIN) return Promise.resolve(this._API_ORIGIN);
+    return this._smartFetch('/appConfig.json')
+      .then(appConfig => {
+        this._API_ORIGIN = appConfig.API_ORIGIN;
+        return this._API_ORIGIN;
+      });
   }
 
 }
