@@ -1,7 +1,7 @@
 
 const AppDispatcher = require('../dispatcher/AppDispatcher');
 const DoneConstant = require('../constants/DoneConstant');
-const whatsdoneApiClient = require('../whatsdoneApiClient');
+const ServiceLocator = require('../ServiceLocator');
 
 var DoneAction = {
 
@@ -19,28 +19,30 @@ var DoneAction = {
       item: doneItem
     });
 
-    whatsdoneApiClient.postDone(doneItem).then(function (updatedItem) {
-      AppDispatcher.dispatch({
-        actionType: DoneConstant.DONE_CREATE_COMPLETE,
-        item: updatedItem
+    ServiceLocator.whatsdoneApiClient.postDone(doneItem)
+      .then(function (updatedItem) {
+        AppDispatcher.dispatch({
+          actionType: DoneConstant.DONE_CREATE_COMPLETE,
+          item: updatedItem
+        });
+      }).catch(e => {
+        console.error(e.stack);  // eslint-disable-line no-console
       });
-    }).catch(e => {
-      console.error(e.stack);  // eslint-disable-line no-console
-    });
   },
 
   /**
    * @param {string} id
    */
   destroy: function (id) {
-    whatsdoneApiClient.deleteDone(id).then(function () {
-      AppDispatcher.dispatch({
-        actionType: DoneConstant.DONE_DESTROY,
-        id: id
+    ServiceLocator.whatsdoneApiClient.deleteDone(id)
+      .then(function () {
+        AppDispatcher.dispatch({
+          actionType: DoneConstant.DONE_DESTROY,
+          id: id
+        });
+      }).catch(function () {
+        // TODO: Rollback the deletion
       });
-    }).catch(function () {
-      // TODO: Rollback the deletion
-    });
   }
 
 };

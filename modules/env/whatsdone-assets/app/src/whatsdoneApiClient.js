@@ -1,10 +1,14 @@
 
-import fetchFromWhatsdone from './FetchFromWhatsdone';
+import ServiceLocator from './ServiceLocator';
 
 class WhatsdoneApiClient {
 
+  constructor() {
+    this._fetchFromWhatsdone = ServiceLocator.fetchFromWhatsdone;
+  }
+
   login(loginDetails) {
-    return fetchFromWhatsdone('/signin', this._buildPostOption(loginDetails));
+    return this._fetchFromWhatsdone('/signin', this._buildPostOption(loginDetails));
   }
 
   _buildPostOption(data) {
@@ -24,17 +28,17 @@ class WhatsdoneApiClient {
   }
 
   getDones() {
-    return fetchFromWhatsdone('/dones');
+    return this._fetchFromWhatsdone('/dones');
   }
 
   postDone(doneItem) {
-    return fetchFromWhatsdone('/dones', this._buildPostOption(doneItem));
+    return this._fetchFromWhatsdone('/dones', this._buildPostOption(doneItem));
   }
 
   deleteDone(doneId) {
-    return fetchFromWhatsdone(`/dones/${doneId}`, {method: 'DELETE'});
+    return this._fetchFromWhatsdone(`/dones/${doneId}`, {method: 'DELETE'});
   }
 
 }
 
-module.exports = new WhatsdoneApiClient();
+module.exports = WhatsdoneApiClient;

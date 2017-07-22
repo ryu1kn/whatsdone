@@ -5,6 +5,10 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {Provider} from 'react-redux';
 import {createStore} from 'redux';
 
+import ServiceLocator from './ServiceLocator';
+import ServiceFactory from './ServiceFactory';
+ServiceLocator.load(new ServiceFactory());
+
 import reduce from './reducer';
 import SigninPage from './pages/signin/index';
 import DonePage from './pages/done/index';

@@ -2,7 +2,7 @@
 const AppDispatcher = require('../dispatcher/AppDispatcher');
 const EventEmitter = require('events').EventEmitter;
 const DoneConstant = require('../constants/DoneConstant');
-const apiClient = require('../whatsdoneApiClient');
+const ServiceLocator = require('../ServiceLocator');
 
 var CHANGE_EVENT = 'change';
 
@@ -69,7 +69,7 @@ var DoneStore = Object.assign({}, EventEmitter.prototype, {
 
   load: function () {
     var me = this;
-    apiClient.getDones().then(response => {
+    ServiceLocator.whatsdoneApiClient.getDones().then(response => {
       _dones = normaliseDoneItems(response);
       me.emit(CHANGE_EVENT);
     }).catch(e => {
