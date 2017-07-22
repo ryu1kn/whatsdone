@@ -2,8 +2,8 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import util from '../../util';
-import DoneAction from '../../actions/DoneAction';
+import util from '../../../util';
+import DoneAction from '../Actions';
 
 const converter = new Showdown.converter(); // eslint-disable-line new-cap
 

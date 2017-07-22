@@ -1,8 +1,8 @@
 
-const AppDispatcher = require('../dispatcher/AppDispatcher');
+const AppDispatcher = require('./AppDispatcher');
 const EventEmitter = require('events').EventEmitter;
-const DoneConstant = require('../constants/DoneConstant');
-const ServiceLocator = require('../ServiceLocator');
+const DoneConstant = require('./Constant');
+const ServiceLocator = require('../../ServiceLocator');
 
 var CHANGE_EVENT = 'change';
 

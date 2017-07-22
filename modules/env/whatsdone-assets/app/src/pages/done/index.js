@@ -4,10 +4,10 @@ import './style.less';
 
 import React from 'react';
 import {Link} from 'react-router-dom';
-import DoneStore from '../../stores/DoneStore';
+import DoneStore from './Store';
 
-import DoneHistory from './DoneHistory';
-import DoneForm from './DoneForm';
+import DoneHistory from './components/History';
+import DoneForm from './components/Form';
 
 class DonePage extends React.Component {
 
