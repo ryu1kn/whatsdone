@@ -1,4 +1,6 @@
 
+const WhatsdoneApiClient = require('./WhatsdoneApiClient');
+
 class ServiceFactory {
 
   createFetchFromWhatsdone() {
@@ -6,7 +8,6 @@ class ServiceFactory {
   }
 
   createWhatsdoneApiClient() {
-    const WhatsdoneApiClient = require('./whatsdoneApiClient');
     return new WhatsdoneApiClient();
   }
 
