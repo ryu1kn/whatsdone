@@ -2,16 +2,12 @@
 const AppDispatcher = require('../dispatcher/AppDispatcher');
 const EventEmitter = require('events').EventEmitter;
 const DoneConstant = require('../constants/DoneConstant');
-const fetchFromWhatsdone = require('../FetchFromWhatsdone');
+const apiClient = require('../whatsdoneApiClient');
 
 var CHANGE_EVENT = 'change';
 
 // TODO: Change _dones from an array to an object
 var _dones = [];
-
-function load() {
-  return fetchFromWhatsdone('/dones');
-}
 
 // TODO: Instead of defining normalise functions,
 //       define DoneItem class and make it deal with own data properly
@@ -73,7 +69,7 @@ var DoneStore = Object.assign({}, EventEmitter.prototype, {
 
   load: function () {
     var me = this;
-    load().then(response => {
+    apiClient.getDones().then(response => {
       _dones = normaliseDoneItems(response);
       me.emit(CHANGE_EVENT);
     }).catch(e => {

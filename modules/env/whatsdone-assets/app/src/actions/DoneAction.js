@@ -1,32 +1,7 @@
 
 const AppDispatcher = require('../dispatcher/AppDispatcher');
 const DoneConstant = require('../constants/DoneConstant');
-const fetchFromWhatsdone = require('../FetchFromWhatsdone');
-
-function postDone(doneItem) {
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-    },
-    body: composeSearchParams(doneItem)
-  };
-  return fetchFromWhatsdone('/dones', options);
-}
-
-function composeSearchParams(data) {
-  return Object.keys(data)
-    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
-    .join('&');
-}
-
-/**
- * @param {string} doneId
- */
-function deleteDone(doneId) {
-  const options = {method: 'DELETE'};
-  return fetchFromWhatsdone(`/dones/${doneId}`, options);
-}
+const whatsdoneApiClient = require('../whatsdoneApiClient');
 
 var DoneAction = {
 
@@ -44,7 +19,7 @@ var DoneAction = {
       item: doneItem
     });
 
-    postDone(doneItem).then(function (updatedItem) {
+    whatsdoneApiClient.postDone(doneItem).then(function (updatedItem) {
       AppDispatcher.dispatch({
         actionType: DoneConstant.DONE_CREATE_COMPLETE,
         item: updatedItem
@@ -58,7 +33,7 @@ var DoneAction = {
    * @param {string} id
    */
   destroy: function (id) {
-    deleteDone(id).then(function () {
+    whatsdoneApiClient.deleteDone(id).then(function () {
       AppDispatcher.dispatch({
         actionType: DoneConstant.DONE_DESTROY,
         id: id
