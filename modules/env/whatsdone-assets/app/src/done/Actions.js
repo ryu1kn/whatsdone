@@ -5,9 +5,6 @@ const ServiceLocator = require('../ServiceLocator');
 
 var DoneAction = {
 
-  /**
-   * @param {string} text
-   */
   create: function (text) {
     var doneItem = {
       doneThing: text,
@@ -30,9 +27,6 @@ var DoneAction = {
       });
   },
 
-  /**
-   * @param {string} id
-   */
   destroy: function (id) {
     ServiceLocator.whatsdoneApiClient.deleteDone(id)
       .then(function () {

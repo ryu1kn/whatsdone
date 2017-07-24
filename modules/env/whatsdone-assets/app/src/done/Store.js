@@ -12,32 +12,18 @@ var _dones = [];
 // TODO: Instead of defining normalise functions,
 //       define DoneItem class and make it deal with own data properly
 
-/**
- * @param {{doneThing: string, date: (string|Date)}} doneItem
- * @return {{doneThing: string, date: Date}}
- */
 function normaliseDoneItem(doneItem) {
   return Object.assign({}, doneItem, {date: new Date(doneItem.date)});
 }
 
-/**
- * @param {Array<{doneThing: string, date: string, ...}> doneItems
- * @return {Array<{doneThing: string, date: Date, ...}>
- */
 function normaliseDoneItems(doneItems) {
   return doneItems.map(normaliseDoneItem);
 }
 
-/**
- * @param {{doneThing: string, date: string}} doneItem
- */
 function add(doneItem) {
   _dones.push(normaliseDoneItem(doneItem));
 }
 
-/**
- * @param {{doneThing: string, date: string}} doneItem
- */
 function update(doneItem) {
   doneItem = normaliseDoneItem(doneItem);
   var found = _dones.filter(done => done.date.getTime() === doneItem.date.getTime());
@@ -46,20 +32,13 @@ function update(doneItem) {
   }
 }
 
-/**
- * TODO: Make it able to revert. Consider the case of delete request failure
- * @param {string} id
- */
+// TODO: Make it able to revert. Consider the case of delete request failure
 function destroy(id) {
   _dones = _dones.filter(done => done.id !== id);
 }
 
 var DoneStore = Object.assign({}, EventEmitter.prototype, {
 
-  /**
-   * Get the entire collection of DONEs.
-   * @return {object}
-   */
   getAll: function () {
     return _dones.sort(
               (a, b) =>
@@ -81,22 +60,15 @@ var DoneStore = Object.assign({}, EventEmitter.prototype, {
     this.emit(CHANGE_EVENT);
   },
 
-  /**
-   * @param {function} callback
-   */
   addChangeListener: function (callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
-  /**
-   * @param {function} callback
-   */
   removeChangeListener: function (callback) {
     this.removeListener(CHANGE_EVENT, callback);
   }
 });
 
-// Register callback to handle all updates
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
   case DoneConstant.DONE_CREATE:
