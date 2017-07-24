@@ -1,7 +1,7 @@
 import {connect} from 'react-redux';
 import SigninPage from './page';
 import {requestLogin, successLogin, failedLogin} from './actions';
-import ServiceLocator from '../../ServiceLocator';
+import ServiceLocator from '../ServiceLocator';
 
 const containerState = {};
 

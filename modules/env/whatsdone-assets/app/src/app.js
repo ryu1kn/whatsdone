@@ -10,8 +10,8 @@ import ServiceFactory from './ServiceFactory';
 ServiceLocator.load(new ServiceFactory());
 
 import reduce from './reducer';
-import SigninPage from './pages/signin/index';
-import DonePage from './pages/done/index';
+import SigninPage from './signin/index';
+import DonePage from './done/index';
 
 const store = createStore(reduce);
 

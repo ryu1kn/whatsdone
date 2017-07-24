@@ -1,5 +1,5 @@
 
-import {LOGIN_REQUEST, LOGIN_FAILED, LOGIN_SUCCESS} from './pages/signin/actions';
+import {LOGIN_REQUEST, LOGIN_FAILED, LOGIN_SUCCESS} from './signin/actions';
 
 module.exports = (state = {}, action) => {
   let newState;

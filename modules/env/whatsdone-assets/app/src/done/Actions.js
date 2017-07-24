@@ -1,7 +1,7 @@
 
 const AppDispatcher = require('./AppDispatcher');
 const DoneConstant = require('./Constant');
-const ServiceLocator = require('../../ServiceLocator');
+const ServiceLocator = require('../ServiceLocator');
 
 var DoneAction = {
 
