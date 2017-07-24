@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-import DoneItem from './DoneItem';
+import DoneItem from './done-item';
 
 class DoneList extends React.Component {
 

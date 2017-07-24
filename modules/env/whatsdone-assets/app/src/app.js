@@ -9,11 +9,19 @@ import ServiceLocator from './ServiceLocator';
 import ServiceFactory from './ServiceFactory';
 ServiceLocator.load(new ServiceFactory());
 
+import {requestGetDones, successGetDones, failedGetDones} from './done/Actions';
 import reduce from './reducer';
 import SigninPage from './signin/index';
 import DonePage from './done/index';
 
 const store = createStore(reduce);
+
+store.dispatch(requestGetDones());
+ServiceLocator.whatsdoneApiClient.getDones().then(response => {
+  store.dispatch(successGetDones(response));
+}).catch(e => {
+  store.dispatch(failedGetDones(e));
+});
 
 ReactDOM.render(
   (

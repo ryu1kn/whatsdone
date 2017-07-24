@@ -2,8 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import util from '../../util';
-import DoneAction from '../Actions';
+import util from '../../../util';
 
 const converter = new Showdown.converter(); // eslint-disable-line new-cap
 
@@ -35,7 +34,7 @@ class DoneItem extends React.Component {
   delete(e) {
     e.stopPropagation();
     ReactDOM.findDOMNode(this).setAttribute('style', 'display:none;');
-    DoneAction.destroy(this.props.doneId);
+    this.props.deleteDone(this.props.doneId);
   }
 
   render() {

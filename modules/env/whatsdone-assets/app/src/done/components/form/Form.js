@@ -1,16 +1,14 @@
 
 import React from 'react';
-import DoneAction from '../Actions';
 
 class DoneForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    var doneThing = this.refs.doneThing.value.trim();
-    if (!doneThing) {
-      return;
-    }
-    DoneAction.create(doneThing);
+    const doneThing = this.refs.doneThing.value.trim();
+    if (!doneThing) return;
+
+    this.props.onSubmit(doneThing);
     this.refs.doneThing.value = '';
   }
 
