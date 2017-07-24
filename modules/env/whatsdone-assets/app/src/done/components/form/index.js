@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import InputForm from './Form';
-import {requestPostDone, succeesPostDone, failedPostDone} from '../../Actions';
+import {requestPostDone, succeesPostDone, failedPostDone} from '../../actions';
 import ServiceLocator from '../../../ServiceLocator';
 
 const mapDispatchToProps = dispatch => {

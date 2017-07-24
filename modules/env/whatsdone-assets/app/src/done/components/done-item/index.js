@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import DoneItem from './DoneItem';
-import {requestDeleteDone, succeesDeleteDone, failedDeleteDone} from '../../Actions';
+import {requestDeleteDone, succeesDeleteDone, failedDeleteDone} from '../../actions';
 import ServiceLocator from '../../../ServiceLocator';
 
 const mapDispatchToProps = dispatch => {

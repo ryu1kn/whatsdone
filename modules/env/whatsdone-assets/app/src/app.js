@@ -3,18 +3,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {Provider} from 'react-redux';
-import {createStore} from 'redux';
+import {createStore, combineReducers} from 'redux';
 
 import ServiceLocator from './ServiceLocator';
 import ServiceFactory from './ServiceFactory';
 ServiceLocator.load(new ServiceFactory());
 
-import {requestGetDones, successGetDones, failedGetDones} from './done/Actions';
-import reduce from './reducer';
+import {requestGetDones, successGetDones, failedGetDones} from './done/actions';
 import SigninPage from './signin/index';
 import DonePage from './done/index';
 
-const store = createStore(reduce);
+const rootReducer = combineReducers({
+  dones: require('./done/reducer'),
+  loginStatus: require('./signin/reducer')
+});
+const store = createStore(rootReducer);
 
 store.dispatch(requestGetDones());
 ServiceLocator.whatsdoneApiClient.getDones().then(response => {
