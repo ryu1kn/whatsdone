@@ -9,20 +9,22 @@ Personal activity tracker. Take memos of what I (or we) have done today.
   - ~~heroku + MongoDB~~
   - ~~heroku + DynamoDB~~
   - ~~AWS Elastic Beanstalk (deployed with `kumo`) + DynamoDB~~
-  - API Gateway + Lambda + DynamoDB (all deployed with `kumo`)
+  - AWS API Gateway + Lambda + DynamoDB (all deployed with `kumo`)
 - backend
-  - Node.js
+  - Node.js v6.10 (deployed on AWS Lambda)
 - frontend
-  - React + flux
+  - ~~React + flux~~
+  - React + Redux
 
-### Deploying module
+### Deploying entire system
 
-For example, if you want to deploy whatsdone-api module, execute following:
+If you want to deploy `prod` environment, you need to have `prod` config in modules then execute:
 
 ```sh
-$ AWS_PROFILE=your-profile ./deploy-module.sh -m whatsdone-api -- --env prod --region ap-southeast-2
+$ AWS_PROFILE=your-profile AWS_REGION=ap-southeast-2 ENV_NAME=prod ./deploy-system.sh
 ```
 
 ### Tools
 
 * Migrate done data from mongodb to dynamodb (written in Go). See its [README](./tools/copy-done-table/README.md)
+* What's Done API Client (written in Haskell). See its [README](./tools/api-client/README.md)
