@@ -9,6 +9,11 @@ import DoneForm from '../form';
 
 class DonePage extends React.Component {
 
+  constructor(params) {
+    super(params);
+    this.props.fetchDones();
+  }
+
   render() {
     return (
       <div className="donebox container">
