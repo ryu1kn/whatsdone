@@ -48,4 +48,4 @@ class ServiceLocator {
 
 }
 
-module.exports = new ServiceLocator();
+export default new ServiceLocator();

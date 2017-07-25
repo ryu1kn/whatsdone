@@ -2,7 +2,7 @@
 import _ from 'lodash';
 import React from 'react';
 
-import DoneList from './DoneList';
+import DoneList from './done-list';
 
 const ONEDAY_MS = 24 * 60 * 60 * 1000;
 
@@ -55,4 +55,4 @@ class DoneHistory extends React.Component {
 
 }
 
-module.exports = DoneHistory;
+export default DoneHistory;

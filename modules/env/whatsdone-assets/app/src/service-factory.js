@@ -1,10 +1,10 @@
 
-const WhatsdoneApiClient = require('./WhatsdoneApiClient');
+import WhatsdoneApiClient from './whatsdone-api-client';
 
 class ServiceFactory {
 
   createSmartFetch() {
-    return require('./smartFetch');
+    return require('./smart-fetch');
   }
 
   createWhatsdoneApiClient() {
@@ -13,4 +13,4 @@ class ServiceFactory {
 
 }
 
-module.exports = ServiceFactory;
+export default ServiceFactory;

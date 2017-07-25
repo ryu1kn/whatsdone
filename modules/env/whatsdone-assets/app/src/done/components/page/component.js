@@ -4,7 +4,7 @@ import './style.less';
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-import DoneHistory from '../History';
+import DoneHistory from '../history';
 import DoneForm from '../form';
 
 class DonePage extends React.Component {

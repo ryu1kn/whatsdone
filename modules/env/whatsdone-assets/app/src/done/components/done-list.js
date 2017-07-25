@@ -24,4 +24,4 @@ class DoneList extends React.Component {
 
 }
 
-module.exports = DoneList;
+export default DoneList;

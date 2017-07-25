@@ -1,6 +1,6 @@
 
 import {requestPostDone, succeesPostDone, failedPostDone} from '../../actions';
-import ServiceLocator from '../../../ServiceLocator';
+import ServiceLocator from '../../../service-locator';
 
 const mapDispatchToProps = dispatch => {
   return {

@@ -1,8 +1,9 @@
-const test = require('tape');
-const sinon = require('sinon');
 
-const ServiceLocator = require('../src/ServiceLocator');
-const WhatsdoneApiClient = require('../src/WhatsdoneApiClient');
+import test from 'tape';
+import sinon from 'sinon';
+
+import ServiceLocator from '../src/service-locator';
+import WhatsdoneApiClient from '../src/whatsdone-api-client';
 
 test('WhatsdoneApiClient login with user information', t => {
   t.plan(1);

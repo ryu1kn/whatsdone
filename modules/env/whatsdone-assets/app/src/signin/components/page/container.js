@@ -1,6 +1,6 @@
 
 import {requestLogin, successLogin, failedLogin} from '../../actions';
-import ServiceLocator from '../../../ServiceLocator';
+import ServiceLocator from '../../../service-locator';
 
 const containerState = {};
 

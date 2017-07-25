@@ -5,8 +5,8 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {Provider} from 'react-redux';
 import {createStore, combineReducers} from 'redux';
 
-import ServiceLocator from './ServiceLocator';
-import ServiceFactory from './ServiceFactory';
+import ServiceLocator from './service-locator';
+import ServiceFactory from './service-factory';
 ServiceLocator.load(new ServiceFactory());
 
 import {requestGetDones, successGetDones, failedGetDones} from './done/actions';

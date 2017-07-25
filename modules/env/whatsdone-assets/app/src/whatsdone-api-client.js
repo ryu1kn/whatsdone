@@ -1,5 +1,5 @@
 
-import ServiceLocator from './ServiceLocator';
+import ServiceLocator from './service-locator';
 import url from 'url';
 
 const DEFAULT_OPTIONS = {
@@ -65,4 +65,4 @@ class WhatsdoneApiClient {
 
 }
 
-module.exports = WhatsdoneApiClient;
+export default WhatsdoneApiClient;
