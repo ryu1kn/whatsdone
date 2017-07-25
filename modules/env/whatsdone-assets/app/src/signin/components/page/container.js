@@ -1,7 +1,6 @@
-import {connect} from 'react-redux';
-import SigninPage from './page';
-import {requestLogin, successLogin, failedLogin} from './actions';
-import ServiceLocator from '../ServiceLocator';
+
+import {requestLogin, successLogin, failedLogin} from '../../actions';
+import ServiceLocator from '../../../ServiceLocator';
 
 const containerState = {};
 
@@ -26,6 +25,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const SigninPageContainer = connect(mapStateToProps, mapDispatchToProps)(SigninPage);
-
-export default SigninPageContainer;
+export {mapStateToProps, mapDispatchToProps};

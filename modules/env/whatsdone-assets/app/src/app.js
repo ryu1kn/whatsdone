@@ -10,8 +10,8 @@ import ServiceFactory from './ServiceFactory';
 ServiceLocator.load(new ServiceFactory());
 
 import {requestGetDones, successGetDones, failedGetDones} from './done/actions';
-import SigninPage from './signin/index';
-import DonePage from './done/index';
+import SigninPage from './signin/components/page';
+import DonePage from './done/components/page';
 
 const rootReducer = combineReducers({
   dones: require('./done/reducer'),

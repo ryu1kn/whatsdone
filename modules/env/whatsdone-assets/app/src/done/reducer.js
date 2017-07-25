@@ -15,7 +15,7 @@ module.exports = (state = initialState, action) => {
     return action.dones.map(normaliseDoneItem).sort(
       (a, b) =>
         a.date < b.date ? 1 :
-          a.date > b.date ? -1 : 0
+        a.date > b.date ? -1 : 0
     );
   case POST_DONE_REQUEST:
     return [...state.dones, normaliseDoneItem(action.item)];
