@@ -1,5 +1,5 @@
 
-import {requestPostDone, succeesPostDone, failedPostDone} from '../../actions';
+import Action from '../../action';
 import ServiceLocator from '../../../service-locator';
 
 const mapDispatchToProps = dispatch => {
@@ -9,12 +9,12 @@ const mapDispatchToProps = dispatch => {
         doneThing,
         date: new Date().toISOString()
       };
-      dispatch(requestPostDone(doneItem));
+      dispatch(Action.postDone(doneItem));
       ServiceLocator.whatsdoneApiClient.postDone(doneItem)
         .then(function (updatedItem) {
-          dispatch(succeesPostDone(updatedItem));
+          dispatch(Action.markPostDoneSuccess(updatedItem));
         }).catch(e => {
-          dispatch(failedPostDone(e));
+          dispatch(Action.markPostDoneFailed(e));
         });
     }
   };

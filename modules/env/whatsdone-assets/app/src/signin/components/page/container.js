@@ -1,5 +1,5 @@
 
-import {requestLogin, successLogin, failedLogin} from '../../actions';
+import Action from '../../action';
 import ServiceLocator from '../../../service-locator';
 
 const containerState = {};
@@ -12,14 +12,14 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
   return {
     onSubmit: loginDetails => {
-      dispatch(requestLogin(loginDetails, dispatch));
+      dispatch(Action.login(loginDetails, dispatch));
       ServiceLocator.whatsdoneApiClient.login(loginDetails)
         .then(() => {
-          dispatch(successLogin());
+          dispatch(Action.markLoginSuccess());
           containerState.ownProps.history.push('/');
         })
         .catch(e => {
-          dispatch(failedLogin(e));
+          dispatch(Action.markLoginFailed(e));
         });
     }
   };

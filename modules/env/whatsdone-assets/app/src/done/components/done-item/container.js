@@ -1,16 +1,16 @@
 
-import {requestDeleteDone, succeesDeleteDone, failedDeleteDone} from '../../actions';
+import Action from '../../action';
 import ServiceLocator from '../../../service-locator';
 
 const mapDispatchToProps = dispatch => {
   return {
     deleteDone: id => {
-      dispatch(requestDeleteDone(id));
+      dispatch(Action.deleteDone(id));
       ServiceLocator.whatsdoneApiClient.deleteDone(id)
         .then(() => {
-          dispatch(succeesDeleteDone(id));
+          dispatch(Action.markDeleteDoneSuccess(id));
         }).catch(e => {
-          dispatch(failedDeleteDone(e));
+          dispatch(Action.markDeleteDoneFailed(e));
         });
     }
   };

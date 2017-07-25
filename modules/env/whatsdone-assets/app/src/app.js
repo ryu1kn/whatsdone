@@ -10,9 +10,9 @@ import ServiceFactory from './service-factory';
 ServiceLocator.load(new ServiceFactory());
 
 import reducer from './reducer';
-import {requestGetDones, successGetDones, failedGetDones} from './done/actions';
 import SigninPage from './signin/components/page';
 import DonePage from './done/components/page';
+import DoneAction from './done/action';
 
 const store = createStore(reducer);
 populateStore(store);
@@ -32,11 +32,11 @@ ReactDOM.render(
 );
 
 function populateStore(store) {
-  store.dispatch(requestGetDones());
+  store.dispatch(DoneAction.getDones());
   ServiceLocator.whatsdoneApiClient.getDones()
     .then(response => {
-      store.dispatch(successGetDones(response));
+      store.dispatch(DoneAction.markGetDonesSuccess(response));
     }).catch(e => {
-      store.dispatch(failedGetDones(e));
+      store.dispatch(DoneAction.markGetDonesFailed(e));
     });
 }
