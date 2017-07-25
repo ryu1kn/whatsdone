@@ -14,11 +14,11 @@ module.exports = (state = initialState, action) => {
         a.date > b.date ? -1 : 0
     );
   case ActionType.POST_DONE_REQUEST:
-    return [...state.dones, normaliseDoneItem(action.item)];
+    return [...state, normaliseDoneItem(action.item)];
   case ActionType.POST_DONE_SUCCESS:
-    return updateDones(state.dones, normaliseDoneItem(action.item));
+    return updateDones(state, normaliseDoneItem(action.item));
   case ActionType.DELETE_DONE_REQUEST:
-    return state.dones.filter(done => done.id !== action.id);
+    return state.filter(done => done.id !== action.id);
   case ActionType.GET_DONE_FAILURE:
   case ActionType.POST_DONE_FAILURE:
   case ActionType.DELETE_DONE_FAILURE:
