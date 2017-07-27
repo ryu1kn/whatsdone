@@ -7,6 +7,7 @@ const app = express();
 const corsOptions = {
   origin: 'http://localhost:8080',
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
@@ -20,8 +21,9 @@ app.post('/dones', cors(corsOptions), (req, res) => {
   promiseToGetBody(req)
     .then(bodyString => {
       const parsedBody = querystring.parse(bodyString);
-      dones.push(Object.assign({}, parsedBody, {id: generateDummyId()}));
-      res.status(202).json(dones);
+      const newDone = Object.assign({}, parsedBody, {id: generateDummyId()});
+      dones.push(newDone);
+      res.status(202).json(newDone);
     })
     .catch(e => console.error(e.stack));
 });

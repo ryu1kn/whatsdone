@@ -13,9 +13,13 @@ import reducer from './reducer';
 import SigninPage from './signin/components/page';
 import DonePage from './done/components/page';
 
+const store = createStore(
+  reducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 ReactDOM.render(
   (
-    <Provider store={createStore(reducer)}>
+    <Provider store={store}>
       <Router>
         <Switch>
           <Route exact path="/" component={DonePage} />
