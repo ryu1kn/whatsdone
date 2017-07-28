@@ -1,12 +1,33 @@
 {
   "moduleName": "whatsdone-web-cache",
-  "dependsOn": [
-    "../../no-env/whatsdone-config",
-    "../whatsdone-env",
-    "../whatsdone-assets/ops"
-  ],
   "config": {
     "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\""
+  },
+  "outputsStore": {
+    "type": "s3-bucket",
+    "region": {"$ref": "#/_args/region"},
+    "bucket": "whatsdone-deployment-outputs",
+    "prefix": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-web-cache"]]}
+  },
+  "dataSources": {
+    "whatsdone-config": {
+      "type": "s3-bucket",
+      "region": {"$ref": "#/_args/region"},
+      "bucket": "whatsdone-deployment-outputs",
+      "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-config"]]}
+    },
+    "whatsdone-env": {
+      "type": "s3-bucket",
+      "region": {"$ref": "#/_args/region"},
+      "bucket": "whatsdone-deployment-outputs",
+      "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-env"]]}
+    },
+    "whatsdone-assets": {
+        "type": "s3-bucket",
+        "region": {"$ref": "#/_args/region"},
+        "bucket": "whatsdone-deployment-outputs",
+        "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-assets"]]}
+    }
   },
   "tasks": [
     {
@@ -23,15 +44,15 @@
     {
       "id": "prepare-cloudfront",
       "type": "cf-stack",
-      "stackName": "module",
+      "stackName": {"Fn::Join": ["-", [{"$ref": "#/_env"}, "whatsdone-web-cache-module"]]},
       "stackTemplate": {
         "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
       },
       "stackParams": {
-        "PublicDomain": {"$ref": "#/_deploymentOutputs/whatsdone-web-cache/PublicDomain"},
-        "CloudFrontOriginAccessIdentity": {"$ref": "#/_deploymentOutputs/whatsdone-config/CloudFrontOriginAccessIdentity/Id"},
-        "LoggingBucket": {"$ref": "#/_deploymentOutputs/whatsdone-env/Bucket"},
-        "AssetBucketDomain": {"$ref": "#/_deploymentOutputs/whatsdone-assets/BucketDomain"}
+        "PublicDomain": {"$ref": "#/_deploymentOutputs/PublicDomain"},
+        "CloudFrontOriginAccessIdentity": {"$ref": "#/_dataSourceData/whatsdone-config/CloudFrontOriginAccessIdentity/Id"},
+        "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
+        "AssetBucketDomain": {"$ref": "#/_dataSourceData/whatsdone-assets/BucketDomain"}
       }
     }
   ]
