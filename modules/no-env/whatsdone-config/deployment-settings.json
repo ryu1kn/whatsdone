@@ -1,5 +1,11 @@
 {
   "moduleName": "whatsdone-config",
+  "outputsStore": {
+    "type": "s3-bucket",
+    "region": {"$ref": "#/_args/region"},
+    "bucket": "whatsdone-deployment-outputs",
+    "prefix": "whatsdone-config"
+  },
   "tasks": [
     {
       "id": "export-configs",
