@@ -1,6 +1,5 @@
 root: true
 extends: xo
-installedESLint: true
 env:
   node: true
   es6: true
