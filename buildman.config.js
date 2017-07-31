@@ -4,7 +4,7 @@ module.exports = {
     {
       path: /^(modules\/env\/whatsdone-assets)\/.*/,
       command: `
-        cd $BM_PATH_VAR_1 \\
+        cd modules/env/whatsdone-assets \\
             && npm install \\
             && npm run lint`
     },
@@ -19,7 +19,7 @@ module.exports = {
     },
     {
       path: /^tools\/buildman\/.*/,
-      command: 'cd tools/buildman && npm install && npm run build'
+      command: 'cd tools/buildman && yarn install && yarn run build'
     }
   ]
 };
