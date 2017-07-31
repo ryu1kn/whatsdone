@@ -20,9 +20,11 @@ before_install:
 - sudo python get-pip.py
 - sudo pip install awscli
 - aws configure set s3.signature_version s3v4
-- npm install -g kumo
+- yarn global add kumo
 - kumo install
+install:
+- yarn install
 script:
-- npm run travis-build
+- yarn run travis-build
 after_success:
-- npm run travis-deploy
+- yarn run travis-deploy
