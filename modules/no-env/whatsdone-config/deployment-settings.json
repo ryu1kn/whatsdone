@@ -11,7 +11,10 @@
       "id": "export-configs",
       "type": "custom",
       "run": {
-        "script": "node ./create-cloudfront-originaccessidentity > $KUMO_TASK_OUTPUTS_FILE"
+        "script": "node ./create-cloudfront-originaccessidentity > $TASK_OUTPUTS_FILE",
+        "envVars": {
+          "TASK_OUTPUTS_FILE": {"$ref": "#/_taskOutputsFile"}
+        }
       }
     }
   ]
