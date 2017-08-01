@@ -4,22 +4,22 @@ module.exports = {
     {
       path: /^(modules\/env\/whatsdone-assets)\/.*/,
       command: `
-        cd modules/env/whatsdone-assets \\
+        cd $BM_PATH_VAR_1 \\
             && npm install \\
             && npm run lint`
     },
     {
       path: /^(modules\/env\/whatsdone-app)\/.*/,
       command: `
-        cd modules/env/whatsdone-app/src \\
+        cd $BM_PATH_VAR_1/src \\
             && npm install \\
             && npm run lint \\
             && npm test \\
             && npm run report-coverage`
     },
     {
-      path: /^tools\/buildman\/.*/,
-      command: 'cd tools/buildman && yarn install && yarn run build'
+      path: /^(tools\/buildman)\/.*/,
+      command: 'cd $BM_PATH_VAR_1 && yarn install && yarn run build'
     }
   ]
 };
