@@ -1,7 +1,10 @@
 {
     "moduleName": "whatsdone-api",
     "config": {
-        "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\" | kumo decrypt --profile $KUMO_ENV --inputFormat json"
+        "script": "node -p \"JSON.stringify(require('./module-config/$ENV.js'))\" | kumo decrypt --profile $ENV --inputFormat json",
+        "envVars": {
+            "ENV": {"$ref": "#/_env"}
+        }
     },
     "outputsStore": {
         "type": "s3-bucket",
@@ -28,7 +31,10 @@
             "id": "fetch-certificate-arn",
             "type": "custom",
             "run": {
-              "script": "aws acm list-certificates --region us-east-1 --query CertificateSummaryList | jq 'map(select(.DomainName == \"*.ryuichi.io\") | .CertificateArn)[0]' > $KUMO_TASK_OUTPUTS_FILE"
+              "script": "aws acm list-certificates --region us-east-1 --query CertificateSummaryList | jq 'map(select(.DomainName == \"*.ryuichi.io\") | .CertificateArn)[0]' > $TASK_OUTPUTS_FILE",
+              "envVars": {
+                "TASK_OUTPUTS_FILE": {"$ref": "#/_taskOutputsFile"}
+              }
             },
             "outputsName": "certificateArn"
         },
@@ -37,14 +43,17 @@
             "type": "cf-stack",
             "stackName": {"Fn::Join": ["-", [{"$ref": "#/_env"}, "whatsdone-api-module"]]},
             "stackTemplate": {
-              "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
+              "script": "cp ./template.json $TEMPLATE_OUTPUT_FILE",
+              "envVars": {
+                "TEMPLATE_OUTPUT_FILE": {"$ref": "#/_templateOutputFile"}
+              }
             },
             "stackParams": {
               "EnvName": {"$ref": "#/_env"},
               "DomainName": {"$ref": "#/_deploymentConfig/domainName"},
               "HostedZoneId": {"$ref": "#/_deploymentConfig/hostedZoneId"},
               "CertificateArn": {"$ref": "#/_deploymentOutputs/certificateArn"},
-              "DbRegion": {"$ref": "#/_args/region"},
+              "DbRegion": {"$ref": "#/_taskRegion"},
               "WebappDomain": {"$ref": "#/_dataSourceData/whatsdone-web-cache/PublicDomain"},
               "DoneTableName": {"$ref": "#/_deploymentConfig/doneTableName"},
               "UserTableName": {"$ref": "#/_deploymentConfig/userTableName"},
@@ -58,8 +67,9 @@
             "id": "create-new-deployment",
             "type": "custom",
             "run": {
-              "script": "aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name $STAGE_NAME --region $KUMO_TASK_REGION",
+              "script": "aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name $STAGE_NAME --region $TASK_REGION",
               "envVars": {
+                "TASK_REGION": {"$ref": "#/_taskRegion"},
                 "REST_API_ID": {"$ref": "#/_deploymentOutputs/RestApiId"},
                 "STAGE_NAME": {"$ref": "#/_deploymentOutputs/ApiStageName"}
               }
