@@ -15,7 +15,10 @@
       "type": "cf-stack",
       "stackName": "artifact-store-bucket",
       "stackTemplate": {
-        "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
+        "script": "cp ./template.json $TEMPLATE_OUTPUT_FILE",
+        "envVars": {
+          "TEMPLATE_OUTPUT_FILE": {"$ref": "#/_templateOutputFile"}
+        }
       },
       "stackParams": {
         "BucketName": {"$ref": "#/_deploymentConfig/artifactBucket"}
