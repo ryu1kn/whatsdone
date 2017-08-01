@@ -7,7 +7,10 @@ module.exports = {
       type: 'cf-stack',
       stackName: 'module',
       stackTemplate: {
-        script: 'cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE'
+        script: 'cp ./template.json $TEMPLATE_OUTPUT_FILE',
+        envVars: {
+          TEMPLATE_OUTPUT_FILE: {$ref: '#/_templateOutputFile'}
+        }
       }
     }
   ]
