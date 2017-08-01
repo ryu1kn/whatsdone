@@ -1,7 +1,10 @@
 {
   "moduleName": "whatsdone-gateway",
   "config": {
-    "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\""
+    "script": "node -p \"JSON.stringify(require('./module-config/$ENV.js'))\"",
+    "envVars": {
+      "ENV": {"$ref": "#/_env"}
+    }
   },
   "outputsStore": {
     "type": "s3-bucket",
@@ -23,7 +26,10 @@
       "type": "cf-stack",
       "stackName": {"Fn::Join": ["-", [{"$ref": "#/_env"}, "whatsdone-gateway-module"]]},
       "stackTemplate": {
-        "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
+        "script": "cp ./template.json $TEMPLATE_OUTPUT_FILE",
+        "envVars": {
+          "TEMPLATE_OUTPUT_FILE": {"$ref": "#/_templateOutputFile"}
+        }
       },
       "stackParams": {
         "HostedZoneId": {"$ref": "#/_deploymentConfig/hostedZoneId"},
