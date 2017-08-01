@@ -1,6 +1,6 @@
 {
   "pluginPacks": {
-    "kumo-plugins": "0.0.32"
+    "kumo-plugins": "0.0.34"
   },
   "deployer": {
     "outputsBucket": {
