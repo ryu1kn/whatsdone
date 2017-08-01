@@ -1,20 +1,45 @@
 {
   "moduleName": "whatsdone-web-cache",
-  "dependsOn": [
-    "../../no-env/whatsdone-config",
-    "../whatsdone-env",
-    "../whatsdone-assets/ops"
-  ],
   "config": {
-    "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\""
+    "script": "node -p \"JSON.stringify(require('./module-config/$ENV.js'))\"",
+    "envVars": {
+      "ENV": {"$ref": "#/_env"}
+    }
+  },
+  "outputsStore": {
+    "type": "s3-bucket",
+    "region": {"$ref": "#/_args/region"},
+    "bucket": "whatsdone-deployment-outputs",
+    "prefix": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-web-cache"]]}
+  },
+  "dataSources": {
+    "whatsdone-config": {
+      "type": "s3-bucket",
+      "region": {"$ref": "#/_args/region"},
+      "bucket": "whatsdone-deployment-outputs",
+      "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-config"]]}
+    },
+    "whatsdone-env": {
+      "type": "s3-bucket",
+      "region": {"$ref": "#/_args/region"},
+      "bucket": "whatsdone-deployment-outputs",
+      "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-env"]]}
+    },
+    "whatsdone-assets": {
+        "type": "s3-bucket",
+        "region": {"$ref": "#/_args/region"},
+        "bucket": "whatsdone-deployment-outputs",
+        "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-assets"]]}
+    }
   },
   "tasks": [
     {
       "id": "export-public-domain-name",
       "type": "custom",
       "run": {
-        "script": "echo \\\"$PUBLIC_DOMAIN_NAME\\\" > $KUMO_TASK_OUTPUTS_FILE",
+        "script": "echo \\\"$PUBLIC_DOMAIN_NAME\\\" > $TASK_OUTPUTS_FILE",
         "envVars": {
+          "TASK_OUTPUTS_FILE": {"$ref": "#/_taskOutputsFile"},
           "PUBLIC_DOMAIN_NAME": {"$ref": "#/_deploymentConfig/publicDomain"}
         }
       },
@@ -23,15 +48,18 @@
     {
       "id": "prepare-cloudfront",
       "type": "cf-stack",
-      "stackName": "module",
+      "stackName": {"Fn::Join": ["-", [{"$ref": "#/_env"}, "whatsdone-web-cache-module"]]},
       "stackTemplate": {
-        "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
+        "script": "cp ./template.json $TEMPLATE_OUTPUT_FILE",
+        "envVars": {
+          "TEMPLATE_OUTPUT_FILE": {"$ref": "#/_templateOutputFile"}
+        }
       },
       "stackParams": {
-        "PublicDomain": {"$ref": "#/_deploymentOutputs/whatsdone-web-cache/PublicDomain"},
-        "CloudFrontOriginAccessIdentity": {"$ref": "#/_deploymentOutputs/whatsdone-config/CloudFrontOriginAccessIdentity/Id"},
-        "LoggingBucket": {"$ref": "#/_deploymentOutputs/whatsdone-env/Bucket"},
-        "AssetBucketDomain": {"$ref": "#/_deploymentOutputs/whatsdone-assets/BucketDomain"}
+        "PublicDomain": {"$ref": "#/_deploymentOutputs/PublicDomain"},
+        "CloudFrontOriginAccessIdentity": {"$ref": "#/_dataSourceData/whatsdone-config/CloudFrontOriginAccessIdentity/Id"},
+        "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
+        "AssetBucketDomain": {"$ref": "#/_dataSourceData/whatsdone-assets/BucketDomain"}
       }
     }
   ]

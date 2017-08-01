@@ -1,17 +1,27 @@
 {
   "moduleName": "whatsdone-assets",
   "config": {
-    "script": "node -p \"JSON.stringify(require('../module-config/$KUMO_ENV.js'))\""
+    "script": "node -p \"JSON.stringify(require('../module-config/$ENV.js'))\"",
+    "envVars": {
+      "ENV": {"$ref": "#/_env"}
+    }
+  },
+  "outputsStore": {
+    "type": "s3-bucket",
+    "region": {"$ref": "#/_args/region"},
+    "bucket": "whatsdone-deployment-outputs",
+    "prefix": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-assets"]]}
   },
   "tasks": [
     {
       "id": "create-assets-bucket",
       "type": "cf-stack",
-      "stackName": "module",
+      "stackName": {"Fn::Join": ["-", [{"$ref": "#/_env"}, "whatsdone-assets-module"]]},
       "stackTemplate": {
-        "script": "sed \"s/__DELETION_POLICY__/$DELETION_POLICY/\" ./template.json > $KUMO_TEMPLATE_OUTPUT_FILE",
+        "script": "sed \"s/__DELETION_POLICY__/$DELETION_POLICY/\" ./template.json > $TEMPLATE_OUTPUT_FILE",
         "envVars": {
-          "DELETION_POLICY": {"$ref": "#/_deploymentConfig/bucketDeletionPolicy"}
+          "DELETION_POLICY": {"$ref": "#/_deploymentConfig/bucketDeletionPolicy"},
+          "TEMPLATE_OUTPUT_FILE": {"$ref": "#/_templateOutputFile"}
         }
       },
       "stackParams": {

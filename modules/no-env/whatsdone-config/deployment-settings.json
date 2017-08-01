@@ -1,11 +1,20 @@
 {
   "moduleName": "whatsdone-config",
+  "outputsStore": {
+    "type": "s3-bucket",
+    "region": {"$ref": "#/_args/region"},
+    "bucket": "whatsdone-deployment-outputs",
+    "prefix": "whatsdone-config"
+  },
   "tasks": [
     {
       "id": "export-configs",
       "type": "custom",
       "run": {
-        "script": "node ./create-cloudfront-originaccessidentity > $KUMO_TASK_OUTPUTS_FILE"
+        "script": "node ./create-cloudfront-originaccessidentity > $TASK_OUTPUTS_FILE",
+        "envVars": {
+          "TASK_OUTPUTS_FILE": {"$ref": "#/_taskOutputsFile"}
+        }
       }
     }
   ]

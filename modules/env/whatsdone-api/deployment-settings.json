@@ -1,51 +1,77 @@
 {
     "moduleName": "whatsdone-api",
-    "dependsOn": [
-      "../whatsdone-app",
-      "../whatsdone-web-cache"
-    ],
     "config": {
-        "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\" | kumo decrypt --profile $KUMO_ENV --inputFormat json"
+        "script": "node -p \"JSON.stringify(require('./module-config/$ENV.js'))\" | kumo decrypt --profile $ENV --inputFormat json",
+        "envVars": {
+            "ENV": {"$ref": "#/_env"}
+        }
+    },
+    "outputsStore": {
+        "type": "s3-bucket",
+        "region": {"$ref": "#/_args/region"},
+        "bucket": "whatsdone-deployment-outputs",
+        "prefix": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-api"]]}
+    },
+    "dataSources": {
+        "whatsdone-app": {
+            "type": "s3-bucket",
+            "region": {"$ref": "#/_args/region"},
+            "bucket": "whatsdone-deployment-outputs",
+            "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-app"]]}
+        },
+        "whatsdone-web-cache": {
+            "type": "s3-bucket",
+            "region": {"$ref": "#/_args/region"},
+            "bucket": "whatsdone-deployment-outputs",
+            "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-web-cache"]]}
+        }
     },
     "tasks": [
         {
             "id": "fetch-certificate-arn",
             "type": "custom",
             "run": {
-              "script": "aws acm list-certificates --region us-east-1 --query CertificateSummaryList | jq 'map(select(.DomainName == \"*.ryuichi.io\") | .CertificateArn)[0]' > $KUMO_TASK_OUTPUTS_FILE"
+              "script": "aws acm list-certificates --region us-east-1 --query CertificateSummaryList | jq 'map(select(.DomainName == \"*.ryuichi.io\") | .CertificateArn)[0]' > $TASK_OUTPUTS_FILE",
+              "envVars": {
+                "TASK_OUTPUTS_FILE": {"$ref": "#/_taskOutputsFile"}
+              }
             },
             "outputsName": "certificateArn"
         },
         {
             "id": "deploy-api",
             "type": "cf-stack",
-            "stackName": "module",
+            "stackName": {"Fn::Join": ["-", [{"$ref": "#/_env"}, "whatsdone-api-module"]]},
             "stackTemplate": {
-              "script": "cp ./template.json $KUMO_TEMPLATE_OUTPUT_FILE"
+              "script": "cp ./template.json $TEMPLATE_OUTPUT_FILE",
+              "envVars": {
+                "TEMPLATE_OUTPUT_FILE": {"$ref": "#/_templateOutputFile"}
+              }
             },
             "stackParams": {
               "EnvName": {"$ref": "#/_env"},
               "DomainName": {"$ref": "#/_deploymentConfig/domainName"},
               "HostedZoneId": {"$ref": "#/_deploymentConfig/hostedZoneId"},
-              "CertificateArn": {"$ref": "#/_deploymentOutputs/whatsdone-api/certificateArn"},
+              "CertificateArn": {"$ref": "#/_deploymentOutputs/certificateArn"},
               "DbRegion": {"$ref": "#/_taskRegion"},
-              "WebappDomain": {"$ref": "#/_deploymentOutputs/whatsdone-web-cache/PublicDomain"},
+              "WebappDomain": {"$ref": "#/_dataSourceData/whatsdone-web-cache/PublicDomain"},
               "DoneTableName": {"$ref": "#/_deploymentConfig/doneTableName"},
               "UserTableName": {"$ref": "#/_deploymentConfig/userTableName"},
               "SessionTableName": {"$ref": "#/_deploymentConfig/sessionTableName"},
               "SessionSecret": {"$ref": "#/_deploymentConfig/sessionSecret"},
-              "LambdaS3Bucket": {"$ref": "#/_deploymentOutputs/whatsdone-app/packages/whatsdone-app/s3Bucket"},
-              "LambdaS3Key": {"$ref": "#/_deploymentOutputs/whatsdone-app/packages/whatsdone-app/s3Key"}
+              "LambdaS3Bucket": {"$ref": "#/_dataSourceData/whatsdone-app/packages/whatsdone-app/s3Bucket"},
+              "LambdaS3Key": {"$ref": "#/_dataSourceData/whatsdone-app/packages/whatsdone-app/s3Key"}
             }
         },
         {
             "id": "create-new-deployment",
             "type": "custom",
             "run": {
-              "script": "aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name $STAGE_NAME --region $KUMO_TASK_REGION",
+              "script": "aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name $STAGE_NAME --region $TASK_REGION",
               "envVars": {
-                "REST_API_ID": {"$ref": "#/_deploymentOutputs/whatsdone-api/RestApiId"},
-                "STAGE_NAME": {"$ref": "#/_deploymentOutputs/whatsdone-api/ApiStageName"}
+                "TASK_REGION": {"$ref": "#/_taskRegion"},
+                "REST_API_ID": {"$ref": "#/_deploymentOutputs/RestApiId"},
+                "STAGE_NAME": {"$ref": "#/_deploymentOutputs/ApiStageName"}
               }
             }
         }
