@@ -1,7 +1,10 @@
 {
   "moduleName": "whatsdone-env",
   "config": {
-    "script": "node -p \"JSON.stringify(require('./module-config/$KUMO_ENV.js'))\""
+    "script": "node -p \"JSON.stringify(require('./module-config/$ENV.js'))\"",
+    "envVars": {
+      "ENV": {"$ref": "#/_env"}
+    }
   },
   "outputsStore": {
     "type": "s3-bucket",
@@ -15,8 +18,9 @@
       "type": "cf-stack",
       "stackName": {"Fn::Join": ["-", [{"$ref": "#/_env"}, "whatsdone-env-module"]]},
       "stackTemplate": {
-        "script": "sed \"s/__DELETION_POLICY__/$DELETION_POLICY/\" ./template.json > $KUMO_TEMPLATE_OUTPUT_FILE",
+        "script": "sed \"s/__DELETION_POLICY__/$DELETION_POLICY/\" ./template.json > $TEMPLATE_OUTPUT_FILE",
         "envVars": {
+          "TEMPLATE_OUTPUT_FILE": {"$ref": "#/_templateOutputFile"},
           "DELETION_POLICY": {"$ref": "#/_deploymentConfig/bucketDeletionPolicy"}
         }
       },
