@@ -14,7 +14,7 @@ module.exports = (state = initialState, action) => {
         a.date > b.date ? -1 : 0
     );
   case ActionType.POST_DONE_REQUEST:
-    return [...state, normaliseDoneItem(action.item)];
+    return [normaliseDoneItem(action.item), ...state];
   case ActionType.POST_DONE_SUCCESS:
     return updateDones(state, normaliseDoneItem(action.item));
   case ActionType.DELETE_DONE_REQUEST:
