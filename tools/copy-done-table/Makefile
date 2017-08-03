@@ -30,5 +30,8 @@ delete-table:
 delete-dump-file:
 	rm -f $(dumpFile)
 
+test:
+	go test
+
 clean:
 	rm -f __main

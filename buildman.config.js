@@ -1,6 +1,7 @@
 
 module.exports = {
   tasks: [
+    // Build modules
     {
       description: 'Build whatsdone-assets',
       path: /^(modules\/env\/whatsdone-assets)\/.*/,
@@ -19,10 +20,29 @@ module.exports = {
             && npm test \\
             && npm run report-coverage`
     },
+
+    // Build tools
     {
       description: 'Build tools/buildman',
       path: /^(tools\/buildman)\/.*/,
       command: 'cd $BM_PATH_VAR_1 && yarn install && yarn run build'
+    },
+    {
+      description: 'Build tools/copy-done-table',
+      path: /^(tools\/copy-done-table)\/.*/,
+      command: 'cd $BM_PATH_VAR_1 && make test'
+    },
+
+    // Deploy modules
+    {
+      description: 'Deploy module',
+      path: /^(modules\/[^/]+\/[^/]+)\/.*/,
+      command: 'cd $BM_PATH_VAR_1 && npm run deploy -- --env $ENV_NAME --region $AWS_REGION'
+    },
+    {
+      description: 'Deploy whatsdone-assets app',
+      path: /^(modules\/env\/whatsdone-assets)\/.*/,
+      command: 'cd $BM_PATH_VAR_1 && npm install && npm run build && npm run deploy:app'
     }
   ]
 };

@@ -26,5 +26,3 @@ install:
 - yarn install
 script:
 - yarn run travis-build
-after_success:
-- yarn run travis-deploy
