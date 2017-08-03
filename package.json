@@ -11,8 +11,7 @@
     "node": "8.2"
   },
   "scripts": {
-    "travis-build": "./travis-build.sh",
-    "travis-deploy": "./travis-deploy.sh"
+    "travis-build": "./travis-build.sh"
   },
   "devDependencies": {
     "buildman": "file:./tools/buildman"
