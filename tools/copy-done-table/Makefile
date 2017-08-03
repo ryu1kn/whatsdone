@@ -6,7 +6,7 @@ dumpFile = __$(TABLE_NAME).json
 migrate: build
 	./__main --from-table-name whatsdone-dones --from-table-region ap-northeast-1 --to-table-name $(TABLE_NAME)
 
-build:
+build: install-deps
 	go build -o __main
 
 dump-as-json: delete-dump-file
@@ -30,8 +30,11 @@ delete-table:
 delete-dump-file:
 	rm -f $(dumpFile)
 
-test:
+test: install-deps
 	go test
+
+install-deps:
+	go get github.com/aws/aws-sdk-go/...
 
 clean:
 	rm -f __main
