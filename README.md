@@ -28,4 +28,3 @@ $ AWS_PROFILE=your-profile AWS_REGION=ap-southeast-2 ENV_NAME=prod ./deploy-syst
 
 * Migrate done data from mongodb to dynamodb (written in Go). See its [README](./tools/copy-done-table/README.md)
 * What's Done API Client (written in Haskell). See its [README](./tools/api-client/README.md)
-* Build Man. Given a file list, trigger necessary build commands (written in JavaScript). See its [README](./tools/buildman/README.md)

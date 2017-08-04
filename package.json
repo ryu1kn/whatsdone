@@ -8,12 +8,12 @@
   ],
   "author": "Ryuichi Inagaki",
   "engines": {
-    "node": "8.2"
+    "node": ">=6.10"
   },
   "scripts": {
     "travis-build": "./travis-build.sh"
   },
   "devDependencies": {
-    "buildman": "file:./tools/buildman"
+    "buildmate": "0.0.1"
   }
 }

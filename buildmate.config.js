@@ -23,11 +23,6 @@ module.exports = {
 
     // Build tools
     {
-      description: 'Build tools/buildman',
-      path: /^(tools\/buildman)\/.*/,
-      command: 'cd $BM_PATH_VAR_1 && yarn install && yarn run build'
-    },
-    {
       description: 'Build tools/copy-done-table',
       path: /^(tools\/copy-done-table)\/.*/,
       command: 'cd $BM_PATH_VAR_1 && make test'

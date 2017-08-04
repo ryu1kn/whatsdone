@@ -17,7 +17,7 @@ function build_and_deploy() {
     git diff --name-only $TRAVIS_COMMIT_RANGE
     echo
 
-    git diff --name-only $TRAVIS_COMMIT_RANGE | BUILD_NUMBER=$TRAVIS_BUILD_NUMBER ./node_modules/.bin/buildman
+    git diff --name-only $TRAVIS_COMMIT_RANGE | BUILD_NUMBER=$TRAVIS_BUILD_NUMBER ./node_modules/.bin/buildmate
 }
 
 function deploy() {
