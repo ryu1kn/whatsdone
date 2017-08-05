@@ -54,7 +54,7 @@
               "HostedZoneId": {"$ref": "#/_deploymentConfig/hostedZoneId"},
               "CertificateArn": {"$ref": "#/_deploymentOutputs/certificateArn"},
               "DbRegion": {"$ref": "#/_taskRegion"},
-              "WebappDomain": {"$ref": "#/_dataSourceData/whatsdone-web-cache/PublicDomain"},
+              "WebappEndpoint": {"Fn::Join": ["", ["https://", {"$ref": "#/_dataSourceData/whatsdone-web-cache/PublicDomain"}]]},
               "DoneTableName": {"$ref": "#/_deploymentConfig/doneTableName"},
               "UserTableName": {"$ref": "#/_deploymentConfig/userTableName"},
               "SessionTableName": {"$ref": "#/_deploymentConfig/sessionTableName"},
