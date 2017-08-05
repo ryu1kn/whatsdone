@@ -13,10 +13,14 @@ module.exports = (uri, options = {}) => {
 };
 
 function parse(response) {
-  const contentType = response.headers.get('Content-Type').toLowerCase();
-  const promiseOfBody = contentType.startsWith('application/json') ? response.json() : response.text();
+  const promiseOfBody = shouldBeJson(response) ? response.json() : response.text();
   return promiseOfBody.then(body => ({
     status: response.status,
     body
   }));
+}
+
+function shouldBeJson(response) {
+  const contentType = response.headers.get('Content-Type');
+  return contentType ? contentType.toLowerCase().startsWith('application/json') : false;
 }

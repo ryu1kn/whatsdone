@@ -18,15 +18,30 @@ test('smartFetch fetches json data', t => {
   });
 });
 
-function createFakeFetch() {
+test('smartFetch treats response body as text if no content-type is specified', t => {
+  t.plan(1);
+
+  const fakeFetch = createFakeFetch({contentType: null});
+  ServiceLocator.load({
+    createFetch: () => fakeFetch
+  });
+
+  smartFetch('URL').then(response => {
+    t.deepEqual(response.body, '{"DATA": ".."}');
+  });
+});
+
+function createFakeFetch({contentType} = {}) {
+  const responseBody = '{"DATA": ".."}';
+  const responseHeaders = {
+    'Content-Type': typeof contentType !== 'undefined' ? contentType : 'application/json'
+  };
   const response = {
     headers: {
-      get: function (headerName) {
-        return this._headers[headerName];
-      },
-      _headers: {'Content-Type': 'application/json'}
+      get: headerName => responseHeaders[headerName]
     },
-    json: () => Promise.resolve('{"DATA": ".."}')
+    json: () => Promise.resolve(JSON.parse(responseBody)),
+    text: () => Promise.resolve(responseBody)
   };
   return sinon.stub().returns(Promise.resolve(response));
 }
