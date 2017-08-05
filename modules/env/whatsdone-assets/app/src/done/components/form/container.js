@@ -11,8 +11,8 @@ const mapDispatchToProps = dispatch => {
       };
       dispatch(Action.postDone(doneItem));
       ServiceLocator.whatsdoneApiClient.postDone(doneItem)
-        .then(function (updatedItem) {
-          dispatch(Action.markPostDoneSuccess(updatedItem));
+        .then(function (response) {
+          dispatch(Action.markPostDoneSuccess(response.body));
         }).catch(e => {
           dispatch(Action.markPostDoneFailed(e));
         });

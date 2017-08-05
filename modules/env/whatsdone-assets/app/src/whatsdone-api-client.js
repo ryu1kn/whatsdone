@@ -57,8 +57,8 @@ class WhatsdoneApiClient {
   _getApiOrigin() {
     if (this._API_ORIGIN) return Promise.resolve(this._API_ORIGIN);
     return this._smartFetch('/appConfig.json')
-      .then(appConfig => {
-        this._API_ORIGIN = appConfig.API_ORIGIN;
+      .then(response => {
+        this._API_ORIGIN = response.body.API_ORIGIN;
         return this._API_ORIGIN;
       });
   }

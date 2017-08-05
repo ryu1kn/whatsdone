@@ -83,8 +83,12 @@ test('WhatsdoneApiClient deletes one done item', t => {
 
 function fakeSmartFetch() {
   const stub = sinon.stub();
+  const response = {
+    status: 200,
+    body: {API_ORIGIN: 'https://api_origin'}
+  };
   ServiceLocator.load({
-    createSmartFetch: () => stub.returns(Promise.resolve({API_ORIGIN: 'https://api_origin'}))
+    createSmartFetch: () => stub.returns(Promise.resolve(response))
   });
   return stub;
 }

@@ -12,5 +12,9 @@ module.exports = (uri, options = {}) => {
 
 function parse(response) {
   const contentType = response.headers.get('Content-Type').toLowerCase();
-  return contentType.startsWith('application/json') ? response.json() : response.text();
+  const promiseOfBody = contentType.startsWith('application/json') ? response.json() : response.text();
+  return promiseOfBody.then(body => ({
+    status: response.status,
+    body
+  }));
 }
