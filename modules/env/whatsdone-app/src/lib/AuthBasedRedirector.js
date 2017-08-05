@@ -14,7 +14,8 @@ class AuthBasedRedirector {
     const isValidSession = this._sessionValidator.validate(session);
     if (isValidSession || request.path === '/signin') return null;
     return {
-      statusCode: '401'
+      statusCode: '401',
+      headers: {'Content-Type': ''}
     };
   }
 
