@@ -32,7 +32,17 @@ describe('Server AuthBasedRedirector', () => {
     const request = {path: '/PATH'};
     const session = 'SESSION';
     const result = authBasedRedirector.redirect(request, session);
-    expect(result).to.eql({statusCode: '401'});
+    expect(result.statusCode).to.eql('401');
+  });
+
+  it('returns an empty string for Content-Type in case of returning 401 Not Authenticated', () => {
+    const sessionValidator = {validate: () => false};
+    ServiceLocator.load({createSessionValidator: () => sessionValidator});
+    const authBasedRedirector = new AuthBasedRedirector();
+    const request = {path: '/PATH'};
+    const session = 'SESSION';
+    const result = authBasedRedirector.redirect(request, session);
+    expect(result.headers).to.eql({'Content-Type': ''});
   });
 
 });
