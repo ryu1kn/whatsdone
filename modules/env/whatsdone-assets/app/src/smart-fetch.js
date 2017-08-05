@@ -1,4 +1,6 @@
 
+import ServiceLocator from './service-locator';
+
 const DEFAULT_HEADERS = {
   'Accept-Encoding': 'gzip, deflate'
 };
@@ -6,7 +8,7 @@ const DEFAULT_HEADERS = {
 module.exports = (uri, options = {}) => {
   const headers = Object.assign({}, DEFAULT_HEADERS, options.headers);
   const finalOptions = Object.assign({}, options, {headers});
-  return fetch(uri, finalOptions)
+  return ServiceLocator.fetch(uri, finalOptions)
     .then(response => parse(response));
 };
 

@@ -6,6 +6,10 @@ class ServiceLocator {
     this._cache = Object.create(null);
   }
 
+  get fetch() {
+    return this._get('fetch');
+  }
+
   get smartFetch() {
     return this._get('smartFetch');
   }
