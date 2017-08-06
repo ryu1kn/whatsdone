@@ -23,6 +23,7 @@
     "build:dev": "NODE_ENV=dev webpack",
     "prebuild:production": "npm run clean",
     "build:production": "NODE_ENV=production webpack",
+    "postbuild:production": "mv $npm_package_config_buildDir/static/static/* $npm_package_config_buildDir/static && rmdir $npm_package_config_buildDir/static/static # HACK",
     "test": "tape --require babel-register test/**/*.test.js",
     "clean": "rm -rf $npm_package_config_buildDir"
   },

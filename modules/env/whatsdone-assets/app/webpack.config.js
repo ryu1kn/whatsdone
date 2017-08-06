@@ -42,13 +42,13 @@ module.exports = {
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: `${__dirname}/index.ejs`,
-      filename: `${BUILD_DIR}/index.html`
-    }),
     new FaviconsWebpackPlugin({
       logo: `${__dirname}/images/favicon.png`,
       prefix: 'static/icons-[hash]/'
+    }),
+    new HtmlWebpackPlugin({
+      template: `${__dirname}/index.ejs`,
+      filename: `${BUILD_DIR}/index.html`
     }),
     extractLess,
     ...jsMinifyPlugins
