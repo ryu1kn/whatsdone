@@ -1,2 +1,1 @@
 artifact-store
-whatsdone-config

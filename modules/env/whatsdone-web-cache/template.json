@@ -2,9 +2,6 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "What's Done Content Delivery",
   "Parameters": {
-    "CloudFrontOriginAccessIdentity": {
-      "Type": "String"
-    },
     "PublicDomain": {
       "Type": "String"
     },

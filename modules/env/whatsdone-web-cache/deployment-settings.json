@@ -13,12 +13,6 @@
     "prefix": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-web-cache"]]}
   },
   "dataSources": {
-    "whatsdone-config": {
-      "type": "s3-bucket",
-      "region": {"$ref": "#/_args/region"},
-      "bucket": "whatsdone-deployment-outputs",
-      "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-config"]]}
-    },
     "whatsdone-env": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
@@ -57,7 +51,6 @@
       },
       "stackParams": {
         "PublicDomain": {"$ref": "#/_deploymentOutputs/PublicDomain"},
-        "CloudFrontOriginAccessIdentity": {"$ref": "#/_dataSourceData/whatsdone-config/CloudFrontOriginAccessIdentity/Id"},
         "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
         "WebappDomain": {"$ref": "#/_dataSourceData/whatsdone-assets/WebappDomain"},
         "WebappBasePath": {"$ref": "#/_dataSourceData/whatsdone-assets/WebappBasePath"}
