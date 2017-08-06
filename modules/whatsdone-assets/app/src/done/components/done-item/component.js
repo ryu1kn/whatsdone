@@ -4,7 +4,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import util from '../../../util';
 
-const converter = new Showdown.converter(); // eslint-disable-line new-cap
+const showdown = require('showdown');
+const converter = new showdown.Converter();
 
 class DoneItem extends React.Component {
 
