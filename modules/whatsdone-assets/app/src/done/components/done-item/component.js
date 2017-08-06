@@ -1,4 +1,3 @@
-/* global Showdown */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -43,21 +42,18 @@ class DoneItem extends React.Component {
     return (
       <div className="doneitem">
         <div className="doneitem__user">
-          <div className="doneitem__user-icon"
-               style={{backgroundColor: this.getIconColor(this.props.username)}}>
+          <div className="doneitem__user-icon" style={{backgroundColor: this.getIconColor(this.props.username)}}>
             {this.getFirstLetter(this.props.username)}
           </div>
           <div className="doneiten__user-name">{this.props.username}</div>
         </div>
         <div>
-          <div className="doneitem__done-thing"
-               dangerouslySetInnerHTML={{__html: rawMarkup}} />
+          <div className="doneitem__done-thing" dangerouslySetInnerHTML={{__html: rawMarkup}} />
           <p className="doneitem__time">
             {this.formatTime(this.props.date)}
           </p>
         </div>
-        <div className="doneitem__delete-action glyphicon glyphicon-remove"
-             onClick={this.delete.bind(this)}></div>
+        <div className="doneitem__delete-action glyphicon glyphicon-remove" onClick={this.delete.bind(this)}></div>
       </div>
     );
   }
