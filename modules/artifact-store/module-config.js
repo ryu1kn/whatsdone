@@ -1,5 +1,5 @@
 
-const commonConfig = require('../../../config/common');
+const commonConfig = require('../../config/common');
 
 module.exports = {
   artifactBucket: commonConfig.artifactBucket

@@ -1,3 +1,4 @@
+artifact-store
 whatsdone-env
 whatsdone-assets
 whatsdone-web-cache

@@ -1,5 +1,5 @@
 
-const projectConfig = require('../../../../config/prod');
+const projectConfig = require('../../../config/prod');
 
 module.exports = {
   bucketName: 'whatsdone',

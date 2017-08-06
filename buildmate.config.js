@@ -4,7 +4,7 @@ module.exports = {
     // Build modules
     {
       description: 'Build whatsdone-assets',
-      path: /^(modules\/env\/whatsdone-assets)\/.*/,
+      path: /^(modules\/whatsdone-assets)\/.*/,
       command: `
         cd $BM_PATH_VAR_1 \\
             && npm install \\
@@ -12,7 +12,7 @@ module.exports = {
     },
     {
       description: 'Build whatsdone-app',
-      path: /^(modules\/env\/whatsdone-app)\/.*/,
+      path: /^(modules\/whatsdone-app)\/.*/,
       command: `
         cd $BM_PATH_VAR_1/src \\
             && npm install \\
@@ -31,12 +31,12 @@ module.exports = {
     // Deploy modules
     {
       description: 'Deploy module',
-      path: /^(modules\/[^/]+\/[^/]+)\/.*/,
+      path: /^(modules\/[^/]+)\/.*/,
       command: 'cd $BM_PATH_VAR_1 && npm run deploy -- --env $ENV_NAME --region $AWS_REGION'
     },
     {
       description: 'Deploy whatsdone-assets app',
-      path: /^(modules\/env\/whatsdone-assets)\/.*/,
+      path: /^(modules\/whatsdone-assets)\/.*/,
       command: 'cd $BM_PATH_VAR_1 && npm install && npm run build && npm run deploy:app'
     }
   ]

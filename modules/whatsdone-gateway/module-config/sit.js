@@ -1,5 +1,5 @@
 
-const projectConfig = require('../../../../config/prod');
+const projectConfig = require('../../../config/sit');
 
 module.exports = {
   hostedZoneId: projectConfig.hostedZoneId
