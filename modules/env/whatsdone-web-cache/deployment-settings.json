@@ -59,7 +59,8 @@
         "PublicDomain": {"$ref": "#/_deploymentOutputs/PublicDomain"},
         "CloudFrontOriginAccessIdentity": {"$ref": "#/_dataSourceData/whatsdone-config/CloudFrontOriginAccessIdentity/Id"},
         "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
-        "AssetBucketDomain": {"$ref": "#/_dataSourceData/whatsdone-assets/BucketDomain"}
+        "WebappDomain": {"$ref": "#/_dataSourceData/whatsdone-assets/WebappDomain"},
+        "WebappBasePath": {"$ref": "#/_dataSourceData/whatsdone-assets/WebappBasePath"}
       }
     }
   ]

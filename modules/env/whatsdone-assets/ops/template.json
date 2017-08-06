@@ -6,6 +6,13 @@
       "Type": "String"
     }
   },
+  "Mappings": {
+    "Variables": {
+      "ApiGateway": {
+        "StageName": "default"
+      }
+    }
+  },
   "Resources": {
     "Bucket": {
       "Type": "AWS::S3::Bucket",
@@ -34,12 +41,263 @@
           }]
         }
       }
+    },
+    "RestApi": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": {"Fn::Sub": "What's Done Webapp - ${AWS::StackName}"},
+        "Description": "What's Done Webapp Entry Point",
+        "FailOnWarnings": true,
+        "Body": {
+          "swagger": "2.0",
+          "info": {
+            "version": "2017-02-25T13:40:34Z",
+            "title": "What's Done Webapp Entry Point"
+          },
+          "schemes": ["https"],
+          "paths": {
+            "/appConfig.json": {
+              "get": {
+                "produces": [
+                  "application/json"
+                ],
+                "responses": {
+                  "200": {
+                    "description": "200 response",
+                    "schema": {},
+                    "headers": {
+                      "content-type": {
+                        "type": "string"
+                      },
+                      "Content-Type": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "400": {
+                    "description": "400 response"
+                  },
+                  "500": {
+                    "description": "500 response"
+                  }
+                },
+                "x-amazon-apigateway-integration": {
+                  "type": "aws",
+                  "httpMethod": "GET",
+                  "credentials": {"Fn::GetAtt": ["IamRole", "Arn"]},
+                  "responses": {
+                    "4\\d{2}": {
+                      "statusCode": "400"
+                    },
+                    "default": {
+                      "statusCode": "200",
+                      "responseParameters": {
+                        "method.response.header.content-type": "integration.response.header.content-type",
+                        "method.response.header.Content-Type": "integration.response.header.Content-Type"
+                      }
+                    },
+                    "5\\d{2}": {
+                      "statusCode": "500"
+                    }
+                  },
+                  "uri": {"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:s3:path/${BucketName}/appConfig.json"},
+                  "passthroughBehavior": "when_no_match"
+                }
+              }
+            },
+            "/static/{proxy+}": {
+              "get": {
+                "produces": [
+                  "application/json"
+                ],
+                "parameters": [
+                  {
+                    "name": "proxy",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                  }
+                ],
+                "responses": {
+                  "200": {
+                    "description": "200 response",
+                    "schema": {},
+                    "headers": {
+                      "content-type": {
+                        "type": "string"
+                      },
+                      "Content-Type": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "400": {
+                    "description": "400 response"
+                  },
+                  "500": {
+                    "description": "500 response"
+                  }
+                },
+                "x-amazon-apigateway-integration": {
+                  "type": "aws",
+                  "httpMethod": "GET",
+                  "credentials": {"Fn::GetAtt": ["IamRole", "Arn"]},
+                  "responses": {
+                    "4\\d{2}": {
+                      "statusCode": "400"
+                    },
+                    "default": {
+                      "statusCode": "200",
+                      "responseParameters": {
+                        "method.response.header.content-type": "integration.response.header.content-type",
+                        "method.response.header.Content-Type": "integration.response.header.Content-Type"
+                      }
+                    },
+                    "5\\d{2}": {
+                      "statusCode": "500"
+                    }
+                  },
+                  "requestParameters": {
+                    "integration.request.path.s3Key": "method.request.path.proxy"
+                  },
+                  "uri": {"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:s3:path/${BucketName}/static/{s3Key}"},
+                  "passthroughBehavior": "when_no_match"
+                }
+              }
+            },
+            "/{proxy+}": {
+              "get": {
+                "produces": [
+                  "application/json"
+                ],
+                "parameters": [
+                  {
+                    "name": "proxy",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                  }
+                ],
+                "responses": {
+                  "200": {
+                    "description": "200 response",
+                    "schema": {},
+                    "headers": {
+                      "content-type": {
+                        "type": "string"
+                      },
+                      "Content-Type": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "400": {
+                    "description": "400 response"
+                  },
+                  "500": {
+                    "description": "500 response"
+                  }
+                },
+                "x-amazon-apigateway-integration": {
+                  "type": "aws",
+                  "httpMethod": "GET",
+                  "credentials": {"Fn::GetAtt": ["IamRole", "Arn"]},
+                  "responses": {
+                    "4\\d{2}": {
+                      "statusCode": "400"
+                    },
+                    "default": {
+                      "statusCode": "200",
+                      "responseParameters": {
+                        "method.response.header.content-type": "integration.response.header.content-type",
+                        "method.response.header.Content-Type": "integration.response.header.Content-Type"
+                      }
+                    },
+                    "5\\d{2}": {
+                      "statusCode": "500"
+                    }
+                  },
+                  "uri": {"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:s3:path/${BucketName}/index.html"},
+                  "passthroughBehavior": "when_no_match"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "RestApiStage": {
+      "Type": "AWS::ApiGateway::Stage",
+      "Properties": {
+        "DeploymentId": {"Ref": "ApiDeployment"},
+        "MethodSettings": [{
+          "HttpMethod": "*",
+          "ResourcePath": "/*",
+          "ThrottlingRateLimit": 10,
+          "ThrottlingBurstLimit": 20
+        }],
+        "RestApiId": {"Ref": "RestApi"},
+        "StageName": {"Fn::FindInMap": ["Variables", "ApiGateway", "StageName"]}
+      }
+    },
+    "ApiDeployment": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {"Ref": "RestApi"}
+      }
+    },
+    "IamRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "apigateway.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyName": "root",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject"
+                  ],
+                  "Resource": {"Fn::Sub": "arn:aws:s3:::${BucketName}/*"}
+                }
+              ]
+            }
+          }
+        ]
+      }
     }
   },
   "Outputs": {
     "BucketDomain": {
       "Description": "Domain of the Bucket for What's done app assets",
       "Value": {"Fn::GetAtt": ["Bucket", "DomainName"]}
+    },
+    "WebappDomain": {
+      "Value": {"Fn::Sub": "${RestApi}.execute-api.${AWS::Region}.amazonaws.com"}
+    },
+    "WebappBasePath": {
+      "Value": {"Fn::Sub": ["/${StageName}", {
+        "StageName": {"Fn::FindInMap": ["Variables", "ApiGateway", "StageName"]}
+      }]}
     }
   }
 }

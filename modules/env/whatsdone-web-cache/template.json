@@ -8,7 +8,10 @@
     "PublicDomain": {
       "Type": "String"
     },
-    "AssetBucketDomain": {
+    "WebappDomain": {
+      "Type": "String"
+    },
+    "WebappBasePath": {
       "Type": "String"
     },
     "LoggingBucket": {
@@ -52,10 +55,11 @@
           },
           "Origins": [
             {
-              "DomainName": {"Ref": "AssetBucketDomain"},
+              "DomainName": {"Ref": "WebappDomain"},
+              "OriginPath": {"Ref": "WebappBasePath"},
               "Id": "whatsdone-assets",
-              "S3OriginConfig": {
-                "OriginAccessIdentity": {"Fn::Sub": "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"}
+              "CustomOriginConfig": {
+                "OriginProtocolPolicy": "https-only"
               }
             }
           ],

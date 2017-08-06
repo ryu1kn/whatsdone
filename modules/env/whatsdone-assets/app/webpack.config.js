@@ -22,7 +22,7 @@ module.exports = {
     `${SRC_DIR}/app.js`
   ],
   output: {
-    path: BUILD_DIR,
+    path: `${BUILD_DIR}/static`,
     filename: 'build.js'
   },
   module: {
@@ -46,7 +46,10 @@ module.exports = {
       template: `${__dirname}/index.ejs`,
       filename: `${BUILD_DIR}/index.html`
     }),
-    new FaviconsWebpackPlugin(`${__dirname}/images/favicon.png`),
+    new FaviconsWebpackPlugin({
+      logo: `${__dirname}/images/favicon.png`,
+      prefix: 'static/icons-[hash]/'
+    }),
     extractLess,
     ...jsMinifyPlugins
   ]
