@@ -7,6 +7,7 @@ const webpack = require('webpack');
 
 const SRC_DIR = path.resolve(__dirname, 'src');
 const BUILD_DIR = path.resolve(__dirname, process.env.npm_package_config_buildDir);
+const BYTE_LIMIT = 8192;
 
 const extractLess = new ExtractTextPlugin('style.css');
 const jsMinifyPlugins = process.env.NODE_ENV === 'production' ? [
@@ -33,15 +34,47 @@ module.exports = {
         loader: 'babel-loader'
       },
       {
-        test: /\.less$/,
+        test: /\.(less|css)$/,
         use: extractLess.extract({
           use: ['css-loader', 'less-loader'],
           fallback: 'style-loader'
         })
+      },
+      {
+        test: /\.(woff|woff2)$/,
+        loader: 'url-loader',
+        options: {
+          limit: BYTE_LIMIT,
+          mimetype: 'application/font-woff'
+        }
+      },
+      {
+        test: /\.ttf$/,
+        loader: 'url-loader',
+        options: {
+          limit: BYTE_LIMIT,
+          mimetype: 'application/octet-stream'
+        }
+      },
+      {
+        test: /\.eot$/,
+        loader: 'file-loader'
+      },
+      {
+        test: /\.svg$/,
+        loader: 'url-loader',
+        options: {
+          limit: BYTE_LIMIT,
+          mimetype: 'image/svg+xml'
+        }
       }
     ]
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery'
+    }),
     new FaviconsWebpackPlugin({
       logo: `${__dirname}/images/favicon.png`,
       prefix: 'static/icons-[hash]/'
