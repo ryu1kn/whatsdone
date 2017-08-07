@@ -8,6 +8,9 @@
     "LambdaS3Key": {
       "Type": "String"
     },
+    "LoggingBucket": {
+      "Type": "String"
+    },
     "DomainName": {
       "Type": "String"
     },
@@ -57,25 +60,61 @@
         "Name": {"Fn::Sub": "${DomainName}."},
         "Type": "A",
         "AliasTarget": {
-          "DNSName": {"Fn::GetAtt": ["ApiDomainName", "DistributionDomainName"]},
+          "DNSName": {"Fn::GetAtt": ["CloudFrontDistribution", "DomainName"]},
           "HostedZoneId": {"Fn::FindInMap": ["Variables", "CloudFrontDistribution", "HostedZoneId"]}
         }
       }
     },
-    "ApiDomainName": {
-      "Type": "AWS::ApiGateway::DomainName",
+    "CloudFrontDistribution": {
+      "Type": "AWS::CloudFront::Distribution",
       "Properties": {
-        "CertificateArn": {"Ref": "CertificateArn"},
-        "DomainName": {"Ref": "DomainName"}
-      }
-    },
-    "ApiBasePathMapping": {
-      "Type": "AWS::ApiGateway::BasePathMapping",
-      "Properties": {
-        "BasePath": "",
-        "DomainName": {"Ref": "ApiDomainName"},
-        "RestApiId": {"Ref": "RestApi"},
-        "Stage": {"Ref": "ApiStage"}
+        "DistributionConfig": {
+          "Aliases": [{"Ref": "DomainName"}],
+          "DefaultCacheBehavior": {
+            "ForwardedValues": {
+              "Cookies": {
+                "Forward": "all"
+              },
+              "QueryString": true
+            },
+            "AllowedMethods": ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"],
+            "Compress": true,
+            "DefaultTTL": 0,
+            "MaxTTL": 0,
+            "MinTTL": 0,
+            "TargetOriginId": "whatsdone-api",
+            "ViewerProtocolPolicy": "https-only"
+          },
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "Logging": {
+            "Bucket": {"Fn::Sub": "${LoggingBucket}.s3.amazonaws.com"},
+            "Prefix": "cloudfront-whatsdone-api",
+            "IncludeCookies": true
+          },
+          "Origins": [
+            {
+              "DomainName": {
+                "Fn::Sub": "${RestApi}.execute-api.${AWS::Region}.amazonaws.com"
+              },
+              "OriginPath": {
+                "Fn::Sub": ["/${StageName}", {
+                  "StageName": {"Fn::FindInMap": ["Variables", "Api", "StageName"]}
+                }]
+              },
+              "Id": "whatsdone-api",
+              "CustomOriginConfig": {
+                "OriginProtocolPolicy": "https-only"
+              }
+            }
+          ],
+          "PriceClass": "PriceClass_All",
+          "ViewerCertificate": {
+            "AcmCertificateArn": {"Ref": "CertificateArn"},
+            "MinimumProtocolVersion": "TLSv1",
+            "SslSupportMethod": "sni-only"
+          }
+        }
       }
     },
     "RestApi": {
@@ -322,12 +361,6 @@
     },
     "ApiStageName": {
       "Value": {"Fn::FindInMap": ["Variables", "Api", "StageName"]}
-    },
-    "ApiRootUrl": {
-      "Description": "Root URL of What's Done API",
-      "Value": {"Fn::Sub": ["https://${RestApi}.execute-api.${AWS::Region}.amazonaws.com/${StageName}", {
-        "StageName": {"Fn::FindInMap": ["Variables", "Api", "StageName"]}
-      }]}
     }
   }
 }

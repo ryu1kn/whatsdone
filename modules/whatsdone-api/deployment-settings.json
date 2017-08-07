@@ -13,6 +13,12 @@
         "prefix": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-api"]]}
     },
     "dataSources": {
+        "whatsdone-env": {
+            "type": "s3-bucket",
+            "region": {"$ref": "#/_args/region"},
+            "bucket": "whatsdone-deployment-outputs",
+            "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-env"]]}
+        },
         "whatsdone-app": {
             "type": "s3-bucket",
             "region": {"$ref": "#/_args/region"},
@@ -41,7 +47,7 @@
         {
             "id": "deploy-api",
             "type": "cf-stack",
-            "stackName": {"Fn::Join": ["-", [{"$ref": "#/_env"}, "whatsdone-api-module"]]},
+            "stackName": {"Fn::Join": ["-", [{"$ref": "#/_env"}, "whatsdone-api"]]},
             "stackTemplate": {
               "script": "cp ./template.json $TEMPLATE_OUTPUT_FILE",
               "envVars": {
@@ -59,6 +65,7 @@
               "UserTableName": {"$ref": "#/_deploymentConfig/userTableName"},
               "SessionTableName": {"$ref": "#/_deploymentConfig/sessionTableName"},
               "SessionSecret": {"$ref": "#/_deploymentConfig/sessionSecret"},
+              "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
               "LambdaS3Bucket": {"$ref": "#/_dataSourceData/whatsdone-app/packages/whatsdone-app/s3Bucket"},
               "LambdaS3Key": {"$ref": "#/_dataSourceData/whatsdone-app/packages/whatsdone-app/s3Key"}
             }
