@@ -28,8 +28,10 @@ class Router {
     }
     callback(null, {
       statusCode: '404',
-      headers: {'Content-Type': 'text/html'},
-      body: 'Not Found'
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({errors: [
+        {title: '404: Not Found'}
+      ]})
     });
   }
 

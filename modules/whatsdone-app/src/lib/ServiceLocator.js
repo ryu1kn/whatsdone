@@ -100,20 +100,12 @@ class ServiceLocator {
     return this._get('logger');
   }
 
-  get pug() {
-    return this._get('pug');
-  }
-
   get cookieCodec() {
     return this._get('cookieCodec');
   }
 
   get sessionValidator() {
     return this._get('sessionValidator');
-  }
-
-  get htmlPageGenerator() {
-    return this._get('htmlPageGenerator');
   }
 
   get userRepository() {

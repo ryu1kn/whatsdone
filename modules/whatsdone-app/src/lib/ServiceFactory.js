@@ -3,8 +3,6 @@
 
 const AWS = require('aws-sdk');
 const Uuid = require('uuid');
-const path = require('path');
-const pug = require('pug');
 const sha1 = require('sha1');
 
 const LambdaRequestHandler = require('./LambdaRequestHandler');
@@ -19,10 +17,6 @@ class ServiceFactory {
     return {
       webappOrigin: process.env.WEBAPP_ORIGIN
     };
-  }
-
-  createViewDirectoryPath() {
-    return path.join(__dirname, 'views');
   }
 
   createAuthBasedRedirector() {
@@ -117,10 +111,6 @@ class ServiceFactory {
     return console;
   }
 
-  createPug() {
-    return pug;
-  }
-
   createCookieCodec() {
     const CookieCodec = require('./CookieCodec');
     return new CookieCodec({signatureSecret: this._env.SESSION_SECRET});
@@ -129,11 +119,6 @@ class ServiceFactory {
   createSessionValidator() {
     const SessionValidator = require('./SessionValidator');
     return new SessionValidator();
-  }
-
-  createHtmlPageGenerator() {
-    const HtmlPageGenerator = require('./HtmlPageGenerator');
-    return new HtmlPageGenerator();
   }
 
   createDynamoDBDocumentClient() {

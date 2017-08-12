@@ -9,7 +9,6 @@ describe('Server PostSigninRequestProcessor', () => {
     const cookieCodec = {encode: sinon.stub().returns('SESSION_EMBEDDED_COOKIE')};
     ServiceLocator.load({
       createLoginCommand: () => loginCommand,
-      createHtmlPageGenerator: () => {},
       createCookieCodec: () => cookieCodec
     });
     const processor = new PostSigninRequestProcessor();
@@ -60,7 +59,6 @@ describe('Server PostSigninRequestProcessor', () => {
       createLoginCommand: () => ({
         execute: () => Promise.reject(new Error('UNEXPECTED_ERROR'))
       }),
-      createHtmlPageGenerator: () => {},
       createCookieCodec: () => {}
     });
     const processor = new PostSigninRequestProcessor();
