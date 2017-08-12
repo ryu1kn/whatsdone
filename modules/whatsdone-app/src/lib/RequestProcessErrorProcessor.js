@@ -7,7 +7,6 @@ class RequestProcessErrorProcessor {
 
   constructor() {
     this._logger = ServiceLocator.logger;
-    this._htmlPageGenerator = ServiceLocator.htmlPageGenerator;
   }
 
   process(err) {
@@ -31,10 +30,13 @@ class RequestProcessErrorProcessor {
   }
 
   _composeResponse(statusCode, errorMessage) {
+    const errorResponse = [
+      {title: errorMessage}
+    ];
     return {
       statusCode,
-      headers: {'Content-Type': 'text/html'},
-      body: this._htmlPageGenerator.generate('error', {message: errorMessage})
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({errors: errorResponse})
     };
   }
 
