@@ -30,14 +30,6 @@ class ServiceFactory {
     return new AuthBasedRedirector();
   }
 
-  createGetRootPageRequestHandler() {
-    const GetRootPageRequestProcessor = require('./request-processors/GetRootPage');
-    const requestHandler = new LambdaRequestHandler({
-      requestProcessor: new GetRootPageRequestProcessor()
-    });
-    return getBoundHandleMethod(requestHandler);
-  }
-
   createGetDonesRequestHandler() {
     const GetDonesRequestProcessor = require('./request-processors/GetDones');
     const requestHandler = new LambdaRequestHandler({
@@ -88,14 +80,6 @@ class ServiceFactory {
   createUpdateDoneCommand() {
     const UpdateDoneCommand = require('./commands/UpdateDone');
     return new UpdateDoneCommand();
-  }
-
-  createGetSigninRequestHandler() {
-    const GetSigninRequestProcessor = require('./request-processors/GetSignin');
-    const requestHandler = new LambdaRequestHandler({
-      requestProcessor: new GetSigninRequestProcessor()
-    });
-    return getBoundHandleMethod(requestHandler);
   }
 
   createPostSigninRequestHandler() {

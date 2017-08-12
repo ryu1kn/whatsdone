@@ -5,8 +5,6 @@ const Route = require('route-parser');
 
 ServiceLocator.load(new ServiceFactory({env: process.env}));
 
-exports.getRootPageRequestHandler = ServiceLocator.getRootPageRequestHandler;
-
 class Router {
 
   constructor() {
@@ -62,7 +60,6 @@ class Router {
 
 const router = new Router();
 
-router.get('/signin', ServiceLocator.getSigninRequestHandler);
 router.post('/signin', ServiceLocator.postSigninRequestHandler);
 router.get('/signout', ServiceLocator.signoutRequestHandler);
 router.get('/dones', ServiceLocator.getDonesRequestHandler);
