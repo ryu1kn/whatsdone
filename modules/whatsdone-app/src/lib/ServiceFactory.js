@@ -98,14 +98,6 @@ class ServiceFactory {
     return getBoundHandleMethod(requestHandler);
   }
 
-  createNoMatchingRouteRequestHandler() {
-    const NoMatchingRouteRequestProcessor = require('./request-processors/NoMatchingRoute');
-    const requestHandler = new LambdaRequestHandler({
-      requestProcessor: new NoMatchingRouteRequestProcessor()
-    });
-    return getBoundHandleMethod(requestHandler);
-  }
-
   createRequestProcessErrorProcessor() {
     const RequestProcessErrorProcessor = require('./RequestProcessErrorProcessor');
     return new RequestProcessErrorProcessor();

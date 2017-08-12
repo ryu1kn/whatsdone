@@ -64,10 +64,6 @@ class ServiceLocator {
     return this._get('signoutRequestHandler');
   }
 
-  get noMatchingRouteRequestHandler() {
-    return this._get('noMatchingRouteRequestHandler');
-  }
-
   get createDoneCommand() {
     return this._get('createDoneCommand');
   }
