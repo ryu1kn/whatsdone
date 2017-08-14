@@ -16,9 +16,18 @@
     "DynamoDBTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
+        "TableName": {"Ref": "TableName"},
         "AttributeDefinitions": [
           {
             "AttributeName": "id",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "date",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "month",
             "AttributeType": "S"
           }
         ],
@@ -29,16 +38,31 @@
           }
         ],
         "ProvisionedThroughput": {
-          "ReadCapacityUnits": {
-            "Ref": "TableReadCapacity"
-          },
-          "WriteCapacityUnits": {
-            "Ref": "TableWriteCapacity"
-          }
+          "ReadCapacityUnits": {"Ref": "TableReadCapacity"},
+          "WriteCapacityUnits": {"Ref": "TableWriteCapacity"}
         },
-        "TableName": {
-          "Ref": "TableName"
-        }
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "date",
+            "KeySchema": [
+              {
+                "AttributeName": "month",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "date",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            },
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": {"Ref": "TableReadCapacity"},
+              "WriteCapacityUnits": {"Ref": "TableWriteCapacity"}
+            }
+          }
+        ]
       }
     }
   },
