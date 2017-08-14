@@ -1,92 +1,92 @@
 {
-    "moduleName": "whatsdone-api",
-    "config": {
-        "script": "node -p \"JSON.stringify(require('./module-config/$ENV.js'))\" | kumo decrypt --profile $ENV --inputFormat json",
+  "moduleName": "whatsdone-api",
+  "config": {
+    "script": "node -p \"JSON.stringify(require('./module-config/$ENV.js'))\" | kumo decrypt --profile $ENV --inputFormat json",
+    "envVars": {
+      "ENV": {"$ref": "#/_env"}
+    }
+  },
+  "outputsStore": {
+    "type": "s3-bucket",
+    "region": {"$ref": "#/_args/region"},
+    "bucket": "whatsdone-deployment-outputs",
+    "prefix": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-api"]]}
+  },
+  "dataSources": {
+    "whatsdone-env": {
+      "type": "s3-bucket",
+      "region": {"$ref": "#/_args/region"},
+      "bucket": "whatsdone-deployment-outputs",
+      "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-env"]]}
+    },
+    "whatsdone-app": {
+      "type": "s3-bucket",
+      "region": {"$ref": "#/_args/region"},
+      "bucket": "whatsdone-deployment-outputs",
+      "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-app"]]}
+    },
+    "done-store": {
+      "type": "s3-bucket",
+      "region": {"$ref": "#/_args/region"},
+      "bucket": "whatsdone-deployment-outputs",
+      "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "done-store"]]}
+    },
+    "whatsdone-web-cache": {
+      "type": "s3-bucket",
+      "region": {"$ref": "#/_args/region"},
+      "bucket": "whatsdone-deployment-outputs",
+      "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-web-cache"]]}
+    }
+  },
+  "tasks": [
+    {
+      "id": "fetch-certificate-arn",
+      "type": "custom",
+      "run": {
+        "script": "aws acm list-certificates --region us-east-1 --query CertificateSummaryList | jq 'map(select(.DomainName == \"*.ryuichi.io\") | .CertificateArn)[0]' > $TASK_OUTPUTS_FILE",
         "envVars": {
-            "ENV": {"$ref": "#/_env"}
+          "TASK_OUTPUTS_FILE": {"$ref": "#/_taskOutputsFile"}
         }
+      },
+      "outputsName": "certificateArn"
     },
-    "outputsStore": {
-        "type": "s3-bucket",
-        "region": {"$ref": "#/_args/region"},
-        "bucket": "whatsdone-deployment-outputs",
-        "prefix": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-api"]]}
-    },
-    "dataSources": {
-        "whatsdone-env": {
-            "type": "s3-bucket",
-            "region": {"$ref": "#/_args/region"},
-            "bucket": "whatsdone-deployment-outputs",
-            "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-env"]]}
-        },
-        "whatsdone-app": {
-            "type": "s3-bucket",
-            "region": {"$ref": "#/_args/region"},
-            "bucket": "whatsdone-deployment-outputs",
-            "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-app"]]}
-        },
-        "done-store": {
-            "type": "s3-bucket",
-            "region": {"$ref": "#/_args/region"},
-            "bucket": "whatsdone-deployment-outputs",
-            "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "done-store"]]}
-        },
-        "whatsdone-web-cache": {
-            "type": "s3-bucket",
-            "region": {"$ref": "#/_args/region"},
-            "bucket": "whatsdone-deployment-outputs",
-            "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-web-cache"]]}
+    {
+      "id": "deploy-api",
+      "type": "cf-stack",
+      "stackName": {"Fn::Join": ["-", [{"$ref": "#/_env"}, "whatsdone-api"]]},
+      "stackTemplate": {
+        "script": "cp ./template.json $TEMPLATE_OUTPUT_FILE",
+        "envVars": {
+          "TEMPLATE_OUTPUT_FILE": {"$ref": "#/_templateOutputFile"}
         }
+      },
+      "stackParams": {
+        "EnvName": {"$ref": "#/_env"},
+        "DomainName": {"$ref": "#/_deploymentConfig/domainName"},
+        "HostedZoneId": {"$ref": "#/_deploymentConfig/hostedZoneId"},
+        "CertificateArn": {"$ref": "#/_deploymentOutputs/certificateArn"},
+        "DbRegion": {"$ref": "#/_taskRegion"},
+        "WebappEndpoint": {"Fn::Join": ["", ["https://", {"$ref": "#/_dataSourceData/whatsdone-web-cache/PublicDomain"}]]},
+        "DoneTableName": {"$ref": "#/_dataSourceData/done-store/TableName"},
+        "UserTableName": {"$ref": "#/_deploymentConfig/userTableName"},
+        "SessionTableName": {"$ref": "#/_deploymentConfig/sessionTableName"},
+        "SessionSecret": {"$ref": "#/_deploymentConfig/sessionSecret"},
+        "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
+        "LambdaS3Bucket": {"$ref": "#/_dataSourceData/whatsdone-app/packages/whatsdone-app/s3Bucket"},
+        "LambdaS3Key": {"$ref": "#/_dataSourceData/whatsdone-app/packages/whatsdone-app/s3Key"}
+      }
     },
-    "tasks": [
-        {
-            "id": "fetch-certificate-arn",
-            "type": "custom",
-            "run": {
-              "script": "aws acm list-certificates --region us-east-1 --query CertificateSummaryList | jq 'map(select(.DomainName == \"*.ryuichi.io\") | .CertificateArn)[0]' > $TASK_OUTPUTS_FILE",
-              "envVars": {
-                "TASK_OUTPUTS_FILE": {"$ref": "#/_taskOutputsFile"}
-              }
-            },
-            "outputsName": "certificateArn"
-        },
-        {
-            "id": "deploy-api",
-            "type": "cf-stack",
-            "stackName": {"Fn::Join": ["-", [{"$ref": "#/_env"}, "whatsdone-api"]]},
-            "stackTemplate": {
-              "script": "cp ./template.json $TEMPLATE_OUTPUT_FILE",
-              "envVars": {
-                "TEMPLATE_OUTPUT_FILE": {"$ref": "#/_templateOutputFile"}
-              }
-            },
-            "stackParams": {
-              "EnvName": {"$ref": "#/_env"},
-              "DomainName": {"$ref": "#/_deploymentConfig/domainName"},
-              "HostedZoneId": {"$ref": "#/_deploymentConfig/hostedZoneId"},
-              "CertificateArn": {"$ref": "#/_deploymentOutputs/certificateArn"},
-              "DbRegion": {"$ref": "#/_taskRegion"},
-              "WebappEndpoint": {"Fn::Join": ["", ["https://", {"$ref": "#/_dataSourceData/whatsdone-web-cache/PublicDomain"}]]},
-              "DoneTableName": {"$ref": "#/_dataSourceData/done-store/TableName"},
-              "UserTableName": {"$ref": "#/_deploymentConfig/userTableName"},
-              "SessionTableName": {"$ref": "#/_deploymentConfig/sessionTableName"},
-              "SessionSecret": {"$ref": "#/_deploymentConfig/sessionSecret"},
-              "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
-              "LambdaS3Bucket": {"$ref": "#/_dataSourceData/whatsdone-app/packages/whatsdone-app/s3Bucket"},
-              "LambdaS3Key": {"$ref": "#/_dataSourceData/whatsdone-app/packages/whatsdone-app/s3Key"}
-            }
-        },
-        {
-            "id": "create-new-deployment",
-            "type": "custom",
-            "run": {
-              "script": "aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name $STAGE_NAME --region $TASK_REGION",
-              "envVars": {
-                "TASK_REGION": {"$ref": "#/_taskRegion"},
-                "REST_API_ID": {"$ref": "#/_deploymentOutputs/RestApiId"},
-                "STAGE_NAME": {"$ref": "#/_deploymentOutputs/ApiStageName"}
-              }
-            }
+    {
+      "id": "create-new-deployment",
+      "type": "custom",
+      "run": {
+        "script": "aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name $STAGE_NAME --region $TASK_REGION",
+        "envVars": {
+          "TASK_REGION": {"$ref": "#/_taskRegion"},
+          "REST_API_ID": {"$ref": "#/_deploymentOutputs/RestApiId"},
+          "STAGE_NAME": {"$ref": "#/_deploymentOutputs/ApiStageName"}
         }
-    ]
+      }
+    }
+  ]
 }
