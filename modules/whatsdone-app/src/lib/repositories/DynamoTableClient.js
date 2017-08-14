@@ -75,7 +75,7 @@ class DynamoTableClient {
       AttributeUpdates: this._getAttributeUpdatesValues(newData)
     };
     return this._docClient.update(params).promise()
-      .then(() => this.getById(id));
+      .then(() => this.getById(id));  // XXX: Don't query again
   }
 
   _getTableName() {
