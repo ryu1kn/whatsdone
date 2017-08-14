@@ -25,6 +25,12 @@
             "bucket": "whatsdone-deployment-outputs",
             "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-app"]]}
         },
+        "done-store": {
+            "type": "s3-bucket",
+            "region": {"$ref": "#/_args/region"},
+            "bucket": "whatsdone-deployment-outputs",
+            "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "done-store"]]}
+        },
         "whatsdone-web-cache": {
             "type": "s3-bucket",
             "region": {"$ref": "#/_args/region"},
@@ -61,7 +67,7 @@
               "CertificateArn": {"$ref": "#/_deploymentOutputs/certificateArn"},
               "DbRegion": {"$ref": "#/_taskRegion"},
               "WebappEndpoint": {"Fn::Join": ["", ["https://", {"$ref": "#/_dataSourceData/whatsdone-web-cache/PublicDomain"}]]},
-              "DoneTableName": {"$ref": "#/_deploymentConfig/doneTableName"},
+              "DoneTableName": {"$ref": "#/_dataSourceData/done-store/TableName"},
               "UserTableName": {"$ref": "#/_deploymentConfig/userTableName"},
               "SessionTableName": {"$ref": "#/_deploymentConfig/sessionTableName"},
               "SessionSecret": {"$ref": "#/_deploymentConfig/sessionSecret"},
