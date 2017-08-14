@@ -1,0 +1,50 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "What's Done - Done Store",
+  "Parameters": {
+    "TableName": {
+      "Type": "String"
+    },
+    "TableReadCapacity": {
+      "Type": "Number"
+    },
+    "TableWriteCapacity": {
+      "Type": "Number"
+    }
+  },
+  "Resources": {
+    "DynamoDBTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": {
+            "Ref": "TableReadCapacity"
+          },
+          "WriteCapacityUnits": {
+            "Ref": "TableWriteCapacity"
+          }
+        },
+        "TableName": {
+          "Ref": "TableName"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "TableName": {
+      "Value": {"Ref": "DynamoDBTable"}
+    }
+  }
+}
