@@ -46,6 +46,9 @@ Resources:
                   - cloudfront:GetDistribution
                   - cloudfront:GetDistributionConfig
                   - cloudfront:UpdateDistribution
+                  - dynamodb:CreateTable
+                  - dynamodb:DeleteTable
+                  - dynamodb:DescribeTable
                   - iam:CreateRole
                   - iam:DeleteRole
                   - iam:GetRole
