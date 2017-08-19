@@ -65,6 +65,7 @@ Resources:
                   - lambda:GetFunctionConfiguration
                   - lambda:RemovePermission
                   - lambda:UpdateFunctionCode
+                  - lambda:UpdateFunctionConfiguration
                   - logs:CreateLogGroup
                   - logs:CreateLogStream
                   - logs:DeleteLogGroup
