@@ -33,8 +33,9 @@ class WhatsdoneApiClient {
       .join('&');
   }
 
-  getDones() {
-    return this._relayFetch('/dones');
+  getDones(nextPageKey) {
+    const qs = nextPageKey ? `?nextKey=${encodeURIComponent(nextPageKey)}` : '';
+    return this._relayFetch(`/dones${qs}`);
   }
 
   postDone(doneItem) {

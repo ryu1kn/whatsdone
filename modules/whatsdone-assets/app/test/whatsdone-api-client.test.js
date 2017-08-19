@@ -43,6 +43,16 @@ test('WhatsdoneApiClient fetch all done items', t => {
   });
 });
 
+test('WhatsdoneApiClient fetch done items by sending a key', t => {
+  t.plan(1);
+
+  const smartFetch = fakeSmartFetch();
+  const apiClient = new WhatsdoneApiClient();
+  apiClient.getDones('NEXT KEY').then(() => {
+    t.deepEqual(smartFetch.args[1][0], 'https://api_origin/dones?nextKey=NEXT%20KEY');
+  });
+});
+
 test('WhatsdoneApiClient record new done item', t => {
   t.plan(1);
 
