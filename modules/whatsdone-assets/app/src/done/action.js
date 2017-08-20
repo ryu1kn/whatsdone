@@ -61,10 +61,11 @@ function getDones() {
   };
 }
 
-function markGetDonesSuccess(dones) {
+function markGetDonesSuccess(dones, nextKey) {
   return {
     type: ActionType.GET_DONE_SUCCESS,
-    dones
+    dones,
+    nextKey
   };
 }
 

@@ -2,6 +2,6 @@
 import {combineReducers} from 'redux';
 
 export default combineReducers({
-  dones: require('./done/reducer'),
+  done: require('./done/reducer'),
   loginStatus: require('./signin/reducer')
 });

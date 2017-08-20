@@ -6,7 +6,7 @@ const containerState = {};
 
 const mapStateToProps = (state, ownProps) => {
   containerState.ownProps = ownProps;
-  return {dones: state.dones};
+  return {done: state.done};
 };
 
 const mapDispatchToProps = dispatch => {

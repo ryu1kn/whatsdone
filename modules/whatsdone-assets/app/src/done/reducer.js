@@ -1,24 +1,39 @@
 
 import ActionType from './action-type';
 
-const initialState = [];
+const initialState = {
+  items: [],
+  nextKey: null
+};
 
 module.exports = (state = initialState, action) => {
   switch (action.type) {
   case ActionType.GET_DONE_REQUEST:
     return state;
   case ActionType.GET_DONE_SUCCESS:
-    return action.dones.map(normaliseDoneItem).sort(
-      (a, b) =>
-        a.date < b.date ? 1 :
-        a.date > b.date ? -1 : 0
-    );
+    return {
+      items: action.dones.map(normaliseDoneItem).sort(
+        (a, b) =>
+          a.date < b.date ? 1 :
+          a.date > b.date ? -1 : 0
+      ),
+      nextKey: action.nextKey
+    };
   case ActionType.POST_DONE_REQUEST:
-    return [normaliseDoneItem(action.item), ...state];
+    return {
+      items: [normaliseDoneItem(action.item), ...state],
+      nextKey: state.nextKey
+    };
   case ActionType.POST_DONE_SUCCESS:
-    return updateDones(state, normaliseDoneItem(action.item));
+    return {
+      items: updateDones(state, normaliseDoneItem(action.item)),
+      nextKey: state.nextKey
+    };
   case ActionType.DELETE_DONE_REQUEST:
-    return state.filter(done => done.id !== action.id);
+    return {
+      items: state.filter(done => done.id !== action.id),
+      nextKey: state.nextKey
+    };
   case ActionType.GET_DONE_FAILURE:
   case ActionType.POST_DONE_FAILURE:
   case ActionType.DELETE_DONE_FAILURE:
