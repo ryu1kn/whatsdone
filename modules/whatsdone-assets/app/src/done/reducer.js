@@ -21,17 +21,17 @@ module.exports = (state = initialState, action) => {
     };
   case ActionType.POST_DONE_REQUEST:
     return {
-      items: [normaliseDoneItem(action.item), ...state],
+      items: [normaliseDoneItem(action.item), ...state.items],
       nextKey: state.nextKey
     };
   case ActionType.POST_DONE_SUCCESS:
     return {
-      items: updateDones(state, normaliseDoneItem(action.item)),
+      items: updateDones(state.items, normaliseDoneItem(action.item)),
       nextKey: state.nextKey
     };
   case ActionType.DELETE_DONE_REQUEST:
     return {
-      items: state.filter(done => done.id !== action.id),
+      items: state.items.filter(done => done.id !== action.id),
       nextKey: state.nextKey
     };
   case ActionType.GET_DONE_FAILURE:
