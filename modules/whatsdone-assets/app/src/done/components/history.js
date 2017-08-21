@@ -3,6 +3,7 @@ import _ from 'lodash';
 import React from 'react';
 
 import DoneList from './done-list';
+import DoneLoader from './done-loader';
 
 const ONEDAY_MS = 24 * 60 * 60 * 1000;
 
@@ -41,14 +42,17 @@ class DoneHistory extends React.Component {
   }
 
   render() {
-    const grouped = _.groupBy(this.props.data, entry =>
-                      this.getLocalDateString(entry.date));
+    const grouped = _.groupBy(
+      this.props.done.items,
+      entry => this.getLocalDateString(entry.date)
+    );
     return (
       <div className="donehistory">
         {_.sortBy(_.toPairs(grouped), pair => pair[0]).reverse()
             .map((data, index) =>
               <DoneList title={this.getFriendlyDayLabel(data[0])} data={data[1]} key={index} />
         )}
+        {this.props.done.nextKey ? <DoneLoader nextKey={this.props.done.nextKey} /> : ''}
       </div>
     );
   }

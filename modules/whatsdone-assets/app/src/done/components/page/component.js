@@ -20,7 +20,7 @@ class DonePage extends React.Component {
         <Link to="/signin">To Sign in</Link>
         <h2 className="donebox-title page-header">What's Done?</h2>
         <DoneForm />
-        <DoneHistory data={this.props.done.items} />
+        <DoneHistory done={this.props.done} />
       </div>
     );
   }

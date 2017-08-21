@@ -4,16 +4,15 @@ import ServiceLocator from '../../../service-locator';
 
 const containerState = {};
 
-const mapStateToProps = (state, ownProps) => {
-  containerState.ownProps = ownProps;
-  return {done: state.done};
+const mapStateToProps = state => {
+  return {nextKey: state.done.nextKey};
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchDones: () => {
+    fetchDones: nextKey => {
       dispatch(Action.getDones());
-      ServiceLocator.whatsdoneApiClient.getDones()
+      ServiceLocator.whatsdoneApiClient.getDones(nextKey)
         .then(response => {
           switch (response.status) {
           case 200: {
@@ -21,8 +20,6 @@ const mapDispatchToProps = dispatch => {
             const dones = body.items || body;
             return dispatch(Action.markGetDonesSuccess(dones, body.nextKey));
           }
-          case 401:
-            return containerState.ownProps.history.push('/signin');
           default:
             throw new Error(`Unexpected response code ${response.status}`);
           }
