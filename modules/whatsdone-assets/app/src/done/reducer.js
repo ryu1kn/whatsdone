@@ -45,7 +45,7 @@ function mergeDoneList(items1, items2) {
     (a, b) =>
       a.date < b.date ? 1 :
       a.date > b.date ? -1 : 0
-  )
+  );
 }
 
 function normaliseDoneItem(doneItem) {

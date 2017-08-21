@@ -2,8 +2,6 @@
 import Action from '../../action';
 import ServiceLocator from '../../../service-locator';
 
-const containerState = {};
-
 const mapStateToProps = state => {
   return {nextKey: state.done.nextKey};
 };
