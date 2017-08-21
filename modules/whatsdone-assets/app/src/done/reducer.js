@@ -12,11 +12,7 @@ module.exports = (state = initialState, action) => {
     return state;
   case ActionType.GET_DONE_SUCCESS:
     return {
-      items: action.dones.map(normaliseDoneItem).sort(
-        (a, b) =>
-          a.date < b.date ? 1 :
-          a.date > b.date ? -1 : 0
-      ),
+      items: mergeDoneList(state.items, action.dones.map(normaliseDoneItem)),
       nextKey: action.nextKey
     };
   case ActionType.POST_DONE_REQUEST:
@@ -43,6 +39,14 @@ module.exports = (state = initialState, action) => {
     return state;
   }
 };
+
+function mergeDoneList(items1, items2) {
+  return [...items1, ...items2].sort(
+    (a, b) =>
+      a.date < b.date ? 1 :
+      a.date > b.date ? -1 : 0
+  )
+}
 
 function normaliseDoneItem(doneItem) {
   return Object.assign({}, doneItem, {date: new Date(doneItem.date)});
