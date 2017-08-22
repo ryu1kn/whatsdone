@@ -13,8 +13,9 @@ class DoneRepository {
     this._doneDynamoTableClient = ServiceLocator.doneDynamoTableClient;
   }
 
-  read() {
-    return this._doneDynamoTableClient.getAll()
+  read(nextKey) {
+    const finalKey = nextKey && this._decodeNextKey(nextKey);
+    return this._doneDynamoTableClient.getAll(finalKey)
       .then(result => ({
         items: result.items.map(done => _.omit(done, 'month')),
         nextKey: this._encodeNextKey(result.nextKey)
@@ -23,6 +24,11 @@ class DoneRepository {
 
   _encodeNextKey(keyObject) {
     return JSON.stringify(_.omit(keyObject, 'month'));
+  }
+
+  _decodeNextKey(keyString) {
+    const decodedKey = JSON.parse(keyString);
+    return this._getDoneWithMonth(decodedKey);
   }
 
   write(done) {

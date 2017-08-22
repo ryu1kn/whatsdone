@@ -21,6 +21,26 @@ describe('Server DynamoTableClient', () => {
     });
   });
 
+  it('returns items honouring next page key', () => {
+    const dynamoDBDocumentClient = {
+      scan: sinon.stub().returns({
+        promise: () => Promise.resolve({Items: 'ITEMS'})
+      })
+    };
+    ServiceLocator.load({
+      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
+      createUuidGenerator: () => {}
+    });
+    const client = new DynamoTableClient('TABLE_NAME');
+    return client.getAll('KEYS').then(result => {
+      expect(result.items).to.eql('ITEMS');
+      expect(dynamoDBDocumentClient.scan).to.have.been.calledWith({
+        TableName: 'TABLE_NAME',
+        ExclusiveStartKey: 'KEYS'
+      });
+    });
+  });
+
   it('returns a key for next page if it exists', () => {
     const dynamoDBDocumentClient = {
       scan: sinon.stub().returns({

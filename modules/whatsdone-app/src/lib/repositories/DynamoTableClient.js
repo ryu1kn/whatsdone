@@ -12,8 +12,12 @@ class DynamoTableClient {
     this._collectionName = collectionName;
   }
 
-  getAll() {
-    const params = {TableName: this._getTableName()};
+  getAll(nextKey) {
+    const exclusiveStartKey = nextKey && {ExclusiveStartKey: nextKey};
+    const params = Object.assign(
+      {TableName: this._getTableName()},
+      exclusiveStartKey
+    );
     return this._docClient.scan(params).promise()
       .then(response => ({
         items: response.Items,

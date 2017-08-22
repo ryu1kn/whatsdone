@@ -20,6 +20,27 @@ describe('Server DoneRepository', () => {
     });
   });
 
+  it('get done items with nextKey', () => {
+    const doneDynamoTableClient = {
+      getAll: sinon.stub().returns(Promise.resolve({
+        items: [{DATA: '..'}]
+      }))
+    };
+    ServiceLocator.load({
+      createDoneDynamoTableClient: () => doneDynamoTableClient
+    });
+    const repository = new DoneRepository();
+
+    const nextKey = JSON.stringify({id: 'ID', date: '2017-08-22T09:56:58.894Z'});
+    return repository.read(nextKey).then(() => {
+      expect(doneDynamoTableClient.getAll).to.have.been.calledWith({
+        id: 'ID',
+        date: '2017-08-22T09:56:58.894Z',
+        month: '2017-08'
+      });
+    });
+  });
+
   it('does not include "month" fields when returning dones', () => {
     const doneDynamoTableClient = {
       getAll: () => Promise.resolve({
