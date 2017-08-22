@@ -19,6 +19,7 @@ class LambdaRequestNormaliser {
     return {
       path: event.path,
       params: event.pathParameters,
+      query: event.queryStringParameters || {},
       body: this._parseBody(event.body, event.headers['Content-Type']),
       sessionId: this._cookieCodec.extractSessionId(event.headers.Cookie)
     };
