@@ -7,8 +7,9 @@ class GetDonesRequestProcessor {
     this._getDonesCommand = ServiceLocator.getDonesCommand;
   }
 
-  process(_request, _session) {
-    return this._getDonesCommand.execute().then(dones => ({
+  process(request, _session) {
+    const nextKey = request.query.nextKey;
+    return this._getDonesCommand.execute(nextKey).then(dones => ({
       statusCode: '200',
       headers: {
         'Content-Type': 'application/json'

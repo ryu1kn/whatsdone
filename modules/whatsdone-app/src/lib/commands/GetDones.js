@@ -11,8 +11,8 @@ class GetDonesCommand {
     this._doneRepository = ServiceLocator.doneRepository;
   }
 
-  execute() {
-    return this._doneRepository.read()
+  execute(nextKey) {
+    return this._doneRepository.read(nextKey)
       .then(result => {
         return this._setUserNames(result.items)
           .then(items => ({
