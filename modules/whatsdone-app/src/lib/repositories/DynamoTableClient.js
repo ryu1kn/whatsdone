@@ -19,6 +19,7 @@ class DynamoTableClient {
     const params = Object.assign(
       {
         TableName: this._getTableName(),
+        IndexName: 'date',
         Limit: DEFAULT_SCAN_LIMIT
       },
       exclusiveStartKey
