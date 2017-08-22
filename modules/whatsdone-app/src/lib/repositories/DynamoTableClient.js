@@ -1,10 +1,9 @@
 
-'use strict';
-
 const _ = require('lodash');
 const ServiceLocator = require('../ServiceLocator');
 
 const DEFAULT_SCAN_LIMIT = 50;
+const SCAN_INDEX_NAME = 'date';
 
 class DynamoTableClient {
 
@@ -19,7 +18,7 @@ class DynamoTableClient {
     const params = Object.assign(
       {
         TableName: this._getTableName(),
-        IndexName: 'date',
+        IndexName: SCAN_INDEX_NAME,
         Limit: DEFAULT_SCAN_LIMIT
       },
       exclusiveStartKey
@@ -28,14 +27,7 @@ class DynamoTableClient {
       .then(response => ({
         items: response.Items,
         nextKey: response.LastEvaluatedKey
-      }))
-      .catch(e => {
-        console.error('Error on querying db', {
-          params,
-          stack: e.stack
-        });
-        throw e;
-      });
+      }));
   }
 
   getById(id) {

@@ -19,6 +19,7 @@ describe('Server DynamoTableClient', () => {
       expect(result.items).to.eql('ITEMS');
       expect(dynamoDBDocumentClient.scan).to.have.been.calledWith({
         TableName: 'TABLE_NAME',
+        IndexName: 'date',
         Limit: 50
       });
     });
@@ -39,6 +40,7 @@ describe('Server DynamoTableClient', () => {
       expect(result.items).to.eql('ITEMS');
       expect(dynamoDBDocumentClient.scan).to.have.been.calledWith({
         TableName: 'TABLE_NAME',
+        IndexName: 'date',
         ExclusiveStartKey: 'KEYS',
         Limit: 50
       });
