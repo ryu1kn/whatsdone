@@ -17,7 +17,10 @@ describe('Server DynamoTableClient', () => {
     const client = new DynamoTableClient('TABLE_NAME');
     return client.getAll().then(result => {
       expect(result.items).to.eql('ITEMS');
-      expect(dynamoDBDocumentClient.scan).to.have.been.calledWith({TableName: 'TABLE_NAME'});
+      expect(dynamoDBDocumentClient.scan).to.have.been.calledWith({
+        TableName: 'TABLE_NAME',
+        Limit: 50
+      });
     });
   });
 
@@ -36,7 +39,8 @@ describe('Server DynamoTableClient', () => {
       expect(result.items).to.eql('ITEMS');
       expect(dynamoDBDocumentClient.scan).to.have.been.calledWith({
         TableName: 'TABLE_NAME',
-        ExclusiveStartKey: 'KEYS'
+        ExclusiveStartKey: 'KEYS',
+        Limit: 50
       });
     });
   });

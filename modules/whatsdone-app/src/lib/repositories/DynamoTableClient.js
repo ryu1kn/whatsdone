@@ -4,6 +4,8 @@
 const _ = require('lodash');
 const ServiceLocator = require('../ServiceLocator');
 
+const DEFAULT_SCAN_LIMIT = 50;
+
 class DynamoTableClient {
 
   constructor(collectionName) {
@@ -15,7 +17,10 @@ class DynamoTableClient {
   getAll(nextKey) {
     const exclusiveStartKey = nextKey && {ExclusiveStartKey: nextKey};
     const params = Object.assign(
-      {TableName: this._getTableName()},
+      {
+        TableName: this._getTableName(),
+        Limit: DEFAULT_SCAN_LIMIT
+      },
       exclusiveStartKey
     );
     return this._docClient.scan(params).promise()
