@@ -20,7 +20,7 @@ describe('Server DynamoTableClient', () => {
       expect(dynamoDBDocumentClient.scan).to.have.been.calledWith({
         TableName: 'TABLE_NAME',
         IndexName: 'date',
-        Limit: 50
+        Limit: 20
       });
     });
   });
@@ -42,7 +42,7 @@ describe('Server DynamoTableClient', () => {
         TableName: 'TABLE_NAME',
         IndexName: 'date',
         ExclusiveStartKey: 'KEYS',
-        Limit: 50
+        Limit: 20
       });
     });
   });
