@@ -2,7 +2,7 @@
 const _ = require('lodash');
 const ServiceLocator = require('../ServiceLocator');
 
-const DEFAULT_SCAN_LIMIT = 50;
+const DEFAULT_SCAN_LIMIT = 20;
 const SCAN_INDEX_NAME = 'date';
 
 class DynamoTableClient {
