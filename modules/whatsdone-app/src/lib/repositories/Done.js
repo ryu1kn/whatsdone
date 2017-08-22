@@ -15,7 +15,14 @@ class DoneRepository {
 
   read() {
     return this._doneDynamoTableClient.getAll()
-      .then(dones => dones.map(done => _.omit(done, 'month')));
+      .then(result => ({
+        items: result.items.map(done => _.omit(done, 'month')),
+        nextKey: this._encodeNextKey(result.nextKey)
+      }));
+  }
+
+  _encodeNextKey(keyObject) {
+    return JSON.stringify(_.omit(keyObject, 'month'));
   }
 
   write(done) {

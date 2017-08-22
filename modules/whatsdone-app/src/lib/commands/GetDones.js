@@ -13,7 +13,13 @@ class GetDonesCommand {
 
   execute() {
     return this._doneRepository.read()
-      .then(dones => this._setUserNames(dones));
+      .then(result => {
+        return this._setUserNames(result.items)
+          .then(items => ({
+            items,
+            nextKey: result.nextKey
+          }));
+      });
   }
 
   _setUserNames(dones) {

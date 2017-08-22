@@ -15,7 +15,10 @@ class DynamoTableClient {
   getAll() {
     const params = {TableName: this._getTableName()};
     return this._docClient.scan(params).promise()
-      .then(response => response.Items);
+      .then(response => ({
+        items: response.Items,
+        nextKey: response.LastEvaluatedKey
+      }));
   }
 
   getById(id) {

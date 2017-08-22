@@ -14,7 +14,9 @@ const corsOptions = {
 const dones = dummyDones();
 
 app.get('/dones', cors(corsOptions), (req, res) => {
-  res.status(200).json(dones);
+  res.status(200).json({
+    items: dones
+  });
 });
 
 app.post('/dones', cors(corsOptions), (req, res) => {

@@ -4,37 +4,62 @@ const DoneRepository = require('../../lib/repositories/Done');
 
 describe('Server DoneRepository', () => {
 
-  it('reads all done items from DB', () => {
+  it('reads done items from DB', () => {
     const doneDynamoTableClient = {
-      getAll: () => Promise.resolve([{DATA: '..'}])
+      getAll: () => Promise.resolve({
+        items: [{DATA: '..'}]
+      })
     };
     ServiceLocator.load({
       createDoneDynamoTableClient: () => doneDynamoTableClient
     });
     const repository = new DoneRepository();
 
-    return repository.read().then(dones => {
-      expect(dones).to.eql([{DATA: '..'}]);
+    return repository.read().then(result => {
+      expect(result.items).to.eql([{DATA: '..'}]);
     });
   });
 
   it('does not include "month" fields when returning dones', () => {
     const doneDynamoTableClient = {
-      getAll: () => Promise.resolve([
-        {doneThing: 'DONE_1', month: 'MONTH_1'},
-        {doneThing: 'DONE_2', month: 'MONTH_2'}
-      ])
+      getAll: () => Promise.resolve({
+        items: [
+          {doneThing: 'DONE_1', month: 'MONTH_1'},
+          {doneThing: 'DONE_2', month: 'MONTH_2'}
+        ]
+      })
     };
     ServiceLocator.load({
       createDoneDynamoTableClient: () => doneDynamoTableClient
     });
     const repository = new DoneRepository();
 
-    return repository.read().then(dones => {
-      expect(dones).to.eql([
+    return repository.read().then(result => {
+      expect(result.items).to.eql([
         {doneThing: 'DONE_1'},
         {doneThing: 'DONE_2'}
       ]);
+    });
+  });
+
+  it('gives back a key for querying next page', () => {
+    const doneDynamoTableClient = {
+      getAll: () => Promise.resolve({
+        items: [{DATA: '..'}],
+        nextKey: {
+          id: 'ID',
+          date: 'DATE',
+          month: 'MONTH'
+        }
+      })
+    };
+    ServiceLocator.load({
+      createDoneDynamoTableClient: () => doneDynamoTableClient
+    });
+    const repository = new DoneRepository();
+
+    return repository.read().then(result => {
+      expect(result.nextKey).to.eql('{"id":"ID","date":"DATE"}');
     });
   });
 
