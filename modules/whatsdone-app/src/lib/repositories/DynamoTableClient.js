@@ -22,7 +22,14 @@ class DynamoTableClient {
       .then(response => ({
         items: response.Items,
         nextKey: response.LastEvaluatedKey
-      }));
+      }))
+      .catch(e => {
+        console.error('Error on querying db', {
+          params,
+          stack: e.stack
+        });
+        throw e;
+      });
   }
 
   getById(id) {
