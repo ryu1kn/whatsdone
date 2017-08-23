@@ -10,7 +10,7 @@ class RequestProcessErrorProcessor {
   }
 
   process(err) {
-    this._logger.error(err.stack, {details: err.details});
+    this._logger.error(err.stack, {details: err.details && JSON.stringify(err.details)});
 
     // TODO: Instead of having a rule for error message format
     //       to destinguish error types, define custom exception classes

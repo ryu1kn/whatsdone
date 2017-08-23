@@ -33,6 +33,7 @@ class DoneQueryHelper {
       },
       restoredKey && {ExclusiveStartKey: restoredKey}
     );
+    console.log('query params:', JSON.stringify(params));
     return this._docClient.query(params).promise()
       .then(response => this._buildResponse(response))
       .catch(e => {
