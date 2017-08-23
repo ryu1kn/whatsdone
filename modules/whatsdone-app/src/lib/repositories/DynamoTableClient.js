@@ -1,6 +1,7 @@
 
 const _ = require('lodash');
 const ServiceLocator = require('../ServiceLocator');
+const WrappedError = require('../WrappedError');
 
 class DynamoTableClient {
 
@@ -16,7 +17,8 @@ class DynamoTableClient {
       Key: {id}
     };
     return this._docClient.get(params).promise()
-      .then(response => response.Item);
+      .then(response => response.Item)
+      .catch(this._wrapError);
   }
 
   getByIds(ids) {
@@ -29,7 +31,8 @@ class DynamoTableClient {
       }
     };
     return this._docClient.batchGet(params).promise()
-      .then(response => response.Responses[this._getTableName()]);
+      .then(response => response.Responses[this._getTableName()])
+      .catch(this._wrapError);
   }
 
   // @deprecated
@@ -39,7 +42,8 @@ class DynamoTableClient {
       {TableName: this._getTableName()}
     );
     return this._docClient.scan(params).promise()
-      .then(result => _.get(result, 'Items[0]'));
+      .then(result => _.get(result, 'Items[0]'))
+      .catch(this._wrapError);
   }
 
   put(newData) {
@@ -49,7 +53,8 @@ class DynamoTableClient {
       Item: Object.assign({}, newData, {id})
     };
     return this._docClient.put(params).promise()
-      .then(() => id);
+      .then(() => id)
+      .catch(this._wrapError);
   }
 
   delete(id) {
@@ -57,7 +62,8 @@ class DynamoTableClient {
       TableName: this._getTableName(),
       Key: {id}
     };
-    return this._docClient.delete(params).promise();
+    return this._docClient.delete(params).promise()
+      .catch(this._wrapError);
   }
 
   update(id, newData) {
@@ -67,7 +73,8 @@ class DynamoTableClient {
       AttributeUpdates: this._getAttributeUpdatesValues(newData)
     };
     return this._docClient.update(params).promise()
-      .then(() => this.getById(id));  // XXX: Don't query again
+      .then(() => this.getById(id))   // XXX: Don't query again
+      .catch(this._wrapError);
   }
 
   _getTableName() {
@@ -96,6 +103,10 @@ class DynamoTableClient {
       FilterExpression: filterExpressions.join(' AND '),
       ExpressionAttributeValues: expressionAttributeValues
     };
+  }
+
+  _wrapError(e) {
+    throw new WrappedError(e);
   }
 
 }

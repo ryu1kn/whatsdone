@@ -1,6 +1,7 @@
 
 const _ = require('lodash');
 const ServiceLocator = require('../../ServiceLocator');
+const WrappedError = require('../../WrappedError');
 const utils = require('../utils');
 
 const DEFAULT_SCAN_LIMIT = 20;
@@ -33,7 +34,10 @@ class DoneQueryHelper {
       restoredKey && {ExclusiveStartKey: restoredKey}
     );
     return this._docClient.query(params).promise()
-      .then(response => this._buildResponse(response));
+      .then(response => this._buildResponse(response))
+      .catch(e => {
+        throw new WrappedError(e);
+      });
   }
 
   _getExpressionAttributeValues(restoredKey) {
