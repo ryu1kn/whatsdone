@@ -18,7 +18,9 @@ class DynamoTableClient {
     };
     return this._docClient.get(params).promise()
       .then(response => response.Item)
-      .catch(this._wrapError);
+      .catch(e => {
+        throw new WrappedError(e, params);
+      });
   }
 
   getByIds(ids) {
@@ -32,7 +34,9 @@ class DynamoTableClient {
     };
     return this._docClient.batchGet(params).promise()
       .then(response => response.Responses[this._getTableName()])
-      .catch(this._wrapError);
+      .catch(e => {
+        throw new WrappedError(e, params);
+      });
   }
 
   // @deprecated
@@ -43,7 +47,9 @@ class DynamoTableClient {
     );
     return this._docClient.scan(params).promise()
       .then(result => _.get(result, 'Items[0]'))
-      .catch(this._wrapError);
+      .catch(e => {
+        throw new WrappedError(e, params);
+      });
   }
 
   put(newData) {
@@ -54,7 +60,9 @@ class DynamoTableClient {
     };
     return this._docClient.put(params).promise()
       .then(() => id)
-      .catch(this._wrapError);
+      .catch(e => {
+        throw new WrappedError(e, params);
+      });
   }
 
   delete(id) {
@@ -63,7 +71,9 @@ class DynamoTableClient {
       Key: {id}
     };
     return this._docClient.delete(params).promise()
-      .catch(this._wrapError);
+      .catch(e => {
+        throw new WrappedError(e, params);
+      });
   }
 
   update(id, newData) {
@@ -74,7 +84,9 @@ class DynamoTableClient {
     };
     return this._docClient.update(params).promise()
       .then(() => this.getById(id))   // XXX: Don't query again
-      .catch(this._wrapError);
+      .catch(e => {
+        throw new WrappedError(e, params);
+      });
   }
 
   _getTableName() {
@@ -103,10 +115,6 @@ class DynamoTableClient {
       FilterExpression: filterExpressions.join(' AND '),
       ExpressionAttributeValues: expressionAttributeValues
     };
-  }
-
-  _wrapError(e) {
-    throw new WrappedError(e);
   }
 
 }

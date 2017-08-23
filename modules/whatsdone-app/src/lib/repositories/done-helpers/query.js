@@ -36,7 +36,7 @@ class DoneQueryHelper {
     return this._docClient.query(params).promise()
       .then(response => this._buildResponse(response))
       .catch(e => {
-        throw new WrappedError(e);
+        throw new WrappedError(e, params);
       });
   }
 
