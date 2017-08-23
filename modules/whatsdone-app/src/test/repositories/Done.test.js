@@ -5,82 +5,17 @@ const DoneRepository = require('../../lib/repositories/Done');
 describe('Server DoneRepository', () => {
 
   it('reads done items from DB', () => {
-    const doneDynamoTableClient = {
-      getAll: () => Promise.resolve({
-        items: [{DATA: '..'}]
-      })
+    const doneQueryHelper = {
+      query: () => Promise.resolve('QUERY_RESULT')
     };
     ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient
+      createDoneDynamoTableClient: () => {},
+      createDoneQueryHelper: () => doneQueryHelper
     });
     const repository = new DoneRepository();
 
     return repository.read().then(result => {
-      expect(result.items).to.eql([{DATA: '..'}]);
-    });
-  });
-
-  it('get done items with nextKey', () => {
-    const doneDynamoTableClient = {
-      getAll: sinon.stub().returns(Promise.resolve({
-        items: [{DATA: '..'}]
-      }))
-    };
-    ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient
-    });
-    const repository = new DoneRepository();
-
-    const nextKey = JSON.stringify({id: 'ID', date: '2017-08-22T09:56:58.894Z'});
-    return repository.read(nextKey).then(() => {
-      expect(doneDynamoTableClient.getAll).to.have.been.calledWith({
-        id: 'ID',
-        date: '2017-08-22T09:56:58.894Z',
-        month: '2017-08'
-      });
-    });
-  });
-
-  it('does not include "month" fields when returning dones', () => {
-    const doneDynamoTableClient = {
-      getAll: () => Promise.resolve({
-        items: [
-          {doneThing: 'DONE_1', month: 'MONTH_1'},
-          {doneThing: 'DONE_2', month: 'MONTH_2'}
-        ]
-      })
-    };
-    ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient
-    });
-    const repository = new DoneRepository();
-
-    return repository.read().then(result => {
-      expect(result.items).to.eql([
-        {doneThing: 'DONE_1'},
-        {doneThing: 'DONE_2'}
-      ]);
-    });
-  });
-
-  it('gives back a key for querying next page', () => {
-    const doneDynamoTableClient = {
-      getAll: () => Promise.resolve({
-        items: [{DATA: '..'}],
-        nextKey: {
-          id: 'ID',
-          date: 'DATE',
-          month: 'MONTH'
-        }
-      })
-    };
-    ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient
-    });
-    const repository = new DoneRepository();
-
-    return repository.read().then(result => {
-      expect(result.nextKey).to.eql('{"id":"ID","date":"DATE"}');
+      expect(result).to.eql('QUERY_RESULT');
     });
   });
 
@@ -90,7 +25,8 @@ describe('Server DoneRepository', () => {
       getById: () => {}
     };
     ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient
+      createDoneDynamoTableClient: () => doneDynamoTableClient,
+      createDoneQueryHelper: () => {}
     });
     const repository = new DoneRepository();
 
@@ -112,7 +48,8 @@ describe('Server DoneRepository', () => {
       getById: sinon.stub().returns(Promise.resolve({DATA: '..'}))
     };
     ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient
+      createDoneDynamoTableClient: () => doneDynamoTableClient,
+      createDoneQueryHelper: () => {}
     });
     const repository = new DoneRepository();
     const done = {
@@ -131,7 +68,8 @@ describe('Server DoneRepository', () => {
       getById: () => Promise.resolve()
     };
     ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient
+      createDoneDynamoTableClient: () => doneDynamoTableClient,
+      createDoneQueryHelper: () => {}
     });
     const repository = new DoneRepository();
 
@@ -157,7 +95,8 @@ describe('Server DoneRepository', () => {
       }))
     };
     ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient
+      createDoneDynamoTableClient: () => doneDynamoTableClient,
+      createDoneQueryHelper: () => {}
     });
     const repository = new DoneRepository();
     const done = {
@@ -176,7 +115,8 @@ describe('Server DoneRepository', () => {
       delete: sinon.spy()
     };
     ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient
+      createDoneDynamoTableClient: () => doneDynamoTableClient,
+      createDoneQueryHelper: () => {}
     });
     const repository = new DoneRepository();
 
@@ -198,7 +138,8 @@ describe('Server DoneRepository', () => {
       update: sinon.stub().returns(Promise.resolve())
     };
     ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient
+      createDoneDynamoTableClient: () => doneDynamoTableClient,
+      createDoneQueryHelper: () => {}
     });
     const repository = new DoneRepository();
 
@@ -229,7 +170,8 @@ describe('Server DoneRepository', () => {
       update: sinon.stub().returns(Promise.resolve())
     };
     ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient
+      createDoneDynamoTableClient: () => doneDynamoTableClient,
+      createDoneQueryHelper: () => {}
     });
     const repository = new DoneRepository();
 
@@ -260,7 +202,8 @@ describe('Server DoneRepository', () => {
       }))
     };
     ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient
+      createDoneDynamoTableClient: () => doneDynamoTableClient,
+      createDoneQueryHelper: () => {}
     });
     const repository = new DoneRepository();
 

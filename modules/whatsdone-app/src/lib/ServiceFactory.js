@@ -125,6 +125,11 @@ class ServiceFactory {
     return new AWS.DynamoDB.DocumentClient({region: this._env.DB_REGION});
   }
 
+  createDoneQueryHelper() {
+    const DoneQueryHelper = require('./repositories/done-helpers/query');
+    return new DoneQueryHelper(this._env.DONE_TABLE_NAME);
+  }
+
   createDoneDynamoTableClient() {
     const DynamoTableClient = require('./repositories/DynamoTableClient');
     return new DynamoTableClient(this._env.DONE_TABLE_NAME);

@@ -124,6 +124,10 @@ class ServiceLocator {
     return this._get('dynamoDBDocumentClient');
   }
 
+  get doneQueryHelper() {
+    return this._get('doneQueryHelper');
+  }
+
   get doneDynamoTableClient() {
     return this._get('doneDynamoTableClient');
   }

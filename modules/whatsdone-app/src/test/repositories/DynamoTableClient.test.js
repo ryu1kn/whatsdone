@@ -4,68 +4,6 @@ const ServiceLocator = require('../../lib/ServiceLocator');
 
 describe('Server DynamoTableClient', () => {
 
-  it('returns items', () => {
-    const dynamoDBDocumentClient = {
-      scan: sinon.stub().returns({
-        promise: () => Promise.resolve({Items: 'ITEMS'})
-      })
-    };
-    ServiceLocator.load({
-      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createUuidGenerator: () => {}
-    });
-    const client = new DynamoTableClient('TABLE_NAME');
-    return client.getAll().then(result => {
-      expect(result.items).to.eql('ITEMS');
-      expect(dynamoDBDocumentClient.scan).to.have.been.calledWith({
-        TableName: 'TABLE_NAME',
-        IndexName: 'date',
-        Limit: 20
-      });
-    });
-  });
-
-  it('returns items honouring next page key', () => {
-    const dynamoDBDocumentClient = {
-      scan: sinon.stub().returns({
-        promise: () => Promise.resolve({Items: 'ITEMS'})
-      })
-    };
-    ServiceLocator.load({
-      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createUuidGenerator: () => {}
-    });
-    const client = new DynamoTableClient('TABLE_NAME');
-    return client.getAll('KEYS').then(result => {
-      expect(result.items).to.eql('ITEMS');
-      expect(dynamoDBDocumentClient.scan).to.have.been.calledWith({
-        TableName: 'TABLE_NAME',
-        IndexName: 'date',
-        ExclusiveStartKey: 'KEYS',
-        Limit: 20
-      });
-    });
-  });
-
-  it('returns a key for next page if it exists', () => {
-    const dynamoDBDocumentClient = {
-      scan: sinon.stub().returns({
-        promise: () => Promise.resolve({
-          Items: 'ITEMS',
-          LastEvaluatedKey: 'LAST_EVALUATED_KEY'
-        })
-      })
-    };
-    ServiceLocator.load({
-      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createUuidGenerator: () => {}
-    });
-    const client = new DynamoTableClient('TABLE_NAME');
-    return client.getAll().then(result => {
-      expect(result.nextKey).to.eql('LAST_EVALUATED_KEY');
-    });
-  });
-
   it('finds one item by ID', () => {
     const dynamoDBDocumentClient = {
       get: sinon.stub().returns({

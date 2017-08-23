@@ -2,32 +2,12 @@
 const _ = require('lodash');
 const ServiceLocator = require('../ServiceLocator');
 
-const DEFAULT_SCAN_LIMIT = 20;
-const SCAN_INDEX_NAME = 'date';
-
 class DynamoTableClient {
 
   constructor(collectionName) {
     this._docClient = ServiceLocator.dynamoDBDocumentClient;
     this._uuidGenerator = ServiceLocator.uuidGenerator;
     this._collectionName = collectionName;
-  }
-
-  getAll(nextKey) {
-    const exclusiveStartKey = nextKey && {ExclusiveStartKey: nextKey};
-    const params = Object.assign(
-      {
-        TableName: this._getTableName(),
-        IndexName: SCAN_INDEX_NAME,
-        Limit: DEFAULT_SCAN_LIMIT
-      },
-      exclusiveStartKey
-    );
-    return this._docClient.scan(params).promise()
-      .then(response => ({
-        items: response.Items,
-        nextKey: response.LastEvaluatedKey
-      }));
   }
 
   getById(id) {

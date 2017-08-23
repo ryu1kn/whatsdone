@@ -3,36 +3,23 @@
 
 const _ = require('lodash');
 const ServiceLocator = require('../ServiceLocator');
+const utils = require('./utils');
 
 const MODIFIABLE_FIELDS = ['date', 'doneThing'];
-const MONTH_LENGTH = 'YYYY-MM'.length;
 
 class DoneRepository {
 
   constructor() {
     this._doneDynamoTableClient = ServiceLocator.doneDynamoTableClient;
+    this._doneQueryHelper = ServiceLocator.doneQueryHelper;
   }
 
   read(nextKey) {
-    const finalKey = nextKey && this._decodeNextKey(nextKey);
-    return this._doneDynamoTableClient.getAll(finalKey)
-      .then(result => ({
-        items: result.items.map(done => _.omit(done, 'month')),
-        nextKey: result.nextKey && this._encodeNextKey(result.nextKey)
-      }));
-  }
-
-  _encodeNextKey(keyObject) {
-    return JSON.stringify(_.omit(keyObject, 'month'));
-  }
-
-  _decodeNextKey(keyString) {
-    const decodedKey = JSON.parse(keyString);
-    return this._getDoneWithMonth(decodedKey);
+    return this._doneQueryHelper.query(nextKey);
   }
 
   write(done) {
-    const finalDone = this._getDoneWithMonth(done);
+    const finalDone = utils.getDoneWithMonth(done);
     return this._doneDynamoTableClient.put(finalDone)
       .then(id => this._doneDynamoTableClient.getById(id))
       .then(doneWithId => _.omit(doneWithId, 'month'));
@@ -61,17 +48,10 @@ class DoneRepository {
           throw new Error('[AccessDenied]: You don\'t have the permission to modify this item.');
         }
         const doneOverwrite = _.pick(newData, MODIFIABLE_FIELDS);
-        const finalOverwrite = this._getDoneWithMonth(doneOverwrite);
+        const finalOverwrite = utils.getDoneWithMonth(doneOverwrite);
         return this._doneDynamoTableClient.update(id, finalOverwrite)
           .then(done => _.omit(done, 'month'));
       });
-  }
-
-  _getDoneWithMonth(done) {
-    if (!done.date) return done;
-    return Object.assign({}, done, {
-      month: done.date.substr(0, MONTH_LENGTH)
-    });
   }
 
 }
