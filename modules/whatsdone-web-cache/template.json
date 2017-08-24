@@ -28,6 +28,17 @@
       "Properties": {
         "DistributionConfig": {
           "Aliases": [{"Ref": "PublicDomain"}],
+          "CacheBehaviors": [
+            {
+              "Compress": true,
+              "ForwardedValues": {
+                "QueryString": true
+              },
+              "PathPattern": "/static/*",
+              "TargetOriginId": "whatsdone-assets",
+              "ViewerProtocolPolicy": "https-only"
+            }
+          ],
           "DefaultCacheBehavior": {
             "ForwardedValues": {
               "Cookies": {
