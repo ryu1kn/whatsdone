@@ -11,6 +11,7 @@ class DoneQueryHelper {
   constructor(collectionName) {
     this._docClient = ServiceLocator.dynamoDBDocumentClient;
     this._dateProvider = ServiceLocator.dateProvider;
+    this._logger = ServiceLocator.logger;
     this._collectionName = collectionName;
   }
 
@@ -33,7 +34,7 @@ class DoneQueryHelper {
       },
       restoredKey && {ExclusiveStartKey: restoredKey}
     );
-    console.log('query params:', JSON.stringify(params));
+    this._logger.log('query params:', JSON.stringify(params));
     return this._docClient.query(params).promise()
       .then(response => this._buildResponse(response))
       .catch(e => {

@@ -13,7 +13,8 @@ describe('Server DoneQueryHelper', () => {
     const dateProvider = {getCurrentDate: () => new Date('2017-08-01T07:26:27.574Z')};
     ServiceLocator.load({
       createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createDateProvider: () => dateProvider
+      createDateProvider: () => dateProvider,
+      createLogger: () => ({log: () => {}})
     });
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(() => {
@@ -45,7 +46,8 @@ describe('Server DoneQueryHelper', () => {
     };
     ServiceLocator.load({
       createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createDateProvider: () => dateProvider
+      createDateProvider: () => dateProvider,
+      createLogger: () => ({log: () => {}})
     });
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(result => {
@@ -62,7 +64,8 @@ describe('Server DoneQueryHelper', () => {
     const dateProvider = {getCurrentDate: () => new Date()};
     ServiceLocator.load({
       createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createDateProvider: () => dateProvider
+      createDateProvider: () => dateProvider,
+      createLogger: () => ({log: () => {}})
     });
     const client = new DoneQueryHelper('TABLE_NAME');
     const nextKey = JSON.stringify({
@@ -98,7 +101,8 @@ describe('Server DoneQueryHelper', () => {
     const dateProvider = {getCurrentDate: () => new Date()};
     ServiceLocator.load({
       createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createDateProvider: () => dateProvider
+      createDateProvider: () => dateProvider,
+      createLogger: () => ({log: () => {}})
     });
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(result => {
