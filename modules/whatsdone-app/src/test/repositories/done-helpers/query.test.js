@@ -21,14 +21,13 @@ describe('Server DoneQueryHelper', () => {
         TableName: 'TABLE_NAME',
         IndexName: 'date',
         Limit: 20,
-        KeyConditionExpression: '#month = :m and #date > :d',
+        KeyConditionExpression: '#month = :m',
         ExpressionAttributeNames: {
           '#month': 'month',
           '#date': 'date'
         },
         ExpressionAttributeValues: {
-          ':m': '2017-08',
-          ':d': '2017-08-01T07:26:27.574Z'
+          ':m': '2017-08'
         },
         ScanIndexForward: false,
         ProjectionExpression: 'id, #date, doneThing, userId',
@@ -73,8 +72,7 @@ describe('Server DoneQueryHelper', () => {
     return client.query(nextKey).then(() => {
       const queryArgs = dynamoDBDocumentClient.query.args[0][0];
       expect(queryArgs.ExpressionAttributeValues).to.eql({
-        ':m': '2017-08',
-        ':d': '2017-08-01T07:26:27.574Z'
+        ':m': '2017-08'
       });
       expect(queryArgs.ExclusiveStartKey).to.eql({
         id: 'ID',

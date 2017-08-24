@@ -21,7 +21,7 @@ class DoneQueryHelper {
         TableName: this._collectionName,
         IndexName: 'date',
         Limit: DEFAULT_SCAN_LIMIT,
-        KeyConditionExpression: '#month = :m and #date > :d',
+        KeyConditionExpression: '#month = :m',
         ExpressionAttributeNames: {
           '#month': 'month',
           '#date': 'date'
@@ -44,14 +44,12 @@ class DoneQueryHelper {
   _getExpressionAttributeValues(restoredKey) {
     if (restoredKey) {
       return {
-        ':m': restoredKey.month,
-        ':d': restoredKey.date
+        ':m': restoredKey.month
       };
     }
     const currentDate = this._dateProvider.getCurrentDate().toISOString();
     return {
-      ':m': currentDate.substr(0, utils.MONTH_LENGTH),
-      ':d': currentDate
+      ':m': currentDate.substr(0, utils.MONTH_LENGTH)
     };
   }
 
