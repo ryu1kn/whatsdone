@@ -35,6 +35,11 @@ module.exports = {
       command: 'cd $BM_PATH_VAR_1 && npm run deploy -- --env $ENV_NAME --region $AWS_REGION'
     },
     {
+      description: 'Deploy API',  // XXX: whatsdone-api gets deployed twice if both -app and -api are updated
+      path: /^(modules)\/whatsdone-app\/.*/,
+      command: 'cd $BM_PATH_VAR_1/whatsdone-api && npm run deploy -- --env $ENV_NAME --region $AWS_REGION'
+    },
+    {
       description: 'Deploy whatsdone-assets app',
       path: /^(modules\/whatsdone-assets)\/.*/,
       command: 'cd $BM_PATH_VAR_1 && npm install && npm run build && npm run deploy:app'
