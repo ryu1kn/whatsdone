@@ -9,16 +9,16 @@ describe('Server SessionValidator', () => {
       createDateProvider: () => ({getCurrentDate: () => new Date('2017-03-29T12:00:00Z')})
     });
     const sessionValidator = new SessionValidator();
-    const session = {createdAt: '2017-03-29T11:00:00Z'};
+    const session = {createdAt: '2017-03-23T11:00:00Z'};
     expect(sessionValidator.validate(session)).to.be.true;
   });
 
-  it('tells that a session is invalid if it is created more than a day ago', () => {
+  it('tells that a session is invalid if it is created more than a week ago', () => {
     ServiceLocator.load({
       createDateProvider: () => ({getCurrentDate: () => new Date('2017-03-29T12:00:00Z')})
     });
     const sessionValidator = new SessionValidator();
-    const session = {createdAt: '2017-03-28T11:00:00Z'};
+    const session = {createdAt: '2017-03-22T11:00:00Z'};
     expect(sessionValidator.validate(session)).to.be.false;
   });
 

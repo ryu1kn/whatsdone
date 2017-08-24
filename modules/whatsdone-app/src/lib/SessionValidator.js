@@ -4,7 +4,7 @@
 const ServiceLocator = require('./ServiceLocator');
 
 const DAY_IN_MSEC = 24 * 60 * 60 * 1000;
-const SESSION_TTL = DAY_IN_MSEC;
+const SESSION_TTL = 7 * DAY_IN_MSEC;
 
 class SessionValidator {
 
