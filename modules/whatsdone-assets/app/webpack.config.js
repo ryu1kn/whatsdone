@@ -9,7 +9,7 @@ const SRC_DIR = path.resolve(__dirname, 'src');
 const BUILD_DIR = path.resolve(__dirname, process.env.npm_package_config_buildDir);
 const BYTE_LIMIT = 8192;
 
-const extractLess = new ExtractTextPlugin('style.css');
+const extractLess = new ExtractTextPlugin('style-[hash].css');
 const jsMinifyPlugins = process.env.NODE_ENV === 'production' ? [
   new webpack.DefinePlugin({
     'process.env': {NODE_ENV: JSON.stringify('production')}
@@ -24,7 +24,7 @@ module.exports = {
   ],
   output: {
     path: `${BUILD_DIR}/static`,
-    filename: 'build.js'
+    filename: 'build-[hash].js'
   },
   module: {
     rules: [
