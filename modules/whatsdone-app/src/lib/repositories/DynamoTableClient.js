@@ -24,6 +24,7 @@ class DynamoTableClient {
   }
 
   getByIds(ids) {
+    if (_.isEmpty(ids)) return Promise.resolve([]);
     const uniqIds = _.uniq(ids).filter(id => id);
     const params = {
       RequestItems: {

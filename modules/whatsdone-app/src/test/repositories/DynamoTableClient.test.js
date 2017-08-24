@@ -51,6 +51,21 @@ describe('Server DynamoTableClient', () => {
     });
   });
 
+  it('returns an empty list if ID list is empty', () => {
+    const dynamoDBDocumentClient = {
+      batchGet: sinon.spy()
+    };
+    ServiceLocator.load({
+      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
+      createUuidGenerator: () => {}
+    });
+    const client = new DynamoTableClient('TABLE_NAME');
+    return client.getByIds([]).then(items => {
+      expect(items).to.eql([]);
+      expect(dynamoDBDocumentClient.batchGet).to.have.been.not.called;
+    });
+  });
+
   it('finds an item by matching condition', () => {
     const dynamoDBDocumentClient = {
       scan: sinon.stub().returns({
