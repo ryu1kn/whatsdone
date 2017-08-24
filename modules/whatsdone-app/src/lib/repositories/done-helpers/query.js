@@ -59,7 +59,7 @@ class DoneQueryHelper {
   }
 
   _encodeNextKey(keyObject) {
-    return JSON.stringify(_.omit(keyObject, 'month'));
+    return keyObject && JSON.stringify(_.omit(keyObject, 'month'));
   }
 
   _buildResponse(queryResult) {

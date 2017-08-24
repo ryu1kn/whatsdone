@@ -110,4 +110,24 @@ describe('Server DoneQueryHelper', () => {
     });
   });
 
+  it('does not return a key for next page if it does not exist', () => {
+    const dynamoDBDocumentClient = {
+      query: sinon.stub().returns({
+        promise: () => Promise.resolve({
+          Items: []
+        })
+      })
+    };
+    const dateProvider = {getCurrentDate: () => new Date()};
+    ServiceLocator.load({
+      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
+      createDateProvider: () => dateProvider,
+      createLogger: () => ({log: () => {}})
+    });
+    const client = new DoneQueryHelper('TABLE_NAME');
+    return client.query().then(result => {
+      expect(result.nextKey).to.be.undefined;
+    });
+  });
+
 });
