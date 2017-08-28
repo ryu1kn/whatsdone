@@ -1,5 +1,6 @@
 
 import ServiceLocator from './service-locator';
+import querystring from 'querystring';
 import url from 'url';
 
 const DEFAULT_OPTIONS = {
@@ -23,18 +24,12 @@ class WhatsdoneApiClient {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
       },
-      body: this._composeSearchParams(data)
+      body: querystring.stringify(data)
     };
   }
 
-  _composeSearchParams(data) {
-    return Object.keys(data)
-      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
-      .join('&');
-  }
-
-  getDones(nextPageKey) {
-    const qs = nextPageKey ? `?nextKey=${encodeURIComponent(nextPageKey)}` : '';
+  getDones(nextKey) {
+    const qs = nextKey ? `?${querystring.stringify({nextKey})}` : '';
     return this._relayFetch(`/dones${qs}`);
   }
 
