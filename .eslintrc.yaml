@@ -22,13 +22,13 @@ rules:
   - error
   - 2
   - SwitchCase: 0
-  # eslint doesn't have jscs's maximumLineLength allExcept:regex
-  # see. https://github.com/eslint/eslint/issues/5805
   max-len:
   - warn
   - code: 110
     ignoreTrailingComments: true
-    ignoreUrls: true
+    ignoreStrings: true
+    ignoreTemplateLiterals: true
+    ignoreRegExpLiterals: true
   no-bitwise: error
   no-caller: error
   no-implicit-coercion:
