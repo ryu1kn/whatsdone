@@ -17,7 +17,17 @@ class DoneQueryHelper {
 
   query(nextKey) {
     const restoredKey = this._decodeNextKey(nextKey);
-    const params = Object.assign(
+    const params = this._buildQueryParams(restoredKey);
+    this._logger.log('query params:', JSON.stringify(params));
+    return this._docClient.query(params).promise()
+      .then(response => this._buildResponse(response))
+      .catch(e => {
+        throw new WrappedError(e, params);
+      });
+  }
+
+  _buildQueryParams(restoredKey) {
+    return Object.assign(
       {
         TableName: this._collectionName,
         IndexName: 'date',
@@ -34,12 +44,6 @@ class DoneQueryHelper {
       },
       restoredKey && {ExclusiveStartKey: restoredKey}
     );
-    this._logger.log('query params:', JSON.stringify(params));
-    return this._docClient.query(params).promise()
-      .then(response => this._buildResponse(response))
-      .catch(e => {
-        throw new WrappedError(e, params);
-      });
   }
 
   _getExpressionAttributeValues(restoredKey) {
