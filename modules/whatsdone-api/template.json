@@ -259,14 +259,22 @@
                 {
                   "Effect": "Allow",
                   "Action": [
-                      "logs:CreateLogGroup",
-                      "logs:CreateLogStream",
-                      "logs:DescribeLogStreams",
-                      "logs:PutLogEvents"
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:DescribeLogStreams",
+                    "logs:PutLogEvents"
                   ],
                   "Resource": {
-                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
                   }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "xray:PutTraceSegments",
+                    "xray:PutTelemetryRecords"
+                  ],
+                  "Resource": "*"
                 },
                 {
                   "Effect": "Allow",
