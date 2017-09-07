@@ -14,8 +14,7 @@ describe('Server DoneQueryHelper', () => {
     ServiceLocator.load({
       createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
       createDateProvider: () => dateProvider,
-      createLogger: () => ({log: () => {}}),
-      createAwsXraySegment: () => 'SEGMENT'
+      createLogger: () => ({log: () => {}})
     });
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(() => {
@@ -33,8 +32,7 @@ describe('Server DoneQueryHelper', () => {
         },
         ScanIndexForward: false,
         ProjectionExpression: 'id, #date, doneThing, userId',
-        Select: 'SPECIFIC_ATTRIBUTES',
-        XRaySegment: 'SEGMENT'
+        Select: 'SPECIFIC_ATTRIBUTES'
       });
     });
   });
@@ -49,8 +47,7 @@ describe('Server DoneQueryHelper', () => {
     ServiceLocator.load({
       createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
       createDateProvider: () => dateProvider,
-      createLogger: () => ({log: () => {}}),
-      createAwsXraySegment: () => 'SEGMENT'
+      createLogger: () => ({log: () => {}})
     });
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(result => {
@@ -68,8 +65,7 @@ describe('Server DoneQueryHelper', () => {
     ServiceLocator.load({
       createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
       createDateProvider: () => dateProvider,
-      createLogger: () => ({log: () => {}}),
-      createAwsXraySegment: () => 'SEGMENT'
+      createLogger: () => ({log: () => {}})
     });
     const client = new DoneQueryHelper('TABLE_NAME');
     const nextKey = JSON.stringify({
@@ -106,8 +102,7 @@ describe('Server DoneQueryHelper', () => {
     ServiceLocator.load({
       createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
       createDateProvider: () => dateProvider,
-      createLogger: () => ({log: () => {}}),
-      createAwsXraySegment: () => 'SEGMENT'
+      createLogger: () => ({log: () => {}})
     });
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(result => {
@@ -127,8 +122,7 @@ describe('Server DoneQueryHelper', () => {
     ServiceLocator.load({
       createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
       createDateProvider: () => dateProvider,
-      createLogger: () => ({log: () => {}}),
-      createAwsXraySegment: () => 'SEGMENT'
+      createLogger: () => ({log: () => {}})
     });
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(result => {

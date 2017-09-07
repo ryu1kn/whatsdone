@@ -140,10 +140,6 @@ class ServiceLocator {
     return this._get('sessionDynamoTableClient');
   }
 
-  get awsXraySegment() {
-    return this._get('awsXraySegment');
-  }
-
   get hashGenerator() {
     return this._get('hashGenerator');
   }
