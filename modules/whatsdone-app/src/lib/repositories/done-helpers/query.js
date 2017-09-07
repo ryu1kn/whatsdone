@@ -12,6 +12,7 @@ class DoneQueryHelper {
     this._docClient = ServiceLocator.dynamoDBDocumentClient;
     this._dateProvider = ServiceLocator.dateProvider;
     this._logger = ServiceLocator.logger;
+    this._segment = ServiceLocator.awsXraySegment;
     this._collectionName = collectionName;
   }
 
@@ -40,7 +41,8 @@ class DoneQueryHelper {
         ExpressionAttributeValues: this._getExpressionAttributeValues(restoredKey),
         ScanIndexForward: false,
         ProjectionExpression: 'id, #date, doneThing, userId',
-        Select: 'SPECIFIC_ATTRIBUTES'
+        Select: 'SPECIFIC_ATTRIBUTES',
+        XRaySegment: this._segment
       },
       restoredKey && {ExclusiveStartKey: restoredKey}
     );

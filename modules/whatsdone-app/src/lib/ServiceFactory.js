@@ -2,10 +2,14 @@
 'use strict';
 
 const AWS = require('aws-sdk');
+const AWSXRay = require('aws-xray-sdk');
 const Uuid = require('uuid');
 const sha1 = require('sha1');
 
 const LambdaRequestHandler = require('./LambdaRequestHandler');
+
+AWSXRay.enableManualMode();
+const segment = new AWSXRay.Segment('whatsdone-backend');
 
 class ServiceFactory {
 
@@ -122,7 +126,8 @@ class ServiceFactory {
   }
 
   createDynamoDBDocumentClient() {
-    return new AWS.DynamoDB.DocumentClient({region: this._env.DB_REGION});
+    const docClient = new AWS.DynamoDB.DocumentClient({region: this._env.DB_REGION});
+    return AWSXRay.captureAWSClient(docClient);
   }
 
   createDoneQueryHelper() {
@@ -158,6 +163,10 @@ class ServiceFactory {
   createSessionRepository() {
     const SessionRepository = require('./repositories/Session');
     return new SessionRepository();
+  }
+
+  createAwsXraySegment() {
+    return segment;
   }
 
   createHashGenerator() {
