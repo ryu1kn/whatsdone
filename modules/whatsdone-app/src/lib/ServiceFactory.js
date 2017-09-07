@@ -1,8 +1,8 @@
 
 'use strict';
 
-const AWS = require('aws-sdk');
 const AWSXRay = require('aws-xray-sdk');
+const AWS = AWSXRay.captureAWS(require('aws-sdk'));
 const Uuid = require('uuid');
 const sha1 = require('sha1');
 
@@ -123,8 +123,7 @@ class ServiceFactory {
   }
 
   createDynamoDBDocumentClient() {
-    const docClient = new AWS.DynamoDB.DocumentClient({region: this._env.DB_REGION});
-    return AWSXRay.captureAWSClient(docClient);
+    return new AWS.DynamoDB.DocumentClient({region: this._env.DB_REGION});
   }
 
   createDoneQueryHelper() {
