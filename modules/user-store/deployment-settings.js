@@ -17,7 +17,7 @@ module.exports = {
     {
       id: 'create-user-table',
       type: 'cf-stack',
-      stackName: {'Fn::Join': ['-', [{$ref: '#/_env'}, 'user-store']]},
+      stackName: {'Fn::Join': ['-', ['whatsdone', {$ref: '#/_env'}, 'user-store']]},
       stackTemplate: {
         script: 'cp ./template.json $TEMPLATE_OUTPUT_FILE',
         envVars: {

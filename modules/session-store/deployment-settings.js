@@ -17,7 +17,7 @@ module.exports = {
     {
       id: 'create-session-table',
       type: 'cf-stack',
-      stackName: {'Fn::Join': ['-', [{$ref: '#/_env'}, 'session-store']]},
+      stackName: {'Fn::Join': ['-', ['whatsdone', {$ref: '#/_env'}, 'session-store']]},
       stackTemplate: {
         script: 'cp ./template.json $TEMPLATE_OUTPUT_FILE',
         envVars: {
