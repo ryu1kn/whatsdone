@@ -1,5 +1,7 @@
 artifact-store
 whatsdone-env
+user-store
+session-store
 done-store
 whatsdone-assets
 whatsdone-web-cache

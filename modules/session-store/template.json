@@ -1,0 +1,74 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "What's Done - Session Store",
+  "Parameters": {
+    "TableName": {
+      "Type": "String"
+    },
+    "TableReadCapacity": {
+      "Type": "Number"
+    },
+    "TableWriteCapacity": {
+      "Type": "Number"
+    }
+  },
+  "Resources": {
+    "DynamoDBTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {"Ref": "TableName"},
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "date",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "month",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": {"Ref": "TableReadCapacity"},
+          "WriteCapacityUnits": {"Ref": "TableWriteCapacity"}
+        },
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "date",
+            "KeySchema": [
+              {
+                "AttributeName": "month",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "date",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            },
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": {"Ref": "TableReadCapacity"},
+              "WriteCapacityUnits": {"Ref": "TableWriteCapacity"}
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "TableName": {
+      "Value": {"Ref": "DynamoDBTable"}
+    }
+  }
+}
