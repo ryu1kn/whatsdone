@@ -55,9 +55,10 @@
       "id": "fetch-certificate-arn",
       "type": "custom",
       "run": {
-        "script": "aws acm list-certificates --region us-east-1 --query CertificateSummaryList | jq 'map(select(.DomainName == \"*.ryuichi.io\") | .CertificateArn)[0]' > $TASK_OUTPUTS_FILE",
+        "script": "aws acm list-certificates --region us-east-1 --query CertificateSummaryList | jq \"map(select(.DomainName == \\\"$CERT_DOMAIN_NAME\\\") | .CertificateArn)[0]\" > $TASK_OUTPUTS_FILE",
         "envVars": {
-          "TASK_OUTPUTS_FILE": {"$ref": "#/_taskOutputsFile"}
+          "TASK_OUTPUTS_FILE": {"$ref": "#/_taskOutputsFile"},
+          "CERT_DOMAIN_NAME": {"$ref": "#/_deploymentConfig/certDomainName"}
         }
       },
       "outputsName": "certificateArn"
