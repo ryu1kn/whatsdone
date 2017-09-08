@@ -31,6 +31,18 @@
       "bucket": "whatsdone-deployment-outputs",
       "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "done-store"]]}
     },
+    "user-store": {
+      "type": "s3-bucket",
+      "region": {"$ref": "#/_args/region"},
+      "bucket": "whatsdone-deployment-outputs",
+      "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "user-store"]]}
+    },
+    "session-store": {
+      "type": "s3-bucket",
+      "region": {"$ref": "#/_args/region"},
+      "bucket": "whatsdone-deployment-outputs",
+      "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "session-store"]]}
+    },
     "whatsdone-web-cache": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
@@ -68,8 +80,8 @@
         "DbRegion": {"$ref": "#/_taskRegion"},
         "WebappEndpoint": {"Fn::Join": ["", ["https://", {"$ref": "#/_dataSourceData/whatsdone-web-cache/PublicDomain"}]]},
         "DoneTableName": {"$ref": "#/_dataSourceData/done-store/TableName"},
-        "UserTableName": {"$ref": "#/_deploymentConfig/userTableName"},
-        "SessionTableName": {"$ref": "#/_deploymentConfig/sessionTableName"},
+        "UserTableName": {"$ref": "#/_dataSourceData/user-store/TableName"},
+        "SessionTableName": {"$ref": "#/_dataSourceData/session-store/TableName"},
         "SessionSecret": {"$ref": "#/_deploymentConfig/sessionSecret"},
         "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
         "LambdaS3Bucket": {"$ref": "#/_dataSourceData/whatsdone-app/packages/whatsdone-app/s3Bucket"},
