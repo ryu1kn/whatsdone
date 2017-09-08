@@ -21,14 +21,6 @@
           {
             "AttributeName": "id",
             "AttributeType": "S"
-          },
-          {
-            "AttributeName": "date",
-            "AttributeType": "S"
-          },
-          {
-            "AttributeName": "month",
-            "AttributeType": "S"
           }
         ],
         "KeySchema": [
@@ -40,29 +32,7 @@
         "ProvisionedThroughput": {
           "ReadCapacityUnits": {"Ref": "TableReadCapacity"},
           "WriteCapacityUnits": {"Ref": "TableWriteCapacity"}
-        },
-        "GlobalSecondaryIndexes": [
-          {
-            "IndexName": "date",
-            "KeySchema": [
-              {
-                "AttributeName": "month",
-                "KeyType": "HASH"
-              },
-              {
-                "AttributeName": "date",
-                "KeyType": "RANGE"
-              }
-            ],
-            "Projection": {
-              "ProjectionType": "ALL"
-            },
-            "ProvisionedThroughput": {
-              "ReadCapacityUnits": {"Ref": "TableReadCapacity"},
-              "WriteCapacityUnits": {"Ref": "TableWriteCapacity"}
-            }
-          }
-        ]
+        }
       }
     }
   },
