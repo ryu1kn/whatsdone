@@ -49,6 +49,7 @@ Resources:
                   - dynamodb:CreateTable
                   - dynamodb:DeleteTable
                   - dynamodb:DescribeTable
+                  - dynamodb:UpdateTable
                   - iam:CreateRole
                   - iam:DeleteRole
                   - iam:GetRole
