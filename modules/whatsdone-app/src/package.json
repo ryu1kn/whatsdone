@@ -8,7 +8,7 @@
     "test": "mocha --opts mocha.opts",
     "lint": "eslint .",
     "coverage": "istanbul cover ./node_modules/.bin/_mocha -- --opts mocha.opts",
-    "prereport-coverage": "npm run coverage",
+    "prereport-coverage": "yarn run coverage",
     "report-coverage": "codeclimate-test-reporter < coverage/lcov.info"
   },
   "dependencies": {

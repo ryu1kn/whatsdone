@@ -5,9 +5,9 @@
     "APP_BUILD_DIR": "app/dist"
   },
   "scripts": {
-    "build": "cd app && npm install && npm run build:production",
+    "build": "cd app && yarn install && yarn run build:production",
     "postbuild": "node ./upload-artifact",
-    "predeploy": "npm install",
+    "predeploy": "yarn install",
     "deploy": "cd ops && kumo deploy-module --verbose",
     "destroy": "cd ops && kumo destroy-module --verbose",
     "deploy:app": "./deploy-app.sh",
