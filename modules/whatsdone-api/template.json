@@ -341,7 +341,7 @@
             "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
           }
         },
-        "TracingConfig": {"Mode": "PassThrough"},
+        "TracingConfig": {"Mode": "Active"},
         "Runtime": "nodejs6.10",
         "Timeout": "10"
       }
