@@ -1,7 +1,7 @@
 {
   "name": "whatsdone-app",
   "engines": {
-    "node": "6.10"
+    "node": ">= 6"
   },
   "main": "index.js",
   "scripts": {
