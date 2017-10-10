@@ -1,5 +1,7 @@
+
 .DS_Store
 npm-debug.log
-/.kumo
 __*
 node_modules
+
+/.kumo
