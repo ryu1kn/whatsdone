@@ -7,18 +7,18 @@ module.exports = {
       path: /^(modules\/whatsdone-assets)\/.*/,
       command: `
         cd $BM_PATH_VAR_1 \\
-            && npm install \\
-            && npm run lint`
+            && yarn install \\
+            && yarn run lint`
     },
     {
       description: 'Build whatsdone-app',
       path: /^(modules\/whatsdone-app)\/.*/,
       command: `
         cd $BM_PATH_VAR_1/src \\
-            && npm install \\
-            && npm run lint \\
-            && npm test \\
-            && npm run report-coverage`
+            && yarn install \\
+            && yarn run lint \\
+            && yarn test \\
+            && yarn run report-coverage`
     },
 
     // Build tools
@@ -32,17 +32,17 @@ module.exports = {
     {
       description: 'Deploy module',
       path: /^(modules\/[^/]+)\/.*/,
-      command: 'cd $BM_PATH_VAR_1 && npm run deploy -- --env $ENV_NAME --region $AWS_REGION'
+      command: 'cd $BM_PATH_VAR_1 && yarn run deploy --env $ENV_NAME --region $AWS_REGION'
     },
     {
       description: 'Deploy API',  // XXX: whatsdone-api gets deployed twice if both -app and -api are updated
       path: /^(modules)\/whatsdone-app\/.*/,
-      command: 'cd $BM_PATH_VAR_1/whatsdone-api && npm run deploy -- --env $ENV_NAME --region $AWS_REGION'
+      command: 'cd $BM_PATH_VAR_1/whatsdone-api && yarn run deploy --env $ENV_NAME --region $AWS_REGION'
     },
     {
       description: 'Deploy whatsdone-assets app',
       path: /^(modules\/whatsdone-assets)\/.*/,
-      command: 'cd $BM_PATH_VAR_1 && npm install && npm run build && npm run deploy:app'
+      command: 'cd $BM_PATH_VAR_1 && yarn install && yarn run build && yarn run deploy:app'
     }
   ]
 };
