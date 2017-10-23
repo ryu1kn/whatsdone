@@ -9,12 +9,12 @@ Personal activity tracker. Take memos of what I (or we) have done today.
   - ~~heroku + MongoDB~~
   - ~~heroku + DynamoDB~~
   - ~~AWS Elastic Beanstalk (deployed with `kumo`) + DynamoDB~~
-  - AWS API Gateway + Lambda + DynamoDB (all deployed with `kumo`)
+  - AWS API Gateway + Lambda + DynamoDB (all deployed with `kumo`) ⬅️ Now here
 - backend
   - Node.js v6.10 (deployed on AWS Lambda)
 - frontend
   - ~~React + flux~~
-  - React + Redux
+  - React + Redux ⬅️ Now here
 
 ### Deploying entire system
 
