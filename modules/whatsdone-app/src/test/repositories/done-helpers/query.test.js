@@ -6,9 +6,7 @@ describe('Server DoneQueryHelper', () => {
 
   it('uses DynamoDB#query to get done items', () => {
     const dynamoDBDocumentClient = {
-      query: sinon.stub().returns({
-        promise: () => Promise.resolve({Items: [{DATA: '..'}]})
-      })
+      query: sinon.stub().returns(awsSdkResponse({Items: [{DATA: '..'}]}))
     };
     const dateProvider = {getCurrentDate: () => new Date('2017-08-01T07:26:27.574Z')};
     ServiceLocator.load({
@@ -40,9 +38,7 @@ describe('Server DoneQueryHelper', () => {
   it('returns items', () => {
     const dateProvider = {getCurrentDate: () => new Date()};
     const dynamoDBDocumentClient = {
-      query: sinon.stub().returns({
-        promise: () => Promise.resolve({Items: [{DATA: '..'}]})
-      })
+      query: sinon.stub().returns(awsSdkResponse({Items: [{DATA: '..'}]}))
     };
     ServiceLocator.load({
       createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
@@ -57,9 +53,7 @@ describe('Server DoneQueryHelper', () => {
 
   it('returns items honouring next page key', () => {
     const dynamoDBDocumentClient = {
-      query: sinon.stub().returns({
-        promise: () => Promise.resolve({Items: []})
-      })
+      query: sinon.stub().returns(awsSdkResponse({Items: []}))
     };
     const dateProvider = {getCurrentDate: () => new Date()};
     ServiceLocator.load({
@@ -87,16 +81,14 @@ describe('Server DoneQueryHelper', () => {
 
   it('returns a key for next page if it exists', () => {
     const dynamoDBDocumentClient = {
-      query: sinon.stub().returns({
-        promise: () => Promise.resolve({
-          Items: [],
-          LastEvaluatedKey: {
-            id: 'ID',
-            date: '2017-08-01T07:26:27.574Z',
-            month: '2017-08'
-          }
-        })
-      })
+      query: sinon.stub().returns(awsSdkResponse({
+        Items: [],
+        LastEvaluatedKey: {
+          id: 'ID',
+          date: '2017-08-01T07:26:27.574Z',
+          month: '2017-08'
+        }
+      }))
     };
     const dateProvider = {getCurrentDate: () => new Date()};
     ServiceLocator.load({
@@ -112,11 +104,7 @@ describe('Server DoneQueryHelper', () => {
 
   it('does not return a key for next page if it does not exist', () => {
     const dynamoDBDocumentClient = {
-      query: sinon.stub().returns({
-        promise: () => Promise.resolve({
-          Items: []
-        })
-      })
+      query: sinon.stub().returns(awsSdkResponse({Items: []}))
     };
     const dateProvider = {getCurrentDate: () => new Date()};
     ServiceLocator.load({
@@ -129,5 +117,11 @@ describe('Server DoneQueryHelper', () => {
       expect(result.nextKey).to.be.undefined;
     });
   });
+
+  function awsSdkResponse(response) {
+    const finalResponse = response instanceof Error ?
+      Promise.reject(response) : Promise.resolve(response);
+    return {promise: () => finalResponse};
+  }
 
 });
