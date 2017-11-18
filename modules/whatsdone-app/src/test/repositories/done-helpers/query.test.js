@@ -8,12 +8,8 @@ describe('Server DoneQueryHelper', () => {
     const dynamoDBDocumentClient = {
       query: sinon.stub().returns(awsSdkResponse({Items: [{DATA: '..'}]}))
     };
-    const dateProvider = {getCurrentDate: () => new Date('2017-08-01T07:26:27.574Z')};
-    ServiceLocator.load({
-      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createDateProvider: () => dateProvider,
-      createLogger: () => ({log: () => {}})
-    });
+    setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
+
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(() => {
       expect(dynamoDBDocumentClient.query).to.have.been.calledWith({
@@ -36,15 +32,11 @@ describe('Server DoneQueryHelper', () => {
   });
 
   it('returns items', () => {
-    const dateProvider = {getCurrentDate: () => new Date()};
     const dynamoDBDocumentClient = {
       query: sinon.stub().returns(awsSdkResponse({Items: [{DATA: '..'}]}))
     };
-    ServiceLocator.load({
-      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createDateProvider: () => dateProvider,
-      createLogger: () => ({log: () => {}})
-    });
+    setupServiceLocator({dynamoDBDocumentClient});
+
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(result => {
       expect(result.items).to.eql([{DATA: '..'}]);
@@ -55,12 +47,8 @@ describe('Server DoneQueryHelper', () => {
     const dynamoDBDocumentClient = {
       query: sinon.stub().returns(awsSdkResponse({Items: []}))
     };
-    const dateProvider = {getCurrentDate: () => new Date()};
-    ServiceLocator.load({
-      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createDateProvider: () => dateProvider,
-      createLogger: () => ({log: () => {}})
-    });
+    setupServiceLocator({dynamoDBDocumentClient});
+
     const client = new DoneQueryHelper('TABLE_NAME');
     const nextKey = JSON.stringify({
       date: '2017-08-01T07:26:27.574Z',
@@ -90,12 +78,8 @@ describe('Server DoneQueryHelper', () => {
         }
       }))
     };
-    const dateProvider = {getCurrentDate: () => new Date()};
-    ServiceLocator.load({
-      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createDateProvider: () => dateProvider,
-      createLogger: () => ({log: () => {}})
-    });
+    setupServiceLocator({dynamoDBDocumentClient});
+
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(result => {
       expect(result.nextKey).to.eql('{"id":"ID","date":"2017-08-01T07:26:27.574Z"}');
@@ -106,17 +90,24 @@ describe('Server DoneQueryHelper', () => {
     const dynamoDBDocumentClient = {
       query: sinon.stub().returns(awsSdkResponse({Items: []}))
     };
-    const dateProvider = {getCurrentDate: () => new Date()};
-    ServiceLocator.load({
-      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createDateProvider: () => dateProvider,
-      createLogger: () => ({log: () => {}})
-    });
+    setupServiceLocator({dynamoDBDocumentClient});
+
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(result => {
       expect(result.nextKey).to.be.undefined;
     });
   });
+
+  function setupServiceLocator({dynamoDBDocumentClient, currentDate}) {
+    const dateProvider = {
+      getCurrentDate: () => currentDate ? new Date(currentDate) : new Date()
+    };
+    ServiceLocator.load({
+      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
+      createDateProvider: () => dateProvider,
+      createLogger: () => ({log: () => {}})
+    });
+  }
 
   function awsSdkResponse(response) {
     const finalResponse = response instanceof Error ?
