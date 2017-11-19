@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "What's Done Artifact Store",
+  "Description": "What's Done Artifacts Storage",
   "Parameters": {
     "BucketName": {
       "Type": "String"
@@ -8,9 +8,9 @@
   },
   "Resources": {
     "Bucket": {
-      "Type" : "AWS::S3::Bucket",
-      "Properties" : {
-        "BucketName" : {"Ref": "BucketName"}
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": {"Ref": "BucketName"}
       }
     }
   },

@@ -13,7 +13,7 @@
     {
       "id": "artifact-bucket",
       "type": "cf-stack",
-      "stackName": "artifact-store-bucket",
+      "stackName": "whatsdone-artifacts",
       "stackTemplate": {
         "script": "cp ./template.json $TEMPLATE_OUTPUT_FILE",
         "envVars": {
@@ -22,6 +22,17 @@
       },
       "stackParams": {
         "BucketName": {"$ref": "#/_deploymentConfig/artifactBucket"}
+      }
+    },
+    {
+      "id": "protect-stack",
+      "type": "custom",
+      "run": {
+        "script":
+          "aws cloudformation update-termination-protection --enable-termination-protection --stack-name whatsdone-artifacts",
+        "envVars": {
+          "TASK_REGION": {"$ref": "#/_taskRegion"}
+        }
       }
     }
   ]
