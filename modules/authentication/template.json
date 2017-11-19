@@ -1,0 +1,31 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "What's Done - Authentication",
+  "Parameters": {
+    "UserPoolName": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "UserPool": {
+      "Type": "AWS::Cognito::UserPool",
+      "Properties": {
+        "AdminCreateUserConfig": {"AllowAdminCreateUserOnly": true},
+        "AliasAttributes": ["email", "preferred_username"],
+        "UserPoolName": {"Ref": "UserPoolName"}
+      }
+    },
+    "UserPoolClient": {
+      "Type": "AWS::Cognito::UserPoolClient",
+      "Properties": {
+        "ClientName": "Webapp",
+        "UserPoolId": {"Ref": "UserPool"}
+      }
+    }
+  },
+  "Outputs": {
+    "UserPoolId": {
+      "Value": {"Ref": "UserPool"}
+    }
+  }
+}
