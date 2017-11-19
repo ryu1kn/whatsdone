@@ -4,7 +4,7 @@ set -euo pipefail
 
 function main() {
     if [ "$TRAVIS_EVENT_TYPE" = "cron" ] ; then
-        ENV_NAME=sit deploy
+        ENV_NAME=ci deploy
     else
         ENV_NAME=prod build_and_deploy
     fi
