@@ -2,12 +2,12 @@
 
 module AppConfig where
 
-import Data.Aeson
-import GHC.Generics
+import           Data.Aeson
 import qualified Data.ByteString.Lazy as BL
+import           GHC.Generics
 
-data AppConfig = AppConfig { email :: String
-                           , password :: String
+data AppConfig = AppConfig { email       :: String
+                           , password    :: String
                            , apiEndpoint :: String
                            , sessionFile :: String
                            } deriving (Show, Generic)

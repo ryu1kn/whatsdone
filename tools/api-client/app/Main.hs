@@ -1,11 +1,10 @@
 
 module Main (main) where
 
-import System.Console.GetOpt
-import System.Environment
-import LoginCommand (login)
-import GetDonesCommand (getDones)
-import ApiClientArgs
+import           ApiClientArgs
+import           GetDonesCommand    (getDones)
+import           LoginCommand       (login)
+import           System.Environment
 
 main :: IO ()
 main = do
