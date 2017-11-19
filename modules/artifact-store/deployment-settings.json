@@ -29,7 +29,7 @@
       "type": "custom",
       "run": {
         "script":
-          "aws cloudformation update-termination-protection --enable-termination-protection --stack-name whatsdone-artifacts",
+          "aws cloudformation update-termination-protection --enable-termination-protection --stack-name whatsdone-artifacts --region $TASK_REGION",
         "envVars": {
           "TASK_REGION": {"$ref": "#/_taskRegion"}
         }
