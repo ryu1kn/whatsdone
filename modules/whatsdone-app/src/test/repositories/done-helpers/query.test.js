@@ -86,6 +86,52 @@ describe('Server DoneQueryHelper', () => {
     });
   });
 
+  it.only('automatically query next month if result does not have enough records', () => {
+    const queryStub = sinon.stub();
+    queryStub.onCall(0).returns(awsSdkResponse({
+      Items: '.'.repeat(17).split('').map((v, i) => `ITEM-1-${i}`)
+    }));
+    queryStub.onCall(1).returns(awsSdkResponse({
+      Items: '.'.repeat(3).split('').map((v, i) => `ITEM-2-${i}`)
+    }));
+    const dynamoDBDocumentClient = {query: queryStub};
+    setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
+
+    const client = new DoneQueryHelper('TABLE_NAME');
+    return client.query().then(() => {
+      expect(dynamoDBDocumentClient.query.args[0][0].ExpressionAttributeValues)
+        .to.eql({':m': '2017-08'});
+      expect(dynamoDBDocumentClient.query.args[1][0].ExpressionAttributeValues)
+        .to.eql({':m': '2017-07'});
+    });
+  });
+
+  it.only('automatically query for next 2 months if result does not have enough records', () => {
+    const queryStub = sinon.stub();
+    queryStub.onCall(0).returns(awsSdkResponse({
+      Items: '.'.repeat(15).split('').map((v, i) => `ITEM-1-${i}`)
+    }));
+    queryStub.onCall(1).returns(awsSdkResponse({
+      Items: '.'.repeat(3).split('').map((v, i) => `ITEM-2-${i}`)
+    }));
+    queryStub.onCall(2).returns(awsSdkResponse({
+      Items: '.'.repeat(2).split('').map((v, i) => `ITEM-3-${i}`)
+    }));
+    const dynamoDBDocumentClient = {query: queryStub};
+    setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
+
+    const client = new DoneQueryHelper('TABLE_NAME');
+    return client.query().then(() => {
+      expect(dynamoDBDocumentClient.query).to.have.been.calledThrice;
+      expect(dynamoDBDocumentClient.query.args[0][0].ExpressionAttributeValues)
+        .to.eql({':m': '2017-08'});
+      expect(dynamoDBDocumentClient.query.args[1][0].ExpressionAttributeValues)
+        .to.eql({':m': '2017-07'});
+      expect(dynamoDBDocumentClient.query.args[2][0].ExpressionAttributeValues)
+        .to.eql({':m': '2017-06'});
+    });
+  });
+
   it('does not return a key for next page if it does not exist', () => {
     const dynamoDBDocumentClient = {
       query: sinon.stub().returns(awsSdkResponse({Items: []}))

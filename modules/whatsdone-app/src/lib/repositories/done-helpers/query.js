@@ -16,17 +16,58 @@ class DoneQueryHelper {
   }
 
   query(nextKey) {
-    const restoredKey = this._decodeNextKey(nextKey);
-    const params = this._buildQueryParams(restoredKey);
-    this._logger.log('query params:', JSON.stringify(params));
-    return this._docClient.query(params).promise()
-      .then(response => this._buildResponse(response))
+    return this._query(this._decodeNextKey(nextKey))
       .catch(e => {
-        throw new WrappedError(e, params);
+        throw new WrappedError(e);
       });
   }
 
-  _buildQueryParams(restoredKey) {
+  _query(startKey) {
+    const queryUntil = (params, accumulatedResponse) => {
+      this._logger.log('query params:', JSON.stringify(params));
+      return this._docClient.query(params).promise()
+        .then(queryResult => {
+          const next = {
+            Items: [...accumulatedResponse.Items, ...queryResult.Items],
+            LastEvaluatedKey: queryResult.LastEvaluatedKey
+          };
+          if (next.Items.length >= DEFAULT_SCAN_LIMIT) return next;
+          const nextParams = this._buildQueryParamsFromMonthKey(this._getPrevMonthKey(params));
+          return queryUntil(nextParams, next);
+        });
+    };
+    const params = this._buildQueryFromStartKey(startKey);
+    return queryUntil(params, {Items: []}).then(response => this._buildResponse(response));
+  }
+
+  _getPrevMonthKey(params) {
+    function pad0(number) {
+      return number < 10 ? `0${number}` : number;
+    }
+    const d = new Date(params.ExpressionAttributeValues[':m']);
+    const oldMonth = d.getMonth() === 0 ? 12 : d.getMonth();
+    const oldYear = d.getMonth() === 0 ? d.getFullYear() - 1 : d.getFullYear();
+    return `${oldYear}-${pad0(oldMonth)}`;
+  }
+
+  _buildQueryParamsFromMonthKey(monthKey) {
+    return this._buildQueryParams({monthKey});
+  }
+
+  _buildQueryFromStartKey(startKey) {
+    return this._buildQueryParams({
+      monthKey: this._getMonthKey(startKey),
+      exclusiveStartKey: startKey && {ExclusiveStartKey: startKey}
+    });
+  }
+
+  _getMonthKey(restoredKey) {
+    if (restoredKey) return restoredKey.month;
+    const currentDate = this._dateProvider.getCurrentDate().toISOString();
+    return currentDate.substr(0, utils.MONTH_LENGTH);
+  }
+
+  _buildQueryParams({monthKey, exclusiveStartKey}) {
     return Object.assign(
       {
         TableName: this._collectionName,
@@ -37,25 +78,13 @@ class DoneQueryHelper {
           '#month': 'month',
           '#date': 'date'
         },
-        ExpressionAttributeValues: this._getExpressionAttributeValues(restoredKey),
+        ExpressionAttributeValues: {':m': monthKey},
         ScanIndexForward: false,
         ProjectionExpression: 'id, #date, doneThing, userId',
         Select: 'SPECIFIC_ATTRIBUTES'
       },
-      restoredKey && {ExclusiveStartKey: restoredKey}
+      exclusiveStartKey
     );
-  }
-
-  _getExpressionAttributeValues(restoredKey) {
-    if (restoredKey) {
-      return {
-        ':m': restoredKey.month
-      };
-    }
-    const currentDate = this._dateProvider.getCurrentDate().toISOString();
-    return {
-      ':m': currentDate.substr(0, utils.MONTH_LENGTH)
-    };
   }
 
   _decodeNextKey(nextKey) {
