@@ -4,7 +4,7 @@ set -euo pipefail
 
 function main() {
     if [ "$TRAVIS_EVENT_TYPE" = "cron" ] ; then
-        ENV_NAME=ci deploy
+        ENV_NAME=ci deploy_system
     elif [ "$TRAVIS_BRANCH" = "master" ] ; then
         ENV_NAME=prod build_and_deploy
     else
@@ -22,7 +22,7 @@ function build_and_deploy() {
     git diff --name-only $TRAVIS_COMMIT_RANGE | BUILD_NUMBER=$TRAVIS_BUILD_NUMBER ./node_modules/.bin/buildmate
 }
 
-function deploy() {
+function deploy_system() {
     BUILD_NUMBER=$TRAVIS_BUILD_NUMBER ./deploy-system.sh
 }
 
