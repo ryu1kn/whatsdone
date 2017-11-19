@@ -40,6 +40,7 @@ Resources:
                   - cloudformation:DeleteStack
                   - cloudformation:DescribeStacks
                   - cloudformation:UpdateStack
+                  - cloudformation:UpdateTerminationProtection
                   - cloudfront:CreateCloudFrontOriginAccessIdentity
                   - cloudfront:CreateDistribution
                   - cloudfront:DeleteDistribution
