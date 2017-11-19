@@ -28,17 +28,20 @@ class DoneQueryHelper {
       this._logger.log('query params:', JSON.stringify(params));
       return this._docClient.query(params).promise()
         .then(queryResult => {
-          const next = {
+          const newAccumulatedResponse = {
             Items: [...accumulatedResponse.Items, ...queryResult.Items],
             LastEvaluatedKey: queryResult.LastEvaluatedKey
           };
-          if (next.Items.length >= DEFAULT_SCAN_LIMIT) return next;
+          if (newAccumulatedResponse.Items.length >= DEFAULT_SCAN_LIMIT) return newAccumulatedResponse;
 
           const prevMonthKey = this._getPrevMonthKey(params);
-          if (prevMonthKey === OLDEST_QUERY_MONTH) return next;
+          if (prevMonthKey === OLDEST_QUERY_MONTH) return newAccumulatedResponse;
 
-          const nextParams = this._buildQueryParamsFromMonthKey(prevMonthKey, next.Items.length);
-          return queryUntil(nextParams, next);
+          const nextParams = this._buildQueryParams({
+            monthKey: prevMonthKey,
+            limit: DEFAULT_SCAN_LIMIT - newAccumulatedResponse.Items.length
+          });
+          return queryUntil(nextParams, newAccumulatedResponse);
         });
     };
     const params = this._buildQueryFromStartKey(startKey);
@@ -53,13 +56,6 @@ class DoneQueryHelper {
     const oldMonth = d.getMonth() === 0 ? 12 : d.getMonth();
     const oldYear = d.getMonth() === 0 ? d.getFullYear() - 1 : d.getFullYear();
     return `${oldYear}-${pad0(oldMonth)}`;
-  }
-
-  _buildQueryParamsFromMonthKey(monthKey, numOfItemsFetched) {
-    return this._buildQueryParams({
-      monthKey,
-      limit: DEFAULT_SCAN_LIMIT - numOfItemsFetched
-    });
   }
 
   _buildQueryFromStartKey(startKey) {
