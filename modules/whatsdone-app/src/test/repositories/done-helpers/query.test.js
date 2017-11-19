@@ -86,7 +86,7 @@ describe('Server DoneQueryHelper', () => {
     });
   });
 
-  it.only('automatically query next month if result does not have enough records', () => {
+  it.only('automatically queries next month if result does not have enough records', () => {
     const queryStub = sinon.stub();
     queryStub.onCall(0).returns(awsSdkResponse({
       Items: '.'.repeat(17).split('').map((v, i) => `ITEM-1-${i}`)
@@ -106,7 +106,7 @@ describe('Server DoneQueryHelper', () => {
     });
   });
 
-  it.only('automatically query for next 2 months if result does not have enough records', () => {
+  it.only('automatically queries for next 2 months if result does not have enough records', () => {
     const queryStub = sinon.stub();
     queryStub.onCall(0).returns(awsSdkResponse({
       Items: '.'.repeat(15).split('').map((v, i) => `ITEM-1-${i}`)
@@ -129,6 +129,24 @@ describe('Server DoneQueryHelper', () => {
         .to.eql({':m': '2017-07'});
       expect(dynamoDBDocumentClient.query.args[2][0].ExpressionAttributeValues)
         .to.eql({':m': '2017-06'});
+    });
+  });
+
+  it.only('automatically fetches the number of items that satisfies original fetch limit', () => {
+    const queryStub = sinon.stub();
+    queryStub.onCall(0).returns(awsSdkResponse({
+      Items: '.'.repeat(17).split('').map((v, i) => `ITEM-1-${i}`)
+    }));
+    queryStub.onCall(1).returns(awsSdkResponse({
+      Items: '.'.repeat(3).split('').map((v, i) => `ITEM-2-${i}`)
+    }));
+    const dynamoDBDocumentClient = {query: queryStub};
+    setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
+
+    const client = new DoneQueryHelper('TABLE_NAME');
+    return client.query().then(() => {
+      expect(dynamoDBDocumentClient.query.args[0][0].Limit).to.eql(20);
+      expect(dynamoDBDocumentClient.query.args[1][0].Limit).to.eql(3);
     });
   });
 

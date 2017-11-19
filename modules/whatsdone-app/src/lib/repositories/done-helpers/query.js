@@ -32,7 +32,7 @@ class DoneQueryHelper {
             LastEvaluatedKey: queryResult.LastEvaluatedKey
           };
           if (next.Items.length >= DEFAULT_SCAN_LIMIT) return next;
-          const nextParams = this._buildQueryParamsFromMonthKey(this._getPrevMonthKey(params));
+          const nextParams = this._buildQueryParamsFromMonthKey(this._getPrevMonthKey(params), next.Items.length);
           return queryUntil(nextParams, next);
         });
     };
@@ -50,8 +50,11 @@ class DoneQueryHelper {
     return `${oldYear}-${pad0(oldMonth)}`;
   }
 
-  _buildQueryParamsFromMonthKey(monthKey) {
-    return this._buildQueryParams({monthKey});
+  _buildQueryParamsFromMonthKey(monthKey, numOfItemsFetched) {
+    return this._buildQueryParams({
+      monthKey,
+      limit: DEFAULT_SCAN_LIMIT - numOfItemsFetched
+    });
   }
 
   _buildQueryFromStartKey(startKey) {
@@ -67,12 +70,12 @@ class DoneQueryHelper {
     return currentDate.substr(0, utils.MONTH_LENGTH);
   }
 
-  _buildQueryParams({monthKey, exclusiveStartKey}) {
+  _buildQueryParams({monthKey, exclusiveStartKey, limit}) {
     return Object.assign(
       {
         TableName: this._collectionName,
         IndexName: 'date',
-        Limit: DEFAULT_SCAN_LIMIT,
+        Limit: limit || DEFAULT_SCAN_LIMIT,
         KeyConditionExpression: '#month = :m',
         ExpressionAttributeNames: {
           '#month': 'month',
