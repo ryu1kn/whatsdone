@@ -1,6 +1,5 @@
-
 module.exports = {
-  tableName: 'whatsdone-sit-users',
+  tableName: 'whatsdone-dev-ryuichi-users',
   readCapacity: '1',
   writeCapacity: '1'
 };
