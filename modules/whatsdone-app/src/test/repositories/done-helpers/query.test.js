@@ -39,7 +39,7 @@ describe('Server DoneQueryHelper', () => {
 
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(result => {
-      expect(result.items).to.eql([{DATA: '..'}]);
+      expect(result.items[0]).to.eql({DATA: '..'});
     });
   });
 
@@ -86,7 +86,7 @@ describe('Server DoneQueryHelper', () => {
     });
   });
 
-  it.only('automatically queries next month if result does not have enough records', () => {
+  it('automatically queries next month if result does not have enough records', () => {
     const queryStub = sinon.stub();
     queryStub.onCall(0).returns(awsSdkResponse({
       Items: '.'.repeat(17).split('').map((v, i) => `ITEM-1-${i}`)
@@ -106,7 +106,7 @@ describe('Server DoneQueryHelper', () => {
     });
   });
 
-  it.only('automatically queries for next 2 months if result does not have enough records', () => {
+  it('automatically queries for next 2 months if result does not have enough records', () => {
     const queryStub = sinon.stub();
     queryStub.onCall(0).returns(awsSdkResponse({
       Items: '.'.repeat(15).split('').map((v, i) => `ITEM-1-${i}`)
@@ -132,7 +132,7 @@ describe('Server DoneQueryHelper', () => {
     });
   });
 
-  it.only('automatically fetches the number of items that satisfies original fetch limit', () => {
+  it('automatically fetches the number of items that satisfies original fetch limit', () => {
     const queryStub = sinon.stub();
     queryStub.onCall(0).returns(awsSdkResponse({
       Items: '.'.repeat(17).split('').map((v, i) => `ITEM-1-${i}`)
@@ -147,6 +147,18 @@ describe('Server DoneQueryHelper', () => {
     return client.query().then(() => {
       expect(dynamoDBDocumentClient.query.args[0][0].Limit).to.eql(20);
       expect(dynamoDBDocumentClient.query.args[1][0].Limit).to.eql(3);
+    });
+  });
+
+  it('tries to find items as old as March 2015', () => {
+    const dynamoDBDocumentClient = {query: sinon.stub().returns(awsSdkResponse({Items: []}))};
+    setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
+
+    const client = new DoneQueryHelper('TABLE_NAME');
+    return client.query().then(() => {
+      expect(dynamoDBDocumentClient.query).to.have.callCount(30);
+      expect(dynamoDBDocumentClient.query.args[29][0].ExpressionAttributeValues)
+        .to.eql({':m': '2015-03'});
     });
   });
 

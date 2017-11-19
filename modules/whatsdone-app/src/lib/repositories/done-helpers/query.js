@@ -5,6 +5,7 @@ const WrappedError = require('../../WrappedError');
 const utils = require('../utils');
 
 const DEFAULT_SCAN_LIMIT = 20;
+const OLDEST_QUERY_MONTH = '2015-02';
 
 class DoneQueryHelper {
 
@@ -32,7 +33,11 @@ class DoneQueryHelper {
             LastEvaluatedKey: queryResult.LastEvaluatedKey
           };
           if (next.Items.length >= DEFAULT_SCAN_LIMIT) return next;
-          const nextParams = this._buildQueryParamsFromMonthKey(this._getPrevMonthKey(params), next.Items.length);
+
+          const prevMonthKey = this._getPrevMonthKey(params);
+          if (prevMonthKey === OLDEST_QUERY_MONTH) return next;
+
+          const nextParams = this._buildQueryParamsFromMonthKey(prevMonthKey, next.Items.length);
           return queryUntil(nextParams, next);
         });
     };
