@@ -1,9 +1,7 @@
-
 const projectConfig = require('../../../config/prod');
+const moduleCommonConfig = require('./common');
 
-module.exports = {
+module.exports = Object.assign({}, moduleCommonConfig, {
   bucketName: 'whatsdone-assets',
-  bucketDeletionPolicy: projectConfig.customDeletionPolicy,
-  artifactBucket: projectConfig.artifactBucket,
-  artifactBasePath: 'whatsdone-assets'
-};
+  bucketDeletionPolicy: projectConfig.customDeletionPolicy
+});
