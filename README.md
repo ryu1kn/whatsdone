@@ -15,6 +15,11 @@ Personal activity tracker. Take memos of what I (or we) have done today.
 - frontend
   - ~~React + flux~~
   - React + Redux ⬅️ Now here
+  
+## CI/CD
+
+Commits to the master branch automatically goes to the production after the successful test execution.
+This includes the changes to the infrastructure settings.
 
 ### Deploying entire system
 
