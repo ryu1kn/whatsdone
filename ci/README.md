@@ -21,3 +21,15 @@ $ AWS_PROFILE=<YOUR_PROFILE_NAME> make create-access-key
 ```
 
 Make sure you take a memo of `SecretAccessKey` in the output. You can only see this at this timing.
+
+To set the access key id and secret access key, do the following:
+
+```sh
+$ travis encrypt AWS_ACCESS_KEY_ID='YOUR_ACCESS_KEY_ID' --add
+```
+
+## Update the CI user
+
+```sh
+$ AWS_PROFILE=<YOUR_PROFILE_NAME> make update-ci-user
+```
