@@ -6,6 +6,14 @@ class ServiceLocator {
     this._cache = Object.create(null);
   }
 
+  get authenticator() {
+    return this._get('authenticator');
+  }
+
+  get configProvider() {
+    return this._get('configProvider');
+  }
+
   get fetch() {
     return this._get('fetch');
   }
