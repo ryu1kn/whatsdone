@@ -5,12 +5,12 @@ import ServiceLocator from '../../../service-locator';
 const containerState = {};
 
 const mapStateToProps = (state, ownProps) => {
-  const loginState = state.loginStatus;
+  const login = state.login;
   Object.assign(containerState, {
     ownProps,
-    cognitoUser: loginState.cognitoUser
+    cognitoUser: login.cognitoUser
   });
-  return {status: loginState.status};
+  return {status: login.status};
 };
 
 const mapDispatchToProps = dispatch => {

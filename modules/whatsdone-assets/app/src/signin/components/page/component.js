@@ -2,6 +2,7 @@
 import './style.less';
 
 import React from 'react';
+import LoginStatus from '../../login-status';
 
 class Signin extends React.Component {
 
@@ -41,7 +42,7 @@ class Signin extends React.Component {
   render() {
     return (
       <div className="container signin">
-        {this.props.status !== 'NEW_PASSWORD_REQUIRED' ? (
+        {this.props.status !== LoginStatus.NEW_PASSWORD_REQUIRED ? (
           <form className="form-signin" onSubmit={this.handleSubmit}>
             <h2 className="form-signin-heading">Please sign in</h2>
             <label className="sr-only" htmlFor="inputEmail">Email address</label>
