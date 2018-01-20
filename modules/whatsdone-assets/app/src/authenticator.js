@@ -36,13 +36,23 @@ class Authenticator {
   _authenticate(cognitoUser, authenticationDetails) {
     return new Promise((resolve, reject) => {
       cognitoUser.authenticateUser(authenticationDetails, {
+        onSuccess: _result => resolve({
+          newPasswordRequired: false
+        }),
+        newPasswordRequired: (_userAttributes, _requiredAttributes) => resolve({
+          newPasswordRequired: true,
+          cognitoUser
+        }),
+        onFailure: reject
+      });
+    });
+  }
+
+  updatePassword(cognitoUser, newPassword) {
+    const userAttributes = {};
+    return new Promise((resolve, reject) => {
+      cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, {
         onSuccess: resolve,
-        newPasswordRequired: (userAttributes, _requiredAttributes) => {
-          cognitoUser.completeNewPasswordChallenge('NEW_DUMMY_PASSWORD', userAttributes, {
-            onSuccess: resolve,
-            onFailure: reject
-          });
-        },
         onFailure: reject
       });
     });

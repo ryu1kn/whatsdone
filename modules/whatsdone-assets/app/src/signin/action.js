@@ -1,7 +1,7 @@
 
 import ActionType from './action-type';
 
-export default {login, markLoginSuccess, markLoginFailed};
+export default {login, markLoginSuccess, markLoginFailed, markNewPasswordRequired};
 
 function login(loginDetails) {
   return {
@@ -20,5 +20,12 @@ function markLoginFailed(e) {
   return {
     type: ActionType.LOGIN_FAILED,
     error: e
+  };
+}
+
+function markNewPasswordRequired(cognitoUser) {
+  return {
+    type: ActionType.LOGIN_NEW_PASSWORD_REQUIRED,
+    cognitoUser
   };
 }
