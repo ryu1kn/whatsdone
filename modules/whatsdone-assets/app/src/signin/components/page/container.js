@@ -13,7 +13,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onSubmit: loginDetails => {
       dispatch(Action.login(loginDetails, dispatch));
-      ServiceLocator.whatsdoneApiClient.login(loginDetails)
+      ServiceLocator.authenticator.authenticate(loginDetails)
         .then(() => {
           dispatch(Action.markLoginSuccess());
           containerState.ownProps.history.push('/');

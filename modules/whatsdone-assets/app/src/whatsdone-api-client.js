@@ -12,10 +12,7 @@ class WhatsdoneApiClient {
 
   constructor() {
     this._smartFetch = ServiceLocator.smartFetch;
-  }
-
-  login(loginDetails) {
-    return this._relayFetch('/signin', this._buildPostOption(loginDetails));
+    this._configProvider = ServiceLocator.configProvider;
   }
 
   _buildPostOption(data) {
@@ -49,14 +46,9 @@ class WhatsdoneApiClient {
     });
   }
 
-  // HACK: Temporally placing the retrieval of application config here
   _getApiOrigin() {
-    if (this._API_ORIGIN) return Promise.resolve(this._API_ORIGIN);
-    return this._smartFetch('/appConfig.json')
-      .then(response => {
-        this._API_ORIGIN = response.body.API_ORIGIN;
-        return this._API_ORIGIN;
-      });
+    return this._configProvider.getConfig()
+      .then(appConfig => appConfig.API_ORIGIN);
   }
 
 }
