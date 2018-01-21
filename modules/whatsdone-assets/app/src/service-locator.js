@@ -10,6 +10,10 @@ class ServiceLocator {
     return this._get('authenticator');
   }
 
+  get authTokenProvider() {
+    return this._get('authTokenProvider');
+  }
+
   get configProvider() {
     return this._get('configProvider');
   }

@@ -179,6 +179,11 @@
                   }
                 ],
                 "responses": {},
+                "security": [
+                  {
+                    "default-authorizer": []
+                  }
+                ],
                 "x-amazon-apigateway-integration": {
                   "responses": {
                     "default": {
@@ -198,6 +203,20 @@
                   "contentHandling": "CONVERT_TO_TEXT",
                   "type": "aws_proxy"
                 }
+              }
+            }
+          },
+          "securityDefinitions": {
+            "default-authorizer": {
+              "type": "apiKey",
+              "name": "Authorization",
+              "in": "header",
+              "x-amazon-apigateway-authtype": "cognito_user_pools",
+              "x-amazon-apigateway-authorizer": {
+                "providerARNs": [
+                  "arn:aws:cognito-idp:ap-southeast-2:650892143834:userpool/ap-southeast-2_R0tZ3qQMb"
+                ],
+                "type": "cognito_user_pools"
               }
             }
           },
