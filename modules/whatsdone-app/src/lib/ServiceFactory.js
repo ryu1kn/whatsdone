@@ -133,7 +133,7 @@ class ServiceFactory {
 
   createDoneDynamoTableClient() {
     const DynamoTableClient = require('./repositories/DynamoTableClient');
-    return new DynamoTableClient(this._env.DONE_TABLE_NAME);
+    return new DynamoTableClient({collectionName: this._env.DONE_TABLE_NAME, idName: 'id'});
   }
 
   createDoneRepository() {
@@ -143,7 +143,7 @@ class ServiceFactory {
 
   createUserDynamoTableClient() {
     const DynamoTableClient = require('./repositories/DynamoTableClient');
-    return new DynamoTableClient(this._env.USER_TABLE_NAME);
+    return new DynamoTableClient({collectionName: this._env.USER_TABLE_NAME, idName: 'id'});
   }
 
   createUserRepository() {
@@ -153,7 +153,7 @@ class ServiceFactory {
 
   createSessionDynamoTableClient() {
     const DynamoTableClient = require('./repositories/DynamoTableClient');
-    return new DynamoTableClient(this._env.SESSION_TABLE_NAME);
+    return new DynamoTableClient({collectionName: this._env.SESSION_TABLE_NAME, idName: 'id'});
   }
 
   createSessionRepository() {
