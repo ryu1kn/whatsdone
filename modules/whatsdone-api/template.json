@@ -75,7 +75,8 @@
               "Cookies": {
                 "Forward": "all"
               },
-              "QueryString": true
+              "QueryString": true,
+              "Headers": ["Authorization"]
             },
             "AllowedMethods": ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"],
             "Compress": true,
