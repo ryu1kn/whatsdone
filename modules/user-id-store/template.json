@@ -1,0 +1,44 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "What's Done - User Id Store",
+  "Parameters": {
+    "TableName": {
+      "Type": "String"
+    },
+    "TableReadCapacity": {
+      "Type": "Number"
+    },
+    "TableWriteCapacity": {
+      "Type": "Number"
+    }
+  },
+  "Resources": {
+    "DynamoDBTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {"Ref": "TableName"},
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "cognitoId",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "cognitoId",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": {"Ref": "TableReadCapacity"},
+          "WriteCapacityUnits": {"Ref": "TableWriteCapacity"}
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "TableName": {
+      "Value": {"Ref": "DynamoDBTable"}
+    }
+  }
+}
