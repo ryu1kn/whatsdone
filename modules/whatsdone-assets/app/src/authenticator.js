@@ -7,6 +7,7 @@ class Authenticator {
 
   constructor() {
     this._configProvider = ServiceLocator.configProvider;
+    this._authTokenProvider = ServiceLocator.authTokenProvider;
   }
 
   authenticate({email, password}) {
@@ -36,9 +37,10 @@ class Authenticator {
   _authenticate(cognitoUser, authenticationDetails) {
     return new Promise((resolve, reject) => {
       cognitoUser.authenticateUser(authenticationDetails, {
-        onSuccess: _result => resolve({
-          newPasswordRequired: false
-        }),
+        onSuccess: tokens => {
+          this._authTokenProvider.setTokens(tokens);
+          resolve({newPasswordRequired: false});
+        },
         newPasswordRequired: (_userAttributes, _requiredAttributes) => resolve({
           newPasswordRequired: true,
           cognitoUser
@@ -52,7 +54,10 @@ class Authenticator {
     const userAttributes = {};
     return new Promise((resolve, reject) => {
       cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, {
-        onSuccess: resolve,
+        onSuccess: result => {
+          this._authTokenProvider.setTokens(result);
+          resolve();
+        },
         onFailure: reject
       });
     });

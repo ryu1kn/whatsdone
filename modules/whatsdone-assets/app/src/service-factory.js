@@ -1,9 +1,14 @@
 
 import Authenticator from './authenticator';
+import AuthTokenProvider from './auth-token-provider';
 import ConfigProvider from './config-provider';
 import WhatsdoneApiClient from './whatsdone-api-client';
 
 class ServiceFactory {
+
+  createAuthTokenProvider() {
+    return new AuthTokenProvider();
+  }
 
   createAuthenticator() {
     return new Authenticator();
