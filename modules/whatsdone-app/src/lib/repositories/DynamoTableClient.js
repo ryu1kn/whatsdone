@@ -5,10 +5,11 @@ const WrappedError = require('../WrappedError');
 
 class DynamoTableClient {
 
-  constructor(collectionName) {
+  constructor({collectionName, idName}) {
     this._docClient = ServiceLocator.dynamoDBDocumentClient;
     this._uuidGenerator = ServiceLocator.uuidGenerator;
     this._collectionName = collectionName;
+    this._idName = idName;
   }
 
   getById(id) {
@@ -91,7 +92,7 @@ class DynamoTableClient {
   }
 
   _toIdObject(id) {
-    return {id};
+    return {[this._idName]: id};
   }
 
   _getTableName() {
