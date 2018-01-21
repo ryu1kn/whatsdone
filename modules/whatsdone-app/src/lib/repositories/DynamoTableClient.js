@@ -14,7 +14,7 @@ class DynamoTableClient {
   getById(id) {
     const params = {
       TableName: this._getTableName(),
-      Key: {id}
+      Key: this._toIdObject(id)
     };
     return this._docClient.get(params).promise()
       .then(response => response.Item)
@@ -29,7 +29,7 @@ class DynamoTableClient {
     const params = {
       RequestItems: {
         [this._getTableName()]: {
-          Keys: uniqIds.map(id => ({id}))
+          Keys: uniqIds.map(id => this._toIdObject(id))
         }
       }
     };
@@ -57,7 +57,7 @@ class DynamoTableClient {
     const id = this._uuidGenerator.generate();
     const params = {
       TableName: this._getTableName(),
-      Item: Object.assign({}, newData, {id})
+      Item: Object.assign({}, newData, this._toIdObject(id))
     };
     return this._docClient.put(params).promise()
       .then(() => id)
@@ -69,7 +69,7 @@ class DynamoTableClient {
   delete(id) {
     const params = {
       TableName: this._getTableName(),
-      Key: {id}
+      Key: this._toIdObject(id)
     };
     return this._docClient.delete(params).promise()
       .catch(e => {
@@ -80,7 +80,7 @@ class DynamoTableClient {
   update(id, newData) {
     const params = {
       TableName: this._getTableName(),
-      Key: {id},
+      Key: this._toIdObject(id),
       AttributeUpdates: this._getAttributeUpdatesValues(newData)
     };
     return this._docClient.update(params).promise()
@@ -88,6 +88,10 @@ class DynamoTableClient {
       .catch(e => {
         throw new WrappedError(e, params);
       });
+  }
+
+  _toIdObject(id) {
+    return {id};
   }
 
   _getTableName() {
