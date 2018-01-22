@@ -10,11 +10,10 @@ class Authenticator {
     this._authTokenProvider = ServiceLocator.authTokenProvider;
   }
 
-  authenticate({email, password}) {
+  authenticate({username, password}) {
     return this._configProvider.getConfig()
       .then(appConfig => {
         this._configureAWSSdk(appConfig);
-        const username = email.substring(0, email.indexOf('@'));
         const userPool = new CognitoUserPool({
           UserPoolId: appConfig.USER_POOL_ID,
           ClientId: appConfig.CLIENT_ID
