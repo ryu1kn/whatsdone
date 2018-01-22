@@ -3,17 +3,11 @@
 
 const querystring = require('querystring');
 
-const ServiceLocator = require('./ServiceLocator');
-
 const ContentType = {
   JSON: 'application/json'
 };
 
 class LambdaRequestNormaliser {
-
-  constructor() {
-    this._cookieCodec = ServiceLocator.cookieCodec;
-  }
 
   normalise(event, _lambdaContext) {
     return {
@@ -21,7 +15,7 @@ class LambdaRequestNormaliser {
       params: event.pathParameters,
       query: event.queryStringParameters || {},
       body: this._parseBody(event.body, event.headers['Content-Type']),
-      sessionId: this._cookieCodec.extractSessionId(event.headers.Cookie)
+      userInfo: event.requestContext.authorizer.claims
     };
   }
 

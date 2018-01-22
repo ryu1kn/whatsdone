@@ -28,16 +28,8 @@ class ServiceLocator {
     return this._get('jsonRequestBodyParser');
   }
 
-  get sessionManager() {
-    return this._get('sessionManager');
-  }
-
   get staticContentsProvider() {
     return this._get('staticContentsProvider');
-  }
-
-  get authBasedRedirector() {
-    return this._get('authBasedRedirector');
   }
 
   get getDonesRequestHandler() {
@@ -76,10 +68,6 @@ class ServiceLocator {
     return this._get('getDonesCommand');
   }
 
-  get loginCommand() {
-    return this._get('loginCommand');
-  }
-
   get updateDoneCommand() {
     return this._get('updateDoneCommand');
   }
@@ -100,24 +88,16 @@ class ServiceLocator {
     return this._get('logger');
   }
 
-  get cookieCodec() {
-    return this._get('cookieCodec');
-  }
-
-  get sessionValidator() {
-    return this._get('sessionValidator');
-  }
-
   get userRepository() {
     return this._get('userRepository');
   }
 
-  get doneRepository() {
-    return this._get('doneRepository');
+  get userIdRepository() {
+    return this._get('userIdRepository');
   }
 
-  get sessionRepository() {
-    return this._get('sessionRepository');
+  get doneRepository() {
+    return this._get('doneRepository');
   }
 
   get dynamoDBDocumentClient() {
@@ -136,8 +116,8 @@ class ServiceLocator {
     return this._get('userDynamoTableClient');
   }
 
-  get sessionDynamoTableClient() {
-    return this._get('sessionDynamoTableClient');
+  get userIdDynamoTableClient() {
+    return this._get('userIdDynamoTableClient');
   }
 
   get hashGenerator() {
