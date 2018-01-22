@@ -20,11 +20,6 @@ class ServiceFactory {
     };
   }
 
-  createAuthBasedRedirector() {
-    const AuthBasedRedirector = require('./AuthBasedRedirector');
-    return new AuthBasedRedirector();
-  }
-
   createGetDonesRequestHandler() {
     const GetDonesRequestProcessor = require('./request-processors/GetDones');
     const requestHandler = new LambdaRequestHandler({
@@ -67,11 +62,6 @@ class ServiceFactory {
     return new GetDonesCommand();
   }
 
-  createLoginCommand() {
-    const LoginCommand = require('./commands/Login');
-    return new LoginCommand();
-  }
-
   createUpdateDoneCommand() {
     const UpdateDoneCommand = require('./commands/UpdateDone');
     return new UpdateDoneCommand();
@@ -112,16 +102,6 @@ class ServiceFactory {
     return console;
   }
 
-  createCookieCodec() {
-    const CookieCodec = require('./CookieCodec');
-    return new CookieCodec({signatureSecret: this._env.SESSION_SECRET});
-  }
-
-  createSessionValidator() {
-    const SessionValidator = require('./SessionValidator');
-    return new SessionValidator();
-  }
-
   createDynamoDBDocumentClient() {
     return new AWS.DynamoDB.DocumentClient({region: this._env.DB_REGION});
   }
@@ -146,19 +126,19 @@ class ServiceFactory {
     return new DynamoTableClient({collectionName: this._env.USER_TABLE_NAME, idName: 'id'});
   }
 
+  createUserIdDynamoTableClient() {
+    const DynamoTableClient = require('./repositories/DynamoTableClient');
+    return new DynamoTableClient({collectionName: this._env.USER_ID_TABLE_NAME, idName: 'cognitoId'});
+  }
+
   createUserRepository() {
     const UserRepository = require('./repositories/User');
     return new UserRepository();
   }
 
-  createSessionDynamoTableClient() {
-    const DynamoTableClient = require('./repositories/DynamoTableClient');
-    return new DynamoTableClient({collectionName: this._env.SESSION_TABLE_NAME, idName: 'id'});
-  }
-
-  createSessionRepository() {
-    const SessionRepository = require('./repositories/Session');
-    return new SessionRepository();
+  createUserIdRepository() {
+    const UserRepository = require('./repositories/UserId');
+    return new UserRepository();
   }
 
   createHashGenerator() {

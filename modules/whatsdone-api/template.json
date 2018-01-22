@@ -26,10 +26,7 @@
     "UserTableName": {
       "Type": "String"
     },
-    "SessionTableName": {
-      "Type": "String"
-    },
-    "SessionSecret": {
+    "UserIdTableName": {
       "Type": "String"
     },
     "EnvName": {
@@ -355,10 +352,9 @@
           "Variables": {
             "DB_REGION": {"Ref": "DbRegion"},
             "WEBAPP_ORIGIN": {"Ref": "WebappEndpoint"},
-            "SESSION_SECRET": {"Ref": "SessionSecret"},
             "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
             "USER_TABLE_NAME": {"Ref": "UserTableName"},
-            "SESSION_TABLE_NAME": {"Ref": "SessionTableName"}
+            "USER_ID_TABLE_NAME": {"Ref": "UserIdTableName"}
           }
         },
         "TracingConfig": {"Mode": "Active"},
