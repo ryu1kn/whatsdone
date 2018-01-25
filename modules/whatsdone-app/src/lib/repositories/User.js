@@ -7,10 +7,6 @@ class UserRepository {
     this._userDynamoTableClient = ServiceLocator.userDynamoTableClient;
   }
 
-  getById(id) {
-    return this._userDynamoTableClient.getById(id);
-  }
-
   getByIds(ids) {
     return this._userDynamoTableClient.getByIds(ids);
   }
