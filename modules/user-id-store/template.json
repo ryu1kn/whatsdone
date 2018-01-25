@@ -19,20 +19,42 @@
         "TableName": {"Ref": "TableName"},
         "AttributeDefinitions": [
           {
-            "AttributeName": "cognitoId",
+            "AttributeName": "id",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "cognitoUserId",
             "AttributeType": "S"
           }
         ],
         "KeySchema": [
           {
-            "AttributeName": "cognitoId",
+            "AttributeName": "id",
             "KeyType": "HASH"
           }
         ],
         "ProvisionedThroughput": {
           "ReadCapacityUnits": {"Ref": "TableReadCapacity"},
           "WriteCapacityUnits": {"Ref": "TableWriteCapacity"}
-        }
+        },
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "cognitoUserId",
+            "KeySchema": [
+              {
+                "AttributeName": "cognitoUserId",
+                "KeyType": "HASH"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            },
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": {"Ref": "TableReadCapacity"},
+              "WriteCapacityUnits": {"Ref": "TableWriteCapacity"}
+            }
+          }
+        ]
       }
     }
   },
