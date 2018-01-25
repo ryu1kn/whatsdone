@@ -1,10 +1,7 @@
 
-'use strict';
-
 const AWSXRay = require('aws-xray-sdk');
 const AWS = AWSXRay.captureAWS(require('aws-sdk'));
 const Uuid = require('uuid');
-const sha1 = require('sha1');
 
 const LambdaRequestHandler = require('./LambdaRequestHandler');
 
@@ -134,10 +131,6 @@ class ServiceFactory {
   createUserIdRepository() {
     const UserRepository = require('./repositories/UserId');
     return new UserRepository({tableName: this._env.USER_ID_TABLE_NAME});
-  }
-
-  createHashGenerator() {
-    return {generate: sha1};
   }
 
   createUuidGenerator() {

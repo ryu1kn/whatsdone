@@ -14,11 +14,8 @@
   "dependencies": {
     "aws-sdk": "~2.110.0",
     "aws-xray-sdk": "~1.1.4",
-    "cookie": "~0.3.1",
-    "cookie-signature": "~1.0.6",
     "lodash": "~4.17.3",
     "route-parser": "0.0.5",
-    "sha1": "~1.1.1",
     "uuid": "~3.0.1"
   },
   "devDependencies": {
