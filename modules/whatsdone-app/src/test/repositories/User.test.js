@@ -4,36 +4,12 @@ const UserRepository = require('../../lib/repositories/User');
 
 describe('Server UserRepository', () => {
 
-  it('finds a user by an email and hashed password', () => {
-    const userDynamoTableClient = {
-      getByQuery: sinon.stub().returns(Promise.resolve('USER'))
-    };
-    ServiceLocator.load({
-      createUserDynamoTableClient: () => userDynamoTableClient,
-      createHashGenerator: () => ({generate: () => 'HASH'})
-    });
-    const userRepository = new UserRepository();
-
-    const loginInfo = {
-      email: 'EMAIL_ADDRESS',
-      password: 'PASSWORD'
-    };
-    return userRepository.findUser(loginInfo).then(user => {
-      expect(user).to.eql('USER');
-      expect(userDynamoTableClient.getByQuery).to.have.been.calledWith({
-        email: 'EMAIL_ADDRESS',
-        password: 'HASH'
-      });
-    });
-  });
-
   it('finds a user by a user id', () => {
     const userDynamoTableClient = {
       getById: sinon.stub().returns(Promise.resolve('USER'))
     };
     ServiceLocator.load({
-      createUserDynamoTableClient: () => userDynamoTableClient,
-      createHashGenerator: () => {}
+      createUserDynamoTableClient: () => userDynamoTableClient
     });
     const userRepository = new UserRepository();
 
@@ -48,8 +24,7 @@ describe('Server UserRepository', () => {
       getByIds: sinon.stub().returns(Promise.resolve(['USER_1', 'USER_2']))
     };
     ServiceLocator.load({
-      createUserDynamoTableClient: () => userDynamoTableClient,
-      createHashGenerator: () => {}
+      createUserDynamoTableClient: () => userDynamoTableClient
     });
     const userRepository = new UserRepository();
 

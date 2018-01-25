@@ -1,20 +1,10 @@
 
-'use strict';
-
 const ServiceLocator = require('../ServiceLocator');
 
 class UserRepository {
 
   constructor() {
     this._userDynamoTableClient = ServiceLocator.userDynamoTableClient;
-    this._hashGenerator = ServiceLocator.hashGenerator;
-  }
-
-  findUser(loginInfo) {
-    return ServiceLocator.userDynamoTableClient.getByQuery({
-      email: loginInfo.email,
-      password: this._hashGenerator.generate(loginInfo.password)
-    });
   }
 
   getById(id) {
