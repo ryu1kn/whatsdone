@@ -15,7 +15,14 @@ class LambdaRequestNormaliser {
       params: event.pathParameters,
       query: event.queryStringParameters || {},
       body: this._parseBody(event.body, event.headers['Content-Type']),
-      userInfo: event.requestContext.authorizer.claims
+      userInfo: this._filterUserInfo(event.requestContext.authorizer.claims)
+    };
+  }
+
+  _filterUserInfo(claims) {
+    return {
+      username: claims['cognito:username'],
+      userId: claims.sub
     };
   }
 
