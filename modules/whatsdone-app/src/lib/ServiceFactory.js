@@ -128,7 +128,7 @@ class ServiceFactory {
 
   createUserIdDynamoTableClient() {
     const DynamoTableClient = require('./repositories/DynamoTableClient');
-    return new DynamoTableClient({collectionName: this._env.USER_ID_TABLE_NAME, idName: 'cognitoId'});
+    return new DynamoTableClient({collectionName: this._env.USER_ID_TABLE_NAME, idName: 'cognitoUserId'});
   }
 
   createUserRepository() {
