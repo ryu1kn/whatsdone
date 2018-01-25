@@ -10,7 +10,7 @@ describe('Server LambdaRequestHandler', () => {
       userInfo: {sub: 'COGNITO_USER_ID'}
     };
     const requestNormaliser = {normalise: sinon.stub().returns(normalisedRequest)};
-    const userIdRepository = {getUserId: sinon.stub().returns(Promise.resolve('USER_ID'))};
+    const userIdRepository = {getByCognitoUserId: sinon.stub().returns(Promise.resolve('USER_ID'))};
     const responseFormatter = {format: sinon.stub().returns('LAMBDA_RESPONSE')};
     const requestProcessor = {process: sinon.stub().returns(Promise.resolve('RESPONSE'))};
     ServiceLocator.load({
@@ -24,7 +24,7 @@ describe('Server LambdaRequestHandler', () => {
 
     return handler.handle('LAMBDA_EVENT', 'LAMBDA_CONTEXT', lambdaCallback).then(() => {
       expect(requestNormaliser.normalise).to.have.been.calledWith('LAMBDA_EVENT');
-      expect(userIdRepository.getUserId).to.have.been.calledWith('COGNITO_USER_ID');
+      expect(userIdRepository.getByCognitoUserId).to.have.been.calledWith('COGNITO_USER_ID');
       expect(requestProcessor.process).to.have.been.calledWith(
         normalisedRequest,
         {userId: 'USER_ID'}
@@ -44,7 +44,7 @@ describe('Server LambdaRequestHandler', () => {
     const requestProcessErrorProcessor = {process: sinon.stub().returns('ERROR_RESPONSE')};
     ServiceLocator.load({
       createLambdaRequestNormaliser: () => requestNormaliser,
-      createUserIdRepository: () => ({getUserId: () => Promise.resolve()}),
+      createUserIdRepository: () => ({getByCognitoUserId: () => Promise.resolve()}),
       createLambdaResponseFormatter: () => responseFormatter,
       createRequestProcessErrorProcessor: () => requestProcessErrorProcessor
     });
