@@ -116,10 +116,6 @@ class ServiceLocator {
     return this._get('userDynamoTableClient');
   }
 
-  get userIdDynamoTableClient() {
-    return this._get('userIdDynamoTableClient');
-  }
-
   get hashGenerator() {
     return this._get('hashGenerator');
   }
