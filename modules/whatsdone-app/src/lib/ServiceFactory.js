@@ -126,11 +126,6 @@ class ServiceFactory {
     return new DynamoTableClient({collectionName: this._env.USER_TABLE_NAME, idName: 'id'});
   }
 
-  createUserIdDynamoTableClient() {
-    const DynamoTableClient = require('./repositories/DynamoTableClient');
-    return new DynamoTableClient({collectionName: this._env.USER_ID_TABLE_NAME, idName: 'cognitoUserId'});
-  }
-
   createUserRepository() {
     const UserRepository = require('./repositories/User');
     return new UserRepository();
@@ -138,7 +133,7 @@ class ServiceFactory {
 
   createUserIdRepository() {
     const UserRepository = require('./repositories/UserId');
-    return new UserRepository();
+    return new UserRepository({tableName: this._env.USER_ID_TABLE_NAME});
   }
 
   createHashGenerator() {

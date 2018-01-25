@@ -3,13 +3,24 @@ const ServiceLocator = require('../ServiceLocator');
 
 class UserIdRepository {
 
-  constructor() {
-    this._userIdDynamoTableClient = ServiceLocator.userIdDynamoTableClient;
+  constructor({tableName}) {
+    this._docClient = ServiceLocator.dynamoDBDocumentClient;
+    this._tableName = tableName;
   }
 
   getByCognitoUserId(cognitoUserId) {
-    return this._userIdDynamoTableClient.getById(cognitoUserId)
-      .then(result => result && result.userId);
+    const params = {
+      TableName: this._tableName,
+      IndexName: 'cognitoUserId',
+      KeyConditionExpression: 'cognitoUserId = :hkey',
+      ExpressionAttributeValues: {':hkey': cognitoUserId},
+      ProjectionExpression: 'id'
+    };
+    return this._docClient.query(params).promise()
+      .then(result => {
+        const items = result.Items[0];
+        return items && items.id;
+      });
   }
 
 }
