@@ -7,7 +7,7 @@ class UserIdRepository {
     this._userIdDynamoTableClient = ServiceLocator.userIdDynamoTableClient;
   }
 
-  getUserId(cognitoUserId) {
+  getByCognitoUserId(cognitoUserId) {
     return this._userIdDynamoTableClient.getById(cognitoUserId)
       .then(result => result && result.userId);
   }

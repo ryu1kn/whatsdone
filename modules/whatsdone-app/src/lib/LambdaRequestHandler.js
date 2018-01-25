@@ -17,7 +17,7 @@ class LambdaRequestHandler {
   handle(event, context, callback) {
     const normalisedRequest = this._lambdaRequestNormaliser.normalise(event, context);
     const cognitoUserId = normalisedRequest.userInfo.sub;
-    const userIdPromise = this._userIdRepository.getUserId(cognitoUserId);
+    const userIdPromise = this._userIdRepository.getByCognitoUserId(cognitoUserId);
     return userIdPromise
       .then(userId => this._requestProcessor.process(normalisedRequest, {userId}))
       .catch(e => this._requestProcessErrorProcessor.process(e))
