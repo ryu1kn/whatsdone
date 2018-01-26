@@ -7,7 +7,7 @@ MODULES=(
 )
 
 for MODULE in ${MODULES[*]} ; do
-    (cd modules/$MODULE && yarn run deploy --env $ENV_NAME --region $AWS_REGION)
+    AWS_REGION=$AWS_REGION ./deploy-module.sh --env $ENV_NAME $MODULE
 done
 
 (cd modules/whatsdone-assets && yarn install && yarn run build && yarn run deploy:app )
