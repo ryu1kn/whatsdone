@@ -13,8 +13,13 @@ class ServiceFactory {
 
   createConfig() {
     return {
+      userPoolId: process.env.USER_POOL_ID,
       webappOrigin: process.env.WEBAPP_ORIGIN
     };
+  }
+
+  createCognitoIdentityServiceProvider() {
+    return new AWS.CognitoIdentityServiceProvider();
   }
 
   createGetDonesRequestHandler() {
@@ -123,14 +128,14 @@ class ServiceFactory {
     return new DynamoTableClient({collectionName: this._env.USER_TABLE_NAME, idName: 'id'});
   }
 
-  createUserRepository() {
-    const UserRepository = require('./repositories/User');
-    return new UserRepository();
+  createUserNameService() {
+    const UserNameService = require('./UserNameService');
+    return new UserNameService();
   }
 
   createUserIdRepository() {
-    const UserRepository = require('./repositories/UserId');
-    return new UserRepository({tableName: this._env.USER_ID_TABLE_NAME});
+    const UserIdRepository = require('./repositories/UserId');
+    return new UserIdRepository({tableName: this._env.USER_ID_TABLE_NAME});
   }
 
   createUuidGenerator() {

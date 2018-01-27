@@ -16,6 +16,10 @@ class ServiceLocator {
     return this._get('accessLogger');
   }
 
+  get cognitoIdentityServiceProvider() {
+    return this._get('cognitoIdentityServiceProvider');
+  }
+
   get encodedUrlParser() {
     return this._get('encodedUrlParser');
   }
@@ -88,8 +92,8 @@ class ServiceLocator {
     return this._get('logger');
   }
 
-  get userRepository() {
-    return this._get('userRepository');
+  get userNameService() {
+    return this._get('userNameService');
   }
 
   get userIdRepository() {

@@ -25,7 +25,6 @@ class DoneQueryHelper {
 
   _query(startKey) {
     const queryUntil = (params, accumulatedResponse) => {
-      this._logger.log('query params:', JSON.stringify(params));
       return this._docClient.query(params).promise()
         .then(queryResult => {
           const newAccumulatedResponse = {

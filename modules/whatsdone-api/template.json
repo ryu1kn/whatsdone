@@ -276,6 +276,15 @@
                 {
                   "Effect": "Allow",
                   "Action": [
+                    "cognito-idp:ListUsers"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/ap-southeast-2_R0tZ3qQMb"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
                     "logs:CreateLogGroup",
                     "logs:CreateLogStream",
                     "logs:DescribeLogStreams",
@@ -354,7 +363,8 @@
             "WEBAPP_ORIGIN": {"Ref": "WebappEndpoint"},
             "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
             "USER_TABLE_NAME": {"Ref": "UserTableName"},
-            "USER_ID_TABLE_NAME": {"Ref": "UserIdTableName"}
+            "USER_ID_TABLE_NAME": {"Ref": "UserIdTableName"},
+            "USER_POOL_ID": "ap-southeast-2_R0tZ3qQMb"
           }
         },
         "TracingConfig": {"Mode": "Active"},

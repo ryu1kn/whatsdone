@@ -8,6 +8,15 @@ class UserIdRepository {
     this._tableName = tableName;
   }
 
+  getCognitoUserId(id) {
+    const params = {
+      TableName: this._tableName,
+      Key: {id}
+    };
+    return this._docClient.get(params).promise()
+      .then(response => (response.Item || {}).cognitoUserId);
+  }
+
   getByCognitoUserId(cognitoUserId) {
     const params = {
       TableName: this._tableName,
