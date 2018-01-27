@@ -7,7 +7,7 @@ const ServiceLocator = require('../ServiceLocator');
 class GetDonesCommand {
 
   constructor() {
-    this._userRepository = ServiceLocator.userRepository;
+    this._userNameService = ServiceLocator.userNameService;
     this._doneRepository = ServiceLocator.doneRepository;
   }
 
@@ -23,7 +23,7 @@ class GetDonesCommand {
   }
 
   _setUserNames(dones) {
-    return this._userRepository.getByIds(_.map(dones, 'userId'))
+    return this._userNameService.getUsernames(_.map(dones, 'userId'))
       .then(users => {
         const nameMap = _.keyBy(users, 'id');
         return dones.map(done => {
