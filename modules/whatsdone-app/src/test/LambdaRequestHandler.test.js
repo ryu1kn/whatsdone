@@ -4,10 +4,13 @@ const ServiceLocator = require('../lib/ServiceLocator');
 
 describe('Server LambdaRequestHandler', () => {
 
-  it('bridges express req/res world to express agnostic http request processor', () => {
+  it('bridges lambda request/response world to lambda agnostic http request processor', () => {
     const normalisedRequest = {
       REQUEST_DATA: '..',
-      userInfo: {sub: 'COGNITO_USER_ID'}
+      userInfo: {
+        userId: 'COGNITO_USER_ID',
+        username: 'COGNITO_USER_NAME'
+      }
     };
     const requestNormaliser = {normalise: sinon.stub().returns(normalisedRequest)};
     const userIdRepository = {getByCognitoUserId: sinon.stub().returns(Promise.resolve('USER_ID'))};
@@ -27,7 +30,10 @@ describe('Server LambdaRequestHandler', () => {
       expect(userIdRepository.getByCognitoUserId).to.have.been.calledWith('COGNITO_USER_ID');
       expect(requestProcessor.process).to.have.been.calledWith(
         normalisedRequest,
-        {userId: 'USER_ID'}
+        {
+          userId: 'USER_ID',
+          username: 'COGNITO_USER_NAME'
+        }
       );
       expect(responseFormatter.format).to.have.been.calledWith('RESPONSE');
       expect(lambdaCallback).to.have.been.calledWith(null, 'LAMBDA_RESPONSE');
