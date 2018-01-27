@@ -8,8 +8,11 @@ POSITIONAL_ARGS=($0)
 main() {
     parseArgs "$@"
 
-    local MODULE="${POSITIONAL_ARGS[1]}"
-    (cd modules/$MODULE && yarn run deploy --env $ENV_NAME --region $AWS_REGION)
+    for MODULE in ${POSITIONAL_ARGS[@]:1} ; do
+        echo === Deploying module $MODULE ===
+        (cd modules/$MODULE && yarn run deploy --env $ENV_NAME --region $AWS_REGION)
+        echo
+    done
 }
 
 parseArgs() {
