@@ -5,9 +5,6 @@ const ServiceLocator = require('../../lib/ServiceLocator');
 describe('Server CreateDoneCommand', () => {
 
   it('returns list of dones with the names of their owners', () => {
-    const userRepository = {
-      getById: stubWithArgs(['USER_ID'], Promise.resolve({id: 'USER_ID', name: 'USER'}))
-    };
     const doneRepository = {
       write: stubWithArgs(
         [{userId: 'USER_ID', SOME_DATA: '..'}],
@@ -15,13 +12,13 @@ describe('Server CreateDoneCommand', () => {
       )
     };
     ServiceLocator.load({
-      createUserRepository: () => userRepository,
       createDoneRepository: () => doneRepository
     });
     const command = new CreateDoneCommand();
 
     const params = {
       userId: 'USER_ID',
+      username: 'USER',
       data: {SOME_DATA: '..'}
     };
     return command.execute(params).then(result => {
