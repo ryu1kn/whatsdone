@@ -25,7 +25,7 @@ class ServiceFactory {
   }
 
   createCookieStorage() {
-    return new CookieStorage({domain: '.whatsdone-dev-ryuichi.ryuichi.io'});
+    return new CookieStorage({domain: `.${location.host}`});
   }
 
   createSmartFetch() {
