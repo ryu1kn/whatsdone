@@ -3,6 +3,7 @@ import Authenticator from './authenticator';
 import AuthTokenProvider from './auth-token-provider';
 import ConfigProvider from './config-provider';
 import WhatsdoneApiClient from './whatsdone-api-client';
+import {CookieStorage} from 'amazon-cognito-identity-js';
 
 class ServiceFactory {
 
@@ -21,6 +22,10 @@ class ServiceFactory {
 
   createConfigProvider() {
     return new ConfigProvider();
+  }
+
+  createCookieStorage() {
+    return new CookieStorage({domain: '.whatsdone-dev-ryuichi.ryuichi.io'});
   }
 
   createSmartFetch() {
