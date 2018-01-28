@@ -40,13 +40,14 @@ class WhatsdoneApiClient {
   }
 
   _relayFetch(path, options) {
-    return this._getApiOrigin().then(apiOrigin => {
-      const uri = url.resolve(apiOrigin, path);
-      const headers = (options && options.headers) || {};
-      const finalHeaders = Object.assign({}, headers, {Authorization: this._authTokenProvider.getIdToken()});
-      const finalOptions = Object.assign({}, DEFAULT_OPTIONS, options, {headers: finalHeaders});
-      return this._smartFetch(uri, finalOptions);
-    });
+    return Promise.all([this._getApiOrigin(), this._authTokenProvider.getIdToken()])
+      .then(([apiOrigin, idToken]) => {
+        const uri = url.resolve(apiOrigin, path);
+        const headers = (options && options.headers) || {};
+        const finalHeaders = Object.assign({}, headers, {Authorization: idToken});
+        const finalOptions = Object.assign({}, DEFAULT_OPTIONS, options, {headers: finalHeaders});
+        return this._smartFetch(uri, finalOptions);
+      });
   }
 
   _getApiOrigin() {

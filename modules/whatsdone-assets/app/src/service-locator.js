@@ -18,6 +18,10 @@ class ServiceLocator {
     return this._get('configProvider');
   }
 
+  get cookieStorage() {
+    return this._get('cookieStorage');
+  }
+
   get fetch() {
     return this._get('fetch');
   }

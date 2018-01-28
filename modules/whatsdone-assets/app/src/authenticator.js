@@ -7,7 +7,7 @@ class Authenticator {
 
   constructor() {
     this._configProvider = ServiceLocator.configProvider;
-    this._authTokenProvider = ServiceLocator.authTokenProvider;
+    this._cookieStorage = ServiceLocator.cookieStorage;
   }
 
   authenticate({username, password}) {
@@ -16,11 +16,13 @@ class Authenticator {
         this._configureAWSSdk(appConfig);
         const userPool = new CognitoUserPool({
           UserPoolId: appConfig.USER_POOL_ID,
-          ClientId: appConfig.CLIENT_ID
+          ClientId: appConfig.CLIENT_ID,
+          Storage: this._cookieStorage
         });
         const userData = {
           Username: username,
-          Pool: userPool
+          Pool: userPool,
+          Storage: this._cookieStorage
         };
         const cognitoUser = new CognitoUser(userData);
 
@@ -36,10 +38,7 @@ class Authenticator {
   _authenticate(cognitoUser, authenticationDetails) {
     return new Promise((resolve, reject) => {
       cognitoUser.authenticateUser(authenticationDetails, {
-        onSuccess: tokens => {
-          this._authTokenProvider.setTokens(tokens);
-          resolve({newPasswordRequired: false});
-        },
+        onSuccess: () => resolve({newPasswordRequired: false}),
         newPasswordRequired: (_userAttributes, _requiredAttributes) => resolve({
           newPasswordRequired: true,
           cognitoUser
@@ -53,10 +52,7 @@ class Authenticator {
     const userAttributes = {};
     return new Promise((resolve, reject) => {
       cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, {
-        onSuccess: result => {
-          this._authTokenProvider.setTokens(result);
-          resolve();
-        },
+        onSuccess: resolve(),
         onFailure: reject
       });
     });
