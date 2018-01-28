@@ -6,7 +6,10 @@
   },
   "scripts": {
     "build": "cd app && yarn install && yarn run build:production",
+    "build:dev": "cd app && yarn install && yarn run build:dev",
     "postbuild": "node ./upload-artifact",
+    "postbuild:dev": "yarn run upload",
+    "upload": "node ./upload-artifact",
     "predeploy": "yarn install",
     "deploy": "cd ops && kumo deploy-module --verbose",
     "destroy": "cd ops && kumo destroy-module --verbose",
