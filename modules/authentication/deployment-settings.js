@@ -26,6 +26,7 @@ module.exports = {
         }
       },
       stackParams: {
+        IdentityPoolName: {$ref: '#/_deploymentConfig/identityPoolName'},
         UserPoolName: {$ref: '#/_deploymentConfig/userPoolName'}
       }
     }
