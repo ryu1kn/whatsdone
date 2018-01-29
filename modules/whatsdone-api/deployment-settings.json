@@ -83,6 +83,7 @@
         "DoneTableName": {"$ref": "#/_dataSourceData/done-store/TableName"},
         "UserTableName": {"$ref": "#/_dataSourceData/user-store/TableName"},
         "UserIdTableName": {"$ref": "#/_dataSourceData/user-id-store/TableName"},
+        "UserPoolId": "ap-southeast-2_R0tZ3qQMb",
         "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
         "LambdaS3Bucket": {"$ref": "#/_dataSourceData/whatsdone-app/packages/whatsdone-app/s3Bucket"},
         "LambdaS3Key": {"$ref": "#/_dataSourceData/whatsdone-app/packages/whatsdone-app/s3Key"}

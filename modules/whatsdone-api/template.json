@@ -35,6 +35,9 @@
     "DbRegion": {
       "Type": "String"
     },
+    "UserPoolId": {
+      "Type": "String"
+    },
     "WebappEndpoint": {
       "Type": "String"
     }
@@ -212,7 +215,7 @@
               "x-amazon-apigateway-authtype": "cognito_user_pools",
               "x-amazon-apigateway-authorizer": {
                 "providerARNs": [
-                  "arn:aws:cognito-idp:ap-southeast-2:650892143834:userpool/ap-southeast-2_R0tZ3qQMb"
+                  {"Fn::Sub": "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${UserPoolId}"}
                 ],
                 "type": "cognito_user_pools"
               }
@@ -279,7 +282,7 @@
                     "cognito-idp:ListUsers"
                   ],
                   "Resource": {
-                    "Fn::Sub": "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/ap-southeast-2_R0tZ3qQMb"
+                    "Fn::Sub": "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${UserPoolId}"
                   }
                 },
                 {
@@ -364,7 +367,7 @@
             "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
             "USER_TABLE_NAME": {"Ref": "UserTableName"},
             "USER_ID_TABLE_NAME": {"Ref": "UserIdTableName"},
-            "USER_POOL_ID": "ap-southeast-2_R0tZ3qQMb"
+            "USER_POOL_ID": {"Ref": "UserPoolId"}
           }
         },
         "TracingConfig": {"Mode": "Active"},
