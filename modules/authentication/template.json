@@ -4,6 +4,9 @@
   "Parameters": {
     "UserPoolName": {
       "Type": "String"
+    },
+    "IdentityPoolName": {
+      "Type": "String"
     }
   },
   "Resources": {
@@ -21,11 +24,31 @@
         "ClientName": "Webapp",
         "UserPoolId": {"Ref": "UserPool"}
       }
+    },
+    "IdentityPool": {
+      "Type": "AWS::Cognito::IdentityPool",
+      "Properties": {
+        "IdentityPoolName": {"Ref": "IdentityPoolName"},
+        "AllowUnauthenticatedIdentities": false,
+        "CognitoIdentityProviders": [
+          {
+            "ClientId": {"Ref": "UserPoolClient"},
+            "ProviderName": {"Fn::Sub": "cognito-idp.${AWS::Region}.amazonaws.com/${UserPool}"},
+            "ServerSideTokenCheck": true
+          }
+        ]
+      }
     }
   },
   "Outputs": {
     "UserPoolId": {
       "Value": {"Ref": "UserPool"}
+    },
+    "UserPoolClientId": {
+      "Value": {"Ref": "UserPoolClient"}
+    },
+    "IdentityPoolId": {
+      "Value": {"Ref": "IdentityPool"}
     }
   }
 }
