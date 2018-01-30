@@ -25,6 +25,12 @@
       "bucket": "whatsdone-deployment-outputs",
       "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-app"]]}
     },
+    "authentication": {
+      "type": "s3-bucket",
+      "region": {"$ref": "#/_args/region"},
+      "bucket": "whatsdone-deployment-outputs",
+      "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "authentication"]]}
+    },
     "done-store": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
@@ -83,7 +89,7 @@
         "DoneTableName": {"$ref": "#/_dataSourceData/done-store/TableName"},
         "UserTableName": {"$ref": "#/_dataSourceData/user-store/TableName"},
         "UserIdTableName": {"$ref": "#/_dataSourceData/user-id-store/TableName"},
-        "UserPoolId": "ap-southeast-2_R0tZ3qQMb",
+        "UserPoolId": {"$ref": "#/_dataSourceData/authentication/UserPoolId"},
         "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
         "LambdaS3Bucket": {"$ref": "#/_dataSourceData/whatsdone-app/packages/whatsdone-app/s3Bucket"},
         "LambdaS3Key": {"$ref": "#/_dataSourceData/whatsdone-app/packages/whatsdone-app/s3Key"}
