@@ -1,6 +1,0 @@
-{
-  "name": "authentication-scripts",
-  "dependencies": {
-    "aws-sdk": "^2.153.0"
-  }
-}
