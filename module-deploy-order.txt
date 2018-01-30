@@ -1,8 +1,8 @@
 artifact-store
 whatsdone-env
-user-store
 user-id-store
 done-store
+authentication
 whatsdone-assets
 whatsdone-web-cache
 whatsdone-app
