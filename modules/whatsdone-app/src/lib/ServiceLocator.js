@@ -116,10 +116,6 @@ class ServiceLocator {
     return this._get('doneDynamoTableClient');
   }
 
-  get userDynamoTableClient() {
-    return this._get('userDynamoTableClient');
-  }
-
   get uuidGenerator() {
     return this._get('uuidGenerator');
   }

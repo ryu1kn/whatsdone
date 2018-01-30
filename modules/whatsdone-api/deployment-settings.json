@@ -37,12 +37,6 @@
       "bucket": "whatsdone-deployment-outputs",
       "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "done-store"]]}
     },
-    "user-store": {
-      "type": "s3-bucket",
-      "region": {"$ref": "#/_args/region"},
-      "bucket": "whatsdone-deployment-outputs",
-      "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "user-store"]]}
-    },
     "user-id-store": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
@@ -87,7 +81,6 @@
         "DbRegion": {"$ref": "#/_taskRegion"},
         "WebappEndpoint": {"Fn::Join": ["", ["https://", {"$ref": "#/_dataSourceData/whatsdone-web-cache/PublicDomain"}]]},
         "DoneTableName": {"$ref": "#/_dataSourceData/done-store/TableName"},
-        "UserTableName": {"$ref": "#/_dataSourceData/user-store/TableName"},
         "UserIdTableName": {"$ref": "#/_dataSourceData/user-id-store/TableName"},
         "UserPoolId": {"$ref": "#/_dataSourceData/authentication/UserPoolId"},
         "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},

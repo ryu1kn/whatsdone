@@ -123,11 +123,6 @@ class ServiceFactory {
     return new DoneRepository();
   }
 
-  createUserDynamoTableClient() {
-    const DynamoTableClient = require('./repositories/DynamoTableClient');
-    return new DynamoTableClient({collectionName: this._env.USER_TABLE_NAME, idName: 'id'});
-  }
-
   createUserNameService() {
     const UserNameService = require('./UserNameService');
     return new UserNameService();

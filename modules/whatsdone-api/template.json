@@ -23,9 +23,6 @@
     "DoneTableName": {
       "Type": "String"
     },
-    "UserTableName": {
-      "Type": "String"
-    },
     "UserIdTableName": {
       "Type": "String"
     },
@@ -365,7 +362,6 @@
             "DB_REGION": {"Ref": "DbRegion"},
             "WEBAPP_ORIGIN": {"Ref": "WebappEndpoint"},
             "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
-            "USER_TABLE_NAME": {"Ref": "UserTableName"},
             "USER_ID_TABLE_NAME": {"Ref": "UserIdTableName"},
             "USER_POOL_ID": {"Ref": "UserPoolId"}
           }
