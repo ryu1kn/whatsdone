@@ -22,6 +22,11 @@ class ServiceFactory {
     return new AWS.CognitoIdentityServiceProvider();
   }
 
+  createCognitoUserFinder() {
+    const CognitoUserFinder = require('./CognitoUserFinder');
+    return new CognitoUserFinder();
+  }
+
   createGetDonesRequestHandler() {
     const GetDonesRequestProcessor = require('./request-processors/GetDones');
     const requestHandler = new LambdaRequestHandler({
