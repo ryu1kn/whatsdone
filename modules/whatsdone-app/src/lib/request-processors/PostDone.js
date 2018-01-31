@@ -10,7 +10,8 @@ class PostDonesRequestProcessor {
   process(request, session) {
     const params = {
       data: request.body,
-      userId: session.userId
+      userId: session.userId,
+      username: session.username
     };
     return this._createDoneCommand.execute(params).then(result => {
       return {

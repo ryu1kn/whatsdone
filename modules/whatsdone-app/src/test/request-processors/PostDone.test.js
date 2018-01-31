@@ -12,7 +12,7 @@ describe('Server PostDoneRequestProcessor', () => {
     const request = {
       body: {SOME_DATA: '..'}
     };
-    const session = {userId: 'USER_ID'};
+    const session = {userId: 'USER_ID', username: 'USER_NAME'};
     return processor.process(request, session).then(response => {
       expect(response).to.eql({
         statusCode: '200',
@@ -21,7 +21,8 @@ describe('Server PostDoneRequestProcessor', () => {
       });
       expect(createDoneCommand.execute).to.have.been.calledWith({
         data: {SOME_DATA: '..'},
-        userId: 'USER_ID'
+        userId: 'USER_ID',
+        username: 'USER_NAME'
       });
     });
   });
