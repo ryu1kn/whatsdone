@@ -20,6 +20,10 @@ class ServiceLocator {
     return this._get('cognitoIdentityServiceProvider');
   }
 
+  get cognitoUserFinder() {
+    return this._get('cognitoUserFinder');
+  }
+
   get encodedUrlParser() {
     return this._get('encodedUrlParser');
   }

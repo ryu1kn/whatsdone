@@ -5,8 +5,7 @@ class UserNameService {
 
   constructor() {
     this._userIdRepository = ServiceLocator.userIdRepository;
-    this._cognitoIdentityServiceProvider = ServiceLocator.cognitoIdentityServiceProvider;
-    this._userPoolId = ServiceLocator.config.userPoolId;
+    this._cognitoUserFinder = ServiceLocator.cognitoUserFinder;
   }
 
   getUsernames(ids) {
@@ -20,13 +19,7 @@ class UserNameService {
   }
 
   _resolveUserName(cognitoUserId) {
-    const params = {
-      UserPoolId: this._userPoolId,
-      AttributesToGet: [],
-      Filter: `sub = "${cognitoUserId}"`
-    };
-    return this._cognitoIdentityServiceProvider.listUsers(params).promise()
-      .then(result => result.Users[0])
+    return this._cognitoUserFinder.find(cognitoUserId)
       .then(user => user && user.Username);
   }
 
