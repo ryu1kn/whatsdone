@@ -1,5 +1,4 @@
 
-const _ = require('lodash');
 const ServiceLocator = require('../ServiceLocator');
 const WrappedError = require('../WrappedError');
 
@@ -19,36 +18,6 @@ class DynamoTableClient {
     };
     return this._docClient.get(params).promise()
       .then(response => response.Item)
-      .catch(e => {
-        throw new WrappedError(e, params);
-      });
-  }
-
-  getByIds(ids) {
-    if (_.isEmpty(ids)) return Promise.resolve([]);
-    const uniqIds = _.uniq(ids).filter(id => id);
-    const params = {
-      RequestItems: {
-        [this._getTableName()]: {
-          Keys: uniqIds.map(id => this._toIdObject(id))
-        }
-      }
-    };
-    return this._docClient.batchGet(params).promise()
-      .then(response => response.Responses[this._getTableName()])
-      .catch(e => {
-        throw new WrappedError(e, params);
-      });
-  }
-
-  // @deprecated
-  getByQuery(query) {
-    const params = Object.assign(
-      this._composeScanQuery(query),
-      {TableName: this._getTableName()}
-    );
-    return this._docClient.scan(params).promise()
-      .then(result => _.get(result, 'Items[0]'))
       .catch(e => {
         throw new WrappedError(e, params);
       });
@@ -107,20 +76,6 @@ class DynamoTableClient {
       };
       return result;
     }, {});
-  }
-
-  _composeScanQuery(matchCondition) {
-    let filterExpressions = [];
-    let expressionAttributeValues = {};
-
-    Object.keys(matchCondition).forEach(key => {
-      filterExpressions.push(`${key} = :${key}`);
-      expressionAttributeValues[`:${key}`] = matchCondition[key];
-    });
-    return {
-      FilterExpression: filterExpressions.join(' AND '),
-      ExpressionAttributeValues: expressionAttributeValues
-    };
   }
 
 }
