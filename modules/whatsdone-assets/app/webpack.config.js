@@ -19,6 +19,7 @@ const jsMinifyPlugins = process.env.NODE_ENV === 'production' ? [
 
 module.exports = {
   entry: [
+    'babel-polyfill',
     'whatwg-fetch',
     `${SRC_DIR}/app.js`
   ],
