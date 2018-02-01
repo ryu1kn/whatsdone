@@ -10,29 +10,27 @@ class Authenticator {
     this._cookieStorage = ServiceLocator.cookieStorage;
   }
 
-  authenticate({username, password}) {
-    return this._configProvider.getConfig()
-      .then(appConfig => {
-        this._configureAWSSdk(appConfig);
-        const userPool = new CognitoUserPool({
-          UserPoolId: appConfig.USER_POOL_ID,
-          ClientId: appConfig.CLIENT_ID,
-          Storage: this._cookieStorage
-        });
-        const userData = {
-          Username: username,
-          Pool: userPool,
-          Storage: this._cookieStorage
-        };
-        const cognitoUser = new CognitoUser(userData);
+  async authenticate({username, password}) {
+    const appConfig = await this._configProvider.getConfig();
+    this._configureAWSSdk(appConfig);
+    const userPool = new CognitoUserPool({
+      UserPoolId: appConfig.USER_POOL_ID,
+      ClientId: appConfig.CLIENT_ID,
+      Storage: this._cookieStorage
+    });
+    const userData = {
+      Username: username,
+      Pool: userPool,
+      Storage: this._cookieStorage
+    };
+    const cognitoUser = new CognitoUser(userData);
 
-        const authenticationData = {
-          Username: username,
-          Password: password
-        };
-        const authenticationDetails = new AuthenticationDetails(authenticationData);
-        return this._authenticate(cognitoUser, authenticationDetails);
-      });
+    const authenticationData = {
+      Username: username,
+      Password: password
+    };
+    const authenticationDetails = new AuthenticationDetails(authenticationData);
+    return this._authenticate(cognitoUser, authenticationDetails);
   }
 
   _authenticate(cognitoUser, authenticationDetails) {
