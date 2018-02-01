@@ -4,6 +4,7 @@ env:
 # It's better if below could be put under `components` but then
 # the `app.js` unnecessarily gets alerted
 parserOptions:
+  ecmaVersion: 8
   ecmaFeatures:
     jsx: true
 plugins:
