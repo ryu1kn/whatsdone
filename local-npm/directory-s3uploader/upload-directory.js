@@ -39,7 +39,7 @@ function pipeStreams(...streams) {
       (joinedStream, stream) => joinedStream.pipe(stream),
       firstStream
     );
-    pipedStream.on('close', resolve);
+    pipedStream.on('finish', resolve);
   });
 }
 
