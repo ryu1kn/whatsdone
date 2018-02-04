@@ -12,7 +12,7 @@ module.exports = ({directoryPath, s3bucket, s3key}) => {
 };
 
 function zipDirectory(state) {
-  const archive = archiver('zip', {store: true});
+  const archive = archiver('zip');
   archive.directory(state.directoryPath, false);
   archive.finalize();
   return Object.assign({}, state, {zipStream: archive});
