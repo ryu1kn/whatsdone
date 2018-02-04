@@ -1,5 +1,6 @@
 {
   "name": "whatsdone-assets",
+  "private": true,
   "config": {
     "BUILD_DIR": ".build",
     "APP_BUILD_DIR": "app/dist"
