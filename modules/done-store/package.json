@@ -1,5 +1,6 @@
 {
   "name": "done-store",
+  "private": true,
   "scripts": {
     "deploy": "kumo deploy-module --verbose",
     "destroy": "kumo destroy-module --verbose"

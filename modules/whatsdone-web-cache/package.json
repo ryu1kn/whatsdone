@@ -1,5 +1,6 @@
 {
   "name": "whatsdone-web-cache",
+  "private": true,
   "scripts": {
     "deploy": "kumo deploy-module --verbose",
     "destroy": "kumo destroy-module --verbose"

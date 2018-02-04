@@ -1,5 +1,6 @@
 {
   "name": "whatsdone-assets-app",
+  "private": true,
   "dependencies": {
     "amazon-cognito-identity-js": "^1.31.0",
     "aws-sdk": "^2.184.0",
