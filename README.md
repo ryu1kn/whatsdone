@@ -32,7 +32,7 @@ $ AWS_PROFILE=your-profile AWS_REGION=ap-southeast-2 ENV_NAME=prod ./deploy-syst
 ## Test
 
 * Unit test: Backend/frontend modules have their own unit test
-* Performance test: Written in Scala using Gatling. see it's [README](./test/performance/README.md)
+* Performance test: Written in Scala using Gatling. see its [README](./test/performance/README.md)
 
 ## Tools
 
