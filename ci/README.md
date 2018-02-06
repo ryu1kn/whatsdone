@@ -1,5 +1,5 @@
 
-# CI / CD
+# Continuous Integration / Continuous Delivery
 
 What's Done works on AWS; hence you need an IAM user for CI/CD service to deploy the system.
 
