@@ -33,7 +33,12 @@ If you want to deploy `prod` environment, you need to have `prod` config in modu
 $ AWS_PROFILE=your-profile AWS_REGION=ap-southeast-2 ENV_NAME=prod ./deploy-system.sh
 ```
 
-### Tools
+## Test
+
+* Unit test: Backend/frontend modules have their own unit test
+* Performance test: Written in Scala using Gatling. see its [README](./test/performance/README.md)
+
+## Tools
 
 * Migrate done data from mongodb to dynamodb (written in Go). See its [README](./tools/copy-done-table/README.md)
 * What's Done API Client (written in Haskell). See its [README](./tools/api-client/README.md)
