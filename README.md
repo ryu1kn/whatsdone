@@ -5,6 +5,8 @@
 
 Personal activity tracker. Take memos of what I (or we) have done today.
 
+This is my toy project that I experiment different technologies I want to try.
+
 - infrastructure
   - ~~heroku + MongoDB~~
   - ~~heroku + DynamoDB~~
@@ -15,11 +17,13 @@ Personal activity tracker. Take memos of what I (or we) have done today.
 - frontend
   - ~~React + flux~~
   - React + Redux ⬅️ Now here
-  
-## CI/CD
+
+## Continuous Integration / Continuous Delivery
 
 Commits to the master branch automatically goes to the production after the successful test execution.
-This includes the changes to the infrastructure settings.
+This includes the changes to the infrastructure.
+
+For CI/CD, What's Done uses Travis CI. For more information about CI setup, see its [README](./ci/README.md)
 
 ### Deploying entire system
 
