@@ -12,6 +12,7 @@ This is my toy project that I experiment different technologies I want to try.
   - ~~heroku + DynamoDB~~
   - ~~AWS Elastic Beanstalk (deployed with `kumo`) + DynamoDB~~
   - AWS API Gateway + Lambda + DynamoDB (all deployed with `kumo`) ⬅️ Now here
+    - with other components including: CloudFormation, CloudFront, Route53, X-Ray, Cognito, S3
 - backend
   - Node.js v6.10 (deployed on AWS Lambda)
 - frontend
