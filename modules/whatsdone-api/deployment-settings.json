@@ -84,8 +84,8 @@
         "UserIdTableName": {"$ref": "#/_dataSourceData/user-id-store/TableName"},
         "UserPoolId": {"$ref": "#/_dataSourceData/authentication/UserPoolId"},
         "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
-        "LambdaS3Bucket": {"$ref": "#/_dataSourceData/whatsdone-app/packages/whatsdone-app/s3Bucket"},
-        "LambdaS3Key": {"$ref": "#/_dataSourceData/whatsdone-app/packages/whatsdone-app/s3Key"}
+        "LambdaS3Bucket": {"$ref": "#/_dataSourceData/whatsdone-app/packages/backend-app/s3bucket"},
+        "LambdaS3Key": {"$ref": "#/_dataSourceData/whatsdone-app/packages/backend-app/s3key"}
       }
     },
     {
