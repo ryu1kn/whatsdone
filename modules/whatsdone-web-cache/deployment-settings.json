@@ -9,20 +9,20 @@
   "outputsStore": {
     "type": "s3-bucket",
     "region": {"$ref": "#/_args/region"},
-    "bucket": "whatsdone-deployment-outputs",
+    "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
     "prefix": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-web-cache"]]}
   },
   "dataSources": {
     "whatsdone-env": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
-      "bucket": "whatsdone-deployment-outputs",
+      "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
       "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-env"]]}
     },
     "whatsdone-assets": {
         "type": "s3-bucket",
         "region": {"$ref": "#/_args/region"},
-        "bucket": "whatsdone-deployment-outputs",
+        "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
         "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-assets"]]}
     }
   },

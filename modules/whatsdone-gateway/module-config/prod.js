@@ -1,6 +1,3 @@
+const { deploymentOutputsBucket, hostedZoneId } = require('../../../config/common');
 
-const projectConfig = require('../../../config/prod');
-
-module.exports = {
-  hostedZoneId: projectConfig.hostedZoneId
-};
+module.exports = { deploymentOutputsBucket, hostedZoneId };

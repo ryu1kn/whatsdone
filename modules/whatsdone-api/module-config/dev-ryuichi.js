@@ -1,7 +1,8 @@
-const projectConfig = require('../../../config/dev-ryuichi');
+const { deploymentOutputsBucket, hostedZoneId } = require('../../../config/common');
 
 module.exports = {
+  deploymentOutputsBucket,
+  hostedZoneId,
   certDomainName: '*.ryuichi.io',
-  domainName: 'whatsdone-dev-ryuichi-api.ryuichi.io',
-  hostedZoneId: projectConfig.hostedZoneId
+  domainName: 'whatsdone-dev-ryuichi-api.ryuichi.io'
 };
