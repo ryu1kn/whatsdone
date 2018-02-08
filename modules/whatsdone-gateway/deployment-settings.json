@@ -9,14 +9,14 @@
   "outputsStore": {
     "type": "s3-bucket",
     "region": {"$ref": "#/_args/region"},
-    "bucket": "whatsdone-deployment-outputs",
+    "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
     "prefix": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-gateway"]]}
   },
   "dataSources": {
     "whatsdone-web-cache": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
-      "bucket": "whatsdone-deployment-outputs",
+      "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
       "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-web-cache"]]}
     }
   },

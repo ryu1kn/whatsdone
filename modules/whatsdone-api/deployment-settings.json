@@ -9,44 +9,44 @@
   "outputsStore": {
     "type": "s3-bucket",
     "region": {"$ref": "#/_args/region"},
-    "bucket": "whatsdone-deployment-outputs",
+    "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
     "prefix": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-api"]]}
   },
   "dataSources": {
     "whatsdone-env": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
-      "bucket": "whatsdone-deployment-outputs",
+      "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
       "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-env"]]}
     },
     "whatsdone-app": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
-      "bucket": "whatsdone-deployment-outputs",
+      "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
       "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-app"]]}
     },
     "authentication": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
-      "bucket": "whatsdone-deployment-outputs",
+      "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
       "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "authentication"]]}
     },
     "done-store": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
-      "bucket": "whatsdone-deployment-outputs",
+      "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
       "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "done-store"]]}
     },
     "user-id-store": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
-      "bucket": "whatsdone-deployment-outputs",
+      "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
       "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "user-id-store"]]}
     },
     "whatsdone-web-cache": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
-      "bucket": "whatsdone-deployment-outputs",
+      "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
       "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-web-cache"]]}
     }
   },

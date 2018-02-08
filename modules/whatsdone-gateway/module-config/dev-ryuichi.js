@@ -1,5 +1,3 @@
-const projectConfig = require('../../../config/dev-ryuichi');
+const { deploymentOutputsBucket, hostedZoneId } = require('../../../config/common');
 
-module.exports = {
-  hostedZoneId: projectConfig.hostedZoneId
-};
+module.exports = { deploymentOutputsBucket, hostedZoneId };

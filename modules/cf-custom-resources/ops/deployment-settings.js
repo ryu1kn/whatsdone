@@ -7,7 +7,7 @@ module.exports = {
   outputsStore: {
     type: 's3-bucket',
     region: {$ref: '#/_args/region'},
-    bucket: 'whatsdone-deployment-outputs',
+    bucket: {'$ref': '#/_deploymentConfig/deploymentOutputsBucket'},
     prefix: 'cf-custom-resources'
   },
   tasks: [

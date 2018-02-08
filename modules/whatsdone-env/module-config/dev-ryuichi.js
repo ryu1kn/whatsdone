@@ -1,6 +1,7 @@
-const projectConfig = require('../../../config/dev-ryuichi');
+const { deploymentOutputsBucket, customDeletionPolicy } = require('../../../config/dev-ryuichi');
 
 module.exports = {
+  deploymentOutputsBucket,
   bucketName: 'whatsdone-dev-ryuichi',
-  bucketDeletionPolicy: projectConfig.customDeletionPolicy
+  bucketDeletionPolicy: customDeletionPolicy
 };

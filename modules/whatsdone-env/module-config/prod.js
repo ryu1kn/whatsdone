@@ -1,7 +1,7 @@
-
-const projectConfig = require('../../../config/prod');
+const { deploymentOutputsBucket, customDeletionPolicy } = require('../../../config/prod');
 
 module.exports = {
+  deploymentOutputsBucket,
   bucketName: 'whatsdone',
-  bucketDeletionPolicy: projectConfig.customDeletionPolicy
+  bucketDeletionPolicy: customDeletionPolicy
 };

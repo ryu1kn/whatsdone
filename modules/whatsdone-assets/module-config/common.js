@@ -1,6 +1,7 @@
-const projectConfig = require('../../../config/common');
+const {deploymentOutputsBucket, artifactBucket} = require('../../../config/common');
 
 module.exports = {
-  artifactBucket: projectConfig.artifactBucket,
+  deploymentOutputsBucket,
+  artifactBucket,
   artifactBasePath: 'whatsdone-assets'
 };
