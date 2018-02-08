@@ -6,6 +6,14 @@
     "bucket": "whatsdone-deployment-outputs",
     "prefix": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-app"]]}
   },
+  "dataSources": {
+    "artifact-store": {
+      "type": "s3-bucket",
+      "region": {"$ref": "#/_args/region"},
+      "bucket": "whatsdone-deployment-outputs",
+      "key": "artifact-store"
+    }
+  },
   "tasks": [
     {
       "id": "build-lambda-app",
@@ -15,12 +23,14 @@
       }
     },
     {
-      "id": "package-lambda",
+      "id": "upload-lambda",
       "type": "custom",
       "run": {
-        "script": "kumo upload-package --build-number $BUILD_NUMBER --region $TASK_REGION --upload-bucket lambda-packages-cg3j2bu2 --output $TASK_OUTPUTS_FILE",
+        "script": "node upload-artifact > $TASK_OUTPUTS_FILE",
         "envVars": {
-          "TASK_REGION": {"$ref": "#/_taskRegion"},
+          "AWS_REGION": {"$ref": "#/_taskRegion"},
+          "ARTIFACT_BUCKET": {"$ref": "#/_dataSourceData/artifact-store/Bucket"},
+          "ARTIFACT_BASE_PATH": "whatsdone-app",
           "TASK_OUTPUTS_FILE": {"$ref": "#/_taskOutputsFile"}
         }
       },
