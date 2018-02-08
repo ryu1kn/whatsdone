@@ -1,16 +1,19 @@
 {
   "moduleName": "whatsdone-app",
+  "config": {
+    "script": "node -p \"JSON.stringify(require('./module-config.js'))\""
+  },
   "outputsStore": {
     "type": "s3-bucket",
     "region": {"$ref": "#/_args/region"},
-    "bucket": "whatsdone-deployment-outputs",
+    "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
     "prefix": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-app"]]}
   },
   "dataSources": {
     "artifact-store": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
-      "bucket": "whatsdone-deployment-outputs",
+      "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
       "key": "artifact-store"
     }
   },
