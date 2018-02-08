@@ -1,8 +1,15 @@
 {
   "name": "whatsdone-app",
   "private": true,
+  "config": {
+    "BUILD_DIR": "./dist"
+  },
   "scripts": {
+    "predeploy": "yarn install",
     "deploy": "kumo deploy-module --verbose",
     "destroy": "kumo destroy-module --verbose"
+  },
+  "dependencies": {
+    "directory-s3uploader": "../../local-npm/directory-s3uploader"
   }
 }
