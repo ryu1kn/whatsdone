@@ -27,6 +27,8 @@ Many commands require config file. Sample should look like:
 
 * Login
 
+    **NOTE:** Login command doesn't work now as What's done's authentication mechanism has changed.
+
     ```sh
     $ ./apiClient login --config config.json
     ```
