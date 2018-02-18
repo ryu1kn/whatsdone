@@ -5,7 +5,7 @@
 
 Personal activity tracker. Take memos of what I (or we) have done today.
 
-This is my toy project that I experiment different technologies I want to try.
+This is my toy project that I experiment different technologies/tools I want to try.
 
 - infrastructure
   - ~~heroku + MongoDB~~
