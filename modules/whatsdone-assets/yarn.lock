@@ -54,9 +54,9 @@ archiver-utils@^1.3.0:
     normalize-path "^2.0.0"
     readable-stream "^2.0.0"
 
-archiver@^2.0.0:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/archiver/-/archiver-2.0.3.tgz#b4360bb584af1437991942716f21d7c523d1dbbd"
+archiver@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/archiver/-/archiver-2.1.1.tgz#ff662b4a78201494a3ee544d3a33fe7496509ebc"
   dependencies:
     archiver-utils "^1.3.0"
     async "^2.0.0"
@@ -65,7 +65,6 @@ archiver@^2.0.0:
     lodash "^4.8.0"
     readable-stream "^2.0.0"
     tar-stream "^1.5.0"
-    walkdir "^0.0.11"
     zip-stream "^1.2.0"
 
 argparse@^1.0.7:
@@ -101,12 +100,11 @@ async@^2.0.0:
   dependencies:
     lodash "^4.14.0"
 
-aws-sdk@^2.85.0:
-  version "2.130.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.130.0.tgz#f0c6da7dbda9a15cb0c2beb3030f6da2a4c03c36"
+aws-sdk@^2.188.0:
+  version "2.209.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.209.0.tgz#cfe6ca23736f665932b2d14cc8e4e49d7e9d20cc"
   dependencies:
     buffer "4.9.1"
-    crypto-browserify "1.0.9"
     events "^1.1.1"
     jmespath "0.15.0"
     querystring "0.2.0"
@@ -235,10 +233,6 @@ crc@^3.4.4:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/crc/-/crc-3.5.0.tgz#98b8ba7d489665ba3979f59b21381374101a1964"
 
-crypto-browserify@1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/crypto-browserify/-/crypto-browserify-1.0.9.tgz#cc5449685dfb85eb11c9828acc7cb87ab5bbfcc0"
-
 d@1:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/d/-/d-1.0.0.tgz#754bb5bfe55451da69a58b94d45f4c5b0462d58f"
@@ -277,8 +271,8 @@ del@^2.0.2:
 "directory-s3uploader@file:../../local-npm/directory-s3uploader":
   version "0.0.1"
   dependencies:
-    archiver "^2.0.0"
-    aws-sdk "^2.85.0"
+    archiver "^2.1.1"
+    aws-sdk "^2.188.0"
     s3-upload-stream "^1.0.7"
 
 doctrine@^1.2.2:
@@ -1076,10 +1070,6 @@ util-deprecate@~1.0.1:
 uuid@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.1.0.tgz#3dd3d3e790abc24d7b0d3a034ffababe28ebbc04"
-
-walkdir@^0.0.11:
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/walkdir/-/walkdir-0.0.11.tgz#a16d025eb931bd03b52f308caed0f40fcebe9532"
 
 wordwrap@~1.0.0:
   version "1.0.0"
