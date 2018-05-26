@@ -31,7 +31,7 @@ class LambdaRequestHandler {
       const userId = await this._userIdRepository.getByCognitoUserId(cognitoUserId);
       return await this._requestProcessor.process(normalisedRequest, {userId, username});
     } catch (e) {
-      return await this._requestProcessErrorProcessor.process(e);
+      return this._requestProcessErrorProcessor.process(e);
     }
   }
 
