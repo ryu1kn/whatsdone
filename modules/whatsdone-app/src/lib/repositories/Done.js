@@ -1,6 +1,4 @@
 
-'use strict';
-
 const _ = require('lodash');
 const ServiceLocator = require('../ServiceLocator');
 const utils = require('./utils');
