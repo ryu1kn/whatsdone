@@ -11,8 +11,6 @@ global.throwError = () => {
 
 // stubWithArgs([arg11, arg12, ...], return1, [arg21, ...], return2)
 global.stubWithArgs = function () {
-  'use strict';
-
   const args = Array.prototype.slice.call(arguments);
   const stub = sinon.stub();
   for (let i = 0; i + 1 < args.length; i += 2) {
