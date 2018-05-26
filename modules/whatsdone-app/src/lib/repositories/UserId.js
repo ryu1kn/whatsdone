@@ -8,16 +8,16 @@ class UserIdRepository {
     this._tableName = tableName;
   }
 
-  getCognitoUserId(id) {
+  async getCognitoUserId(id) {
     const params = {
       TableName: this._tableName,
       Key: {id}
     };
-    return this._docClient.get(params).promise()
-      .then(response => (response.Item || {}).cognitoUserId);
+    const response = await this._docClient.get(params).promise();
+    return (response.Item || {}).cognitoUserId;
   }
 
-  getByCognitoUserId(cognitoUserId) {
+  async getByCognitoUserId(cognitoUserId) {
     const params = {
       TableName: this._tableName,
       IndexName: 'cognitoUserId',
@@ -25,11 +25,9 @@ class UserIdRepository {
       ExpressionAttributeValues: {':hkey': cognitoUserId},
       ProjectionExpression: 'id'
     };
-    return this._docClient.query(params).promise()
-      .then(result => {
-        const items = result.Items[0];
-        return items && items.id;
-      });
+    const result = await this._docClient.query(params).promise();
+    const items = result.Items[0];
+    return items && items.id;
   }
 
 }

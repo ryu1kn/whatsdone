@@ -7,15 +7,16 @@ class GetDonesRequestProcessor {
     this._getDonesCommand = ServiceLocator.getDonesCommand;
   }
 
-  process(request, _session) {
+  async process(request, _session) {
     const nextKey = request.query.nextKey;
-    return this._getDonesCommand.execute(nextKey).then(dones => ({
+    const dones = await this._getDonesCommand.execute(nextKey);
+    return {
       statusCode: '200',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(dones)
-    }));
+    };
   }
 
 }

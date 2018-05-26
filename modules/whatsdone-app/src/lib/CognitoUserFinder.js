@@ -8,14 +8,14 @@ class CognitoUserFinder {
     this._userPoolId = ServiceLocator.config.userPoolId;
   }
 
-  find(cognitoUserId) {
+  async find(cognitoUserId) {
     const params = {
       UserPoolId: this._userPoolId,
       AttributesToGet: [],
       Filter: `sub = "${cognitoUserId}"`
     };
-    return this._cognitoIdentityServiceProvider.listUsers(params).promise()
-      .then(result => result.Users[0]);
+    const result = await this._cognitoIdentityServiceProvider.listUsers(params).promise();
+    return result.Users[0];
   }
 
 }
