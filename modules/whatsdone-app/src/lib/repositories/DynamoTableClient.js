@@ -58,7 +58,7 @@ class DynamoTableClient {
     };
     try {
       await this._docClient.update(params).promise();
-      return await this.getById(id);  // XXX: Don't query again
+      return await this.getById(id); // XXX: Don't query again
     } catch (e) {
       throw new WrappedError(e, params);
     }

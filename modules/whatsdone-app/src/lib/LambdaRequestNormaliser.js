@@ -28,8 +28,8 @@ class LambdaRequestNormaliser {
 
   _parseBody(bodyString, contentType) {
     return contentType === ContentType.JSON ?
-        JSON.parse(bodyString) :
-        querystring.parse(bodyString || '');
+      JSON.parse(bodyString) :
+      querystring.parse(bodyString || '');
   }
 
 }
