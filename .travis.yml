@@ -12,9 +12,6 @@ addons:
     - sourceline: 'deb http://us.archive.ubuntu.com/ubuntu vivid main universe'
     packages:
     - jq
-  code_climate:
-    repo_token:
-      secure: bJqT2zF3uoBRU0SLY7hOrK9UEZWeRhmqAuUAxm4IizBzc5mBDETTFM0T4jxRX6ob92SXSQvsN23lA65CYRa4zWCl782HJDTBQzXfRrG2LKwJj8NFpN5uuNtEES8QRbE8zOWY4XQYIVYpqmhPyOKg6YN4h6aaK87dUthJmBsL2CtYlyUGRoBJznntEldcBhfKdIWdvpyqziQ9GeFj/SLW+AzofmDpDztqCilCLBd1BsTd5LwH6hzyXqkaw9PZsfUMofPFPC2Z8NV2wblifXeco8q5A7ml1mjSEm8n5EtVR+sRKa+lUuQKGJx6fvDy3JuCRf5Zr9JzzO/Ggm5+cnnOWhwoJGlcTQk4vB5cSdJzSQ0s5mzxBHxzeihcDRCIumHVCK4G0dPq0UU2lgMaIXqDUHmjPdcjsuRDNlTIUEyfxLhXh20C/FWLQxQa7U4JBStYuw0p3V67ur2L1tIkriUVQ1bjSQLffjLNOxMC8IbjuwPPJ353I292C6RpKxEswuFBlWyayePQ58fPYQQJJZVhgwaezc7rHexg8ftpD3h0hkMvBuTz/i5lwCGTmZbnwNw65Yb9bZZZVKHIIfdYbnohWXJFaIAHApejzIGARbAkaT3//TX0CYtRrywUO8CxV1URvrkX/is1kPGwdq6SGga2V81juyN901mueVyNX27SGfg=
 before_install:
 - wget https://bootstrap.pypa.io/get-pip.py
 - sudo python get-pip.py
