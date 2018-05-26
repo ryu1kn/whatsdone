@@ -8,19 +8,19 @@ class UserNameService {
     this._cognitoUserFinder = ServiceLocator.cognitoUserFinder;
   }
 
-  getUsernames(ids) {
-    return Promise.all(ids.map(id => this._userIdRepository.getCognitoUserId(id)))
-      .then(cognitoUserIds => cognitoUserIds.map((cognitoUserId, index) => cognitoUserId || ids[index]))
-      .then(cognitoUserIds => Promise.all(cognitoUserIds.map(id => this._resolveUserName(id))))
-      .then(usernames => usernames.map((name, index) => ({
-        id: ids[index],
-        name
-      })));
+  async getUsernames(ids) {
+    const cognitoUserIds = await Promise.all(ids.map(id => this._userIdRepository.getCognitoUserId(id)));
+    const finalCognitoUserIds = cognitoUserIds.map((cognitoUserId, index) => cognitoUserId || ids[index]);
+    const usernames = await Promise.all(finalCognitoUserIds.map(id => this._resolveUserName(id)));
+    return usernames.map((name, index) => ({
+      id: ids[index],
+      name
+    }));
   }
 
-  _resolveUserName(cognitoUserId) {
-    return this._cognitoUserFinder.find(cognitoUserId)
-      .then(user => user && user.Username);
+  async _resolveUserName(cognitoUserId) {
+    const user = await this._cognitoUserFinder.find(cognitoUserId);
+    return user && user.Username;
   }
 
 }

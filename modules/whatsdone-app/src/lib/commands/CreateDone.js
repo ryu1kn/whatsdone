@@ -7,10 +7,10 @@ class CreateDoneCommand {
     this._doneRepository = ServiceLocator.doneRepository;
   }
 
-  execute(params) {
+  async execute(params) {
     const writeParams = Object.assign({}, params.data, {userId: params.userId});
-    return this._doneRepository.write(writeParams)
-      .then(done => Object.assign({}, done, {username: params.username}));
+    const done = await this._doneRepository.write(writeParams);
+    return Object.assign({}, done, {username: params.username});
   }
 
 }

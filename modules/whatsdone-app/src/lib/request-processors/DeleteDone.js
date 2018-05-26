@@ -9,9 +9,9 @@ class DeleteDoneRequestHandler {
     this._doneRepository = ServiceLocator.doneRepository;
   }
 
-  process(request, session) {
-    return this._doneRepository.remove(request.params.id, session.userId)
-      .then(() => ({statusCode: '200'}));
+  async process(request, session) {
+    await this._doneRepository.remove(request.params.id, session.userId);
+    return {statusCode: '200'};
   }
 
 }

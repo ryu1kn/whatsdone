@@ -10,9 +10,9 @@ class UpdateDoneCommand {
     this._doneRepository = ServiceLocator.doneRepository;
   }
 
-  execute(params) {
-    return this._doneRepository.update(params.doneId, params.userId, params.data)
-      .then(done => _.pick(done, ['id', 'userId', 'date', 'doneThing']));
+  async execute(params) {
+    const done = await this._doneRepository.update(params.doneId, params.userId, params.data);
+    return _.pick(done, ['id', 'userId', 'date', 'doneThing']);
   }
 
 }

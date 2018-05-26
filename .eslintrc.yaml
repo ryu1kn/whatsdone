@@ -4,8 +4,9 @@ env:
   node: true
   es6: true
 parserOptions:
-  ecmaVersion: 6
+  ecmaVersion: 8
   sourceType: module
+  impliedStrict: true
 rules:
   brace-style:
   - error

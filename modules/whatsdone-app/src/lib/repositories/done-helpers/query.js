@@ -16,35 +16,35 @@ class DoneQueryHelper {
     this._collectionName = collectionName;
   }
 
-  query(nextKey) {
-    return this._query(this._decodeNextKey(nextKey))
-      .catch(e => {
-        throw new WrappedError(e);
-      });
+  async query(nextKey) {
+    try {
+      return await this._query(this._decodeNextKey(nextKey));
+    } catch (e) {
+      throw new WrappedError(e);
+    }
   }
 
-  _query(startKey) {
-    const queryUntil = (params, accumulatedResponse) => {
-      return this._docClient.query(params).promise()
-        .then(queryResult => {
-          const newAccumulatedResponse = {
-            Items: [...accumulatedResponse.Items, ...queryResult.Items],
-            LastEvaluatedKey: queryResult.LastEvaluatedKey
-          };
-          if (newAccumulatedResponse.Items.length >= DEFAULT_SCAN_LIMIT) return newAccumulatedResponse;
+  async _query(startKey) {
+    const queryUntil = async (params, accumulatedResponse) => {
+      const queryResult = await this._docClient.query(params).promise();
+      const newAccumulatedResponse = {
+        Items: [...accumulatedResponse.Items, ...queryResult.Items],
+        LastEvaluatedKey: queryResult.LastEvaluatedKey
+      };
+      if (newAccumulatedResponse.Items.length >= DEFAULT_SCAN_LIMIT) return newAccumulatedResponse;
 
-          const prevMonthKey = this._getPrevMonthKey(params);
-          if (prevMonthKey === OLDEST_QUERY_MONTH) return newAccumulatedResponse;
+      const prevMonthKey = this._getPrevMonthKey(params);
+      if (prevMonthKey === OLDEST_QUERY_MONTH) return newAccumulatedResponse;
 
-          const nextParams = this._buildQueryParams({
-            monthKey: prevMonthKey,
-            limit: DEFAULT_SCAN_LIMIT - newAccumulatedResponse.Items.length
-          });
-          return queryUntil(nextParams, newAccumulatedResponse);
-        });
+      const nextParams = this._buildQueryParams({
+        monthKey: prevMonthKey,
+        limit: DEFAULT_SCAN_LIMIT - newAccumulatedResponse.Items.length
+      });
+      return queryUntil(nextParams, newAccumulatedResponse);
     };
     const params = this._buildQueryFromStartKey(startKey);
-    return queryUntil(params, {Items: []}).then(response => this._buildResponse(response));
+    const response = await queryUntil(params, {Items: []});
+    return this._buildResponse(response);
   }
 
   _getPrevMonthKey(params) {

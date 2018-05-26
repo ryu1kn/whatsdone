@@ -11,28 +11,23 @@ class GetDonesCommand {
     this._doneRepository = ServiceLocator.doneRepository;
   }
 
-  execute(nextKey) {
-    return this._doneRepository.read(nextKey)
-      .then(result => {
-        return this._setUserNames(result.items)
-          .then(items => ({
-            items,
-            nextKey: result.nextKey
-          }));
-      });
+  async execute(nextKey) {
+    const result = await this._doneRepository.read(nextKey);
+    const items = await this._setUserNames(result.items);
+    return {
+      items,
+      nextKey: result.nextKey
+    };
   }
 
-  _setUserNames(dones) {
-    return this._userNameService.getUsernames(_.map(dones, 'userId'))
-      .then(users => {
-        const nameMap = _.keyBy(users, 'id');
-        return dones.map(done => {
-          if (done.userId) {
-            done.username = _.get(nameMap, `${done.userId}.name`);
-          }
-          return done;
-        });
-      });
+  async _setUserNames(dones) {
+    const users = await this._userNameService.getUsernames(_.map(dones, 'userId'));
+    const nameMap = _.keyBy(users, 'id');
+    return dones.map(done =>
+      done.userId ?
+        Object.assign({}, done, {username: _.get(nameMap, `${done.userId}.name`)}) :
+        done
+    );
   }
 
 }
