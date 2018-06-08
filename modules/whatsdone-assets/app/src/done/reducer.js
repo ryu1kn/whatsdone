@@ -3,11 +3,14 @@ import ActionType from './action-type';
 
 const initialState = {
   items: [],
-  nextKey: null
+  nextKey: null,
+  apiReady: false
 };
 
 module.exports = (state = initialState, action) => {
   switch (action.type) {
+  case 'API_READY':
+    return Object.assign({}, state, {apiReady: true});
   case ActionType.GET_DONE_REQUEST:
     return state;
   case ActionType.GET_DONE_SUCCESS:

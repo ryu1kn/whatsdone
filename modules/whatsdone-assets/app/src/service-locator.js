@@ -14,6 +14,10 @@ class ServiceLocator {
     return this._get('authTokenProvider');
   }
 
+  get cognitoUserInitialiser() {
+    return this._get('cognitoUserInitialiser');
+  }
+
   get configProvider() {
     return this._get('configProvider');
   }

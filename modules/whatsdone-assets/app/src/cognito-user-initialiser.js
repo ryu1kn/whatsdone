@@ -1,16 +1,24 @@
 import AWS from 'aws-sdk';
 import ServiceLocator from './service-locator';
-import {CognitoUser, CognitoUserPool, CognitoUserSession} from 'amazon-cognito-identity-js';
 import {parse} from 'querystring';
+import jwtDecode from 'jwt-decode';
+import {
+  CognitoAccessToken,
+  CognitoIdToken,
+  CognitoRefreshToken,
+  CognitoUser,
+  CognitoUserPool,
+  CognitoUserSession
+} from 'amazon-cognito-identity-js';
 
-class Authenticator {
+class CognitoUserInitialiser {
 
   constructor() {
     this._configProvider = ServiceLocator.configProvider;
     this._cookieStorage = ServiceLocator.cookieStorage;
   }
 
-  async authenticate({username}) {
+  async initialise() {
     const appConfig = await this._configProvider.getConfig();
     this._configureAWSSdk(appConfig);
     const userPool = new CognitoUserPool({
@@ -18,31 +26,23 @@ class Authenticator {
       ClientId: appConfig.CLIENT_ID,
       Storage: this._cookieStorage
     });
+
+    const hash = window.location.hash.substr(1);
+    const token = parse(hash);
+
     const userData = {
-      Username: username,
+      Username: jwtDecode(token.id_token)['cognito:username'],
       Pool: userPool,
       Storage: this._cookieStorage
     };
     const cognitoUser = new CognitoUser(userData);
 
-    const hash = window.location.hash.substr(1);
-    const token = parse(hash);
-
     const userSession = new CognitoUserSession({
-      IdToken: token.id_token,
-      AccessToken: token.access_token
+      IdToken: new CognitoIdToken({IdToken: token.id_token}),
+      AccessToken: new CognitoAccessToken({AccessToken: token.access_token}),
+      RefreshToken: new CognitoRefreshToken()
     });
     cognitoUser.setSignInUserSession(userSession);
-  }
-
-  updatePassword(cognitoUser, newPassword) {
-    const userAttributes = {};
-    return new Promise((resolve, reject) => {
-      cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, {
-        onSuccess: resolve(),
-        onFailure: reject
-      });
-    });
   }
 
   _configureAWSSdk(appConfig) {
@@ -54,4 +54,4 @@ class Authenticator {
 
 }
 
-export default Authenticator;
+module.exports = CognitoUserInitialiser;
