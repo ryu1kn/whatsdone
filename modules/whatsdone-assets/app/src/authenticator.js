@@ -1,7 +1,7 @@
-
 import AWS from 'aws-sdk';
 import ServiceLocator from './service-locator';
-import {CognitoUser, CognitoUserPool, AuthenticationDetails} from 'amazon-cognito-identity-js';
+import {CognitoUser, CognitoUserPool, CognitoUserSession} from 'amazon-cognito-identity-js';
+import {parse} from 'querystring';
 
 class Authenticator {
 
@@ -10,7 +10,7 @@ class Authenticator {
     this._cookieStorage = ServiceLocator.cookieStorage;
   }
 
-  async authenticate({username, password}) {
+  async authenticate({username}) {
     const appConfig = await this._configProvider.getConfig();
     this._configureAWSSdk(appConfig);
     const userPool = new CognitoUserPool({
@@ -25,25 +25,14 @@ class Authenticator {
     };
     const cognitoUser = new CognitoUser(userData);
 
-    const authenticationData = {
-      Username: username,
-      Password: password
-    };
-    const authenticationDetails = new AuthenticationDetails(authenticationData);
-    return this._authenticate(cognitoUser, authenticationDetails);
-  }
+    const hash = window.location.hash.substr(1);
+    const token = parse(hash);
 
-  _authenticate(cognitoUser, authenticationDetails) {
-    return new Promise((resolve, reject) => {
-      cognitoUser.authenticateUser(authenticationDetails, {
-        onSuccess: () => resolve({newPasswordRequired: false}),
-        newPasswordRequired: (_userAttributes, _requiredAttributes) => resolve({
-          newPasswordRequired: true,
-          cognitoUser
-        }),
-        onFailure: reject
-      });
+    const userSession = new CognitoUserSession({
+      IdToken: token.id_token,
+      AccessToken: token.access_token
     });
+    cognitoUser.setSignInUserSession(userSession);
   }
 
   updatePassword(cognitoUser, newPassword) {

@@ -1,6 +1,7 @@
 
 import Authenticator from './authenticator';
 import AuthTokenProvider from './auth-token-provider';
+import CognitoUserInitialiser from './cognito-user-initialiser';
 import ConfigProvider from './config-provider';
 import WhatsdoneApiClient from './whatsdone-api-client';
 import {CookieStorage} from 'amazon-cognito-identity-js';
@@ -18,6 +19,10 @@ class ServiceFactory {
   createFetch() {
     // HACK: fetch/webpack combination problem? cf. https://github.com/developit/unfetch/issues/46
     return fetch.bind();
+  }
+
+  createCognitoUserInitialiser() {
+    return new CognitoUserInitialiser();
   }
 
   createConfigProvider() {

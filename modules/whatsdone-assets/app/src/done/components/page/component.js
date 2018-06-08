@@ -11,7 +11,15 @@ class DonePage extends React.Component {
 
   constructor(params) {
     super(params);
-    this.props.fetchDones();
+
+    const fetchDones = () => {
+      if (this.props.done.apiReady) {
+        this.props.fetchDones();
+      } else {
+        setTimeout(fetchDones, 100);
+      }
+    };
+    fetchDones();
   }
 
   render() {
