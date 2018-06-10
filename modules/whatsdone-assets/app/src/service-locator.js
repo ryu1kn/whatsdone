@@ -6,10 +6,6 @@ class ServiceLocator {
     this._cache = Object.create(null);
   }
 
-  get authenticator() {
-    return this._get('authenticator');
-  }
-
   get authTokenProvider() {
     return this._get('authTokenProvider');
   }

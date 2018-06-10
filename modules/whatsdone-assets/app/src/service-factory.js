@@ -1,5 +1,3 @@
-
-import Authenticator from './authenticator';
 import AuthTokenProvider from './auth-token-provider';
 import CognitoUserInitialiser from './cognito-user-initialiser';
 import ConfigProvider from './config-provider';
@@ -10,10 +8,6 @@ class ServiceFactory {
 
   createAuthTokenProvider() {
     return new AuthTokenProvider();
-  }
-
-  createAuthenticator() {
-    return new Authenticator();
   }
 
   createFetch() {

@@ -13,7 +13,6 @@ import ServiceFactory from './service-factory';
 ServiceLocator.load(new ServiceFactory());
 
 import reducer from './reducer';
-import SigninPage from './signin/components/page';
 import DonePage from './done/components/page';
 
 const store = createStore(
@@ -29,7 +28,6 @@ ReactDOM.render(
       <Router>
         <Switch>
           <Route exact path="/" component={DonePage} />
-          <Route path="/signin" component={SigninPage} />
         </Switch>
       </Router>
     </Provider>
