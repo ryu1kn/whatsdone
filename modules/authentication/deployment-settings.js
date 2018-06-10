@@ -50,6 +50,17 @@ module.exports = {
           CALLBACK_URLS: {$ref: '#/_deploymentConfig/callbackUrls'}
         }
       }
+    },
+    {
+      id: 'create-domain-for-user-pool',
+      type: 'custom',
+      run: {
+        script: './create-domain-for-userpool.sh',
+        envVars: {
+          USER_POOL_ID: {$ref: '#/_deploymentOutputs/UserPoolId'},
+          USER_POOL_DOMAIN: {$ref: '#/_deploymentConfig/userPoolDomain'}
+        }
+      }
     }
   ]
 };
