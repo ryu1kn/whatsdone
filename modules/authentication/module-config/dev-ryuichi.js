@@ -5,5 +5,6 @@ module.exports = {
   deploymentOutputsBucket,
   identityPoolName: 'Whatsdone Dev Ryuichi',
   userPoolName: hostName,
+  userPoolDomain: hostName,
   callbackUrls: `["https://${hostName}.ryuichi.io"]`
 };
