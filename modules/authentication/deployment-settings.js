@@ -42,9 +42,11 @@ module.exports = {
                     --allowed-o-auth-flows-user-pool-client \\
                     --allowed-o-auth-flows "code" "implicit" \\
                     --allowed-o-auth-scopes "openid" \\
-                    --callback-urls $CALLBACK_URLS
+                    --callback-urls $CALLBACK_URLS \\
+                    --region $TASK_REGION
                 `,
         envVars: {
+          TASK_REGION: {$ref: '#/_args/region'},
           USER_POOL_ID: {$ref: '#/_deploymentOutputs/UserPoolId'},
           USER_POOL_CLIENT_ID: {$ref: '#/_deploymentOutputs/UserPoolClientId'},
           CALLBACK_URLS: {$ref: '#/_deploymentConfig/callbackUrls'}
@@ -57,6 +59,7 @@ module.exports = {
       run: {
         script: './create-domain-for-userpool.sh',
         envVars: {
+          TASK_REGION: {$ref: '#/_args/region'},
           USER_POOL_ID: {$ref: '#/_deploymentOutputs/UserPoolId'},
           USER_POOL_DOMAIN: {$ref: '#/_deploymentConfig/userPoolDomain'}
         }
