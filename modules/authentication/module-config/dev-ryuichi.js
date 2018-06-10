@@ -1,7 +1,9 @@
 const { deploymentOutputsBucket } = require('../../../config/common');
+const hostName = 'whatsdone-dev-ryuichi';
 
 module.exports = {
   deploymentOutputsBucket,
   identityPoolName: 'Whatsdone Dev Ryuichi',
-  userPoolName: 'whatsdone-dev-ryuichi'
+  userPoolName: hostName,
+  callbackUrls: `["https://${hostName}.ryuichi.io"]`
 };
