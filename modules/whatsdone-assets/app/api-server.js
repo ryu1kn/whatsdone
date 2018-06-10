@@ -30,10 +30,6 @@ app.post('/dones', cors(corsOptions), (req, res) => {
     .catch(e => console.error(e.stack));
 });
 
-app.post('/signin', cors(corsOptions), (req, res) => {
-  res.sendStatus(200);
-});
-
 app.get('*', (req, res) => {
   res.sendStatus(404);
 });

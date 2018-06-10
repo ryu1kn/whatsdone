@@ -5,28 +5,6 @@ import sinon from 'sinon';
 import ServiceLocator from '../src/service-locator';
 import WhatsdoneApiClient from '../src/whatsdone-api-client';
 
-test('WhatsdoneApiClient login with user information', t => {
-  t.plan(1);
-
-  const smartFetch = fakeSmartFetch();
-  const apiClient = new WhatsdoneApiClient();
-  apiClient.login({email: 'EMAIL@SAMPLE.COM', password: 'PASSWORD'}).then(() => {
-    t.deepEqual(smartFetch.args[1], [
-      'https://api_origin/signin',
-      {
-        method: 'POST',
-        mode: 'cors',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
-        body: 'email=EMAIL%40SAMPLE.COM&password=PASSWORD'
-      }
-    ]);
-  });
-
-});
-
 test('WhatsdoneApiClient fetch all done items', t => {
   t.plan(1);
 

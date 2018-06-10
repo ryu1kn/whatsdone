@@ -25,7 +25,6 @@ class DonePage extends React.Component {
   render() {
     return (
       <div className="donebox container">
-        <Link to="/signin">To Sign in</Link>
         <h2 className="donebox-title page-header">What's Done?</h2>
         <DoneForm />
         <DoneHistory done={this.props.done} />
