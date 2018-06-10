@@ -30,19 +30,20 @@ class CognitoUserInitialiser {
     const hash = window.location.hash.substr(1);
     const token = parse(hash);
 
-    const userData = {
-      Username: jwtDecode(token.id_token)['cognito:username'],
-      Pool: userPool,
-      Storage: this._cookieStorage
-    };
-    const cognitoUser = new CognitoUser(userData);
-
-    const userSession = new CognitoUserSession({
-      IdToken: new CognitoIdToken({IdToken: token.id_token}),
-      AccessToken: new CognitoAccessToken({AccessToken: token.access_token}),
-      RefreshToken: new CognitoRefreshToken()
-    });
-    cognitoUser.setSignInUserSession(userSession);
+    if (token.id_token && token.access_token) {
+      const userData = {
+        Username: jwtDecode(token.id_token)['cognito:username'],
+        Pool: userPool,
+        Storage: this._cookieStorage
+      };
+      const cognitoUser = new CognitoUser(userData);
+      const userSession = new CognitoUserSession({
+        IdToken: new CognitoIdToken({IdToken: token.id_token}),
+        AccessToken: new CognitoAccessToken({AccessToken: token.access_token}),
+        RefreshToken: new CognitoRefreshToken()
+      });
+      cognitoUser.setSignInUserSession(userSession);
+    }
   }
 
   _configureAWSSdk(appConfig) {

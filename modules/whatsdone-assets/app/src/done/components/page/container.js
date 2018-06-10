@@ -22,7 +22,11 @@ const mapDispatchToProps = dispatch => {
             return dispatch(Action.markGetDonesSuccess(dones, body.nextKey));
           }
           case 401:
-            return containerState.ownProps.history.push('/signin');
+            return ServiceLocator.configProvider.getConfig()
+              .then(appConfig => {
+                const signinUrl = buildSigninUrl(appConfig.CLIENT_ID);
+                window.location.replace(signinUrl);
+              });
           default:
             throw new Error(`Unexpected response code ${response.status}`);
           }
@@ -32,5 +36,11 @@ const mapDispatchToProps = dispatch => {
     }
   };
 };
+
+function buildSigninUrl(clientId) {
+  const host = window.location.hostname;
+  const hostname = host.split('.')[0];
+  return `https://${hostname}.auth.ap-southeast-2.amazoncognito.com/login?response_type=token&client_id=${clientId}&redirect_uri=https://${host}`;
+}
 
 export {mapStateToProps, mapDispatchToProps};
