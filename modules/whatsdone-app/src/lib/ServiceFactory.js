@@ -74,14 +74,6 @@ class ServiceFactory {
     return new UpdateDoneCommand();
   }
 
-  createSignoutRequestHandler() {
-    const SignoutRequestProcessor = require('./request-processors/Signout');
-    const requestHandler = new LambdaRequestHandler({
-      requestProcessor: new SignoutRequestProcessor()
-    });
-    return getBoundHandleMethod(requestHandler);
-  }
-
   createRequestProcessErrorProcessor() {
     const RequestProcessErrorProcessor = require('./RequestProcessErrorProcessor');
     return new RequestProcessErrorProcessor();
