@@ -74,14 +74,6 @@ class ServiceFactory {
     return new UpdateDoneCommand();
   }
 
-  createPostSigninRequestHandler() {
-    const PostSigninRequestProcessor = require('./request-processors/PostSignin');
-    const requestHandler = new LambdaRequestHandler({
-      requestProcessor: new PostSigninRequestProcessor()
-    });
-    return getBoundHandleMethod(requestHandler);
-  }
-
   createSignoutRequestHandler() {
     const SignoutRequestProcessor = require('./request-processors/Signout');
     const requestHandler = new LambdaRequestHandler({

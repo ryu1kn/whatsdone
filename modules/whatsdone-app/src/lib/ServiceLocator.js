@@ -54,10 +54,6 @@ class ServiceLocator {
     return this._get('updateDoneRequestHandler');
   }
 
-  get postSigninRequestHandler() {
-    return this._get('postSigninRequestHandler');
-  }
-
   get signoutRequestHandler() {
     return this._get('signoutRequestHandler');
   }

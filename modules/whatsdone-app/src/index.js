@@ -62,7 +62,6 @@ class Router {
 
 const router = new Router();
 
-router.post('/signin', ServiceLocator.postSigninRequestHandler);
 router.get('/signout', ServiceLocator.signoutRequestHandler);
 router.get('/dones', ServiceLocator.getDonesRequestHandler);
 router.post('/dones', ServiceLocator.postDoneRequestHandler);
