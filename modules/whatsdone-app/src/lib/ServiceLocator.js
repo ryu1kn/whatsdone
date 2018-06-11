@@ -54,10 +54,6 @@ class ServiceLocator {
     return this._get('updateDoneRequestHandler');
   }
 
-  get signoutRequestHandler() {
-    return this._get('signoutRequestHandler');
-  }
-
   get createDoneCommand() {
     return this._get('createDoneCommand');
   }

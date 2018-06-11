@@ -62,7 +62,6 @@ class Router {
 
 const router = new Router();
 
-router.get('/signout', ServiceLocator.signoutRequestHandler);
 router.get('/dones', ServiceLocator.getDonesRequestHandler);
 router.post('/dones', ServiceLocator.postDoneRequestHandler);
 router.delete('/dones/:id', ServiceLocator.deleteDoneRequestHandler);
