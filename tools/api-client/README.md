@@ -1,5 +1,7 @@
 # What's Done API Client
 
+**NOTE: After changing the app to use AWS Cognito for authentication, this tool is not working**
+
 ## Build
 
 ```sh
