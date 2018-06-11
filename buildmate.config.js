@@ -17,8 +17,7 @@ module.exports = {
         cd $BM_PATH_VAR_1/src \\
             && yarn install \\
             && yarn run lint \\
-            && yarn test \\
-            && yarn run report-coverage`
+            && yarn test`
     },
 
     // Build tools
