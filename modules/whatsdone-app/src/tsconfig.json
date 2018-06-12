@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "rootDir": "src",
+    "outDir": "built",
+    "lib": [
+      "es6",
+      "es2017"
+    ],
+    "sourceMap": false,
+    "strict": false
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

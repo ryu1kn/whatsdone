@@ -1,3 +1,2 @@
---require test/bootstrap.js
 --recursive
-test
+built/test

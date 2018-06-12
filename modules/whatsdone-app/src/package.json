@@ -4,10 +4,12 @@
   "engines": {
     "node": ">= 8"
   },
-  "main": "index.js",
   "scripts": {
+    "build": "yarn && yarn run compile",
+    "compile": "tsc -p ./",
+    "pretest": "yarn run compile",
     "test": "mocha --opts mocha.opts",
-    "lint": "eslint .",
+    "lint": "#eslint .",
     "coverage": "nyc yarn test"
   },
   "dependencies": {
@@ -18,12 +20,15 @@
     "uuid": "~3.0.1"
   },
   "devDependencies": {
+    "@types/mocha": "^5.2.1",
+    "@types/node": "^8.10.19",
     "chai": "^4.1.2",
     "eslint": "^4.19.1",
     "eslint-config-xo": "^0.22.2",
     "mocha": "^5.2.0",
     "nyc": "^11.8.0",
     "sinon": "^5.0.10",
-    "sinon-chai": "^3.1.0"
+    "sinon-chai": "^3.1.0",
+    "typescript": "^2.9.1"
   }
 }
