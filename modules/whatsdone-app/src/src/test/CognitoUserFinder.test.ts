@@ -1,7 +1,7 @@
 
 import ServiceLocator = require('../lib/ServiceLocator');
 import CognitoUserFinder = require('../lib/CognitoUserFinder');
-import {expect, sinon} from "./TestUtils";
+import {expect, sinon} from './TestUtils';
 
 describe('Server CognitoUserFinder', () => {
 

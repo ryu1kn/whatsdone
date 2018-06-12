@@ -1,7 +1,7 @@
 
 import LambdaRequestHandler = require('../lib/LambdaRequestHandler');
 import ServiceLocator = require('../lib/ServiceLocator');
-import {expect, sinon} from "./TestUtils";
+import {expect, sinon} from './TestUtils';
 
 describe('Server LambdaRequestHandler', () => {
 

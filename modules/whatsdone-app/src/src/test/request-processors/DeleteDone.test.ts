@@ -1,7 +1,7 @@
 
 import DeleteDoneRequestProcessor = require('../../lib/request-processors/DeleteDone');
 import ServiceLocator = require('../../lib/ServiceLocator');
-import {expect, sinon, throwError} from "../TestUtils";
+import {expect, sinon, throwError} from '../TestUtils';
 
 describe('Server DeleteDoneRequestProcessor', () => {
 
