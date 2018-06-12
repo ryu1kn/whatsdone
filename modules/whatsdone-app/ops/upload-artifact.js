@@ -1,4 +1,5 @@
 const uploadDirectory = require('directory-s3uploader')
+const {join} = require('path')
 
 if (!process.env.BUILD_NUMBER) {
   throw new Error('Environment variable BUILD_NUMBER is not set')
@@ -10,7 +11,7 @@ const uploadLocation = {
 }
 
 const params = Object.assign({}, uploadLocation, {
-  directoryPath: process.env.npm_package_config_BUILD_DIR
+  directoryPath: join(__dirname, '..', process.env.npm_package_config_BUILD_DIR_NAME)
 })
 uploadDirectory(params)
   .then(() => {

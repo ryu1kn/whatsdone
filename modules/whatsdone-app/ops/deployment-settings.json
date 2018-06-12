@@ -19,13 +19,6 @@
   },
   "tasks": [
     {
-      "id": "build-lambda-app",
-      "type": "custom",
-      "run": {
-        "script": "./build.sh"
-      }
-    },
-    {
       "id": "upload-lambda",
       "type": "custom",
       "run": {
