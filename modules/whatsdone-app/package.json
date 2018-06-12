@@ -19,20 +19,20 @@
     "destroy": "cd ops && kumo destroy-module --verbose"
   },
   "dependencies": {
-    "aws-sdk": "~2.110.0",
-    "aws-xray-sdk": "~1.1.4",
-    "lodash": "~4.17.3",
+    "aws-sdk": "~2.255.1",
+    "aws-xray-sdk": "~1.2.0",
+    "lodash": "~4.17.10",
     "route-parser": "0.0.5",
-    "uuid": "~3.0.1"
+    "uuid": "~3.2.1"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.1",
+    "@types/mocha": "^5.2.2",
     "@types/node": "^8.10.19",
     "chai": "^4.1.2",
     "mocha": "^5.2.0",
-    "nyc": "^11.8.0",
-    "sinon": "^5.0.10",
-    "sinon-chai": "^3.1.0",
+    "nyc": "^12.0.2",
+    "sinon": "^6.0.0",
+    "sinon-chai": "^3.2.0",
     "tslint": "^5.10.0",
     "typescript": "^2.9.1"
   }
