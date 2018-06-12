@@ -47,6 +47,8 @@ Resources:
                   - cloudfront:GetDistribution
                   - cloudfront:GetDistributionConfig
                   - cloudfront:UpdateDistribution
+                  - cognito-idp:CreateUserPoolDomain
+                  - cognito-idp:DescribeUserPoolDomain
                   - cognito-idp:UpdateUserPoolClient
                   - dynamodb:CreateTable
                   - dynamodb:DeleteTable
