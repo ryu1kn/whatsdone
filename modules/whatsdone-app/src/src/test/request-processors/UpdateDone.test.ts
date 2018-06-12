@@ -1,7 +1,7 @@
 
 import UpdateDoneRequestProcessor = require('../../lib/request-processors/UpdateDone');
 import ServiceLocator = require('../../lib/ServiceLocator');
-import {expect, sinon} from "../TestUtils";
+import {expect, sinon} from '../TestUtils';
 
 describe('Server UpdateDoneRequestProcessor', () => {
 

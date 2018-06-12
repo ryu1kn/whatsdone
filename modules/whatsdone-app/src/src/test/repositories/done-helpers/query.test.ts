@@ -1,7 +1,7 @@
 
 import ServiceLocator = require('../../../lib/ServiceLocator');
 import DoneQueryHelper = require('../../../lib/repositories/done-helpers/query');
-import {expect, sinon} from "../../TestUtils";
+import {expect, sinon} from '../../TestUtils';
 
 describe('Server DoneQueryHelper', () => {
 
@@ -123,7 +123,7 @@ describe('Server DoneQueryHelper', () => {
 
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(() => {
-      expect(dynamoDBDocumentClient.query).to.have.been.calledThrice;
+      expect(dynamoDBDocumentClient.query).to.have.been.calledThrice; // tslint:disable-line:no-unused-expression
       expect(dynamoDBDocumentClient.query.args[0][0].ExpressionAttributeValues)
         .to.eql({':m': '2017-08'});
       expect(dynamoDBDocumentClient.query.args[1][0].ExpressionAttributeValues)
@@ -171,7 +171,7 @@ describe('Server DoneQueryHelper', () => {
 
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(result => {
-      expect(result.nextKey).to.be.undefined;
+      expect(result.nextKey).to.be.undefined; // tslint:disable-line:no-unused-expression
     });
   });
 

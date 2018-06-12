@@ -1,7 +1,7 @@
 
 import ServiceLocator = require('../../lib/ServiceLocator');
 import DoneRepository = require('../../lib/repositories/Done');
-import {expect, sinon} from "../TestUtils";
+import {expect, sinon} from '../TestUtils';
 
 describe('Server DoneRepository', () => {
 

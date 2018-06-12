@@ -1,7 +1,7 @@
 
 import ServiceLocator = require('../../lib/ServiceLocator');
 import UserIdRepository = require('../../lib/repositories/UserId');
-import {expect, sinon} from "../TestUtils";
+import {expect, sinon} from '../TestUtils';
 
 describe('Server UserIdRepository', () => {
 

@@ -1,7 +1,7 @@
 
 import PostDoneRequestProcessor = require('../../lib/request-processors/PostDone');
 import ServiceLocator = require('../../lib/ServiceLocator');
-import {expect, sinon} from "../TestUtils";
+import {expect, sinon} from '../TestUtils';
 
 describe('Server PostDoneRequestProcessor', () => {
 
