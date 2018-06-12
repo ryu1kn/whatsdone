@@ -1,7 +1,8 @@
 
 import DynamoTableClient = require('../../lib/repositories/DynamoTableClient');
 import ServiceLocator = require('../../lib/ServiceLocator');
-import {expect, sinon} from '../TestUtils';
+import {expect} from '../TestUtils';
+import sinon = require('sinon');
 
 describe('Server DynamoTableClient', () => {
 

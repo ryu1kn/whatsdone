@@ -1,7 +1,8 @@
 
 import ServiceLocator = require('../../../lib/ServiceLocator');
 import DoneQueryHelper = require('../../../lib/repositories/done-helpers/query');
-import {expect, sinon} from '../../TestUtils';
+import {expect} from '../../TestUtils';
+import sinon = require('sinon');
 
 describe('Server DoneQueryHelper', () => {
 

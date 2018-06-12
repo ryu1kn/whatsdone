@@ -1,7 +1,8 @@
 
 import GetDonesRequestProcessor = require('../../lib/request-processors/GetDones');
 import ServiceLocator = require('../../lib/ServiceLocator');
-import {expect, sinon, throwError} from '../TestUtils';
+import {expect, throwError} from '../TestUtils';
+import sinon = require('sinon');
 
 describe('Server GetDonesRequestProcessor', () => {
 

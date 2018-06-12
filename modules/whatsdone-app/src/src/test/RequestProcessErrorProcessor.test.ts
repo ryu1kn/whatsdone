@@ -1,7 +1,8 @@
 
 import RequestProcessErrorProcessor = require('../lib/RequestProcessErrorProcessor');
 import ServiceLocator = require('../lib/ServiceLocator');
-import {expect, sinon} from './TestUtils';
+import {expect} from './TestUtils';
+import sinon = require('sinon');
 
 describe('Server RequestProcessErrorProcessor', () => {
 

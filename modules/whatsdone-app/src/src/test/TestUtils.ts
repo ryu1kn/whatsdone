@@ -2,8 +2,9 @@
 import chai = require('chai');
 chai.use(require('sinon-chai'));
 
+import sinon = require('sinon');
+
 export const expect = chai.expect;
-export const sinon = require('sinon');
 
 export const throwError = () => {
   throw new Error('Should not have been called');
