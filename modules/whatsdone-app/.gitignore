@@ -1,5 +1,6 @@
 /dist
-/src/built
-/src/node_modules
-/src/coverage
-/src/.nyc_output
+/built
+/node_modules
+/ops/node_modules
+/coverage
+/.nyc_output

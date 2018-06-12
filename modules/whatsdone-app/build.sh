@@ -2,12 +2,9 @@
 
 set -euo pipefail
 
-app_dir=./src
-app_build_dir=$app_dir/built
-dist_dir=$npm_package_config_BUILD_DIR
-
-(cd $app_dir && yarn run build)
+build_dir=built
+dist_dir=$npm_package_config_BUILD_DIR_NAME
 
 mkdir -p $dist_dir
-cp -r $app_dir/package.json $app_dir/tsconfig.json $app_build_dir/index.js $app_build_dir/lib $dist_dir
+cp -r package.json $build_dir/index.js $build_dir/lib $dist_dir
 (cd $dist_dir && yarn install --production)
