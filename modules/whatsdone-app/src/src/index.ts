@@ -68,4 +68,4 @@ router.post('/dones', ServiceLocator.postDoneRequestHandler);
 router.delete('/dones/:id', ServiceLocator.deleteDoneRequestHandler);
 router.put('/dones/:id', ServiceLocator.updateDoneRequestHandler);
 
-exports.handler = router.route;
+export const handler = (event, context, callback) => router.route(event, context, callback);
