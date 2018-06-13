@@ -1,7 +1,8 @@
 import ServiceLocator from '../ServiceLocator';
+import DoneRepository from '../repositories/Done';
 
 export default class CreateDoneCommand {
-  private _doneRepository: any;
+  private _doneRepository: DoneRepository;
 
   constructor() {
     this._doneRepository = ServiceLocator.doneRepository;

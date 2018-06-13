@@ -1,9 +1,10 @@
 import ServiceLocator from './ServiceLocator';
 import UserIdRepository from './repositories/UserId';
+import CognitoUserFinder from './CognitoUserFinder';
 
 export default class UserNameService {
   private _userIdRepository: UserIdRepository;
-  private _cognitoUserFinder: any;
+  private _cognitoUserFinder: CognitoUserFinder;
 
   constructor() {
     this._userIdRepository = ServiceLocator.userIdRepository;

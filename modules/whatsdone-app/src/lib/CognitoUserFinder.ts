@@ -2,8 +2,8 @@
 import ServiceLocator from './ServiceLocator';
 
 export default class CognitoUserFinder {
-  private _cognitoIdentityServiceProvider: any;
-  private _userPoolId: any;
+  private _cognitoIdentityServiceProvider: AWS.CognitoIdentityServiceProvider;
+  private _userPoolId: string;
 
   constructor() {
     this._cognitoIdentityServiceProvider = ServiceLocator.cognitoIdentityServiceProvider;

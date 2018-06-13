@@ -17,7 +17,7 @@ class ServiceLocator {
     this._cache = {};
   }
 
-  get config() {
+  get config(): {userPoolId: string, webappOrigin: string} {
     return this._get('config');
   }
 
