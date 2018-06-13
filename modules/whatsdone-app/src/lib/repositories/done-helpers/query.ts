@@ -8,7 +8,7 @@ import utils = require('../utils');
 const DEFAULT_SCAN_LIMIT = 20;
 const OLDEST_QUERY_MONTH = '2015-02';
 
-class DoneQueryHelper {
+export default class DoneQueryHelper {
   private _docClient: AWS.DynamoDB.DocumentClient;
   private _dateProvider: {getCurrentDate: () => Date};
   private _collectionName: string;
@@ -109,5 +109,3 @@ class DoneQueryHelper {
   }
 
 }
-
-export = DoneQueryHelper;

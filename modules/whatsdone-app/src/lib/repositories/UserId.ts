@@ -4,7 +4,7 @@ import ServiceLocator from '../ServiceLocator';
 
 class UserIdRepository {
   private _docClient: AWS.DynamoDB.DocumentClient;
-  private _tableName: any;
+  private _tableName: string;
 
   constructor({tableName}) {
     this._docClient = ServiceLocator.dynamoDBDocumentClient;

@@ -2,12 +2,14 @@
 import _ = require('lodash');
 import ServiceLocator from '../ServiceLocator';
 import utils = require('./utils');
+import DynamoTableClient from './DynamoTableClient';
+import DoneQueryHelper from './done-helpers/query';
 
 const MODIFIABLE_FIELDS = ['date', 'doneThing'];
 
 class DoneRepository {
-  private _doneDynamoTableClient: any;
-  private _doneQueryHelper: any;
+  private _doneDynamoTableClient: DynamoTableClient;
+  private _doneQueryHelper: DoneQueryHelper;
 
   constructor() {
     this._doneDynamoTableClient = ServiceLocator.doneDynamoTableClient;

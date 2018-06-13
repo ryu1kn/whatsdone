@@ -3,11 +3,11 @@ import AWS = require('aws-sdk');
 import ServiceLocator from '../ServiceLocator';
 import WrappedError from '../WrappedError';
 
-class DynamoTableClient {
+export default class DynamoTableClient {
   private _docClient: AWS.DynamoDB.DocumentClient;
-  private _uuidGenerator: any;
-  private _collectionName: any;
-  private _idName: any;
+  private _uuidGenerator: {generate: () => string};
+  private _collectionName: string;
+  private _idName: string;
 
   constructor({collectionName, idName}) {
     this._docClient = ServiceLocator.dynamoDBDocumentClient;
@@ -88,5 +88,3 @@ class DynamoTableClient {
   }
 
 }
-
-export = DynamoTableClient;
