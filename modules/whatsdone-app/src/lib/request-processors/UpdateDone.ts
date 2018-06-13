@@ -1,5 +1,5 @@
 
-import ServiceLocator = require('../ServiceLocator');
+import ServiceLocator from '../ServiceLocator';
 
 class UpdateDoneRequestProcessor {
   private _updateDoneCommand: any;

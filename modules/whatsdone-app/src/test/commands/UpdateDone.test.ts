@@ -1,6 +1,6 @@
 
 import UpdateDoneCommand = require('../../lib/commands/UpdateDone');
-import ServiceLocator = require('../../lib/ServiceLocator');
+import ServiceLocator from '../../lib/ServiceLocator';
 import {expect, stubWithArgs} from '../TestUtils';
 
 describe('Server UpdateDoneCommand', () => {

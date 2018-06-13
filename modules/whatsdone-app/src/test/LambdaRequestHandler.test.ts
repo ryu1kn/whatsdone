@@ -1,6 +1,6 @@
 
 import LambdaRequestHandler = require('../lib/LambdaRequestHandler');
-import ServiceLocator = require('../lib/ServiceLocator');
+import ServiceLocator from '../lib/ServiceLocator';
 import {expect} from './TestUtils';
 import sinon = require('sinon');
 

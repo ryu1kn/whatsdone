@@ -1,5 +1,5 @@
 
-import ServiceLocator = require('./lib/ServiceLocator');
+import ServiceLocator from './lib/ServiceLocator';
 import ServiceFactory = require('./lib/ServiceFactory');
 import Route = require('route-parser');
 

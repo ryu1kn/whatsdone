@@ -1,5 +1,5 @@
 
-import ServiceLocator = require('./ServiceLocator');
+import ServiceLocator from './ServiceLocator';
 
 class LambdaRequestHandler {
   private _requestProcessor: any;
