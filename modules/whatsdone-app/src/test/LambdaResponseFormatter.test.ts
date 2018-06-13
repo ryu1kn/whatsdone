@@ -1,5 +1,5 @@
 
-import ServiceLocator = require('../lib/ServiceLocator');
+import ServiceLocator from '../lib/ServiceLocator';
 import LambdaResponseFormatter = require('../lib/LambdaResponseFormatter');
 import {expect} from './TestUtils';
 

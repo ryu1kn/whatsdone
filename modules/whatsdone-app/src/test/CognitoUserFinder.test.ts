@@ -1,5 +1,5 @@
 
-import ServiceLocator = require('../lib/ServiceLocator');
+import ServiceLocator from '../lib/ServiceLocator';
 import CognitoUserFinder = require('../lib/CognitoUserFinder');
 import {expect} from './TestUtils';
 import sinon = require('sinon');

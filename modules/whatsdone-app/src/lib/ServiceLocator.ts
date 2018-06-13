@@ -154,4 +154,4 @@ class ServiceLocator {
 
 }
 
-export = new ServiceLocator();
+export default new ServiceLocator();

@@ -1,6 +1,6 @@
 
 import GetDonesCommand = require('../../lib/commands/GetDones');
-import ServiceLocator = require('../../lib/ServiceLocator');
+import ServiceLocator from '../../lib/ServiceLocator';
 import {expect, stubWithArgs} from '../TestUtils';
 
 describe('Server GetDonesCommand', () => {

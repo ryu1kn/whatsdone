@@ -1,5 +1,5 @@
 
-import ServiceLocator = require('./ServiceLocator');
+import ServiceLocator from './ServiceLocator';
 
 class RequestProcessErrorProcessor {
   private _logger: any;

@@ -1,6 +1,6 @@
 
 import _ = require('lodash');
-import ServiceLocator = require('../ServiceLocator');
+import ServiceLocator from '../ServiceLocator';
 import utils = require('./utils');
 
 const MODIFIABLE_FIELDS = ['date', 'doneThing'];

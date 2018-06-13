@@ -1,6 +1,6 @@
 
 import _ = require('lodash');
-import ServiceLocator = require('../ServiceLocator');
+import ServiceLocator from '../ServiceLocator';
 
 class GetDonesCommand {
   private _userNameService: any;

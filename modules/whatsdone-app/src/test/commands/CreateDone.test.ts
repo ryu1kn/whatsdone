@@ -1,6 +1,6 @@
 
 import CreateDoneCommand = require('../../lib/commands/CreateDone');
-import ServiceLocator = require('../../lib/ServiceLocator');
+import ServiceLocator from '../../lib/ServiceLocator';
 import {expect, stubWithArgs} from '../TestUtils';
 
 describe('Server CreateDoneCommand', () => {
