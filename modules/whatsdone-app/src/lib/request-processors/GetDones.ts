@@ -1,8 +1,8 @@
-
 import ServiceLocator from '../ServiceLocator';
+import GetDonesCommand from '../commands/GetDones';
 
-class GetDonesRequestProcessor {
-  private _getDonesCommand: any;
+export default class GetDonesRequestProcessor {
+  private _getDonesCommand: GetDonesCommand;
 
   constructor() {
     this._getDonesCommand = ServiceLocator.getDonesCommand;
@@ -21,5 +21,3 @@ class GetDonesRequestProcessor {
   }
 
 }
-
-export = GetDonesRequestProcessor;

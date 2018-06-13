@@ -2,6 +2,11 @@ import AWS = require('aws-sdk');
 import ServiceFactory from './ServiceFactory';
 import DoneRepository from './repositories/Done';
 import UserIdRepository from './repositories/UserId';
+import DeleteDoneRequestHandler from './request-processors/DeleteDone';
+import GetDonesRequestProcessor from './request-processors/GetDones';
+import GetDonesCommand from './commands/GetDones';
+import CreateDoneCommand from './commands/CreateDone';
+import UpdateDoneCommand from './commands/UpdateDone';
 
 class ServiceLocator {
   private _serviceFactory: ServiceFactory;
@@ -44,7 +49,7 @@ class ServiceLocator {
     return this._get('staticContentsProvider');
   }
 
-  get getDonesRequestHandler() {
+  get getDonesRequestHandler(): GetDonesRequestProcessor {
     return this._get('getDonesRequestHandler');
   }
 
@@ -52,7 +57,7 @@ class ServiceLocator {
     return this._get('postDoneRequestHandler');
   }
 
-  get deleteDoneRequestHandler() {
+  get deleteDoneRequestHandler(): DeleteDoneRequestHandler {
     return this._get('deleteDoneRequestHandler');
   }
 
@@ -60,7 +65,7 @@ class ServiceLocator {
     return this._get('updateDoneRequestHandler');
   }
 
-  get createDoneCommand() {
+  get createDoneCommand(): CreateDoneCommand {
     return this._get('createDoneCommand');
   }
 
@@ -68,11 +73,11 @@ class ServiceLocator {
     return this._get('deleteDoneCommand');
   }
 
-  get getDonesCommand() {
+  get getDonesCommand(): GetDonesCommand {
     return this._get('getDonesCommand');
   }
 
-  get updateDoneCommand() {
+  get updateDoneCommand(): UpdateDoneCommand {
     return this._get('updateDoneCommand');
   }
 

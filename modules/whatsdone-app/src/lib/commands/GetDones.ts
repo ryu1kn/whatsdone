@@ -1,8 +1,7 @@
-
 import _ = require('lodash');
 import ServiceLocator from '../ServiceLocator';
 
-class GetDonesCommand {
+export default class GetDonesCommand {
   private _userNameService: any;
   private _doneRepository: any;
 
@@ -31,5 +30,3 @@ class GetDonesCommand {
   }
 
 }
-
-export = GetDonesCommand;

@@ -1,5 +1,5 @@
 
-import CreateDoneCommand = require('../../lib/commands/CreateDone');
+import CreateDoneCommand from '../../lib/commands/CreateDone';
 import ServiceLocator from '../../lib/ServiceLocator';
 import {expect, stubWithArgs} from '../TestUtils';
 

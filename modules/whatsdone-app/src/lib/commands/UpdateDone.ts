@@ -1,8 +1,7 @@
-
 import _ = require('lodash');
 import ServiceLocator from '../ServiceLocator';
 
-class UpdateDoneCommand {
+export default class UpdateDoneCommand {
   private _doneRepository: any;
 
   constructor() {
@@ -15,5 +14,3 @@ class UpdateDoneCommand {
   }
 
 }
-
-export = UpdateDoneCommand;

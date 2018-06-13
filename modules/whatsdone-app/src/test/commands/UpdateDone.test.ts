@@ -1,5 +1,5 @@
 
-import UpdateDoneCommand = require('../../lib/commands/UpdateDone');
+import UpdateDoneCommand from '../../lib/commands/UpdateDone';
 import ServiceLocator from '../../lib/ServiceLocator';
 import {expect, stubWithArgs} from '../TestUtils';
 

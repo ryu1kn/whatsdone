@@ -1,5 +1,5 @@
 
-import GetDonesCommand = require('../../lib/commands/GetDones');
+import GetDonesCommand from '../../lib/commands/GetDones';
 import ServiceLocator from '../../lib/ServiceLocator';
 import {expect, stubWithArgs} from '../TestUtils';
 

@@ -1,7 +1,6 @@
-
 import ServiceLocator from '../ServiceLocator';
 
-class CreateDoneCommand {
+export default class CreateDoneCommand {
   private _doneRepository: any;
 
   constructor() {
@@ -15,5 +14,3 @@ class CreateDoneCommand {
   }
 
 }
-
-export = CreateDoneCommand;
