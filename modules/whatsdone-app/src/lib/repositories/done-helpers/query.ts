@@ -1,5 +1,6 @@
 
 import _ = require('lodash');
+import AWS = require('aws-sdk');
 import ServiceLocator from '../../ServiceLocator';
 import WrappedError from '../../WrappedError';
 import utils = require('../utils');
@@ -8,7 +9,7 @@ const DEFAULT_SCAN_LIMIT = 20;
 const OLDEST_QUERY_MONTH = '2015-02';
 
 class DoneQueryHelper {
-  private _docClient: any;
+  private _docClient: AWS.DynamoDB.DocumentClient;
   private _dateProvider: any;
   private _logger: any;
   private _collectionName: any;

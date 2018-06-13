@@ -1,8 +1,9 @@
 
+import AWS = require('aws-sdk');
 import ServiceLocator from '../ServiceLocator';
 
 class UserIdRepository {
-  private _docClient: any;
+  private _docClient: AWS.DynamoDB.DocumentClient;
   private _tableName: any;
 
   constructor({tableName}) {
