@@ -1,7 +1,7 @@
 
 import ServiceLocator from './ServiceLocator';
 
-class CognitoUserFinder {
+export default class CognitoUserFinder {
   private _cognitoIdentityServiceProvider: any;
   private _userPoolId: any;
 
@@ -21,5 +21,3 @@ class CognitoUserFinder {
   }
 
 }
-
-export = CognitoUserFinder;

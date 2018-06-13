@@ -3,7 +3,7 @@ import _ = require('lodash');
 import AWS = require('aws-sdk');
 import ServiceLocator from '../../ServiceLocator';
 import WrappedError from '../../WrappedError';
-import utils = require('../utils');
+import * as utils from '../utils';
 
 const DEFAULT_SCAN_LIMIT = 20;
 const OLDEST_QUERY_MONTH = '2015-02';

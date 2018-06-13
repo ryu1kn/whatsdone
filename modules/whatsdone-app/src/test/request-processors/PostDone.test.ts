@@ -1,5 +1,5 @@
 
-import PostDoneRequestProcessor = require('../../lib/request-processors/PostDone');
+import PostDoneRequestProcessor from '../../lib/request-processors/PostDone';
 import ServiceLocator from '../../lib/ServiceLocator';
 import {expect} from '../TestUtils';
 import sinon = require('sinon');

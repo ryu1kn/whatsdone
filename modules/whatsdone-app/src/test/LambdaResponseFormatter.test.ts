@@ -1,6 +1,6 @@
 
 import ServiceLocator from '../lib/ServiceLocator';
-import LambdaResponseFormatter = require('../lib/LambdaResponseFormatter');
+import LambdaResponseFormatter from '../lib/LambdaResponseFormatter';
 import {expect} from './TestUtils';
 
 describe('Server LambdaResponseFormatter', () => {

@@ -1,7 +1,7 @@
 import ServiceLocator from '../ServiceLocator';
 import UpdateDoneCommand from '../commands/UpdateDone';
 
-class UpdateDoneRequestProcessor {
+export default class UpdateDoneRequestProcessor {
   private _updateDoneCommand: UpdateDoneCommand;
 
   constructor() {
@@ -26,5 +26,3 @@ class UpdateDoneRequestProcessor {
   }
 
 }
-
-export = UpdateDoneRequestProcessor;

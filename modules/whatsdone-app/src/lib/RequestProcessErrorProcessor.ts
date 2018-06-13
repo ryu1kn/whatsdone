@@ -1,7 +1,7 @@
 
 import ServiceLocator from './ServiceLocator';
 
-class RequestProcessErrorProcessor {
+export default class RequestProcessErrorProcessor {
   private _logger: {error: (...args: any[]) => void};
 
   constructor() {
@@ -40,5 +40,3 @@ class RequestProcessErrorProcessor {
   }
 
 }
-
-export = RequestProcessErrorProcessor;

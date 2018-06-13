@@ -1,7 +1,7 @@
 import ServiceLocator from './ServiceLocator';
 import UserIdRepository from './repositories/UserId';
 
-class UserNameService {
+export default class UserNameService {
   private _userIdRepository: UserIdRepository;
   private _cognitoUserFinder: any;
 
@@ -26,5 +26,3 @@ class UserNameService {
   }
 
 }
-
-export = UserNameService;
