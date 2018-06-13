@@ -7,7 +7,7 @@ const AWS = AWSXRay.captureAWS(RawAWS);
 import LambdaRequestHandler from './LambdaRequestHandler';
 
 export default class ServiceFactory {
-  private _env: any;
+  private _env: {[key: string]: string};
 
   constructor(params: any) {
     this._env = params.env;
@@ -25,12 +25,12 @@ export default class ServiceFactory {
   }
 
   createCognitoUserFinder() {
-    const CognitoUserFinder = require('./CognitoUserFinder');
+    const CognitoUserFinder = require('./CognitoUserFinder').default;
     return new CognitoUserFinder();
   }
 
   createGetDonesRequestHandler() {
-    const GetDonesRequestProcessor = require('./request-processors/GetDones');
+    const GetDonesRequestProcessor = require('./request-processors/GetDones').default;
     const requestHandler = new LambdaRequestHandler({
       requestProcessor: new GetDonesRequestProcessor()
     });
@@ -38,7 +38,7 @@ export default class ServiceFactory {
   }
 
   createPostDoneRequestHandler() {
-    const PostDoneRequestProcessor = require('./request-processors/PostDone');
+    const PostDoneRequestProcessor = require('./request-processors/PostDone').default;
     const requestHandler = new LambdaRequestHandler({
       requestProcessor: new PostDoneRequestProcessor()
     });
@@ -46,7 +46,7 @@ export default class ServiceFactory {
   }
 
   createDeleteDoneRequestHandler() {
-    const DeleteDoneRequestProcessor = require('./request-processors/DeleteDone');
+    const DeleteDoneRequestProcessor = require('./request-processors/DeleteDone').default;
     const requestHandler = new LambdaRequestHandler({
       requestProcessor: new DeleteDoneRequestProcessor()
     });
@@ -54,7 +54,7 @@ export default class ServiceFactory {
   }
 
   createUpdateDoneRequestHandler() {
-    const UpdateDoneRequestProcessor = require('./request-processors/UpdateDone');
+    const UpdateDoneRequestProcessor = require('./request-processors/UpdateDone').default;
     const requestHandler = new LambdaRequestHandler({
       requestProcessor: new UpdateDoneRequestProcessor()
     });
@@ -62,32 +62,32 @@ export default class ServiceFactory {
   }
 
   createCreateDoneCommand() {
-    const CreateDoneCommand = require('./commands/CreateDone');
+    const CreateDoneCommand = require('./commands/CreateDone').default;
     return new CreateDoneCommand();
   }
 
   createGetDonesCommand() {
-    const GetDonesCommand = require('./commands/GetDones');
+    const GetDonesCommand = require('./commands/GetDones').default;
     return new GetDonesCommand();
   }
 
   createUpdateDoneCommand() {
-    const UpdateDoneCommand = require('./commands/UpdateDone');
+    const UpdateDoneCommand = require('./commands/UpdateDone').default;
     return new UpdateDoneCommand();
   }
 
   createRequestProcessErrorProcessor() {
-    const RequestProcessErrorProcessor = require('./RequestProcessErrorProcessor');
+    const RequestProcessErrorProcessor = require('./RequestProcessErrorProcessor').default;
     return new RequestProcessErrorProcessor();
   }
 
   createLambdaRequestNormaliser() {
-    const LambdaRequestNormaliser = require('./LambdaRequestNormaliser');
+    const LambdaRequestNormaliser = require('./LambdaRequestNormaliser').default;
     return new LambdaRequestNormaliser();
   }
 
   createLambdaResponseFormatter() {
-    const LambdaResponseFormatter = require('./LambdaResponseFormatter');
+    const LambdaResponseFormatter = require('./LambdaResponseFormatter').default;
     return new LambdaResponseFormatter();
   }
 
@@ -100,27 +100,27 @@ export default class ServiceFactory {
   }
 
   createDoneQueryHelper() {
-    const DoneQueryHelper = require('./repositories/done-helpers/query');
+    const DoneQueryHelper = require('./repositories/done-helpers/query').default;
     return new DoneQueryHelper(this._env.DONE_TABLE_NAME);
   }
 
   createDoneDynamoTableClient() {
-    const DynamoTableClient = require('./repositories/DynamoTableClient');
+    const DynamoTableClient = require('./repositories/DynamoTableClient').default;
     return new DynamoTableClient({collectionName: this._env.DONE_TABLE_NAME, idName: 'id'});
   }
 
   createDoneRepository() {
-    const DoneRepository = require('./repositories/Done');
+    const DoneRepository = require('./repositories/Done').default;
     return new DoneRepository();
   }
 
   createUserNameService() {
-    const UserNameService = require('./UserNameService');
+    const UserNameService = require('./UserNameService').default;
     return new UserNameService();
   }
 
   createUserIdRepository() {
-    const UserIdRepository = require('./repositories/UserId');
+    const UserIdRepository = require('./repositories/UserId').default;
     return new UserIdRepository({tableName: this._env.USER_ID_TABLE_NAME});
   }
 
