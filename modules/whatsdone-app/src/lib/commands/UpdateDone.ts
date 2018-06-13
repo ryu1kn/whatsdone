@@ -1,8 +1,9 @@
 import _ = require('lodash');
 import ServiceLocator from '../ServiceLocator';
+import DoneRepository from '../repositories/Done';
 
 export default class UpdateDoneCommand {
-  private _doneRepository: any;
+  private _doneRepository: DoneRepository;
 
   constructor() {
     this._doneRepository = ServiceLocator.doneRepository;

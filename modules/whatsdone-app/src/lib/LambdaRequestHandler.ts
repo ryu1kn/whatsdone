@@ -1,12 +1,15 @@
 import ServiceLocator from './ServiceLocator';
 import UserIdRepository from './repositories/UserId';
+import LambdaRequestNormaliser from './LambdaRequestNormaliser';
+import LambdaResponseFormatter from './LambdaResponseFormatter';
+import RequestProcessErrorProcessor from './RequestProcessErrorProcessor';
 
 export default class LambdaRequestHandler {
   private _requestProcessor: any;
   private _userIdRepository: UserIdRepository;
-  private _lambdaRequestNormaliser: any;
-  private _lambdaResponseFormatter: any;
-  private _requestProcessErrorProcessor: any;
+  private _lambdaRequestNormaliser: LambdaRequestNormaliser;
+  private _lambdaResponseFormatter: LambdaResponseFormatter;
+  private _requestProcessErrorProcessor: RequestProcessErrorProcessor;
 
   constructor(params) {
     this._requestProcessor = params.requestProcessor;

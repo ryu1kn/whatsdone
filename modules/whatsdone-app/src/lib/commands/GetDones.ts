@@ -1,9 +1,11 @@
 import _ = require('lodash');
 import ServiceLocator from '../ServiceLocator';
+import UserNameService from '../UserNameService';
+import DoneRepository from '../repositories/Done';
 
 export default class GetDonesCommand {
-  private _userNameService: any;
-  private _doneRepository: any;
+  private _userNameService: UserNameService;
+  private _doneRepository: DoneRepository;
 
   constructor() {
     this._userNameService = ServiceLocator.userNameService;
