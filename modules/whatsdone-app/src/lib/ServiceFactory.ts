@@ -95,7 +95,7 @@ export default class ServiceFactory {
     return console;
   }
 
-  createDynamoDBDocumentClient() {
+  createDynamoDBDocumentClient(): AWS.DynamoDB.DocumentClient {
     return new AWS.DynamoDB.DocumentClient({region: this._env.DB_REGION});
   }
 

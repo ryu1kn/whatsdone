@@ -1,3 +1,4 @@
+import AWS = require('aws-sdk');
 import ServiceFactory from './ServiceFactory';
 
 class ServiceLocator {
@@ -102,7 +103,7 @@ class ServiceLocator {
   }
 
   get dynamoDBDocumentClient() {
-    return this._get('dynamoDBDocumentClient');
+    return this._get('dynamoDBDocumentClient') as AWS.DynamoDB.DocumentClient;
   }
 
   get doneQueryHelper() {

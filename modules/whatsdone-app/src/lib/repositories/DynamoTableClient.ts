@@ -1,9 +1,10 @@
 
+import AWS = require('aws-sdk');
 import ServiceLocator from '../ServiceLocator';
 import WrappedError from '../WrappedError';
 
 class DynamoTableClient {
-  private _docClient: any;
+  private _docClient: AWS.DynamoDB.DocumentClient;
   private _uuidGenerator: any;
   private _collectionName: any;
   private _idName: any;
