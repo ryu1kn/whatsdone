@@ -1,7 +1,7 @@
 import ServiceLocator from '../ServiceLocator';
 import CreateDoneCommand from '../commands/CreateDone';
 
-class PostDonesRequestProcessor {
+export default class PostDonesRequestProcessor {
   private _createDoneCommand: CreateDoneCommand;
 
   constructor() {
@@ -23,5 +23,3 @@ class PostDonesRequestProcessor {
   }
 
 }
-
-export = PostDonesRequestProcessor;

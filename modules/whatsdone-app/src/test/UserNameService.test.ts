@@ -1,5 +1,5 @@
 
-import UserNameService = require('../lib/UserNameService');
+import UserNameService from '../lib/UserNameService';
 import ServiceLocator from '../lib/ServiceLocator';
 import {expect} from './TestUtils';
 import sinon = require('sinon');

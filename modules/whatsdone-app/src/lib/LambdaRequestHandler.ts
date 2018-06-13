@@ -1,7 +1,7 @@
 import ServiceLocator from './ServiceLocator';
 import UserIdRepository from './repositories/UserId';
 
-class LambdaRequestHandler {
+export default class LambdaRequestHandler {
   private _requestProcessor: any;
   private _userIdRepository: UserIdRepository;
   private _lambdaRequestNormaliser: any;
@@ -39,5 +39,3 @@ class LambdaRequestHandler {
   }
 
 }
-
-export = LambdaRequestHandler;

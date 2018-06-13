@@ -5,7 +5,7 @@ const ContentType = {
   JSON: 'application/json'
 };
 
-class LambdaRequestNormaliser {
+export default class LambdaRequestNormaliser {
 
   normalise(event, _lambdaContext?) {
     return {
@@ -31,5 +31,3 @@ class LambdaRequestNormaliser {
   }
 
 }
-
-export = LambdaRequestNormaliser;

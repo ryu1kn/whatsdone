@@ -4,7 +4,7 @@ import RawAWS = require('aws-sdk');
 import Uuid = require('uuid');
 const AWS = AWSXRay.captureAWS(RawAWS);
 
-import LambdaRequestHandler = require('./LambdaRequestHandler');
+import LambdaRequestHandler from './LambdaRequestHandler';
 
 export default class ServiceFactory {
   private _env: any;

@@ -1,5 +1,5 @@
 
-import LambdaRequestNormaliser = require('../lib/LambdaRequestNormaliser');
+import LambdaRequestNormaliser from '../lib/LambdaRequestNormaliser';
 import {expect} from './TestUtils';
 
 describe('Server LambdaRequestNormaliser', () => {

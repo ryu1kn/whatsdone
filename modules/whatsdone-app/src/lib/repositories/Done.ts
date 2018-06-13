@@ -1,7 +1,7 @@
 
 import _ = require('lodash');
 import ServiceLocator from '../ServiceLocator';
-import utils = require('./utils');
+import * as utils from './utils';
 import DynamoTableClient from './DynamoTableClient';
 import DoneQueryHelper from './done-helpers/query';
 

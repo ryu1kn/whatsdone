@@ -1,7 +1,7 @@
 
 import ServiceLocator from './ServiceLocator';
 
-class LambdaResponseFormatter {
+export default class LambdaResponseFormatter {
   private _config: any;
 
   constructor() {
@@ -19,5 +19,3 @@ class LambdaResponseFormatter {
   }
 
 }
-
-export = LambdaResponseFormatter;
