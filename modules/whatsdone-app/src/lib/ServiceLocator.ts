@@ -114,7 +114,7 @@ class ServiceLocator {
     return this._get('doneDynamoTableClient');
   }
 
-  get uuidGenerator() {
+  get uuidGenerator(): {generate: () => string} {
     return this._get('uuidGenerator');
   }
 

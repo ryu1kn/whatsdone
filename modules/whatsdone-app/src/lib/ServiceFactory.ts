@@ -124,7 +124,7 @@ export default class ServiceFactory {
     return new UserIdRepository({tableName: this._env.USER_ID_TABLE_NAME});
   }
 
-  createUuidGenerator() {
+  createUuidGenerator(): {generate: () => string} {
     return {generate: () => Uuid.v4()};
   }
 
