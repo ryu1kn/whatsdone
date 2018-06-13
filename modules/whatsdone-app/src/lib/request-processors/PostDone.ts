@@ -1,8 +1,8 @@
-
 import ServiceLocator from '../ServiceLocator';
+import CreateDoneCommand from '../commands/CreateDone';
 
 class PostDonesRequestProcessor {
-  private _createDoneCommand: any;
+  private _createDoneCommand: CreateDoneCommand;
 
   constructor() {
     this._createDoneCommand = ServiceLocator.createDoneCommand;

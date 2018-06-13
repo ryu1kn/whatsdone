@@ -1,5 +1,5 @@
 
-import DeleteDoneRequestProcessor = require('../../lib/request-processors/DeleteDone');
+import DeleteDoneRequestProcessor from '../../lib/request-processors/DeleteDone';
 import ServiceLocator from '../../lib/ServiceLocator';
 import {expect, throwError} from '../TestUtils';
 import sinon = require('sinon');

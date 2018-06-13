@@ -1,8 +1,7 @@
-
 import ServiceLocator from '../ServiceLocator';
 import DoneRepository from '../repositories/Done';
 
-class DeleteDoneRequestHandler {
+export default class DeleteDoneRequestHandler {
   private _doneRepository: DoneRepository;
 
   constructor() {
@@ -15,5 +14,3 @@ class DeleteDoneRequestHandler {
   }
 
 }
-
-export = DeleteDoneRequestHandler;

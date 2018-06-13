@@ -1,8 +1,8 @@
-
 import ServiceLocator from '../ServiceLocator';
+import UpdateDoneCommand from '../commands/UpdateDone';
 
 class UpdateDoneRequestProcessor {
-  private _updateDoneCommand: any;
+  private _updateDoneCommand: UpdateDoneCommand;
 
   constructor() {
     this._updateDoneCommand = ServiceLocator.updateDoneCommand;
