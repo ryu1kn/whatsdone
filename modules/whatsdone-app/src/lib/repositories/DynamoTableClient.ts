@@ -1,6 +1,6 @@
 
 import ServiceLocator = require('../ServiceLocator');
-import WrappedError = require('../WrappedError');
+import WrappedError from '../WrappedError';
 
 class DynamoTableClient {
   private _docClient: any;

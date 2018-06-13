@@ -1,7 +1,7 @@
 
 import _ = require('lodash');
 import ServiceLocator = require('../../ServiceLocator');
-import WrappedError = require('../../WrappedError');
+import WrappedError from '../../WrappedError';
 import utils = require('../utils');
 
 const DEFAULT_SCAN_LIMIT = 20;
@@ -24,7 +24,7 @@ class DoneQueryHelper {
     try {
       return await this._query(this._decodeNextKey(nextKey));
     } catch (e) {
-      throw new WrappedError(e, undefined);
+      throw new WrappedError(e);
     }
   }
 
