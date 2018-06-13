@@ -86,7 +86,7 @@ class ServiceLocator {
     return this._get('lambdaResponseFormatter');
   }
 
-  get logger() {
+  get logger(): {error: (...args: any[]) => void} {
     return this._get('logger');
   }
 
@@ -118,7 +118,7 @@ class ServiceLocator {
     return this._get('uuidGenerator');
   }
 
-  get dateProvider() {
+  get dateProvider(): {getCurrentDate: () => Date} {
     return this._get('dateProvider');
   }
 

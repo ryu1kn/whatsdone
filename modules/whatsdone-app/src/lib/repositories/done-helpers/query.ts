@@ -10,14 +10,12 @@ const OLDEST_QUERY_MONTH = '2015-02';
 
 class DoneQueryHelper {
   private _docClient: AWS.DynamoDB.DocumentClient;
-  private _dateProvider: any;
-  private _logger: any;
-  private _collectionName: any;
+  private _dateProvider: {getCurrentDate: () => Date};
+  private _collectionName: string;
 
   constructor(collectionName) {
     this._docClient = ServiceLocator.dynamoDBDocumentClient;
     this._dateProvider = ServiceLocator.dateProvider;
-    this._logger = ServiceLocator.logger;
     this._collectionName = collectionName;
   }
 

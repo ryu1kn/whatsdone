@@ -91,7 +91,7 @@ export default class ServiceFactory {
     return new LambdaResponseFormatter();
   }
 
-  createLogger() {
+  createLogger(): {error: (...args: any[]) => void} {
     return console;
   }
 
@@ -128,7 +128,7 @@ export default class ServiceFactory {
     return {generate: () => Uuid.v4()};
   }
 
-  createDateProvider() {
+  createDateProvider(): {getCurrentDate: () => Date} {
     return {getCurrentDate: () => new Date()};
   }
 
