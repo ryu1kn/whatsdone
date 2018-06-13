@@ -1,5 +1,7 @@
 import AWS = require('aws-sdk');
 import ServiceFactory from './ServiceFactory';
+import DoneRepository from './repositories/Done';
+import UserIdRepository from './repositories/UserId';
 
 class ServiceLocator {
   private _serviceFactory: ServiceFactory;
@@ -94,11 +96,11 @@ class ServiceLocator {
     return this._get('userNameService');
   }
 
-  get userIdRepository() {
+  get userIdRepository(): UserIdRepository {
     return this._get('userIdRepository');
   }
 
-  get doneRepository() {
+  get doneRepository(): DoneRepository {
     return this._get('doneRepository');
   }
 

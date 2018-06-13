@@ -1,9 +1,9 @@
-
 import ServiceLocator from './ServiceLocator';
+import UserIdRepository from './repositories/UserId';
 
 class LambdaRequestHandler {
   private _requestProcessor: any;
-  private _userIdRepository: any;
+  private _userIdRepository: UserIdRepository;
   private _lambdaRequestNormaliser: any;
   private _lambdaResponseFormatter: any;
   private _requestProcessErrorProcessor: any;

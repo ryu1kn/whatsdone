@@ -1,6 +1,6 @@
 
 import ServiceLocator from '../../lib/ServiceLocator';
-import DoneRepository = require('../../lib/repositories/Done');
+import DoneRepository from '../../lib/repositories/Done';
 import {expect} from '../TestUtils';
 import sinon = require('sinon');
 
