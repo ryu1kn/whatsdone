@@ -1,9 +1,9 @@
 
-class WrappedError extends Error {
-  public originalError: any;
-  public details: any;
+export default class WrappedError extends Error {
+  public originalError: Error;
+  public details: {[key: string]: any};
 
-  constructor(originalError, errorDetails) {
+  constructor(originalError, errorDetails?) {
     super(originalError.message);
     this.name = 'WrappedError';
     this.originalError = originalError;
@@ -11,5 +11,3 @@ class WrappedError extends Error {
   }
 
 }
-
-export = WrappedError;
