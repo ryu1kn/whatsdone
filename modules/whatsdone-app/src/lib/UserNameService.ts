@@ -1,8 +1,8 @@
-
 import ServiceLocator from './ServiceLocator';
+import UserIdRepository from './repositories/UserId';
 
 class UserNameService {
-  private _userIdRepository: any;
+  private _userIdRepository: UserIdRepository;
   private _cognitoUserFinder: any;
 
   constructor() {

@@ -2,7 +2,7 @@
 import AWS = require('aws-sdk');
 import ServiceLocator from '../ServiceLocator';
 
-class UserIdRepository {
+export default class UserIdRepository {
   private _docClient: AWS.DynamoDB.DocumentClient;
   private _tableName: string;
 
@@ -34,5 +34,3 @@ class UserIdRepository {
   }
 
 }
-
-export = UserIdRepository;

@@ -7,7 +7,7 @@ import DoneQueryHelper from './done-helpers/query';
 
 const MODIFIABLE_FIELDS = ['date', 'doneThing'];
 
-class DoneRepository {
+export default class DoneRepository {
   private _doneDynamoTableClient: DynamoTableClient;
   private _doneQueryHelper: DoneQueryHelper;
 
@@ -53,5 +53,3 @@ class DoneRepository {
   }
 
 }
-
-export = DoneRepository;

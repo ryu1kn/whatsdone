@@ -1,8 +1,9 @@
 
 import ServiceLocator from '../ServiceLocator';
+import DoneRepository from '../repositories/Done';
 
 class DeleteDoneRequestHandler {
-  private _doneRepository: any;
+  private _doneRepository: DoneRepository;
 
   constructor() {
     this._doneRepository = ServiceLocator.doneRepository;
