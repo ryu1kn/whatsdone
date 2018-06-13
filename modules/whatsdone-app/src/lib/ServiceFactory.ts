@@ -6,7 +6,7 @@ const AWS = AWSXRay.captureAWS(RawAWS);
 
 import LambdaRequestHandler = require('./LambdaRequestHandler');
 
-class ServiceFactory {
+export default class ServiceFactory {
   private _env: any;
 
   constructor(params: any) {
@@ -137,5 +137,3 @@ class ServiceFactory {
 function getBoundHandleMethod(handler) {
   return handler.handle.bind(handler);
 }
-
-export = ServiceFactory;

@@ -1,6 +1,6 @@
 
 import ServiceLocator from './lib/ServiceLocator';
-import ServiceFactory = require('./lib/ServiceFactory');
+import ServiceFactory from './lib/ServiceFactory';
 import Route = require('route-parser');
 
 ServiceLocator.load(new ServiceFactory({env: process.env}));

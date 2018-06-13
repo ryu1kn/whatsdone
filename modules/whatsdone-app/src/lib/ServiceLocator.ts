@@ -1,7 +1,8 @@
+import ServiceFactory from './ServiceFactory';
 
 class ServiceLocator {
-  private _serviceFactory: any;
-  private _cache: any;
+  private _serviceFactory: ServiceFactory;
+  private _cache: {[key: string]: Object};
 
   load(serviceFactory) {
     this._serviceFactory = serviceFactory;
