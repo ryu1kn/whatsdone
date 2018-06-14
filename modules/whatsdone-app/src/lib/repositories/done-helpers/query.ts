@@ -8,6 +8,12 @@ import * as utils from '../utils';
 const DEFAULT_SCAN_LIMIT = 20;
 const OLDEST_QUERY_MONTH = '2015-02';
 
+type QueryParams = {
+  monthKey: string,
+  exclusiveStartKey?: {ExclusiveStartKey: string},
+  limit?: number
+};
+
 export default class DoneQueryHelper {
   private _docClient: AWS.DynamoDB.DocumentClient;
   private _dateProvider: {getCurrentDate: () => Date};
@@ -73,7 +79,7 @@ export default class DoneQueryHelper {
     return currentDate.substr(0, utils.MONTH_LENGTH);
   }
 
-  _buildQueryParams({monthKey, exclusiveStartKey, limit}: any) {
+  _buildQueryParams({monthKey, exclusiveStartKey, limit}: QueryParams) {
     return Object.assign(
       {
         TableName: this._collectionName,
