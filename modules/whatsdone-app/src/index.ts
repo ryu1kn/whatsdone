@@ -1,12 +1,12 @@
-
 import ServiceLocator from './lib/ServiceLocator';
 import ServiceFactory from './lib/ServiceFactory';
 import Route = require('route-parser');
+import {ObjectMap} from './lib/models/Collection';
 
-ServiceLocator.load(new ServiceFactory({env: process.env}));
+ServiceLocator.load(new ServiceFactory(process.env));
 
 class Router {
-  private _handlers: {[key: string]: any[]};
+  private _handlers: ObjectMap<any[]>;
 
   constructor() {
     this._handlers = {
