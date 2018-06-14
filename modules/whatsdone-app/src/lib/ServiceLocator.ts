@@ -7,10 +7,11 @@ import GetDonesRequestProcessor from './request-processors/GetDones';
 import GetDonesCommand from './commands/GetDones';
 import CreateDoneCommand from './commands/CreateDone';
 import UpdateDoneCommand from './commands/UpdateDone';
+import {ObjectMap} from './models/Collection';
 
 class ServiceLocator {
   private _serviceFactory: ServiceFactory;
-  private _cache: {[key: string]: Object};
+  private _cache: ObjectMap<Object>;
 
   load(serviceFactory) {
     this._serviceFactory = serviceFactory;

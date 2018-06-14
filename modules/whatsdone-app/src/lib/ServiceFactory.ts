@@ -2,14 +2,15 @@ import AWSXRay = require('aws-xray-sdk');
 import RawAWS = require('aws-sdk');
 import LambdaRequestHandler from './LambdaRequestHandler';
 import Uuid = require('uuid');
+import {ObjectMap} from './models/Collection';
 
 const AWS = AWSXRay.captureAWS(RawAWS);
 
 export default class ServiceFactory {
-  private _env: {[key: string]: string};
+  private _env: ObjectMap<string>;
 
-  constructor(params: any) {
-    this._env = params.env;
+  constructor(env: ObjectMap<string>) {
+    this._env = env;
   }
 
   createConfig() {

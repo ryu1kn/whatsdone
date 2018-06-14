@@ -1,5 +1,7 @@
+import {ObjectMap} from './Collection';
+
 export type Response = {
   statusCode: string;
-  headers?: {[key: string]: string};
+  headers?: ObjectMap<string>;
   body?: string;
 };

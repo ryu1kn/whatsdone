@@ -1,7 +1,8 @@
+import {ObjectMap} from './models/Collection';
 
 export default class WrappedError extends Error {
   public originalError: Error;
-  public details: {[key: string]: any};
+  public details: ObjectMap<any>;
 
   constructor(originalError, errorDetails?) {
     super(originalError.message);
