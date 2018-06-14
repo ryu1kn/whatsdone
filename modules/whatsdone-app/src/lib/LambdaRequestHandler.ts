@@ -3,9 +3,10 @@ import UserIdRepository from './repositories/UserId';
 import LambdaRequestNormaliser from './LambdaRequestNormaliser';
 import LambdaResponseFormatter from './LambdaResponseFormatter';
 import RequestProcessErrorProcessor from './RequestProcessErrorProcessor';
+import {RequestProcessor} from './RequestProcessor';
 
 export default class LambdaRequestHandler {
-  private _requestProcessor: any;
+  private _requestProcessor: RequestProcessor;
   private _userIdRepository: UserIdRepository;
   private _lambdaRequestNormaliser: LambdaRequestNormaliser;
   private _lambdaResponseFormatter: LambdaResponseFormatter;

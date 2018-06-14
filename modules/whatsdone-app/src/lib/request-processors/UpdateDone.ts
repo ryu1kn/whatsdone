@@ -1,7 +1,8 @@
 import ServiceLocator from '../ServiceLocator';
 import UpdateDoneCommand from '../commands/UpdateDone';
+import {RequestProcessor} from '../RequestProcessor';
 
-export default class UpdateDoneRequestProcessor {
+export default class UpdateDoneRequestProcessor implements RequestProcessor {
   private _updateDoneCommand: UpdateDoneCommand;
 
   constructor() {

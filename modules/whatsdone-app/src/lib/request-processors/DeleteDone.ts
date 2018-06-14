@@ -1,7 +1,8 @@
 import ServiceLocator from '../ServiceLocator';
 import DoneRepository from '../repositories/Done';
+import {RequestProcessor} from '../RequestProcessor';
 
-export default class DeleteDoneRequestHandler {
+export default class DeleteDoneRequestHandler implements RequestProcessor {
   private _doneRepository: DoneRepository;
 
   constructor() {
