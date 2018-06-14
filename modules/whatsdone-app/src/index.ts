@@ -43,22 +43,22 @@ class Router {
   }
 
   get(pattern, handler) {
-    this._registerHandler('get', pattern, handler);
+    this.registerHandler('get', pattern, handler);
   }
 
   post(pattern, handler) {
-    this._registerHandler('post', pattern, handler);
+    this.registerHandler('post', pattern, handler);
   }
 
   delete(pattern, handler) {
-    this._registerHandler('delete', pattern, handler);
+    this.registerHandler('delete', pattern, handler);
   }
 
   put(pattern, handler) {
-    this._registerHandler('put', pattern, handler);
+    this.registerHandler('put', pattern, handler);
   }
 
-  _registerHandler(method, pattern, handler) {
+  private registerHandler(method, pattern, handler) {
     this._handlers[method].push({
       pattern: new Route(pattern),
       handler

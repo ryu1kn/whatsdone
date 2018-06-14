@@ -18,8 +18,8 @@ export default class DynamoTableClient {
 
   async getById(id) {
     const params = {
-      TableName: this._getTableName(),
-      Key: this._toIdObject(id)
+      TableName: this.getTableName(),
+      Key: this.toIdObject(id)
     };
     try {
       const response = await this._docClient.get(params).promise();
@@ -32,8 +32,8 @@ export default class DynamoTableClient {
   async put(newData) {
     const id = this._uuidGenerator.generate();
     const params = {
-      TableName: this._getTableName(),
-      Item: Object.assign({}, newData, this._toIdObject(id))
+      TableName: this.getTableName(),
+      Item: Object.assign({}, newData, this.toIdObject(id))
     };
     try {
       await this._docClient.put(params).promise();
@@ -45,8 +45,8 @@ export default class DynamoTableClient {
 
   async delete(id) {
     const params = {
-      TableName: this._getTableName(),
-      Key: this._toIdObject(id)
+      TableName: this.getTableName(),
+      Key: this.toIdObject(id)
     };
     try {
       return await this._docClient.delete(params).promise();
@@ -57,9 +57,9 @@ export default class DynamoTableClient {
 
   async update(id, newData) {
     const params = {
-      TableName: this._getTableName(),
-      Key: this._toIdObject(id),
-      AttributeUpdates: this._getAttributeUpdatesValues(newData)
+      TableName: this.getTableName(),
+      Key: this.toIdObject(id),
+      AttributeUpdates: this.getAttributeUpdatesValues(newData)
     };
     try {
       await this._docClient.update(params).promise();
@@ -69,15 +69,15 @@ export default class DynamoTableClient {
     }
   }
 
-  _toIdObject(id) {
+  private toIdObject(id) {
     return {[this._idName]: id};
   }
 
-  _getTableName() {
+  private getTableName() {
     return this._collectionName;
   }
 
-  _getAttributeUpdatesValues(newData) {
+  private getAttributeUpdatesValues(newData) {
     return Object.keys(newData).reduce((result, key) => {
       result[key] = {
         Action: 'PUT',

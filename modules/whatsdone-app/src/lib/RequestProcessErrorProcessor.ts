@@ -18,17 +18,17 @@ export default class RequestProcessErrorProcessor {
 
     switch (errorKind) {
     case 'AccessDenied':
-      return this._composeResponse('403', '403: Forbidden');
+      return this.composeResponse('403', '403: Forbidden');
 
     case 'NotFound':
-      return this._composeResponse('404', '404: Not Found');
+      return this.composeResponse('404', '404: Not Found');
 
     default:
-      return this._composeResponse(err.status || '500', '500: Internal Server Error');
+      return this.composeResponse(err.status || '500', '500: Internal Server Error');
     }
   }
 
-  _composeResponse(statusCode, errorMessage) {
+  private composeResponse(statusCode, errorMessage) {
     const errorResponse = [
       {title: errorMessage}
     ];
