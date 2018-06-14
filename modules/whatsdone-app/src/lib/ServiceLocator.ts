@@ -21,10 +21,6 @@ class ServiceLocator {
     return this.get('config');
   }
 
-  get accessLogger() {
-    return this.get('accessLogger');
-  }
-
   get cognitoIdentityServiceProvider() {
     return this.get('cognitoIdentityServiceProvider');
   }
