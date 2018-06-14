@@ -27,13 +27,13 @@ export default class DoneQueryHelper {
 
   async query(nextKey?) {
     try {
-      return await this._query(this._decodeNextKey(nextKey));
+      return await this._query(this.decodeNextKey(nextKey));
     } catch (e) {
       throw new WrappedError(e);
     }
   }
 
-  async _query(startKey) {
+  private async _query(startKey) {
     const queryUntil = async (params, accumulatedResponse) => {
       const queryResult = await this._docClient.query(params).promise();
       const newAccumulatedResponse = {
@@ -42,21 +42,21 @@ export default class DoneQueryHelper {
       };
       if (newAccumulatedResponse.Items.length >= DEFAULT_SCAN_LIMIT) return newAccumulatedResponse;
 
-      const prevMonthKey = this._getPrevMonthKey(params);
+      const prevMonthKey = this.getPrevMonthKey(params);
       if (prevMonthKey === OLDEST_QUERY_MONTH) return newAccumulatedResponse;
 
-      const nextParams = this._buildQueryParams({
+      const nextParams = this.buildQueryParams({
         monthKey: prevMonthKey,
         limit: DEFAULT_SCAN_LIMIT - newAccumulatedResponse.Items.length
       });
       return queryUntil(nextParams, newAccumulatedResponse);
     };
-    const params = this._buildQueryFromStartKey(startKey);
+    const params = this.buildQueryFromStartKey(startKey);
     const response = await queryUntil(params, {Items: []});
-    return this._buildResponse(response);
+    return this.buildResponse(response);
   }
 
-  _getPrevMonthKey(params) {
+  private getPrevMonthKey(params) {
     function pad0(number) {
       return number < 10 ? `0${number}` : number;
     }
@@ -66,20 +66,20 @@ export default class DoneQueryHelper {
     return `${oldYear}-${pad0(oldMonth)}`;
   }
 
-  _buildQueryFromStartKey(startKey) {
-    return this._buildQueryParams({
-      monthKey: this._getMonthKey(startKey),
+  private buildQueryFromStartKey(startKey) {
+    return this.buildQueryParams({
+      monthKey: this.getMonthKey(startKey),
       exclusiveStartKey: startKey && {ExclusiveStartKey: startKey}
     });
   }
 
-  _getMonthKey(restoredKey) {
+  private getMonthKey(restoredKey) {
     if (restoredKey) return restoredKey.month;
     const currentDate = this._dateProvider.getCurrentDate().toISOString();
     return currentDate.substr(0, utils.MONTH_LENGTH);
   }
 
-  _buildQueryParams({monthKey, exclusiveStartKey, limit}: QueryParams) {
+  private buildQueryParams({monthKey, exclusiveStartKey, limit}: QueryParams) {
     return Object.assign(
       {
         TableName: this._collectionName,
@@ -99,18 +99,18 @@ export default class DoneQueryHelper {
     );
   }
 
-  _decodeNextKey(nextKey) {
+  private decodeNextKey(nextKey) {
     return nextKey ? utils.getDoneWithMonth(JSON.parse(nextKey)) : null;
   }
 
-  _encodeNextKey(keyObject) {
+  private encodeNextKey(keyObject) {
     return keyObject && JSON.stringify(_.omit(keyObject, 'month'));
   }
 
-  _buildResponse(queryResult) {
+  private buildResponse(queryResult) {
     return {
       items: queryResult.Items.map(done => _.omit(done, 'month')),
-      nextKey: this._encodeNextKey(queryResult.LastEvaluatedKey)
+      nextKey: this.encodeNextKey(queryResult.LastEvaluatedKey)
     };
   }
 

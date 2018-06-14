@@ -12,19 +12,19 @@ export default class LambdaRequestNormaliser {
       path: event.path,
       params: event.pathParameters,
       query: event.queryStringParameters || {},
-      body: this._parseBody(event.body, event.headers['Content-Type']),
-      userInfo: this._filterUserInfo(event.requestContext.authorizer.claims)
+      body: this.parseBody(event.body, event.headers['Content-Type']),
+      userInfo: this.filterUserInfo(event.requestContext.authorizer.claims)
     };
   }
 
-  _filterUserInfo(claims) {
+  private filterUserInfo(claims) {
     return {
       username: claims['cognito:username'],
       userId: claims.sub
     };
   }
 
-  _parseBody(bodyString, contentType) {
+  private parseBody(bodyString, contentType) {
     return contentType === ContentType.JSON ?
       JSON.parse(bodyString) :
       querystring.parse(bodyString || '');

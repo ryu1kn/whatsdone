@@ -23,14 +23,14 @@ export default class LambdaRequestHandler {
 
   handle = async (event, context, callback): Promise<void> => {
     try {
-      const response = await this._handleRequest(event, context);
+      const response = await this.handleRequest(event, context);
       callback(null, this._lambdaResponseFormatter.format(response));
     } catch (e) {
       callback(e);
     }
   }
 
-  async _handleRequest(event, context) {
+  private async handleRequest(event, context) {
     const normalisedRequest = this._lambdaRequestNormaliser.normalise(event, context);
     const cognitoUserId = normalisedRequest.userInfo.userId;
     const username = normalisedRequest.userInfo.username;

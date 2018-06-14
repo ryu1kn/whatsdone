@@ -14,14 +14,14 @@ export default class GetDonesCommand {
 
   async execute(nextKey?) {
     const result = await this._doneRepository.read(nextKey);
-    const items = await this._setUserNames(result.items);
+    const items = await this.setUserNames(result.items);
     return {
       items,
       nextKey: result.nextKey
     };
   }
 
-  async _setUserNames(dones) {
+  private async setUserNames(dones) {
     const users = await this._userNameService.getUsernames(_.map(dones, 'userId'));
     const nameMap = _.keyBy(users, 'id');
     return dones.map(done =>
