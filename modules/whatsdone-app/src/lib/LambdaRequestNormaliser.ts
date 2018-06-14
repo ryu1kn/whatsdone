@@ -7,7 +7,7 @@ const ContentType = {
 
 export default class LambdaRequestNormaliser {
 
-  normalise(event, _lambdaContext?) {
+  normalise(event) {
     return {
       path: event.path,
       params: event.pathParameters,

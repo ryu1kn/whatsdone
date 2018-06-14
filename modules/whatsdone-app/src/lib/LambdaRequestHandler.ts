@@ -21,17 +21,17 @@ export default class LambdaRequestHandler {
     this._requestProcessErrorProcessor = ServiceLocator.requestProcessErrorProcessor;
   }
 
-  handle = async (event, context, callback): Promise<void> => {
+  handle = async (event, callback): Promise<void> => {
     try {
-      const response = await this.handleRequest(event, context);
+      const response = await this.handleRequest(event);
       callback(null, this._lambdaResponseFormatter.format(response));
     } catch (e) {
       callback(e);
     }
   }
 
-  private async handleRequest(event, context) {
-    const normalisedRequest = this._lambdaRequestNormaliser.normalise(event, context);
+  private async handleRequest(event) {
+    const normalisedRequest = this._lambdaRequestNormaliser.normalise(event);
     const cognitoUserId = normalisedRequest.userInfo.userId;
     const username = normalisedRequest.userInfo.username;
     try {
