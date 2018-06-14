@@ -2,11 +2,17 @@ import ServiceLocator from './lib/ServiceLocator';
 import ServiceFactory from './lib/ServiceFactory';
 import Route = require('route-parser');
 import {ObjectMap} from './lib/models/Collection';
+import LambdaRequestHandler from './lib/LambdaRequestHandler';
 
 ServiceLocator.load(new ServiceFactory(process.env));
 
+type RouteDefinition = {
+  handler: LambdaRequestHandler['handle'],
+  pattern: Route
+};
+
 class Router {
-  private _handlers: ObjectMap<any[]>;
+  private _handlers: ObjectMap<RouteDefinition[]>;
 
   constructor() {
     this._handlers = {

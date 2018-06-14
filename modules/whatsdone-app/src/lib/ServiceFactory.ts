@@ -29,36 +29,36 @@ export default class ServiceFactory {
     return new CognitoUserFinder();
   }
 
-  createGetDonesRequestHandler() {
+  createGetDonesRequestHandler(): LambdaRequestHandler['handle'] {
     const GetDonesRequestProcessor = require('./request-processors/GetDones').default;
     const requestHandler = new LambdaRequestHandler({
       requestProcessor: new GetDonesRequestProcessor()
     });
-    return getBoundHandleMethod(requestHandler);
+    return requestHandler.handle;
   }
 
-  createPostDoneRequestHandler() {
+  createPostDoneRequestHandler(): LambdaRequestHandler['handle'] {
     const PostDoneRequestProcessor = require('./request-processors/PostDone').default;
     const requestHandler = new LambdaRequestHandler({
       requestProcessor: new PostDoneRequestProcessor()
     });
-    return getBoundHandleMethod(requestHandler);
+    return requestHandler.handle;
   }
 
-  createDeleteDoneRequestHandler() {
+  createDeleteDoneRequestHandler(): LambdaRequestHandler['handle'] {
     const DeleteDoneRequestProcessor = require('./request-processors/DeleteDone').default;
     const requestHandler = new LambdaRequestHandler({
       requestProcessor: new DeleteDoneRequestProcessor()
     });
-    return getBoundHandleMethod(requestHandler);
+    return requestHandler.handle;
   }
 
-  createUpdateDoneRequestHandler() {
+  createUpdateDoneRequestHandler(): LambdaRequestHandler['handle'] {
     const UpdateDoneRequestProcessor = require('./request-processors/UpdateDone').default;
     const requestHandler = new LambdaRequestHandler({
       requestProcessor: new UpdateDoneRequestProcessor()
     });
-    return getBoundHandleMethod(requestHandler);
+    return requestHandler.handle;
   }
 
   createCreateDoneCommand() {
@@ -132,8 +132,4 @@ export default class ServiceFactory {
     return {getCurrentDate: () => new Date()};
   }
 
-}
-
-function getBoundHandleMethod(handler) {
-  return handler.handle.bind(handler);
 }

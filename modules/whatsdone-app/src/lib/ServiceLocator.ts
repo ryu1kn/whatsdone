@@ -8,6 +8,7 @@ import GetDonesCommand from './commands/GetDones';
 import CreateDoneCommand from './commands/CreateDone';
 import UpdateDoneCommand from './commands/UpdateDone';
 import {ObjectMap} from './models/Collection';
+import LambdaRequestHandler from './LambdaRequestHandler';
 
 class ServiceLocator {
   private _serviceFactory: ServiceFactory;
@@ -50,19 +51,19 @@ class ServiceLocator {
     return this._get('staticContentsProvider');
   }
 
-  get getDonesRequestHandler(): GetDonesRequestProcessor {
+  get getDonesRequestHandler(): LambdaRequestHandler['handle'] {
     return this._get('getDonesRequestHandler');
   }
 
-  get postDoneRequestHandler() {
+  get postDoneRequestHandler(): LambdaRequestHandler['handle'] {
     return this._get('postDoneRequestHandler');
   }
 
-  get deleteDoneRequestHandler(): DeleteDoneRequestHandler {
+  get deleteDoneRequestHandler(): LambdaRequestHandler['handle'] {
     return this._get('deleteDoneRequestHandler');
   }
 
-  get updateDoneRequestHandler() {
+  get updateDoneRequestHandler(): LambdaRequestHandler['handle'] {
     return this._get('updateDoneRequestHandler');
   }
 

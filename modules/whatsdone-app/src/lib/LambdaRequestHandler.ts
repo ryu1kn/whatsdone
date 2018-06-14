@@ -21,7 +21,7 @@ export default class LambdaRequestHandler {
     this._requestProcessErrorProcessor = ServiceLocator.requestProcessErrorProcessor;
   }
 
-  async handle(event, context, callback) {
+  handle = async (event, context, callback): Promise<void> => {
     try {
       const response = await this._handleRequest(event, context);
       callback(null, this._lambdaResponseFormatter.format(response));
