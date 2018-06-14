@@ -23,7 +23,7 @@ class Router {
     };
   }
 
-  route(event, context, callback) {
+  route(event, callback) {
     const method = event.httpMethod.toLowerCase();
     const handlerItem = this._handlers[method].find(
       handlerItem => handlerItem.pattern.match(event.path)
@@ -31,7 +31,7 @@ class Router {
     if (handlerItem) {
       const pathParameters = handlerItem.pattern.match(event.path);
       const finalEvent = Object.assign({}, event, {pathParameters});
-      return handlerItem.handler(finalEvent, context, callback);
+      return handlerItem.handler(finalEvent, callback);
     }
     callback(null, {
       statusCode: '404',
@@ -74,4 +74,4 @@ router.post('/dones', ServiceLocator.postDoneRequestHandler);
 router.delete('/dones/:id', ServiceLocator.deleteDoneRequestHandler);
 router.put('/dones/:id', ServiceLocator.updateDoneRequestHandler);
 
-export const handler = (event, context, callback) => router.route(event, context, callback);
+export const handler = (event, context, callback) => router.route(event, callback);

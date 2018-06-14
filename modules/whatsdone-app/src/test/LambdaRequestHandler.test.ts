@@ -27,7 +27,7 @@ describe('Server LambdaRequestHandler', () => {
     const lambdaCallback = sinon.spy();
     const handler = new LambdaRequestHandler({requestProcessor});
 
-    return handler.handle('LAMBDA_EVENT', 'LAMBDA_CONTEXT', lambdaCallback).then(() => {
+    return handler.handle('LAMBDA_EVENT', lambdaCallback).then(() => {
       expect(requestNormaliser.normalise).to.have.been.calledWith('LAMBDA_EVENT');
       expect(userIdRepository.getByCognitoUserId).to.have.been.calledWith('COGNITO_USER_ID');
       expect(requestProcessor.process).to.have.been.calledWith(
@@ -59,7 +59,7 @@ describe('Server LambdaRequestHandler', () => {
     const lambdaCallback = sinon.spy();
     const handler = new LambdaRequestHandler({requestProcessor});
 
-    return handler.handle('LAMBDA_EVENT', 'LAMBDA_CONTEXT', lambdaCallback).then(() => {
+    return handler.handle('LAMBDA_EVENT', lambdaCallback).then(() => {
       expect(requestProcessErrorProcessor.process.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');
       expect(responseFormatter.format).to.have.been.calledWith('ERROR_RESPONSE');
       expect(lambdaCallback).to.have.been.calledWith(null, 'LAMBDA_RESPONSE');
