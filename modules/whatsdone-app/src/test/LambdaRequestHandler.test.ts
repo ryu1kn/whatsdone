@@ -3,8 +3,23 @@ import LambdaRequestHandler from '../lib/LambdaRequestHandler';
 import ServiceLocator from '../lib/ServiceLocator';
 import {expect} from './TestUtils';
 import sinon = require('sinon');
+import {Event} from '../lib/models/Lambda';
 
 describe('Server LambdaRequestHandler', () => {
+  const lambdaEvent: Event = {
+    httpMethod: 'HTTP_METHOD',
+    path: '/PATH',
+    pathParameters: {},
+    headers: {},
+    requestContext: {
+      authorizer: {
+        claims: {
+          'cognito:username': 'USERNAME',
+          sub: 'SUB'
+        }
+      }
+    }
+  };
 
   it('bridges lambda request/response world to lambda agnostic http request processor', () => {
     const normalisedRequest = {
@@ -27,8 +42,8 @@ describe('Server LambdaRequestHandler', () => {
     const lambdaCallback = sinon.spy();
     const handler = new LambdaRequestHandler({requestProcessor});
 
-    return handler.handle('LAMBDA_EVENT', lambdaCallback).then(() => {
-      expect(requestNormaliser.normalise).to.have.been.calledWith('LAMBDA_EVENT');
+    return handler.handle(lambdaEvent, lambdaCallback).then(() => {
+      expect(requestNormaliser.normalise).to.have.been.calledWith(lambdaEvent);
       expect(userIdRepository.getByCognitoUserId).to.have.been.calledWith('COGNITO_USER_ID');
       expect(requestProcessor.process).to.have.been.calledWith(
         normalisedRequest,
@@ -59,7 +74,7 @@ describe('Server LambdaRequestHandler', () => {
     const lambdaCallback = sinon.spy();
     const handler = new LambdaRequestHandler({requestProcessor});
 
-    return handler.handle('LAMBDA_EVENT', lambdaCallback).then(() => {
+    return handler.handle(lambdaEvent, lambdaCallback).then(() => {
       expect(requestProcessErrorProcessor.process.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');
       expect(responseFormatter.format).to.have.been.calledWith('ERROR_RESPONSE');
       expect(lambdaCallback).to.have.been.calledWith(null, 'LAMBDA_RESPONSE');

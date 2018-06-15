@@ -1,5 +1,6 @@
 
 import querystring = require('querystring');
+import {Event} from './models/Lambda';
 
 const ContentType = {
   JSON: 'application/json'
@@ -7,7 +8,7 @@ const ContentType = {
 
 export default class LambdaRequestNormaliser {
 
-  normalise(event) {
+  normalise(event: Event) {
     return {
       path: event.path,
       params: event.pathParameters,
