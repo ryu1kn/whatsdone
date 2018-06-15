@@ -4,6 +4,7 @@ import {ObjectMap} from './lib/models/Collection';
 import LambdaRequestHandler from './lib/LambdaRequestHandler';
 import Route = require('route-parser');
 import {Event} from './lib/models/Lambda';
+import {Response} from './lib/models/Request';
 
 ServiceLocator.load(new ServiceFactory(process.env));
 
@@ -24,7 +25,7 @@ class Router {
     };
   }
 
-  route(event: Event, callback) {
+  async route(event: Event): Promise<Response> {
     const method = event.httpMethod.toLowerCase();
     const handlerItem = this._handlers[method].find(
       handlerItem => handlerItem.pattern.match(event.path)
@@ -32,15 +33,15 @@ class Router {
     if (handlerItem) {
       const pathParameters = handlerItem.pattern.match(event.path);
       const finalEvent = Object.assign({}, event, {pathParameters});
-      return handlerItem.handler(finalEvent, callback);
+      return handlerItem.handler(finalEvent);
     }
-    callback(null, {
+    return {
       statusCode: '404',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({errors: [
         {title: '404: Not Found'}
       ]})
-    });
+    };
   }
 
   get(pattern, handler) {
@@ -75,4 +76,4 @@ router.post('/dones', ServiceLocator.postDoneRequestHandler);
 router.delete('/dones/:id', ServiceLocator.deleteDoneRequestHandler);
 router.put('/dones/:id', ServiceLocator.updateDoneRequestHandler);
 
-export const handler = (event: Event, context: any, callback) => router.route(event, callback);
+export const handler = (event: Event, context: any) => router.route(event);
