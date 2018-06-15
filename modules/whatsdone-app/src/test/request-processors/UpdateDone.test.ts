@@ -1,8 +1,8 @@
-
 import UpdateDoneRequestProcessor from '../../lib/request-processors/UpdateDone';
 import ServiceLocator from '../../lib/ServiceLocator';
 import {expect} from '../TestUtils';
 import sinon = require('sinon');
+import ServiceFactory from '../../lib/ServiceFactory';
 
 describe('Server UpdateDoneRequestProcessor', () => {
 
@@ -10,7 +10,7 @@ describe('Server UpdateDoneRequestProcessor', () => {
     const updateDoneCommand = {execute: sinon.stub().returns(Promise.resolve({UPDATED_DONE_ITEM: '..'}))};
     ServiceLocator.load({
       createUpdateDoneCommand: () => updateDoneCommand
-    });
+    } as ServiceFactory);
     const processor = new UpdateDoneRequestProcessor();
 
     const request = {

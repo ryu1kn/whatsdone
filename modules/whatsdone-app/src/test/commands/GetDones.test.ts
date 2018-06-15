@@ -1,7 +1,7 @@
-
 import GetDonesCommand from '../../lib/commands/GetDones';
 import ServiceLocator from '../../lib/ServiceLocator';
 import {expect, stubWithArgs} from '../TestUtils';
+import ServiceFactory from '../../lib/ServiceFactory';
 
 describe('Server GetDonesCommand', () => {
 
@@ -11,7 +11,7 @@ describe('Server GetDonesCommand', () => {
     ServiceLocator.load({
       createUserNameService: () => userNameService,
       createDoneRepository: () => doneRepository
-    });
+    } as ServiceFactory);
     const command = new GetDonesCommand();
 
     return command.execute().then(result => {

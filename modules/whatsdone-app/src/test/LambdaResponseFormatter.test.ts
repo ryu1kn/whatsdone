@@ -1,7 +1,7 @@
-
 import ServiceLocator from '../lib/ServiceLocator';
 import LambdaResponseFormatter from '../lib/LambdaResponseFormatter';
 import {expect} from './TestUtils';
+import ServiceFactory from '../lib/ServiceFactory';
 
 describe('Server LambdaResponseFormatter', () => {
 
@@ -9,7 +9,7 @@ describe('Server LambdaResponseFormatter', () => {
     const config = {webappOrigin: 'WEBAPP_ORIGIN'};
     ServiceLocator.load({
       createConfig: () => config
-    });
+    } as ServiceFactory);
     const formatter = new LambdaResponseFormatter();
 
     const response = {

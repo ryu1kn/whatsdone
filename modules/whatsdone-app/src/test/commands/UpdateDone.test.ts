@@ -1,7 +1,7 @@
-
 import UpdateDoneCommand from '../../lib/commands/UpdateDone';
 import ServiceLocator from '../../lib/ServiceLocator';
 import {expect, stubWithArgs} from '../TestUtils';
+import ServiceFactory from '../../lib/ServiceFactory';
 
 describe('Server UpdateDoneCommand', () => {
 
@@ -9,7 +9,7 @@ describe('Server UpdateDoneCommand', () => {
     const doneRepository = {
       update: stubWithArgs(['DONE_ID', 'USER_ID', {DONE_DATA: '..'}], Promise.resolve(fakeDoneItem()))
     };
-    ServiceLocator.load({createDoneRepository: () => doneRepository});
+    ServiceLocator.load({createDoneRepository: () => doneRepository} as ServiceFactory);
     const command = new UpdateDoneCommand();
 
     const params = {
@@ -27,7 +27,7 @@ describe('Server UpdateDoneCommand', () => {
       createDoneRepository: () => ({
         update: () => Promise.resolve(fakeDoneItem())
       })
-    });
+    } as ServiceFactory);
     const command = new UpdateDoneCommand();
 
     const params = {};

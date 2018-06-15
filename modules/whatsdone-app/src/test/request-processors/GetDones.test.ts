@@ -1,16 +1,14 @@
-
 import GetDonesRequestProcessor from '../../lib/request-processors/GetDones';
 import ServiceLocator from '../../lib/ServiceLocator';
 import {expect, throwError} from '../TestUtils';
 import sinon = require('sinon');
+import ServiceFactory from '../../lib/ServiceFactory';
 
 describe('Server GetDonesRequestProcessor', () => {
 
   it('invokes get dones command with next page key', () => {
     const getDonesCommand = {execute: sinon.stub().returns(Promise.resolve())};
-    ServiceLocator.load({
-      createGetDonesCommand: () => getDonesCommand
-    });
+    initialiseServiceLocator(getDonesCommand);
     const processor = new GetDonesRequestProcessor();
 
     const req = {
@@ -23,9 +21,7 @@ describe('Server GetDonesRequestProcessor', () => {
 
   it('returns the output of get dones command result', () => {
     const getDonesCommand = {execute: () => Promise.resolve('COMMAND_OUTPUT')};
-    ServiceLocator.load({
-      createGetDonesCommand: () => getDonesCommand
-    });
+    initialiseServiceLocator(getDonesCommand);
     const processor = new GetDonesRequestProcessor();
 
     const req = {query: {}};
@@ -40,9 +36,7 @@ describe('Server GetDonesRequestProcessor', () => {
 
   it('propagates error', () => {
     const getDonesCommand = {execute: () => Promise.reject(new Error('UNEXPECTED_ERROR'))};
-    ServiceLocator.load({
-      createGetDonesCommand: () => getDonesCommand
-    });
+    initialiseServiceLocator(getDonesCommand);
     const processor = new GetDonesRequestProcessor();
 
     const req = {query: {}};
@@ -54,5 +48,10 @@ describe('Server GetDonesRequestProcessor', () => {
     );
   });
 
+  function initialiseServiceLocator(getDonesCommand) {
+    ServiceLocator.load({
+      createGetDonesCommand: () => getDonesCommand
+    } as ServiceFactory);
+  }
 });
 

@@ -1,7 +1,7 @@
-
 import CreateDoneCommand from '../../lib/commands/CreateDone';
 import ServiceLocator from '../../lib/ServiceLocator';
 import {expect, stubWithArgs} from '../TestUtils';
+import ServiceFactory from '../../lib/ServiceFactory';
 
 describe('Server CreateDoneCommand', () => {
 
@@ -14,7 +14,7 @@ describe('Server CreateDoneCommand', () => {
     };
     ServiceLocator.load({
       createDoneRepository: () => doneRepository
-    });
+    } as ServiceFactory);
     const command = new CreateDoneCommand();
 
     const params = {

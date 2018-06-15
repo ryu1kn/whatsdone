@@ -1,8 +1,8 @@
-
 import ServiceLocator from '../../lib/ServiceLocator';
 import UserIdRepository from '../../lib/repositories/UserId';
 import {expect} from '../TestUtils';
 import sinon = require('sinon');
+import ServiceFactory from '../../lib/ServiceFactory';
 
 describe('Server UserIdRepository', () => {
 
@@ -70,7 +70,7 @@ describe('Server UserIdRepository', () => {
   function createUserIdRepository(dynamoDBDocumentClient) {
     ServiceLocator.load({
       createDynamoDBDocumentClient: () => dynamoDBDocumentClient
-    });
+    } as ServiceFactory);
     return new UserIdRepository({tableName: 'USER_ID_TABLE_NAME'});
   }
 

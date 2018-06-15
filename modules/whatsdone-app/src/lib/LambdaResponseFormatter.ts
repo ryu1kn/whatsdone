@@ -1,8 +1,8 @@
-
 import ServiceLocator from './ServiceLocator';
+import {AppConfig} from './AppConfig';
 
 export default class LambdaResponseFormatter {
-  private _config: {userPoolId: string, webappOrigin: string};
+  private _config: AppConfig;
 
   constructor() {
     this._config = ServiceLocator.config;

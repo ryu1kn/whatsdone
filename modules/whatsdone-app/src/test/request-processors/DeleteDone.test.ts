@@ -1,14 +1,14 @@
-
 import DeleteDoneRequestProcessor from '../../lib/request-processors/DeleteDone';
 import ServiceLocator from '../../lib/ServiceLocator';
 import {expect, throwError} from '../TestUtils';
 import sinon = require('sinon');
+import ServiceFactory from '../../lib/ServiceFactory';
 
 describe('Server DeleteDoneRequestProcessor', () => {
 
   it('deletes a done item', () => {
     const doneRepository = {remove: sinon.stub().returns(Promise.resolve())};
-    ServiceLocator.load({createDoneRepository: () => doneRepository});
+    ServiceLocator.load({createDoneRepository: () => doneRepository} as ServiceFactory);
     const processor = new DeleteDoneRequestProcessor();
 
     const request = {
@@ -28,7 +28,7 @@ describe('Server DeleteDoneRequestProcessor', () => {
       createDoneRepository: () => ({
         remove: () => Promise.reject(new Error('UNEXPECTED_ERROR'))
       })
-    });
+    } as ServiceFactory);
     const processor = new DeleteDoneRequestProcessor();
 
     const request = {
