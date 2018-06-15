@@ -3,6 +3,7 @@ import RawAWS = require('aws-sdk');
 import LambdaRequestHandler from './LambdaRequestHandler';
 import Uuid = require('uuid');
 import {ObjectMap} from './models/Collection';
+import {Logger} from './Logger';
 
 const AWS = AWSXRay.captureAWS(RawAWS);
 
@@ -91,7 +92,7 @@ export default class ServiceFactory {
     return new LambdaResponseFormatter();
   }
 
-  createLogger(): {error: (...args: any[]) => void} {
+  createLogger(): Logger {
     return console;
   }
 

@@ -7,6 +7,7 @@ import CreateDoneCommand from './commands/CreateDone';
 import UpdateDoneCommand from './commands/UpdateDone';
 import {ObjectMap} from './models/Collection';
 import LambdaRequestHandler from './LambdaRequestHandler';
+import {Logger} from './Logger';
 
 class ServiceLocator {
   private _serviceFactory: ServiceFactory;
@@ -89,7 +90,7 @@ class ServiceLocator {
     return this.get('lambdaResponseFormatter');
   }
 
-  get logger(): {error: (...args: any[]) => void} {
+  get logger(): Logger {
     return this.get('logger');
   }
 
