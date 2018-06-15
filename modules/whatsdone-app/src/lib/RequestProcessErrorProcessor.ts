@@ -1,8 +1,9 @@
 
 import ServiceLocator from './ServiceLocator';
+import {Logger} from './Logger';
 
 export default class RequestProcessErrorProcessor {
-  private _logger: {error: (...args: any[]) => void};
+  private _logger: Logger;
 
   constructor() {
     this._logger = ServiceLocator.logger;
