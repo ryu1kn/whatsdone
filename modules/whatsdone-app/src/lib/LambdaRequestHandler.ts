@@ -4,6 +4,7 @@ import LambdaRequestNormaliser from './LambdaRequestNormaliser';
 import LambdaResponseFormatter from './LambdaResponseFormatter';
 import RequestProcessErrorProcessor from './RequestProcessErrorProcessor';
 import {RequestProcessor} from './RequestProcessor';
+import {Event} from './models/Lambda';
 
 export default class LambdaRequestHandler {
   private _requestProcessor: RequestProcessor;
@@ -21,7 +22,7 @@ export default class LambdaRequestHandler {
     this._requestProcessErrorProcessor = ServiceLocator.requestProcessErrorProcessor;
   }
 
-  handle = async (event, callback): Promise<void> => {
+  handle = async (event: Event, callback): Promise<void> => {
     try {
       const response = await this.handleRequest(event);
       callback(null, this._lambdaResponseFormatter.format(response));
