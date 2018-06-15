@@ -1,8 +1,9 @@
-
 import ServiceLocator from '../../../lib/ServiceLocator';
 import DoneQueryHelper from '../../../lib/repositories/done-helpers/query';
 import {expect} from '../../TestUtils';
+import ServiceFactory from '../../../lib/ServiceFactory';
 import sinon = require('sinon');
+import * as td from 'testdouble';
 
 describe('Server DoneQueryHelper', () => {
 
@@ -180,11 +181,11 @@ describe('Server DoneQueryHelper', () => {
     const dateProvider = {
       getCurrentDate: () => currentDate ? new Date(currentDate) : new Date()
     };
-    ServiceLocator.load({
-      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createDateProvider: () => dateProvider,
-      createLogger: () => ({log: () => {}})
-    });
+    const factory = td.object(['createDynamoDBDocumentClient', 'createDateProvider', 'createLogger']) as ServiceFactory;
+    td.when(factory.createDynamoDBDocumentClient()).thenReturn(dynamoDBDocumentClient);
+    td.when(factory.createDateProvider()).thenReturn(dateProvider);
+    td.when(factory.createLogger()).thenReturn({log: () => {}});
+    ServiceLocator.load(factory);
   }
 
   function awsSdkResponse(response) {

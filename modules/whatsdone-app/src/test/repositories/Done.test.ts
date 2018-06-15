@@ -3,6 +3,7 @@ import ServiceLocator from '../../lib/ServiceLocator';
 import DoneRepository from '../../lib/repositories/Done';
 import {expect} from '../TestUtils';
 import sinon = require('sinon');
+import ServiceFactory from '../../lib/ServiceFactory';
 
 describe('Server DoneRepository', () => {
 
@@ -10,10 +11,7 @@ describe('Server DoneRepository', () => {
     const doneQueryHelper = {
       query: () => Promise.resolve('QUERY_RESULT')
     };
-    ServiceLocator.load({
-      createDoneDynamoTableClient: () => {},
-      createDoneQueryHelper: () => doneQueryHelper
-    });
+    initialiseServiceLocator(doneQueryHelper);
     const repository = new DoneRepository();
 
     return repository.read().then(result => {
@@ -26,10 +24,7 @@ describe('Server DoneRepository', () => {
       put: sinon.stub().returns(Promise.resolve('DONE_ID')),
       getById: () => {}
     };
-    ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient,
-      createDoneQueryHelper: () => {}
-    });
+    initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
 
     const done = {
@@ -49,10 +44,7 @@ describe('Server DoneRepository', () => {
       put: () => Promise.resolve('DONE_ID'),
       getById: sinon.stub().returns(Promise.resolve({DATA: '..'}))
     };
-    ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient,
-      createDoneQueryHelper: () => {}
-    });
+    initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
     const done = {
       date: '2017-08-14T12:26:26.227Z',
@@ -69,10 +61,7 @@ describe('Server DoneRepository', () => {
       put: sinon.stub().returns(Promise.resolve('DONE_ID')),
       getById: () => Promise.resolve()
     };
-    ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient,
-      createDoneQueryHelper: () => {}
-    });
+    initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
 
     const done = {
@@ -96,10 +85,7 @@ describe('Server DoneRepository', () => {
         month: 'MONTH'
       }))
     };
-    ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient,
-      createDoneQueryHelper: () => {}
-    });
+    initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
     const done = {
       date: '2017-08-14T12:26:26.227Z',
@@ -116,10 +102,7 @@ describe('Server DoneRepository', () => {
       getById: sinon.stub().returns(Promise.resolve(matchingDone)),
       delete: sinon.spy()
     };
-    ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient,
-      createDoneQueryHelper: () => {}
-    });
+    initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
 
     return repository.remove('DONE_ID', 'USER_ID').then(() => {
@@ -139,10 +122,7 @@ describe('Server DoneRepository', () => {
       getById: sinon.stub().returns(Promise.resolve(matchingDone)),
       update: sinon.stub().returns(Promise.resolve())
     };
-    ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient,
-      createDoneQueryHelper: () => {}
-    });
+    initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
 
     const newData = {
@@ -171,10 +151,7 @@ describe('Server DoneRepository', () => {
       getById: sinon.stub().returns(Promise.resolve(matchingDone)),
       update: sinon.stub().returns(Promise.resolve())
     };
-    ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient,
-      createDoneQueryHelper: () => {}
-    });
+    initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
 
     const newData = {
@@ -203,10 +180,7 @@ describe('Server DoneRepository', () => {
         month: 'MONTH'
       }))
     };
-    ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient,
-      createDoneQueryHelper: () => {}
-    });
+    initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
 
     const newData = {doneThing: 'NEW_DONE_THING'};
@@ -215,4 +189,10 @@ describe('Server DoneRepository', () => {
     });
   });
 
+  let initialiseServiceLocator = function (doneQueryHelper: {query: any} | {}, doneDynamoTableClient?: {getById: any, update?: any, delete?: any, put?: any}) {
+    ServiceLocator.load({
+      createDoneDynamoTableClient: () => doneDynamoTableClient,
+      createDoneQueryHelper: () => doneQueryHelper
+    } as ServiceFactory);
+  };
 });

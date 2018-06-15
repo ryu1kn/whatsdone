@@ -1,14 +1,14 @@
-
 import PostDoneRequestProcessor from '../../lib/request-processors/PostDone';
 import ServiceLocator from '../../lib/ServiceLocator';
 import {expect} from '../TestUtils';
 import sinon = require('sinon');
+import ServiceFactory from '../../lib/ServiceFactory';
 
 describe('Server PostDoneRequestProcessor', () => {
 
   it('saves a done item', () => {
     const createDoneCommand = {execute: sinon.stub().returns(Promise.resolve('CREATED_DONE'))};
-    ServiceLocator.load({createCreateDoneCommand: () => createDoneCommand});
+    ServiceLocator.load({createCreateDoneCommand: () => createDoneCommand} as ServiceFactory);
     const processor = new PostDoneRequestProcessor();
 
     const request = {

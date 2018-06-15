@@ -14,9 +14,10 @@ import LambdaResponseFormatter from './LambdaResponseFormatter';
 import UserNameService from './UserNameService';
 import DoneQueryHelper from './repositories/done-helpers/query';
 import DynamoTableClient from './repositories/DynamoTableClient';
+import {AppConfig} from './AppConfig';
 
 type InstanceCache = {
-  Config?: {userPoolId: string, webappOrigin: string};
+  Config?: AppConfig;
   CognitoIdentityServiceProvider?: AWS.CognitoIdentityServiceProvider;
   CognitoUserFinder?: CognitoUserFinder;
   GetDonesRequestHandler?: LambdaRequestHandler['handle'];
@@ -41,128 +42,128 @@ type InstanceCache = {
 };
 
 class ServiceLocator {
-  private serviceFactory: ServiceFactory;
-  private cache: InstanceCache;
+  private serviceFactory!: ServiceFactory;
+  private cache!: InstanceCache;
 
-  load(serviceFactory) {
+  load(serviceFactory: ServiceFactory) {
     this.serviceFactory = serviceFactory;
     this.cache = {};
   }
 
   get config() {
     this.cache.Config = this.cache.Config || this.serviceFactory.createConfig();
-    return this.cache.Config;
+    return this.cache.Config!;
   }
 
   get cognitoIdentityServiceProvider() {
     this.cache.CognitoIdentityServiceProvider = this.cache.CognitoIdentityServiceProvider
         || this.serviceFactory.createCognitoIdentityServiceProvider();
-    return this.cache.CognitoIdentityServiceProvider;
+    return this.cache.CognitoIdentityServiceProvider!;
   }
 
   get cognitoUserFinder() {
     this.cache.CognitoUserFinder = this.cache.CognitoUserFinder || this.serviceFactory.createCognitoUserFinder();
-    return this.cache.CognitoUserFinder;
+    return this.cache.CognitoUserFinder!;
   }
 
   get getDonesRequestHandler() {
     this.cache.GetDonesRequestHandler = this.cache.GetDonesRequestHandler
         || this.serviceFactory.createGetDonesRequestHandler();
-    return this.cache.GetDonesRequestHandler;
+    return this.cache.GetDonesRequestHandler!;
   }
 
   get postDoneRequestHandler() {
     this.cache.PostDoneRequestHandler = this.cache.PostDoneRequestHandler
         || this.serviceFactory.createPostDoneRequestHandler();
-    return this.cache.PostDoneRequestHandler;
+    return this.cache.PostDoneRequestHandler!;
   }
 
   get deleteDoneRequestHandler() {
     this.cache.DeleteDoneRequestHandler = this.cache.DeleteDoneRequestHandler
         || this.serviceFactory.createDeleteDoneRequestHandler();
-    return this.cache.DeleteDoneRequestHandler;
+    return this.cache.DeleteDoneRequestHandler!;
   }
 
   get updateDoneRequestHandler() {
     this.cache.UpdateDoneRequestHandler = this.cache.UpdateDoneRequestHandler
         || this.serviceFactory.createUpdateDoneRequestHandler();
-    return this.cache.UpdateDoneRequestHandler;
+    return this.cache.UpdateDoneRequestHandler!;
   }
 
   get createDoneCommand() {
     this.cache.CreateDoneCommand = this.cache.CreateDoneCommand || this.serviceFactory.createCreateDoneCommand();
-    return this.cache.CreateDoneCommand;
+    return this.cache.CreateDoneCommand!;
   }
 
   get getDonesCommand() {
     this.cache.GetDonesCommand = this.cache.GetDonesCommand || this.serviceFactory.createGetDonesCommand();
-    return this.cache.GetDonesCommand;
+    return this.cache.GetDonesCommand!;
   }
 
   get updateDoneCommand() {
     this.cache.UpdateDoneCommand = this.cache.UpdateDoneCommand || this.serviceFactory.createUpdateDoneCommand();
-    return this.cache.UpdateDoneCommand;
+    return this.cache.UpdateDoneCommand!;
   }
 
   get requestProcessErrorProcessor() {
     this.cache.RequestProcessErrorProcessor = this.cache.RequestProcessErrorProcessor
         || this.serviceFactory.createRequestProcessErrorProcessor();
-    return this.cache.RequestProcessErrorProcessor;
+    return this.cache.RequestProcessErrorProcessor!;
   }
 
   get lambdaRequestNormaliser() {
     this.cache.LambdaRequestNormaliser = this.cache.LambdaRequestNormaliser || this.serviceFactory.createLambdaRequestNormaliser();
-    return this.cache.LambdaRequestNormaliser;
+    return this.cache.LambdaRequestNormaliser!;
   }
 
   get lambdaResponseFormatter() {
     this.cache.LambdaResponseFormatter = this.cache.LambdaResponseFormatter || this.serviceFactory.createLambdaResponseFormatter();
-    return this.cache.LambdaResponseFormatter;
+    return this.cache.LambdaResponseFormatter!;
   }
 
   get logger() {
     this.cache.Logger = this.cache.Logger || this.serviceFactory.createLogger();
-    return this.cache.Logger;
+    return this.cache.Logger!;
   }
 
   get userNameService() {
     this.cache.UserNameService = this.cache.UserNameService || this.serviceFactory.createUserNameService();
-    return this.cache.UserNameService;
+    return this.cache.UserNameService!;
   }
 
   get userIdRepository() {
     this.cache.UserIdRepository = this.cache.UserIdRepository || this.serviceFactory.createUserIdRepository();
-    return this.cache.UserIdRepository;
+    return this.cache.UserIdRepository!;
   }
 
   get doneRepository() {
     this.cache.DoneRepository = this.cache.DoneRepository || this.serviceFactory.createDoneRepository();
-    return this.cache.DoneRepository;
+    return this.cache.DoneRepository!!;
   }
 
   get dynamoDBDocumentClient() {
     this.cache.DynamoDBDocumentClient = this.cache.DynamoDBDocumentClient || this.serviceFactory.createDynamoDBDocumentClient();
-    return this.cache.DynamoDBDocumentClient;
+    return this.cache.DynamoDBDocumentClient!;
   }
 
   get doneQueryHelper() {
     this.cache.DoneQueryHelper = this.cache.DoneQueryHelper || this.serviceFactory.createDoneQueryHelper();
-    return this.cache.DoneQueryHelper;
+    return this.cache.DoneQueryHelper!;
   }
 
   get doneDynamoTableClient() {
     this.cache.DoneDynamoTableClient = this.cache.DoneDynamoTableClient || this.serviceFactory.createDoneDynamoTableClient();
-    return this.cache.DoneDynamoTableClient;
+    return this.cache.DoneDynamoTableClient!;
   }
 
   get uuidGenerator() {
     this.cache.UuidGenerator = this.cache.UuidGenerator || this.serviceFactory.createUuidGenerator();
-    return this.cache.UuidGenerator;
+    return this.cache.UuidGenerator!;
   }
 
   get dateProvider() {
     this.cache.DateProvider = this.cache.DateProvider || this.serviceFactory.createDateProvider();
-    return this.cache.DateProvider;
+    return this.cache.DateProvider!;
   }
 
 }

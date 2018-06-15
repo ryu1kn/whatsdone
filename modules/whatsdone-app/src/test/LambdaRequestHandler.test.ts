@@ -1,9 +1,9 @@
-
 import LambdaRequestHandler from '../lib/LambdaRequestHandler';
 import ServiceLocator from '../lib/ServiceLocator';
 import {expect} from './TestUtils';
 import sinon = require('sinon');
 import {Event} from '../lib/models/Lambda';
+import ServiceFactory from '../lib/ServiceFactory';
 
 describe('Server LambdaRequestHandler', () => {
   const lambdaEvent: Event = {
@@ -38,7 +38,7 @@ describe('Server LambdaRequestHandler', () => {
       createUserIdRepository: () => userIdRepository,
       createLambdaResponseFormatter: () => responseFormatter,
       createRequestProcessErrorProcessor: () => {}
-    });
+    } as ServiceFactory);
     const handler = new LambdaRequestHandler({requestProcessor});
 
     return handler.handle(lambdaEvent).then(response => {
@@ -69,7 +69,7 @@ describe('Server LambdaRequestHandler', () => {
       createUserIdRepository: () => ({getByCognitoUserId: () => Promise.resolve()}),
       createLambdaResponseFormatter: () => responseFormatter,
       createRequestProcessErrorProcessor: () => requestProcessErrorProcessor
-    });
+    } as ServiceFactory);
     const handler = new LambdaRequestHandler({requestProcessor});
 
     return handler.handle(lambdaEvent).then(response => {

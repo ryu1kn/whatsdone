@@ -1,8 +1,8 @@
-
 import ServiceLocator from '../lib/ServiceLocator';
 import CognitoUserFinder from '../lib/CognitoUserFinder';
 import {expect} from './TestUtils';
 import sinon = require('sinon');
+import ServiceFactory from '../lib/ServiceFactory';
 
 describe('Server CognitoUserFinder', () => {
 
@@ -40,7 +40,7 @@ describe('Server CognitoUserFinder', () => {
     ServiceLocator.load({
       createCognitoIdentityServiceProvider: () => cognitoIdentityServiceProvider,
       createConfig: () => ({userPoolId: 'USER_POOL_ID'})
-    });
+    } as ServiceFactory);
     return new CognitoUserFinder();
   }
 

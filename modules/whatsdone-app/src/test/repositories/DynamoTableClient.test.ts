@@ -1,8 +1,8 @@
-
 import DynamoTableClient from '../../lib/repositories/DynamoTableClient';
 import ServiceLocator from '../../lib/ServiceLocator';
 import {expect} from '../TestUtils';
 import sinon = require('sinon');
+import ServiceFactory from '../../lib/ServiceFactory';
 
 describe('Server DynamoTableClient', () => {
 
@@ -12,10 +12,7 @@ describe('Server DynamoTableClient', () => {
         promise: () => Promise.resolve({Item: 'ITEM'})
       })
     };
-    ServiceLocator.load({
-      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createUuidGenerator: () => {}
-    });
+    initialiseServiceLocator({dynamoDBDocumentClient});
     const client = new DynamoTableClient({collectionName: 'TABLE_NAME', idName: 'id'});
     return client.getById('ITEM_ID').then(item => {
       expect(item).to.eql('ITEM');
@@ -32,9 +29,9 @@ describe('Server DynamoTableClient', () => {
         promise: () => Promise.resolve()
       })
     };
-    ServiceLocator.load({
-      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createUuidGenerator: () => ({generate: () => 'UUID'})
+    initialiseServiceLocator({
+      dynamoDBDocumentClient,
+      uuidGenerator: {generate: () => 'UUID'}
     });
     const client = new DynamoTableClient({collectionName: 'TABLE_NAME', idName: 'id'});
     const newItem = {DATA: '..'};
@@ -56,10 +53,7 @@ describe('Server DynamoTableClient', () => {
         promise: () => Promise.resolve()
       })
     };
-    ServiceLocator.load({
-      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createUuidGenerator: () => {}
-    });
+    initialiseServiceLocator({dynamoDBDocumentClient});
     const client = new DynamoTableClient({collectionName: 'TABLE_NAME', idName: 'id'});
     return client.delete('ITEM_ID').then(() => {
       expect(dynamoDBDocumentClient.delete).to.have.been.calledWith({
@@ -78,10 +72,7 @@ describe('Server DynamoTableClient', () => {
         promise: () => Promise.resolve({Item: 'ITEM'})
       })
     };
-    ServiceLocator.load({
-      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createUuidGenerator: () => {}
-    });
+    initialiseServiceLocator({dynamoDBDocumentClient});
     const client = new DynamoTableClient({collectionName: 'TABLE_NAME', idName: 'id'});
     const newData = {KEY_1: 'VALUE_1', KEY_2: 'VALUE_2'};
     return client.update('ITEM_ID', newData).then(item => {
@@ -107,4 +98,10 @@ describe('Server DynamoTableClient', () => {
     });
   });
 
+  function initialiseServiceLocator({dynamoDBDocumentClient = {}, uuidGenerator = {}} = {}) {
+    ServiceLocator.load({
+      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
+      createUuidGenerator: () => uuidGenerator
+    } as ServiceFactory);
+  }
 });

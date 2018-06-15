@@ -1,8 +1,8 @@
-
 import UserNameService from '../lib/UserNameService';
 import ServiceLocator from '../lib/ServiceLocator';
 import {expect} from './TestUtils';
 import sinon = require('sinon');
+import ServiceFactory from '../lib/ServiceFactory';
 
 describe('Server UserNameService', () => {
 
@@ -33,7 +33,7 @@ describe('Server UserNameService', () => {
     ServiceLocator.load({
       createUserIdRepository: () => userIdRepository,
       createCognitoUserFinder: () => cognitoUserFinder
-    });
+    } as ServiceFactory);
     return new UserNameService();
   }
 
