@@ -32,33 +32,25 @@ export default class ServiceFactory {
 
   createGetDonesRequestHandler(): LambdaRequestHandler['handle'] {
     const GetDonesRequestProcessor = require('./request-processors/GetDones').default;
-    const requestHandler = new LambdaRequestHandler({
-      requestProcessor: new GetDonesRequestProcessor()
-    });
+    const requestHandler = new LambdaRequestHandler(new GetDonesRequestProcessor());
     return requestHandler.handle;
   }
 
   createPostDoneRequestHandler(): LambdaRequestHandler['handle'] {
     const PostDoneRequestProcessor = require('./request-processors/PostDone').default;
-    const requestHandler = new LambdaRequestHandler({
-      requestProcessor: new PostDoneRequestProcessor()
-    });
+    const requestHandler = new LambdaRequestHandler(new PostDoneRequestProcessor());
     return requestHandler.handle;
   }
 
   createDeleteDoneRequestHandler(): LambdaRequestHandler['handle'] {
     const DeleteDoneRequestProcessor = require('./request-processors/DeleteDone').default;
-    const requestHandler = new LambdaRequestHandler({
-      requestProcessor: new DeleteDoneRequestProcessor()
-    });
+    const requestHandler = new LambdaRequestHandler(new DeleteDoneRequestProcessor());
     return requestHandler.handle;
   }
 
   createUpdateDoneRequestHandler(): LambdaRequestHandler['handle'] {
     const UpdateDoneRequestProcessor = require('./request-processors/UpdateDone').default;
-    const requestHandler = new LambdaRequestHandler({
-      requestProcessor: new UpdateDoneRequestProcessor()
-    });
+    const requestHandler = new LambdaRequestHandler(new UpdateDoneRequestProcessor());
     return requestHandler.handle;
   }
 

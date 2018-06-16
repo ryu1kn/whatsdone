@@ -1,6 +1,6 @@
 import CreateDoneCommand from '../../lib/commands/CreateDone';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect, stubWithArgs} from '../TestUtils';
+import {expect, stubWithArgs} from '../helper/TestUtils';
 import ServiceFactory from '../../lib/ServiceFactory';
 
 describe('Server CreateDoneCommand', () => {

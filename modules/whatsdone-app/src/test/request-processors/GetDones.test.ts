@@ -1,8 +1,9 @@
 import GetDonesRequestProcessor from '../../lib/request-processors/GetDones';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect, throwError} from '../TestUtils';
+import {expect, throwError} from '../helper/TestUtils';
 import sinon = require('sinon');
 import ServiceFactory from '../../lib/ServiceFactory';
+import {request, session} from '../helper/NormalisedRequestData';
 
 describe('Server GetDonesRequestProcessor', () => {
 
@@ -11,10 +12,8 @@ describe('Server GetDonesRequestProcessor', () => {
     initialiseServiceLocator(getDonesCommand);
     const processor = new GetDonesRequestProcessor();
 
-    const req = {
-      query: {nextKey: 'NEXT_KEY'}
-    };
-    return processor.process(req).then(() => {
+    const req = Object.assign({}, request, {query: {nextKey: 'NEXT_KEY'}});
+    return processor.process(req, session).then(() => {
       expect(getDonesCommand.execute).to.have.been.calledWith('NEXT_KEY');
     });
   });
@@ -24,8 +23,7 @@ describe('Server GetDonesRequestProcessor', () => {
     initialiseServiceLocator(getDonesCommand);
     const processor = new GetDonesRequestProcessor();
 
-    const req = {query: {}};
-    return processor.process(req).then(result => {
+    return processor.process(request, session).then(result => {
       expect(result).to.eql({
         statusCode: '200',
         headers: {'Content-Type': 'application/json'},
@@ -39,8 +37,7 @@ describe('Server GetDonesRequestProcessor', () => {
     initialiseServiceLocator(getDonesCommand);
     const processor = new GetDonesRequestProcessor();
 
-    const req = {query: {}};
-    return processor.process(req).then(
+    return processor.process(request, session).then(
       throwError,
       e => {
         expect(e).to.have.property('message', 'UNEXPECTED_ERROR');

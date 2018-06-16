@@ -1,6 +1,8 @@
 import ServiceLocator from '../ServiceLocator';
 import CreateDoneCommand from '../commands/CreateDone';
 import {RequestProcessor} from '../RequestProcessor';
+import {Request} from '../LambdaRequestNormaliser';
+import {Session} from '../LambdaRequestHandler';
 
 export default class PostDonesRequestProcessor implements RequestProcessor {
   private _createDoneCommand: CreateDoneCommand;
@@ -9,7 +11,7 @@ export default class PostDonesRequestProcessor implements RequestProcessor {
     this._createDoneCommand = ServiceLocator.createDoneCommand;
   }
 
-  async process(request, session) {
+  async process(request: Request, session: Session) {
     const params = {
       data: request.body,
       userId: session.userId,

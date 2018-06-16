@@ -1,6 +1,8 @@
 import ServiceLocator from '../ServiceLocator';
 import GetDonesCommand from '../commands/GetDones';
 import {RequestProcessor} from '../RequestProcessor';
+import {Session} from '../LambdaRequestHandler';
+import {Request} from '../LambdaRequestNormaliser';
 
 export default class GetDonesRequestProcessor implements RequestProcessor {
   private _getDonesCommand: GetDonesCommand;
@@ -9,7 +11,7 @@ export default class GetDonesRequestProcessor implements RequestProcessor {
     this._getDonesCommand = ServiceLocator.getDonesCommand;
   }
 
-  async process(request, _session?) {
+  async process(request: Request, session: Session) {
     const nextKey = request.query.nextKey;
     const dones = await this._getDonesCommand.execute(nextKey);
     return {

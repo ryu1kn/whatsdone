@@ -1,6 +1,6 @@
 import LambdaRequestHandler from '../lib/LambdaRequestHandler';
 import ServiceLocator from '../lib/ServiceLocator';
-import {expect} from './TestUtils';
+import {expect} from './helper/TestUtils';
 import sinon = require('sinon');
 import {Event} from '../lib/models/Lambda';
 import ServiceFactory from '../lib/ServiceFactory';
@@ -39,7 +39,7 @@ describe('Server LambdaRequestHandler', () => {
       createLambdaResponseFormatter: () => responseFormatter,
       createRequestProcessErrorProcessor: () => {}
     } as ServiceFactory);
-    const handler = new LambdaRequestHandler({requestProcessor});
+    const handler = new LambdaRequestHandler(requestProcessor);
 
     return handler.handle(lambdaEvent).then(response => {
       expect(requestNormaliser.normalise).to.have.been.calledWith(lambdaEvent);
@@ -70,7 +70,7 @@ describe('Server LambdaRequestHandler', () => {
       createLambdaResponseFormatter: () => responseFormatter,
       createRequestProcessErrorProcessor: () => requestProcessErrorProcessor
     } as ServiceFactory);
-    const handler = new LambdaRequestHandler({requestProcessor});
+    const handler = new LambdaRequestHandler(requestProcessor);
 
     return handler.handle(lambdaEvent).then(response => {
       expect(requestProcessErrorProcessor.process.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');

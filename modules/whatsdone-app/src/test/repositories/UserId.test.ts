@@ -1,6 +1,6 @@
 import ServiceLocator from '../../lib/ServiceLocator';
 import UserIdRepository from '../../lib/repositories/UserId';
-import {expect} from '../TestUtils';
+import {expect} from '../helper/TestUtils';
 import sinon = require('sinon');
 import ServiceFactory from '../../lib/ServiceFactory';
 

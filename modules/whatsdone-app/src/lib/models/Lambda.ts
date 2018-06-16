@@ -9,10 +9,12 @@ export type Event = {
   headers: ObjectMap<string>,
   requestContext: {
     authorizer: {
-      claims: {
-        'cognito:username': string,
-        sub: string
-      }
+      claims: Claims
     }
   }
+};
+
+export type Claims = {
+  'cognito:username': string;
+  sub: string;
 };
