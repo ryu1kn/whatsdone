@@ -88,6 +88,40 @@
   dependencies:
     samsam "1.3.0"
 
+"@types/lodash.get@^4.4.3":
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/@types/lodash.get/-/lodash.get-4.4.3.tgz#ac823d175a9593c10555b5097b72281effd544b5"
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash.keyby@^4.6.3":
+  version "4.6.3"
+  resolved "https://registry.yarnpkg.com/@types/lodash.keyby/-/lodash.keyby-4.6.3.tgz#ceab6ebad584341aec9a7265f3678ef0c8b3168a"
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash.map@^4.6.12":
+  version "4.6.12"
+  resolved "https://registry.yarnpkg.com/@types/lodash.map/-/lodash.map-4.6.12.tgz#c03ba5093e388ecfdf22186aed1361ca54743327"
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash.omit@^4.5.3":
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/@types/lodash.omit/-/lodash.omit-4.5.3.tgz#38a28731b4123282fbc057656c5f5131e171d44b"
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash.pick@^4.4.3":
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/@types/lodash.pick/-/lodash.pick-4.4.3.tgz#2d979a8e2a553a26b9aa46a1d6d0bf7d07507bb4"
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
+  version "4.14.109"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.109.tgz#b1c4442239730bf35cabaf493c772b18c045886d"
+
 "@types/mocha@^5.2.2":
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-5.2.2.tgz#202d2b8fe1364c5b617b439b26a54f0e75eac0a7"
