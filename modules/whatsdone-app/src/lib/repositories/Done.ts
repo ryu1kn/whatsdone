@@ -1,5 +1,6 @@
 
-import _ = require('lodash');
+import _pick = require('lodash.pick');
+import _omit = require('lodash.omit');
 import ServiceLocator from '../ServiceLocator';
 import * as utils from './utils';
 import DynamoTableClient from './DynamoTableClient';
@@ -24,7 +25,7 @@ export default class DoneRepository {
     const finalDone = utils.getDoneWithMonth(done);
     const id = await this._doneDynamoTableClient.put(finalDone);
     const doneWithId = await this._doneDynamoTableClient.getById(id);
-    return _.omit(doneWithId, 'month');
+    return _omit(doneWithId, 'month');
   }
 
   async remove(id, currentUserId) {
@@ -46,10 +47,10 @@ export default class DoneRepository {
     if (found.userId !== currentUserId) {
       throw new Error('[AccessDenied]: You don\'t have the permission to modify this item.');
     }
-    const doneOverwrite = _.pick(newData, MODIFIABLE_FIELDS);
+    const doneOverwrite = _pick(newData, MODIFIABLE_FIELDS);
     const finalOverwrite = utils.getDoneWithMonth(doneOverwrite);
     const done = await this._doneDynamoTableClient.update(id, finalOverwrite);
-    return _.omit(done, 'month');
+    return _omit(done, 'month');
   }
 
 }

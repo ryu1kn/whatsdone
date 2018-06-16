@@ -1,5 +1,5 @@
 
-import _ = require('lodash');
+import _omit = require('lodash.omit');
 import AWS = require('aws-sdk');
 import ServiceLocator from '../../ServiceLocator';
 import WrappedError from '../../WrappedError';
@@ -117,12 +117,12 @@ export default class DoneQueryHelper {
   }
 
   private encodeNextKey(keyObject) {
-    return keyObject && JSON.stringify(_.omit(keyObject, 'month'));
+    return keyObject && JSON.stringify(_omit(keyObject, 'month'));
   }
 
   private buildResponse(queryResult): DoneQueryResult {
     return {
-      items: queryResult.Items.map(done => _.omit(done, 'month')),
+      items: queryResult.Items.map(done => _omit(done, 'month')),
       nextKey: this.encodeNextKey(queryResult.LastEvaluatedKey)
     };
   }
