@@ -1,6 +1,6 @@
 import RequestProcessErrorProcessor from '../lib/RequestProcessErrorProcessor';
 import ServiceLocator from '../lib/ServiceLocator';
-import {expect} from './TestUtils';
+import {expect} from './helper/TestUtils';
 import sinon = require('sinon');
 import ServiceFactory from '../lib/ServiceFactory';
 

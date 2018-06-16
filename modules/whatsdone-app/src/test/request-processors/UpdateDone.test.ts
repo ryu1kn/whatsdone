@@ -1,8 +1,9 @@
 import UpdateDoneRequestProcessor from '../../lib/request-processors/UpdateDone';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect} from '../TestUtils';
+import {expect} from '../helper/TestUtils';
 import sinon = require('sinon');
 import ServiceFactory from '../../lib/ServiceFactory';
+import {request, session} from '../helper/NormalisedRequestData';
 
 describe('Server UpdateDoneRequestProcessor', () => {
 
@@ -13,12 +14,10 @@ describe('Server UpdateDoneRequestProcessor', () => {
     } as ServiceFactory);
     const processor = new UpdateDoneRequestProcessor();
 
-    const request = {
-      params: {id: 'DONE_ID'},
+    const req = Object.assign({}, request, {
       body: {DONE_DATA: '..'}
-    };
-    const session = {userId: 'USER_ID'};
-    return processor.process(request, session).then(response => {
+    });
+    return processor.process(req, session).then(response => {
       expect(response).to.eql({
         statusCode: '200',
         headers: {

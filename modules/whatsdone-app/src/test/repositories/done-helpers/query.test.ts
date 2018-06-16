@@ -1,6 +1,6 @@
 import ServiceLocator from '../../../lib/ServiceLocator';
 import DoneQueryHelper from '../../../lib/repositories/done-helpers/query';
-import {expect} from '../../TestUtils';
+import {expect} from '../../helper/TestUtils';
 import ServiceFactory from '../../../lib/ServiceFactory';
 import sinon = require('sinon');
 import * as td from 'testdouble';

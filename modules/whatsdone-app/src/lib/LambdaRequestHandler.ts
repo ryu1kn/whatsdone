@@ -7,6 +7,11 @@ import {RequestProcessor} from './RequestProcessor';
 import {Event} from './models/Lambda';
 import {Response} from './models/Request';
 
+export type Session = {
+  userId: string;
+  username: string;
+};
+
 export default class LambdaRequestHandler {
   private _requestProcessor: RequestProcessor;
   private _userIdRepository: UserIdRepository;
@@ -14,8 +19,8 @@ export default class LambdaRequestHandler {
   private _lambdaResponseFormatter: LambdaResponseFormatter;
   private _requestProcessErrorProcessor: RequestProcessErrorProcessor;
 
-  constructor(params) {
-    this._requestProcessor = params.requestProcessor;
+  constructor(requestProcessor: RequestProcessor) {
+    this._requestProcessor = requestProcessor;
 
     this._userIdRepository = ServiceLocator.userIdRepository;
     this._lambdaRequestNormaliser = ServiceLocator.lambdaRequestNormaliser;
@@ -28,7 +33,7 @@ export default class LambdaRequestHandler {
     return this._lambdaResponseFormatter.format(response);
   }
 
-  private async handleRequest(event) {
+  private async handleRequest(event: Event) {
     const normalisedRequest = this._lambdaRequestNormaliser.normalise(event);
     const cognitoUserId = normalisedRequest.userInfo.userId;
     const username = normalisedRequest.userInfo.username;

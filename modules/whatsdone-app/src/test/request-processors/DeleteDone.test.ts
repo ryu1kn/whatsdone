@@ -1,24 +1,18 @@
 import DeleteDoneRequestProcessor from '../../lib/request-processors/DeleteDone';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect, throwError} from '../TestUtils';
+import {expect, throwError} from '../helper/TestUtils';
 import sinon = require('sinon');
 import ServiceFactory from '../../lib/ServiceFactory';
+import {request, session} from '../helper/NormalisedRequestData';
 
 describe('Server DeleteDoneRequestProcessor', () => {
-
   it('deletes a done item', () => {
     const doneRepository = {remove: sinon.stub().returns(Promise.resolve())};
     ServiceLocator.load({createDoneRepository: () => doneRepository} as ServiceFactory);
     const processor = new DeleteDoneRequestProcessor();
 
-    const request = {
-      params: {id: 'DONE_ID'}
-    };
-    const session = {userId: 'USER_ID'};
     return processor.process(request, session).then(response => {
-      expect(response).to.eql({
-        statusCode: '200'
-      });
+      expect(response).to.eql({statusCode: '200'});
       expect(doneRepository.remove).to.have.been.calledWith('DONE_ID', 'USER_ID');
     });
   });
@@ -31,10 +25,6 @@ describe('Server DeleteDoneRequestProcessor', () => {
     } as ServiceFactory);
     const processor = new DeleteDoneRequestProcessor();
 
-    const request = {
-      params: {}
-    };
-    const session = {};
     return processor.process(request, session).then(
       throwError,
       e => {

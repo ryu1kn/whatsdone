@@ -1,6 +1,6 @@
 
 import LambdaRequestNormaliser from '../lib/LambdaRequestNormaliser';
-import {expect} from './TestUtils';
+import {expect} from './helper/TestUtils';
 import {Event} from '../lib/models/Lambda';
 
 describe('Server LambdaRequestNormaliser', () => {
