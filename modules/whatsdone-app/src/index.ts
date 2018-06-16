@@ -28,7 +28,7 @@ class Router {
   async route(event: Event): Promise<Response> {
     const method = event.httpMethod.toLowerCase();
     const handlerItem = this._handlers[method].find(
-      handlerItem => handlerItem.pattern.match(event.path)
+      handlerItem => !!handlerItem.pattern.match(event.path)
     );
     if (handlerItem) {
       const pathParameters = handlerItem.pattern.match(event.path);
