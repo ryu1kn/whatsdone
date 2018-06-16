@@ -11,7 +11,7 @@ export type Request = {
   path: string;
   params: ObjectMap<string>,
   query: ObjectMap<string>,
-  body: ObjectMap<any>,
+  body: any,
   userInfo: {
     username: string,
     userId: string

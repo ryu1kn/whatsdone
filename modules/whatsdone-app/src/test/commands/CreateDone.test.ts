@@ -6,10 +6,12 @@ import ServiceFactory from '../../lib/ServiceFactory';
 describe('Server CreateDoneCommand', () => {
 
   it('returns list of dones with the names of their owners', () => {
+    const done = {doneThing: 'SOMETHING', date: 'DATE'};
+    const doneWithUserId = Object.assign({}, done, {userId: 'USER_ID'});
     const doneRepository = {
       write: stubWithArgs(
-        [{userId: 'USER_ID', SOME_DATA: '..'}],
-        Promise.resolve({userId: 'USER_ID', SOME_DATA: '..'})
+        [doneWithUserId],
+        Promise.resolve(doneWithUserId)
       )
     };
     ServiceLocator.load({
@@ -17,17 +19,8 @@ describe('Server CreateDoneCommand', () => {
     } as ServiceFactory);
     const command = new CreateDoneCommand();
 
-    const params = {
-      userId: 'USER_ID',
-      username: 'USER',
-      data: {SOME_DATA: '..'}
-    };
-    return command.execute(params).then(result => {
-      expect(result).to.eql({
-        userId: 'USER_ID',
-        username: 'USER',
-        SOME_DATA: '..'
-      });
+    return command.execute(done, 'USER_ID').then(result => {
+      expect(result).to.eql(doneWithUserId);
     });
   });
 

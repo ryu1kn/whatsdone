@@ -12,16 +12,12 @@ export default class PostDonesRequestProcessor implements RequestProcessor {
   }
 
   async process(request: Request, session: Session) {
-    const params = {
-      data: request.body,
-      userId: session.userId,
-      username: session.username
-    };
-    const result = await this._createDoneCommand.execute(params);
+    const result = await this._createDoneCommand.execute(request.body, session.userId);
+    const finalResult = Object.assign({}, result, {username: session.username});
     return {
       statusCode: '200',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(result)
+      body: JSON.stringify(finalResult)
     };
   }
 
