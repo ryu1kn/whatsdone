@@ -3,7 +3,7 @@ import _ = require('lodash');
 import ServiceLocator from '../ServiceLocator';
 import * as utils from './utils';
 import DynamoTableClient from './DynamoTableClient';
-import DoneQueryHelper from './done-helpers/query';
+import DoneQueryHelper, {DoneQueryResult} from './done-helpers/query';
 
 const MODIFIABLE_FIELDS = ['date', 'doneThing'];
 
@@ -16,7 +16,7 @@ export default class DoneRepository {
     this._doneQueryHelper = ServiceLocator.doneQueryHelper;
   }
 
-  read(nextKey?) {
+  read(nextKey?: string): Promise<DoneQueryResult> {
     return this._doneQueryHelper.query(nextKey);
   }
 

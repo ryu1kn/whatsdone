@@ -14,6 +14,19 @@ type QueryParams = {
   limit?: number
 };
 
+export type DoneInDb = {
+  id: string;
+  date: string;
+  doneThing: string;
+  userId: string;
+  month: string;
+};
+
+export type DoneQueryResult = {
+  items: DoneInDb[];
+  nextKey: string;
+};
+
 export default class DoneQueryHelper {
   private _docClient: AWS.DynamoDB.DocumentClient;
   private _dateProvider: {getCurrentDate: () => Date};
@@ -25,7 +38,7 @@ export default class DoneQueryHelper {
     this._collectionName = collectionName;
   }
 
-  async query(nextKey?) {
+  async query(nextKey?): Promise<DoneQueryResult> {
     try {
       return await this._query(this.decodeNextKey(nextKey));
     } catch (e) {
@@ -33,7 +46,7 @@ export default class DoneQueryHelper {
     }
   }
 
-  private async _query(startKey) {
+  private async _query(startKey): Promise<DoneQueryResult> {
     const queryUntil = async (params, accumulatedResponse) => {
       const queryResult = await this._docClient.query(params).promise();
       const newAccumulatedResponse = {
@@ -107,7 +120,7 @@ export default class DoneQueryHelper {
     return keyObject && JSON.stringify(_.omit(keyObject, 'month'));
   }
 
-  private buildResponse(queryResult) {
+  private buildResponse(queryResult): DoneQueryResult {
     return {
       items: queryResult.Items.map(done => _.omit(done, 'month')),
       nextKey: this.encodeNextKey(queryResult.LastEvaluatedKey)

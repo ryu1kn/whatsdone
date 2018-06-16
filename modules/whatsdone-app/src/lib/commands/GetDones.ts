@@ -2,6 +2,7 @@ import _ = require('lodash');
 import ServiceLocator from '../ServiceLocator';
 import UserNameService from '../UserNameService';
 import DoneRepository from '../repositories/Done';
+import {DoneInDb} from '../repositories/done-helpers/query';
 
 export default class GetDonesCommand {
   private _userNameService: UserNameService;
@@ -12,7 +13,7 @@ export default class GetDonesCommand {
     this._doneRepository = ServiceLocator.doneRepository;
   }
 
-  async execute(nextKey?) {
+  async execute(nextKey?: string) {
     const result = await this._doneRepository.read(nextKey);
     const items = await this.setUserNames(result.items);
     return {
@@ -21,7 +22,7 @@ export default class GetDonesCommand {
     };
   }
 
-  private async setUserNames(dones) {
+  private async setUserNames(dones: DoneInDb[]) {
     const users = await this._userNameService.getUsernames(_.map(dones, 'userId'));
     const nameMap = _.keyBy(users, 'id');
     return dones.map(done =>
