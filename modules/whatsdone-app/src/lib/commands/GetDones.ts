@@ -1,4 +1,6 @@
-import _ = require('lodash');
+import _map = require('lodash.map');
+import _keyBy = require('lodash.keyby');
+import _get = require('lodash.get');
 import ServiceLocator from '../ServiceLocator';
 import UserNameService from '../UserNameService';
 import DoneRepository from '../repositories/Done';
@@ -23,11 +25,11 @@ export default class GetDonesCommand {
   }
 
   private async setUserNames(dones: DoneInDb[]) {
-    const users = await this._userNameService.getUsernames(_.map(dones, 'userId'));
-    const nameMap = _.keyBy(users, 'id');
+    const users = await this._userNameService.getUsernames(_map(dones, 'userId'));
+    const nameMap = _keyBy(users, 'id');
     return dones.map(done =>
       done.userId ?
-        Object.assign({}, done, {username: _.get(nameMap, `${done.userId}.name`)}) :
+        Object.assign({}, done, {username: _get(nameMap, `${done.userId}.name`)}) :
         done
     );
   }
