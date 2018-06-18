@@ -1,6 +1,7 @@
 import _pick = require('lodash.pick');
 import ServiceLocator from '../ServiceLocator';
 import DoneRepository from '../repositories/Done';
+import {DoneDiff} from '../models/Done';
 
 export default class UpdateDoneCommand {
   private _doneRepository: DoneRepository;
@@ -9,8 +10,8 @@ export default class UpdateDoneCommand {
     this._doneRepository = ServiceLocator.doneRepository;
   }
 
-  async execute(params) {
-    const done = await this._doneRepository.update(params.doneId, params.userId, params.data);
+  async execute(data: DoneDiff, doneId: string, userId: string) {
+    const done = await this._doneRepository.update(doneId, userId, data);
     return _pick(done, ['id', 'userId', 'date', 'doneThing']);
   }
 
