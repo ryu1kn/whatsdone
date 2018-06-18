@@ -10,7 +10,7 @@ const OLDEST_QUERY_MONTH = '2015-02';
 
 type QueryParams = {
   monthKey: string,
-  exclusiveStartKey?: {ExclusiveStartKey: string},
+  exclusiveStartKey?: {ExclusiveStartKey: DoneLastEvaluatedKey},
   limit?: number
 };
 
@@ -24,7 +24,34 @@ export type DoneInDb = {
 
 export type DoneQueryResult = {
   items: DoneInDb[];
-  nextKey: string;
+  nextKey?: string;
+};
+
+type DoneQueryParams = {
+  TableName: string;
+  IndexName: string;
+  Limit: number;
+  KeyConditionExpression: string;
+  ExpressionAttributeNames: {
+    '#month': string,
+    '#date': string
+  };
+  ExpressionAttributeValues: {':m': string;};
+  ScanIndexForward: boolean;
+  ProjectionExpression: string;
+  Select: string;
+  ExclusiveStartKey?: DoneLastEvaluatedKey;
+};
+
+type DoneLastEvaluatedKey = {
+  id: string;
+  month: string;
+  date: string;
+};
+
+type DynamoQueryResult = {
+  Items: DoneInDb[];
+  LastEvaluatedKey?: DoneLastEvaluatedKey;
 };
 
 export default class DoneQueryHelper {
@@ -32,13 +59,13 @@ export default class DoneQueryHelper {
   private _dateProvider: {getCurrentDate: () => Date};
   private _collectionName: string;
 
-  constructor(collectionName) {
+  constructor(collectionName: string) {
     this._docClient = ServiceLocator.dynamoDBDocumentClient;
     this._dateProvider = ServiceLocator.dateProvider;
     this._collectionName = collectionName;
   }
 
-  async query(nextKey?): Promise<DoneQueryResult> {
+  async query(nextKey?: string): Promise<DoneQueryResult> {
     try {
       return await this._query(this.decodeNextKey(nextKey));
     } catch (e) {
@@ -46,12 +73,12 @@ export default class DoneQueryHelper {
     }
   }
 
-  private async _query(startKey): Promise<DoneQueryResult> {
-    const queryUntil = async (params, accumulatedResponse) => {
+  private async _query(startKey: DoneLastEvaluatedKey): Promise<DoneQueryResult> {
+    const queryUntil = async (params: DoneQueryParams, accumulatedResponse: DynamoQueryResult) => {
       const queryResult = await this._docClient.query(params).promise();
       const newAccumulatedResponse = {
-        Items: [...accumulatedResponse.Items, ...queryResult.Items],
-        LastEvaluatedKey: queryResult.LastEvaluatedKey
+        Items: [...accumulatedResponse.Items, ...queryResult.Items as DoneInDb[]],
+        LastEvaluatedKey: queryResult.LastEvaluatedKey as DoneLastEvaluatedKey
       };
       if (newAccumulatedResponse.Items.length >= DEFAULT_SCAN_LIMIT) return newAccumulatedResponse;
 
@@ -69,8 +96,8 @@ export default class DoneQueryHelper {
     return this.buildResponse(response);
   }
 
-  private getPrevMonthKey(params) {
-    function pad0(number) {
+  private getPrevMonthKey(params: DoneQueryParams) {
+    function pad0(number: number) {
       return number < 10 ? `0${number}` : number;
     }
     const d = new Date(params.ExpressionAttributeValues[':m']);
@@ -79,20 +106,20 @@ export default class DoneQueryHelper {
     return `${oldYear}-${pad0(oldMonth)}`;
   }
 
-  private buildQueryFromStartKey(startKey) {
+  private buildQueryFromStartKey(startKey: DoneLastEvaluatedKey) {
     return this.buildQueryParams({
       monthKey: this.getMonthKey(startKey),
       exclusiveStartKey: startKey && {ExclusiveStartKey: startKey}
     });
   }
 
-  private getMonthKey(restoredKey) {
+  private getMonthKey(restoredKey?: DoneLastEvaluatedKey): string {
     if (restoredKey) return restoredKey.month;
     const currentDate = this._dateProvider.getCurrentDate().toISOString();
     return currentDate.substr(0, utils.MONTH_LENGTH);
   }
 
-  private buildQueryParams({monthKey, exclusiveStartKey, limit}: QueryParams) {
+  private buildQueryParams({monthKey, exclusiveStartKey, limit}: QueryParams): DoneQueryParams {
     return Object.assign(
       {
         TableName: this._collectionName,
@@ -112,15 +139,15 @@ export default class DoneQueryHelper {
     );
   }
 
-  private decodeNextKey(nextKey) {
+  private decodeNextKey(nextKey?: string): DoneLastEvaluatedKey {
     return nextKey ? utils.getDoneWithMonth(JSON.parse(nextKey)) : null;
   }
 
-  private encodeNextKey(keyObject) {
+  private encodeNextKey(keyObject?: DoneLastEvaluatedKey) {
     return keyObject && JSON.stringify(_omit(keyObject, 'month'));
   }
 
-  private buildResponse(queryResult): DoneQueryResult {
+  private buildResponse(queryResult: DynamoQueryResult): DoneQueryResult {
     return {
       items: queryResult.Items.map(done => _omit(done, 'month')),
       nextKey: this.encodeNextKey(queryResult.LastEvaluatedKey)
