@@ -13,7 +13,7 @@ describe('Server DynamoTableClient', () => {
       })
     };
     initialiseServiceLocator({dynamoDBDocumentClient});
-    const client = new DynamoTableClient({collectionName: 'TABLE_NAME', idName: 'id'});
+    const client = new DynamoTableClient('TABLE_NAME', 'id');
     return client.getById('ITEM_ID').then(item => {
       expect(item).to.eql('ITEM');
       expect(dynamoDBDocumentClient.get).to.have.been.calledWith({
@@ -33,7 +33,7 @@ describe('Server DynamoTableClient', () => {
       dynamoDBDocumentClient,
       uuidGenerator: {generate: () => 'UUID'}
     });
-    const client = new DynamoTableClient({collectionName: 'TABLE_NAME', idName: 'id'});
+    const client = new DynamoTableClient('TABLE_NAME', 'id');
     const newItem = {DATA: '..'};
     return client.put(newItem).then(newId => {
       expect(newId).to.eql('UUID');
@@ -54,7 +54,7 @@ describe('Server DynamoTableClient', () => {
       })
     };
     initialiseServiceLocator({dynamoDBDocumentClient});
-    const client = new DynamoTableClient({collectionName: 'TABLE_NAME', idName: 'id'});
+    const client = new DynamoTableClient('TABLE_NAME', 'id');
     return client.delete('ITEM_ID').then(() => {
       expect(dynamoDBDocumentClient.delete).to.have.been.calledWith({
         TableName: 'TABLE_NAME',
@@ -73,7 +73,7 @@ describe('Server DynamoTableClient', () => {
       })
     };
     initialiseServiceLocator({dynamoDBDocumentClient});
-    const client = new DynamoTableClient({collectionName: 'TABLE_NAME', idName: 'id'});
+    const client = new DynamoTableClient('TABLE_NAME', 'id');
     const newData = {KEY_1: 'VALUE_1', KEY_2: 'VALUE_2'};
     return client.update('ITEM_ID', newData).then(item => {
       expect(item).to.eql('ITEM');

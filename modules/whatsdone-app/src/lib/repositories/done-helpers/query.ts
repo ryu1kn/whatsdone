@@ -132,7 +132,9 @@ export default class DoneQueryHelper {
   }
 
   private decodeNextKey(nextKey?: string): DoneLastEvaluatedKey {
-    return nextKey ? utils.getDoneWithMonth(JSON.parse(nextKey)) : null;
+    return nextKey
+      ? utils.getDoneWithMonth(JSON.parse(nextKey)) as DoneLastEvaluatedKey
+      : null;
   }
 
   private encodeNextKey(keyObject?: DoneLastEvaluatedKey) {

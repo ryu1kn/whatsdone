@@ -99,7 +99,7 @@ export default class ServiceFactory {
 
   createDoneDynamoTableClient() {
     const DynamoTableClient = require('./repositories/DynamoTableClient').default;
-    return new DynamoTableClient({collectionName: this._env.DONE_TABLE_NAME, idName: 'id'});
+    return new DynamoTableClient(this._env.DONE_TABLE_NAME, 'id');
   }
 
   createDoneRepository() {
@@ -114,7 +114,7 @@ export default class ServiceFactory {
 
   createUserIdRepository() {
     const UserIdRepository = require('./repositories/UserId').default;
-    return new UserIdRepository({tableName: this._env.USER_ID_TABLE_NAME});
+    return new UserIdRepository(this._env.USER_ID_TABLE_NAME);
   }
 
   createUuidGenerator(): {generate: () => string} {

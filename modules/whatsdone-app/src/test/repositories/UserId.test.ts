@@ -71,7 +71,7 @@ describe('Server UserIdRepository', () => {
     ServiceLocator.load({
       createDynamoDBDocumentClient: () => dynamoDBDocumentClient
     } as ServiceFactory);
-    return new UserIdRepository({tableName: 'USER_ID_TABLE_NAME'});
+    return new UserIdRepository('USER_ID_TABLE_NAME');
   }
 
 });
