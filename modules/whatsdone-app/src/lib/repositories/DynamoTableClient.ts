@@ -2,6 +2,7 @@
 import AWS = require('aws-sdk');
 import ServiceLocator from '../ServiceLocator';
 import WrappedError from '../WrappedError';
+import {DoneInDb} from '../models/Done';
 
 export default class DynamoTableClient {
   private _docClient: AWS.DynamoDB.DocumentClient;
@@ -16,14 +17,14 @@ export default class DynamoTableClient {
     this._idName = idName;
   }
 
-  async getById(id) {
+  async getById(id: string): Promise<DoneInDb> {
     const params = {
       TableName: this.getTableName(),
       Key: this.toIdObject(id)
     };
     try {
       const response = await this._docClient.get(params).promise();
-      return response.Item;
+      return response.Item as DoneInDb;
     } catch (e) {
       throw new WrappedError(e, params);
     }
@@ -69,7 +70,7 @@ export default class DynamoTableClient {
     }
   }
 
-  private toIdObject(id) {
+  private toIdObject(id: string) {
     return {[this._idName]: id};
   }
 

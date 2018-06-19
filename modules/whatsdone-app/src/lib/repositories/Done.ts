@@ -5,6 +5,7 @@ import ServiceLocator from '../ServiceLocator';
 import * as utils from './utils';
 import DynamoTableClient from './DynamoTableClient';
 import DoneQueryHelper, {DoneQueryResult} from './done-helpers/query';
+import {DoneDiff, UserDone} from '../models/Done';
 
 const MODIFIABLE_FIELDS = ['date', 'doneThing'];
 
@@ -21,14 +22,14 @@ export default class DoneRepository {
     return this._doneQueryHelper.query(nextKey);
   }
 
-  async write(done) {
+  async write(done: UserDone) {
     const finalDone = utils.getDoneWithMonth(done);
     const id = await this._doneDynamoTableClient.put(finalDone);
     const doneWithId = await this._doneDynamoTableClient.getById(id);
     return _omit(doneWithId, 'month');
   }
 
-  async remove(id, currentUserId) {
+  async remove(id: string, currentUserId: string) {
     const found = await this._doneDynamoTableClient.getById(id);
     if (found === null) {
       throw new Error('[NotFound]: Done item not found');
@@ -39,7 +40,7 @@ export default class DoneRepository {
     return this._doneDynamoTableClient.delete(id);
   }
 
-  async update(id, currentUserId, newData) {
+  async update(id: string, currentUserId: string, newData: DoneDiff) {
     const found = await this._doneDynamoTableClient.getById(id);
     if (found === null) {
       throw new Error('[NotFound]: Done item not found');

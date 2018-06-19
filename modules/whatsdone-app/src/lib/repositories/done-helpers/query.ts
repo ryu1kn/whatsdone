@@ -1,9 +1,9 @@
-
 import _omit = require('lodash.omit');
 import AWS = require('aws-sdk');
 import ServiceLocator from '../../ServiceLocator';
 import WrappedError from '../../WrappedError';
 import * as utils from '../utils';
+import {DoneInDb} from '../../models/Done';
 
 const DEFAULT_SCAN_LIMIT = 20;
 const OLDEST_QUERY_MONTH = '2015-02';
@@ -12,14 +12,6 @@ type QueryParams = {
   monthKey: string,
   exclusiveStartKey?: {ExclusiveStartKey: DoneLastEvaluatedKey},
   limit?: number
-};
-
-export type DoneInDb = {
-  id: string;
-  date: string;
-  doneThing: string;
-  userId: string;
-  month: string;
 };
 
 export type DoneQueryResult = {
@@ -74,7 +66,7 @@ export default class DoneQueryHelper {
   }
 
   private async _query(startKey: DoneLastEvaluatedKey): Promise<DoneQueryResult> {
-    const queryUntil = async (params: DoneQueryParams, accumulatedResponse: DynamoQueryResult) => {
+    const queryUntil = async (params: DoneQueryParams, accumulatedResponse: DynamoQueryResult): Promise<DynamoQueryResult> => {
       const queryResult = await this._docClient.query(params).promise();
       const newAccumulatedResponse = {
         Items: [...accumulatedResponse.Items, ...queryResult.Items as DoneInDb[]],

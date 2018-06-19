@@ -4,7 +4,7 @@ import _get = require('lodash.get');
 import ServiceLocator from '../ServiceLocator';
 import UserNameService from '../UserNameService';
 import DoneRepository from '../repositories/Done';
-import {DoneInDb} from '../repositories/done-helpers/query';
+import {DoneInDb} from '../models/Done';
 
 export default class GetDonesCommand {
   private _userNameService: UserNameService;
