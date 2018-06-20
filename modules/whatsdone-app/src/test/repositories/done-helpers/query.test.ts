@@ -15,7 +15,7 @@ describe('Server DoneQueryHelper', () => {
 
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(() => {
-      expect(dynamoDBDocumentClient.query).to.have.been.calledWith({
+      expect(dynamoDBDocumentClient.query.args[0]).to.eql([{
         TableName: 'TABLE_NAME',
         IndexName: 'date',
         Limit: 20,
@@ -30,7 +30,7 @@ describe('Server DoneQueryHelper', () => {
         ScanIndexForward: false,
         ProjectionExpression: 'id, #date, doneThing, userId',
         Select: 'SPECIFIC_ATTRIBUTES'
-      });
+      }]);
     });
   });
 
@@ -125,7 +125,7 @@ describe('Server DoneQueryHelper', () => {
 
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(() => {
-      expect(dynamoDBDocumentClient.query).to.have.been.calledThrice; // tslint:disable-line:no-unused-expression
+      expect(dynamoDBDocumentClient.query.args.length).to.eql(3); // tslint:disable-line:no-unused-expression
       expect(dynamoDBDocumentClient.query.args[0][0].ExpressionAttributeValues)
         .to.eql({':m': '2017-08'});
       expect(dynamoDBDocumentClient.query.args[1][0].ExpressionAttributeValues)
@@ -159,7 +159,7 @@ describe('Server DoneQueryHelper', () => {
 
     const client = new DoneQueryHelper('TABLE_NAME');
     return client.query().then(() => {
-      expect(dynamoDBDocumentClient.query).to.have.callCount(30);
+      expect(dynamoDBDocumentClient.query.args.length).to.eql(30);
       expect(dynamoDBDocumentClient.query.args[29][0].ExpressionAttributeValues)
         .to.eql({':m': '2015-03'});
     });
@@ -188,7 +188,7 @@ describe('Server DoneQueryHelper', () => {
     ServiceLocator.load(factory);
   }
 
-  function awsSdkResponse(response) {
+  function awsSdkResponse(response: any) {
     const finalResponse = response instanceof Error ?
       Promise.reject(response) : Promise.resolve(response);
     return {promise: () => finalResponse};

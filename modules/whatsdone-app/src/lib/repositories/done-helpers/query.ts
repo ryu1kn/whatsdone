@@ -65,7 +65,7 @@ export default class DoneQueryHelper {
     }
   }
 
-  private async _query(startKey: DoneLastEvaluatedKey): Promise<DoneQueryResult> {
+  private async _query(startKey?: DoneLastEvaluatedKey): Promise<DoneQueryResult> {
     const queryUntil = async (params: DoneQueryParams, accumulatedResponse: DynamoQueryResult): Promise<DynamoQueryResult> => {
       const queryResult = await this._docClient.query(params).promise();
       const newAccumulatedResponse = {
@@ -98,7 +98,7 @@ export default class DoneQueryHelper {
     return `${oldYear}-${pad0(oldMonth)}`;
   }
 
-  private buildQueryFromStartKey(startKey: DoneLastEvaluatedKey) {
+  private buildQueryFromStartKey(startKey?: DoneLastEvaluatedKey) {
     return this.buildQueryParams({
       monthKey: this.getMonthKey(startKey),
       exclusiveStartKey: startKey && {ExclusiveStartKey: startKey}
@@ -131,10 +131,10 @@ export default class DoneQueryHelper {
     );
   }
 
-  private decodeNextKey(nextKey?: string): DoneLastEvaluatedKey {
+  private decodeNextKey(nextKey?: string): DoneLastEvaluatedKey | undefined {
     return nextKey
       ? utils.getDoneWithMonth(JSON.parse(nextKey)) as DoneLastEvaluatedKey
-      : null;
+      : undefined;
   }
 
   private encodeNextKey(keyObject?: DoneLastEvaluatedKey) {

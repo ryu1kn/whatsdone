@@ -42,16 +42,16 @@ describe('Server LambdaRequestHandler', () => {
     const handler = new LambdaRequestHandler(requestProcessor);
 
     return handler.handle(lambdaEvent).then(response => {
-      expect(requestNormaliser.normalise).to.have.been.calledWith(lambdaEvent);
-      expect(userIdRepository.getByCognitoUserId).to.have.been.calledWith('COGNITO_USER_ID');
-      expect(requestProcessor.process).to.have.been.calledWith(
+      expect(requestNormaliser.normalise.args[0]).to.eql([lambdaEvent]);
+      expect(userIdRepository.getByCognitoUserId.args[0]).to.eql(['COGNITO_USER_ID']);
+      expect(requestProcessor.process.args[0]).to.eql([
         normalisedRequest,
         {
           userId: 'USER_ID',
           username: 'COGNITO_USER_NAME'
         }
-      );
-      expect(responseFormatter.format).to.have.been.calledWith('RESPONSE');
+      ]);
+      expect(responseFormatter.format.args[0]).to.eql(['RESPONSE']);
       expect(response).to.eql('LAMBDA_RESPONSE');
     });
   });
@@ -74,7 +74,7 @@ describe('Server LambdaRequestHandler', () => {
 
     return handler.handle(lambdaEvent).then(response => {
       expect(requestProcessErrorProcessor.process.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');
-      expect(responseFormatter.format).to.have.been.calledWith('ERROR_RESPONSE');
+      expect(responseFormatter.format.args[0]).to.eql(['ERROR_RESPONSE']);
       expect(response).to.eql('LAMBDA_RESPONSE');
     });
   });

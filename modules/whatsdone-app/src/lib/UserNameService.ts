@@ -11,7 +11,7 @@ export default class UserNameService {
     this._cognitoUserFinder = ServiceLocator.cognitoUserFinder;
   }
 
-  async getUsernames(ids) {
+  async getUsernames(ids: string[]) {
     const cognitoUserIds = await Promise.all(ids.map(id => this._userIdRepository.getCognitoUserId(id)));
     const finalCognitoUserIds = cognitoUserIds.map((cognitoUserId, index) => cognitoUserId || ids[index]);
     const usernames = await Promise.all(finalCognitoUserIds.map(id => this.resolveUserName(id)));
@@ -21,7 +21,7 @@ export default class UserNameService {
     }));
   }
 
-  private async resolveUserName(cognitoUserId) {
+  private async resolveUserName(cognitoUserId: string) {
     const user = await this._cognitoUserFinder.find(cognitoUserId);
     return user && user.Username;
   }

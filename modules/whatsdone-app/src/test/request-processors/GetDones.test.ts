@@ -1,29 +1,25 @@
 import GetDonesRequestProcessor from '../../lib/request-processors/GetDones';
 import ServiceLocator from '../../lib/ServiceLocator';
 import {expect, throwError} from '../helper/TestUtils';
-import sinon = require('sinon');
 import ServiceFactory from '../../lib/ServiceFactory';
 import {request, session} from '../helper/NormalisedRequestData';
+import * as td from 'testdouble';
+import GetDonesCommand from '../../lib/commands/GetDones';
 
 describe('Server GetDonesRequestProcessor', () => {
+  const getDonesCommand = td.object('execute') as GetDonesCommand;
+  td.when(getDonesCommand.execute('NEXT_KEY'))
+    .thenResolve('COMMAND_OUTPUT');
+  td.when(getDonesCommand.execute('CAUSE_ERROR'))
+    .thenReject(new Error('UNEXPECTED_ERROR'));
+
+  ServiceLocator.load({createGetDonesCommand: () => getDonesCommand} as ServiceFactory);
+
+  const processor = new GetDonesRequestProcessor();
 
   it('invokes get dones command with next page key', () => {
-    const getDonesCommand = {execute: sinon.stub().returns(Promise.resolve())};
-    initialiseServiceLocator(getDonesCommand);
-    const processor = new GetDonesRequestProcessor();
-
     const req = Object.assign({}, request, {query: {nextKey: 'NEXT_KEY'}});
-    return processor.process(req, session).then(() => {
-      expect(getDonesCommand.execute).to.have.been.calledWith('NEXT_KEY');
-    });
-  });
-
-  it('returns the output of get dones command result', () => {
-    const getDonesCommand = {execute: () => Promise.resolve('COMMAND_OUTPUT')};
-    initialiseServiceLocator(getDonesCommand);
-    const processor = new GetDonesRequestProcessor();
-
-    return processor.process(request, session).then(result => {
+    return processor.process(req, session).then(result => {
       expect(result).to.eql({
         statusCode: '200',
         headers: {'Content-Type': 'application/json'},
@@ -33,22 +29,13 @@ describe('Server GetDonesRequestProcessor', () => {
   });
 
   it('propagates error', () => {
-    const getDonesCommand = {execute: () => Promise.reject(new Error('UNEXPECTED_ERROR'))};
-    initialiseServiceLocator(getDonesCommand);
-    const processor = new GetDonesRequestProcessor();
-
-    return processor.process(request, session).then(
+    const req = Object.assign({}, request, {query: {nextKey: 'CAUSE_ERROR'}});
+    return processor.process(req, session).then(
       throwError,
       e => {
         expect(e).to.have.property('message', 'UNEXPECTED_ERROR');
       }
     );
   });
-
-  function initialiseServiceLocator(getDonesCommand) {
-    ServiceLocator.load({
-      createGetDonesCommand: () => getDonesCommand
-    } as ServiceFactory);
-  }
 });
 

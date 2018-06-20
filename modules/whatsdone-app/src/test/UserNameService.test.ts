@@ -1,26 +1,25 @@
 import UserNameService from '../lib/UserNameService';
 import ServiceLocator from '../lib/ServiceLocator';
 import {expect} from './helper/TestUtils';
-import sinon = require('sinon');
 import ServiceFactory from '../lib/ServiceFactory';
+import CognitoUserFinder from '../lib/CognitoUserFinder';
+import UserIdRepository from '../lib/repositories/UserId';
+import * as td from 'testdouble';
 
 describe('Server UserNameService', () => {
+  const userIdRepository = td.object('getCognitoUserId') as UserIdRepository;
+  td.when(userIdRepository.getCognitoUserId('ID')).thenResolve('USER_ID');
 
-  it('finds cognito user ids from given ids', () => {
-    const userIdRepository = {getCognitoUserId: sinon.stub().returns(Promise.resolve('USER_ID'))};
-    const cognitoUserFinder = {find: () => Promise.resolve({})};
-    const service = createUserNameService({cognitoUserFinder, userIdRepository});
+  const cognitoUserFinder = td.object('find') as CognitoUserFinder;
+  td.when(cognitoUserFinder.find('USER_ID')).thenResolve({Username: 'USER_NAME'});
 
-    return service.getUsernames(['ID']).then(() => {
-      expect(userIdRepository.getCognitoUserId).to.have.been.calledWith('ID');
-    });
-  });
+  ServiceLocator.load({
+    createUserIdRepository: () => userIdRepository,
+    createCognitoUserFinder: () => cognitoUserFinder
+  } as ServiceFactory);
+  const service = new UserNameService();
 
   it('looks up a user', () => {
-    const userIdRepository = {getCognitoUserId: () => Promise.resolve('USER_ID')};
-    const cognitoUserFinder = {find: () => Promise.resolve({Username: 'USER_NAME'})};
-    const service = createUserNameService({cognitoUserFinder, userIdRepository});
-
     return service.getUsernames(['ID']).then(result => {
       expect(result).to.eql([{
         id: 'ID',
@@ -28,13 +27,4 @@ describe('Server UserNameService', () => {
       }]);
     });
   });
-
-  function createUserNameService({cognitoUserFinder, userIdRepository}) {
-    ServiceLocator.load({
-      createUserIdRepository: () => userIdRepository,
-      createCognitoUserFinder: () => cognitoUserFinder
-    } as ServiceFactory);
-    return new UserNameService();
-  }
-
 });

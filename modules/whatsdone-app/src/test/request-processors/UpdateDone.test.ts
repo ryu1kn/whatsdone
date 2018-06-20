@@ -26,11 +26,11 @@ describe('Server UpdateDoneRequestProcessor', () => {
         },
         body: '{"UPDATED_DONE_ITEM":".."}'
       });
-      expect(updateDoneCommand.execute).to.have.been.calledWith(
+      expect(updateDoneCommand.execute.args[0]).to.eql([
         {DONE_DATA: '..'},
         'DONE_ID',
         'USER_ID'
-      );
+      ]);
     });
   });
 

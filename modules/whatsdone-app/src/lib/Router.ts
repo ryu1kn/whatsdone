@@ -42,23 +42,23 @@ export class Router {
     };
   }
 
-  get(pattern, handler) {
+  get(pattern: string, handler: LambdaRequestHandler['handle']) {
     this.registerHandler('get', pattern, handler);
   }
 
-  post(pattern, handler) {
+  post(pattern: string, handler: LambdaRequestHandler['handle']) {
     this.registerHandler('post', pattern, handler);
   }
 
-  delete(pattern, handler) {
+  delete(pattern: string, handler: LambdaRequestHandler['handle']) {
     this.registerHandler('delete', pattern, handler);
   }
 
-  put(pattern, handler) {
+  put(pattern: string, handler: LambdaRequestHandler['handle']) {
     this.registerHandler('put', pattern, handler);
   }
 
-  private registerHandler(method, pattern, handler) {
+  private registerHandler(method: string, pattern: string, handler: LambdaRequestHandler['handle']) {
     this._handlers[method].push({
       pattern: new Route(pattern),
       handler

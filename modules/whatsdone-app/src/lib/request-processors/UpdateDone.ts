@@ -12,8 +12,10 @@ export default class UpdateDoneRequestProcessor implements RequestProcessor {
   }
 
   async process(request: Request, session: Session) {
-    const doneId = request.params.id;
     const userId = session.userId;
+    if (!userId) return {statusCode: '403'};
+
+    const doneId = request.params.id;
     const data = request.body;
     const result = await this._updateDoneCommand.execute(data, doneId, userId);
     return {

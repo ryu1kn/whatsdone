@@ -1,6 +1,7 @@
 
 import ServiceLocator from './ServiceLocator';
 import {Logger} from './Logger';
+import WrappedError from './WrappedError';
 
 export default class RequestProcessErrorProcessor {
   private _logger: Logger;
@@ -9,8 +10,9 @@ export default class RequestProcessErrorProcessor {
     this._logger = ServiceLocator.logger;
   }
 
-  process(err) {
-    this._logger.error(err.stack, {details: err.details && JSON.stringify(err.details)});
+  process(err: Error) {
+    const details = err instanceof WrappedError ? {details: err.details && JSON.stringify(err.details)} : undefined;
+    this._logger.error(err.stack, details);
 
     // TODO: Instead of having a rule for error message format
     //       to destinguish error types, define custom exception classes
@@ -25,11 +27,11 @@ export default class RequestProcessErrorProcessor {
       return this.composeResponse('404', '404: Not Found');
 
     default:
-      return this.composeResponse(err.status || '500', '500: Internal Server Error');
+      return this.composeResponse('500', '500: Internal Server Error');
     }
   }
 
-  private composeResponse(statusCode, errorMessage) {
+  private composeResponse(statusCode: string, errorMessage: string) {
     const errorResponse = [
       {title: errorMessage}
     ];
