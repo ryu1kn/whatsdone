@@ -13,10 +13,12 @@ describe('Server LambdaResponseFormatter', () => {
     const formatter = new LambdaResponseFormatter();
 
     const response = {
+      statusCode: '200',
       headers: {'X-ANY-HEADER': '..'},
       NON_HEADER_VALUES: '..'
     };
     expect(formatter.format(response)).to.eql({
+      statusCode: '200',
       headers: {
         'X-ANY-HEADER': '..',
         'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key',

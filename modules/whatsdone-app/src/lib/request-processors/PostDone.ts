@@ -12,6 +12,8 @@ export default class PostDonesRequestProcessor implements RequestProcessor {
   }
 
   async process(request: Request, session: Session) {
+    if (!session.userId) return {statusCode: '403'};
+
     const result = await this._createDoneCommand.execute(request.body, session.userId);
     const finalResult = Object.assign({}, result, {username: session.username});
     return {

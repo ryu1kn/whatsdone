@@ -2,22 +2,22 @@ import AWSXRay = require('aws-xray-sdk');
 import RawAWS = require('aws-sdk');
 import LambdaRequestHandler from './LambdaRequestHandler';
 import Uuid = require('uuid');
-import {ObjectMap} from './models/Collection';
 import {Logger} from './Logger';
+import {EnvVars} from './EnvVars';
 
 const AWS = AWSXRay.captureAWS(RawAWS);
 
 export default class ServiceFactory {
-  private _env: ObjectMap<string>;
+  private env: EnvVars;
 
-  constructor(env: ObjectMap<string>) {
-    this._env = env;
+  constructor(env: EnvVars) {
+    this.env = env;
   }
 
   createConfig() {
     return {
-      userPoolId: process.env.USER_POOL_ID,
-      webappOrigin: process.env.WEBAPP_ORIGIN
+      userPoolId: this.env.USER_POOL_ID,
+      webappOrigin: this.env.WEBAPP_ORIGIN
     };
   }
 
@@ -89,17 +89,17 @@ export default class ServiceFactory {
   }
 
   createDynamoDBDocumentClient(): AWS.DynamoDB.DocumentClient {
-    return new AWS.DynamoDB.DocumentClient({region: this._env.DB_REGION});
+    return new AWS.DynamoDB.DocumentClient({region: this.env.DB_REGION});
   }
 
   createDoneQueryHelper() {
     const DoneQueryHelper = require('./repositories/done-helpers/query').default;
-    return new DoneQueryHelper(this._env.DONE_TABLE_NAME);
+    return new DoneQueryHelper(this.env.DONE_TABLE_NAME);
   }
 
   createDoneDynamoTableClient() {
     const DynamoTableClient = require('./repositories/DynamoTableClient').default;
-    return new DynamoTableClient(this._env.DONE_TABLE_NAME, 'id');
+    return new DynamoTableClient(this.env.DONE_TABLE_NAME, 'id');
   }
 
   createDoneRepository() {
@@ -114,7 +114,7 @@ export default class ServiceFactory {
 
   createUserIdRepository() {
     const UserIdRepository = require('./repositories/UserId').default;
-    return new UserIdRepository(this._env.USER_ID_TABLE_NAME);
+    return new UserIdRepository(this.env.USER_ID_TABLE_NAME);
   }
 
   createUuidGenerator(): {generate: () => string} {

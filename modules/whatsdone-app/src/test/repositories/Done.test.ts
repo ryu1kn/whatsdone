@@ -52,7 +52,7 @@ describe('Server DoneRepository', () => {
     };
     return repository.write(done).then(newDone => {
       expect(newDone).to.eql({DATA: '..'});
-      expect(doneDynamoTableClient.getById).to.have.been.calledWith('DONE_ID');
+      expect(doneDynamoTableClient.getById.args[0]).to.eql(['DONE_ID']);
     });
   });
 
@@ -69,11 +69,11 @@ describe('Server DoneRepository', () => {
       doneThing: 'DONE_THING'
     };
     return repository.write(done).then(() => {
-      expect(doneDynamoTableClient.put).to.have.been.calledWith({
+      expect(doneDynamoTableClient.put.args[0]).to.eql([{
         date: '2017-08-14T12:26:26.227Z',
         doneThing: 'DONE_THING',
         month: '2017-08'
-      });
+      }]);
     });
   });
 
@@ -106,8 +106,8 @@ describe('Server DoneRepository', () => {
     const repository = new DoneRepository();
 
     return repository.remove('DONE_ID', 'USER_ID').then(() => {
-      expect(doneDynamoTableClient.getById).to.have.been.calledWith('DONE_ID');
-      expect(doneDynamoTableClient.delete).to.have.been.calledWith('DONE_ID');
+      expect(doneDynamoTableClient.getById.args[0]).to.eql(['DONE_ID']);
+      expect(doneDynamoTableClient.delete.args[0]).to.eql(['DONE_ID']);
     });
   });
 
@@ -131,7 +131,7 @@ describe('Server DoneRepository', () => {
       NON_UPDATABLE_KEY: 'NEW ..'
     };
     return repository.update('DONE_ID', 'USER_ID', newData).then(() => {
-      expect(doneDynamoTableClient.getById).to.have.been.calledWith('DONE_ID');
+      expect(doneDynamoTableClient.getById.args[0]).to.eql(['DONE_ID']);
       const updateArgs = doneDynamoTableClient.update.args[0];
       expect(updateArgs[0]).to.eql('DONE_ID');
       expect(updateArgs[1]).to.include({

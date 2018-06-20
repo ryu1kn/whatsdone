@@ -1,4 +1,4 @@
 export type AppConfig = {
-  userPoolId?: string;
-  webappOrigin?: string
+  userPoolId: string;
+  webappOrigin: string
 };

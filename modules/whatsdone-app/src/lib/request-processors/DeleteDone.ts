@@ -12,6 +12,7 @@ export default class DeleteDoneRequestHandler implements RequestProcessor {
   }
 
   async process(request: Request, session: Session) {
+    if (!session.userId) return {statusCode: '403'};
     await this._doneRepository.remove(request.params.id, session.userId);
     return {statusCode: '200'};
   }

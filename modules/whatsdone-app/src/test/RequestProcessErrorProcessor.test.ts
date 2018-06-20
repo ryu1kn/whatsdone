@@ -3,12 +3,15 @@ import ServiceLocator from '../lib/ServiceLocator';
 import {expect} from './helper/TestUtils';
 import sinon = require('sinon');
 import ServiceFactory from '../lib/ServiceFactory';
+import * as td from 'testdouble';
 
 describe('Server RequestProcessErrorProcessor', () => {
 
   it('shows NOT FOUND page if error indicates so', () => {
     const logger = {error: sinon.spy()};
-    ServiceLocator.load({createLogger: () => logger} as ServiceFactory);
+    const serviceFactory = td.object('createLogger') as ServiceFactory;
+    td.when(serviceFactory.createLogger()).thenReturn(logger);
+    ServiceLocator.load(serviceFactory);
     const processor = new RequestProcessErrorProcessor();
     const result = processor.process(new Error('[NotFound]: NOT_FOUND'));
 
@@ -22,7 +25,9 @@ describe('Server RequestProcessErrorProcessor', () => {
 
   it('shows an error page with the information that access was denied', () => {
     const logger = {error: sinon.spy()};
-    ServiceLocator.load({createLogger: () => logger} as ServiceFactory);
+    const serviceFactory = td.object('createLogger') as ServiceFactory;
+    td.when(serviceFactory.createLogger()).thenReturn(logger);
+    ServiceLocator.load(serviceFactory);
     const processor = new RequestProcessErrorProcessor();
     const result = processor.process(new Error('[AccessDenied]: ACCESS_DENIED'));
 
@@ -36,7 +41,9 @@ describe('Server RequestProcessErrorProcessor', () => {
 
   it('shows a generic error page if an uncategorised error occurred', () => {
     const logger = {error: sinon.spy()};
-    ServiceLocator.load({createLogger: () => logger} as ServiceFactory);
+    const serviceFactory = td.object('createLogger') as ServiceFactory;
+    td.when(serviceFactory.createLogger()).thenReturn(logger);
+    ServiceLocator.load(serviceFactory);
     const processor = new RequestProcessErrorProcessor();
     const result = processor.process(new Error('UNKNOWN ERROR'));
 
