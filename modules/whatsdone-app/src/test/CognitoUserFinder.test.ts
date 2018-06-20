@@ -10,7 +10,7 @@ describe('Server CognitoUserFinder', () => {
     const cognitoIdentityServiceProvider = createCognitoIdentityServiceProvider();
     const userFinder = createCognitoUserFinder(cognitoIdentityServiceProvider);
 
-    return userFinder.find(['ID']).then(() => {
+    return userFinder.find('ID').then(() => {
       expect(cognitoIdentityServiceProvider.listUsers).to.have.been.calledWith({
         UserPoolId: 'USER_POOL_ID',
         AttributesToGet: [],
@@ -23,7 +23,7 @@ describe('Server CognitoUserFinder', () => {
     const cognitoIdentityServiceProvider = createCognitoIdentityServiceProvider();
     const userFinder = createCognitoUserFinder(cognitoIdentityServiceProvider);
 
-    return userFinder.find(['ID']).then(user => {
+    return userFinder.find('ID').then(user => {
       expect(user).to.eql('USER_1');
     });
   });
