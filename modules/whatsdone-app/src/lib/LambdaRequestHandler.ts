@@ -8,8 +8,8 @@ import {Event} from './models/Lambda';
 import {Response} from './models/Request';
 
 export type Session = {
-  userId: string;
-  username: string;
+  userId?: string;
+  username?: string;
 };
 
 export default class LambdaRequestHandler {
@@ -38,8 +38,11 @@ export default class LambdaRequestHandler {
     const cognitoUserId = normalisedRequest.userInfo.userId;
     const username = normalisedRequest.userInfo.username;
     try {
-      const userId = await this._userIdRepository.getByCognitoUserId(cognitoUserId);
-      return await this._requestProcessor.process(normalisedRequest, {userId, username});
+      const session = {
+        userId: await this._userIdRepository.getByCognitoUserId(cognitoUserId),
+        username
+      };
+      return await this._requestProcessor.process(normalisedRequest, session);
     } catch (e) {
       return this._requestProcessErrorProcessor.process(e);
     }
