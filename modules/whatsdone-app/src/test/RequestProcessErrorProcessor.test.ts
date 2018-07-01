@@ -1,14 +1,14 @@
 import RequestProcessErrorProcessor from '../lib/RequestProcessErrorProcessor';
+import {Logger} from '../lib/Logger';
 import ServiceLocator from '../lib/ServiceLocator';
 import {expect} from './helper/TestUtils';
-import sinon = require('sinon');
 import ServiceFactory from '../lib/ServiceFactory';
 import * as td from 'testdouble';
 
 describe('Server RequestProcessErrorProcessor', () => {
 
   it('shows NOT FOUND page if error indicates so', () => {
-    const logger = {error: sinon.spy()};
+    const logger = td.object('error') as Logger;
     const serviceFactory = td.object('createLogger') as ServiceFactory;
     td.when(serviceFactory.createLogger()).thenReturn(logger);
     ServiceLocator.load(serviceFactory);
@@ -20,11 +20,11 @@ describe('Server RequestProcessErrorProcessor', () => {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({errors: [{title: '404: Not Found'}]})
     });
-    expect(logger.error.args[0][0]).to.have.string('Error: [NotFound]: NOT_FOUND');
+    td.verify(logger.error(td.matchers.contains('Error: [NotFound]: NOT_FOUND')), {ignoreExtraArgs: true});
   });
 
   it('shows an error page with the information that access was denied', () => {
-    const logger = {error: sinon.spy()};
+    const logger = td.object('error') as Logger;
     const serviceFactory = td.object('createLogger') as ServiceFactory;
     td.when(serviceFactory.createLogger()).thenReturn(logger);
     ServiceLocator.load(serviceFactory);
@@ -36,11 +36,11 @@ describe('Server RequestProcessErrorProcessor', () => {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({errors: [{title: '403: Forbidden'}]})
     });
-    expect(logger.error.args[0][0]).to.have.string('Error: [AccessDenied]: ACCESS_DENIED');
+    td.verify(logger.error(td.matchers.contains('Error: [AccessDenied]: ACCESS_DENIED')), {ignoreExtraArgs: true});
   });
 
   it('shows a generic error page if an uncategorised error occurred', () => {
-    const logger = {error: sinon.spy()};
+    const logger = td.object('error') as Logger;
     const serviceFactory = td.object('createLogger') as ServiceFactory;
     td.when(serviceFactory.createLogger()).thenReturn(logger);
     ServiceLocator.load(serviceFactory);
@@ -52,7 +52,7 @@ describe('Server RequestProcessErrorProcessor', () => {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({errors: [{title: '500: Internal Server Error'}]})
     });
-    expect(logger.error.args[0][0]).to.have.string('Error: UNKNOWN');
+    td.verify(logger.error(td.matchers.contains('Error: UNKNOWN')), {ignoreExtraArgs: true});
   });
 
 });
