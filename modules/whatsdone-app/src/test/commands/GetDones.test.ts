@@ -1,26 +1,31 @@
 import GetDonesCommand from '../../lib/commands/GetDones';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect, stubWithArgs} from '../helper/TestUtils';
+import {expect} from '../helper/TestUtils';
 import ServiceFactory from '../../lib/ServiceFactory';
+import * as td from 'testdouble';
+import UserNameService from '../../lib/UserNameService';
+import DoneRepository from '../../lib/repositories/Done';
 
 describe('Server GetDonesCommand', () => {
+  const userNameService = td.object('getUsernames') as UserNameService;
+  td.when(userNameService.getUsernames(['USER_ID'])).thenResolve([{id: 'USER_ID', name: 'USER'}]);
 
-  it('returns list of dones with the names of their owners', () => {
-    const userNameService = {getUsernames: stubWithArgs([['USER_ID']], Promise.resolve([{id: 'USER_ID', name: 'USER'}]))};
-    const doneRepository = {read: () => Promise.resolve({items: [{userId: 'USER_ID', SOME_DATA: '..'}]})};
-    ServiceLocator.load({
-      createUserNameService: () => userNameService,
-      createDoneRepository: () => doneRepository
-    } as ServiceFactory);
-    const command = new GetDonesCommand();
+  const doneRepository = td.object('read') as DoneRepository;
+  td.when(doneRepository.read(undefined)).thenResolve({items: [{userId: 'USER_ID', SOME_DATA: '..'}]});
 
-    return command.execute().then(result => {
-      expect(result.items).to.eql([{
-        userId: 'USER_ID',
-        username: 'USER',
-        SOME_DATA: '..'
-      }]);
-    });
+  ServiceLocator.load({
+    createUserNameService: () => userNameService,
+    createDoneRepository: () => doneRepository
+  } as ServiceFactory);
+  const command = new GetDonesCommand();
+
+  it('returns list of dones with the names of their owners', async () => {
+    const result = await command.execute();
+    expect(result.items).to.eql([{
+      userId: 'USER_ID',
+      username: 'USER',
+      SOME_DATA: '..'
+    }]);
   });
 
 });
