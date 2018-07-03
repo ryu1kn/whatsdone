@@ -1,6 +1,7 @@
 import GetDonesRequestProcessor from '../../lib/request-processors/GetDones';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect, throwError} from '../helper/TestUtils';
+import {expect} from 'chai';
+import {throwError} from '../helper/TestUtils';
 import ServiceFactory from '../../lib/ServiceFactory';
 import {request, session} from '../helper/NormalisedRequestData';
 import * as td from 'testdouble';

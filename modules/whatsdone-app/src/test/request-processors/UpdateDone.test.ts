@@ -1,6 +1,6 @@
 import UpdateDoneRequestProcessor from '../../lib/request-processors/UpdateDone';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect} from '../helper/TestUtils';
+import {expect} from 'chai';
 import sinon = require('sinon');
 import ServiceFactory from '../../lib/ServiceFactory';
 import {request, session} from '../helper/NormalisedRequestData';

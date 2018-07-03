@@ -1,6 +1,6 @@
 import LambdaRequestHandler from '../lib/LambdaRequestHandler';
 import ServiceLocator from '../lib/ServiceLocator';
-import {expect} from './helper/TestUtils';
+import {expect} from 'chai';
 import sinon = require('sinon');
 import {Event} from '../lib/models/Lambda';
 import ServiceFactory from '../lib/ServiceFactory';

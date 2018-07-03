@@ -1,6 +1,6 @@
 import UpdateDoneCommand from '../../lib/commands/UpdateDone';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect} from '../helper/TestUtils';
+import {expect} from 'chai';
 import ServiceFactory from '../../lib/ServiceFactory';
 
 describe('Server UpdateDoneCommand', () => {

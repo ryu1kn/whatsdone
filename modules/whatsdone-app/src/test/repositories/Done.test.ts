@@ -1,7 +1,7 @@
 
 import ServiceLocator from '../../lib/ServiceLocator';
 import DoneRepository from '../../lib/repositories/Done';
-import {expect} from '../helper/TestUtils';
+import {expect} from 'chai';
 import sinon = require('sinon');
 import ServiceFactory from '../../lib/ServiceFactory';
 

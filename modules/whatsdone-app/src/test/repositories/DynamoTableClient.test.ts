@@ -1,6 +1,6 @@
 import DynamoTableClient from '../../lib/repositories/DynamoTableClient';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect} from '../helper/TestUtils';
+import {expect} from 'chai';
 import sinon = require('sinon');
 import ServiceFactory from '../../lib/ServiceFactory';
 

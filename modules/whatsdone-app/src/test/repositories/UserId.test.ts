@@ -1,6 +1,6 @@
 import ServiceLocator from '../../lib/ServiceLocator';
 import UserIdRepository from '../../lib/repositories/UserId';
-import {expect} from '../helper/TestUtils';
+import {expect} from 'chai';
 import ServiceFactory from '../../lib/ServiceFactory';
 import * as td from 'testdouble';
 

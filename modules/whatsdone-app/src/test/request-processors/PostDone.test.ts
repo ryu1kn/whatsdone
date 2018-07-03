@@ -1,6 +1,6 @@
 import PostDoneRequestProcessor from '../../lib/request-processors/PostDone';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect} from '../helper/TestUtils';
+import {expect} from 'chai';
 import ServiceFactory from '../../lib/ServiceFactory';
 import {request} from '../helper/NormalisedRequestData';
 import * as td from 'testdouble';
