@@ -1,6 +1,6 @@
 import ServiceLocator from '../lib/ServiceLocator';
 import LambdaResponseFormatter from '../lib/LambdaResponseFormatter';
-import {expect} from './helper/TestUtils';
+import {expect} from 'chai';
 import ServiceFactory from '../lib/ServiceFactory';
 
 describe('Server LambdaResponseFormatter', () => {

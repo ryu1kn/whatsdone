@@ -1,6 +1,7 @@
 import DeleteDoneRequestProcessor from '../../lib/request-processors/DeleteDone';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect, throwError} from '../helper/TestUtils';
+import {expect} from 'chai';
+import {throwError} from '../helper/TestUtils';
 import sinon = require('sinon');
 import ServiceFactory from '../../lib/ServiceFactory';
 import {request, session} from '../helper/NormalisedRequestData';

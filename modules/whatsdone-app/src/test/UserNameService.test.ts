@@ -1,6 +1,6 @@
 import UserNameService from '../lib/UserNameService';
 import ServiceLocator from '../lib/ServiceLocator';
-import {expect} from './helper/TestUtils';
+import {expect} from 'chai';
 import ServiceFactory from '../lib/ServiceFactory';
 import CognitoUserFinder from '../lib/CognitoUserFinder';
 import UserIdRepository from '../lib/repositories/UserId';

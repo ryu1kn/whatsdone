@@ -1,6 +1,6 @@
 import ServiceLocator from '../lib/ServiceLocator';
 import CognitoUserFinder from '../lib/CognitoUserFinder';
-import {expect} from './helper/TestUtils';
+import {expect} from 'chai';
 import * as td from 'testdouble';
 import ServiceFactory from '../lib/ServiceFactory';
 import {CognitoIdentityServiceProvider} from 'aws-sdk';

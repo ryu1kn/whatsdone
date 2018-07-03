@@ -1,4 +1,4 @@
-import {expect} from './helper/TestUtils';
+import {expect} from 'chai';
 import {EnvVars} from '../lib/EnvVars';
 import ProcessEnv = NodeJS.ProcessEnv;
 
