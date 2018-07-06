@@ -2,13 +2,13 @@
 
 set -euo pipefail
 
-LOG_GROUP=/aws/lambda/prod-whatsdone-GetDonesFunction
-LOG_STREAM=`aws logs describe-log-streams --log-group-name $LOG_GROUP \
+log_group=/aws/lambda/whatsdone-prod-ProxyLambdaFunction
+log_stream=`aws logs describe-log-streams --log-group-name $log_group \
     | jq '.logStreams | map(.logStreamName) | sort | reverse | .[0]' --raw-output`
-LOG_ENTRY_LIMIT=${1:-20}
+log_entry_limit=${1:-20}
 
 aws logs get-log-events \
-    --limit $LOG_ENTRY_LIMIT \
-    --log-group-name $LOG_GROUP \
-    --log-stream-name "$LOG_STREAM" | \
+    --limit $log_entry_limit \
+    --log-group-name $log_group \
+    --log-stream-name "$log_stream" | \
         jq '.events | map([(.timestamp / 1000 | todateiso8601), .message[:-1]] | join(" "))[]' --raw-output
