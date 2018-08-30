@@ -12,8 +12,11 @@ addons:
     - sourceline: 'deb http://us.archive.ubuntu.com/ubuntu vivid main universe'
     packages:
     - jq
-    - awscli
 before_install:
+- wget https://bootstrap.pypa.io/get-pip.py
+- python3 get-pip.py
+- pip install awscli
+- aws configure set s3.signature_version s3v4
 - yarn global add kumo
 - kumo install
 install:
