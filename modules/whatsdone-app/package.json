@@ -19,7 +19,7 @@
     "destroy": "cd ops && kumo destroy-module --verbose"
   },
   "dependencies": {
-    "aws-sdk": "~2.255.1",
+    "aws-sdk": "~2.305.0",
     "aws-xray-sdk": "~1.2.0",
     "lodash.get": "~4.4.2",
     "lodash.keyby": "~4.6.0",
@@ -27,27 +27,27 @@
     "lodash.omit": "~4.5.0",
     "lodash.pick": "~4.4.0",
     "route-parser": "0.0.5",
-    "uuid": "~3.2.1"
+    "uuid": "~3.3.2"
   },
   "devDependencies": {
     "@types/chai": "^4.1.4",
-    "@types/lodash.get": "^4.4.3",
-    "@types/lodash.keyby": "^4.6.3",
-    "@types/lodash.map": "^4.6.12",
-    "@types/lodash.omit": "^4.5.3",
-    "@types/lodash.pick": "^4.4.3",
-    "@types/mocha": "^5.2.2",
+    "@types/lodash.get": "^4.4.4",
+    "@types/lodash.keyby": "^4.6.4",
+    "@types/lodash.map": "^4.6.13",
+    "@types/lodash.omit": "^4.5.4",
+    "@types/lodash.pick": "^4.4.4",
+    "@types/mocha": "^5.2.5",
     "@types/node": "^8.10.19",
     "@types/route-parser": "^0.1.1",
-    "@types/sinon": "^5.0.1",
-    "@types/uuid": "^3.4.3",
+    "@types/sinon": "^5.0.2",
+    "@types/uuid": "^3.4.4",
     "chai": "^4.1.2",
     "mocha": "^5.2.0",
-    "nyc": "^12.0.2",
-    "sinon": "^6.0.0",
+    "nyc": "^13.0.1",
+    "sinon": "^6.1.5",
     "testdouble": "^3.8.1",
-    "ts-node": "^6.1.1",
-    "tslint": "^5.10.0",
-    "typescript": "^2.9.1"
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.3"
   }
 }
