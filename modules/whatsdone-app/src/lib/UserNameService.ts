@@ -12,11 +12,12 @@ export default class UserNameService {
   }
 
   async getUsernames(ids: string[]) {
-    const cognitoUserIds = await Promise.all(ids.map(id => this._userIdRepository.getCognitoUserId(id)));
-    const finalCognitoUserIds = cognitoUserIds.map((cognitoUserId, index) => cognitoUserId || ids[index]);
+    const uniqueIds = ids.reduce((acc, id) => acc.includes(id) ? acc : [...acc, id], [] as string[]);
+    const cognitoUserIds = await Promise.all(uniqueIds.map(id => this._userIdRepository.getCognitoUserId(id)));
+    const finalCognitoUserIds = cognitoUserIds.map((cognitoUserId, index) => cognitoUserId || uniqueIds[index]);
     const usernames = await Promise.all(finalCognitoUserIds.map(id => this.resolveUserName(id)));
     return usernames.map((name, index) => ({
-      id: ids[index],
+      id: uniqueIds[index],
       name
     }));
   }
