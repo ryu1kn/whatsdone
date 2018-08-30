@@ -15,7 +15,7 @@ addons:
 before_install:
 - wget https://bootstrap.pypa.io/get-pip.py
 - python3 get-pip.py --user
-- pip install awscli
+- pip install awscli --user
 - aws configure set s3.signature_version s3v4
 - yarn global add kumo
 - kumo install
