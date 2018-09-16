@@ -1,5 +1,3 @@
-import Dependencies._
-
 lazy val root = (project in file("."))
   .enablePlugins(GatlingPlugin)
   .settings(
@@ -10,8 +8,8 @@ lazy val root = (project in file("."))
     )),
     name := "whatsdone-load-test",
     libraryDependencies ++= Seq(
-      gatlingHighChart,
-      gatling,
-      scalaTest % Test
+      "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+      "io.gatling.highcharts" % "gatling-charts-highcharts" % "2.3.1" % Test,
+      "io.gatling" % "gatling-test-framework" % "2.3.1" % Test
     )
   )
