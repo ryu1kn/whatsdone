@@ -53,7 +53,7 @@ class DoneItem extends React.Component {
             {this.formatTime(this.props.date)}
           </p>
         </div>
-        <div className="doneitem__delete-action glyphicon glyphicon-remove" onClick={this.delete.bind(this)}></div>
+        <div className="doneitem__delete-action glyphicon glyphicon-trash" onClick={this.delete.bind(this)}></div>
       </div>
     );
   }
