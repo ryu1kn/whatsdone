@@ -7,7 +7,7 @@ const webpack = require('webpack');
 
 const SRC_DIR = path.resolve(__dirname, 'src');
 const BUILD_DIR = path.resolve(__dirname, process.env.npm_package_config_buildDir);
-const BYTE_LIMIT = 8192;
+const BYTE_LIMIT = 100000;
 
 const extractLess = new ExtractTextPlugin('style-[hash].css');
 const jsMinifyPlugins = process.env.NODE_ENV === 'production' ? [
