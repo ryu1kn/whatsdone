@@ -7,46 +7,44 @@ import * as td from 'testdouble';
 
 describe('Server DoneQueryHelper', () => {
 
-  it('uses DynamoDB#query to get done items', () => {
+  it('uses DynamoDB#query to get done items', async () => {
     const dynamoDBDocumentClient = {
       query: sinon.stub().returns(awsSdkResponse({Items: [{DATA: '..'}]}))
     };
     setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
 
     const client = new DoneQueryHelper('TABLE_NAME');
-    return client.query().then(() => {
-      expect(dynamoDBDocumentClient.query.args[0]).to.eql([{
-        TableName: 'TABLE_NAME',
-        IndexName: 'date',
-        Limit: 20,
-        KeyConditionExpression: '#month = :m',
-        ExpressionAttributeNames: {
-          '#month': 'month',
-          '#date': 'date'
-        },
-        ExpressionAttributeValues: {
-          ':m': '2017-08'
-        },
-        ScanIndexForward: false,
-        ProjectionExpression: 'id, #date, doneThing, userId',
-        Select: 'SPECIFIC_ATTRIBUTES'
-      }]);
-    });
+    await client.query();
+    expect(dynamoDBDocumentClient.query.args[0]).to.eql([{
+      TableName: 'TABLE_NAME',
+      IndexName: 'date',
+      Limit: 20,
+      KeyConditionExpression: '#month = :m',
+      ExpressionAttributeNames: {
+        '#month': 'month',
+        '#date': 'date'
+      },
+      ExpressionAttributeValues: {
+        ':m': '2017-08'
+      },
+      ScanIndexForward: false,
+      ProjectionExpression: 'id, #date, doneThing, userId',
+      Select: 'SPECIFIC_ATTRIBUTES'
+    }]);
   });
 
-  it('returns items', () => {
+  it('returns items', async () => {
     const dynamoDBDocumentClient = {
       query: sinon.stub().returns(awsSdkResponse({Items: [{DATA: '..'}]}))
     };
     setupServiceLocator({dynamoDBDocumentClient});
 
     const client = new DoneQueryHelper('TABLE_NAME');
-    return client.query().then(result => {
-      expect(result.items[0]).to.eql({DATA: '..'});
-    });
+    const result = await client.query();
+    expect(result.items[0]).to.eql({DATA: '..'});
   });
 
-  it('returns items honouring next page key', () => {
+  it('returns items honouring next page key', async () => {
     const dynamoDBDocumentClient = {
       query: sinon.stub().returns(awsSdkResponse({Items: []}))
     };
@@ -57,20 +55,19 @@ describe('Server DoneQueryHelper', () => {
       date: '2017-08-01T07:26:27.574Z',
       id: 'ID'
     });
-    return client.query(nextKey).then(() => {
-      const queryArgs = dynamoDBDocumentClient.query.args[0][0];
-      expect(queryArgs.ExpressionAttributeValues).to.eql({
-        ':m': '2017-08'
-      });
-      expect(queryArgs.ExclusiveStartKey).to.eql({
-        id: 'ID',
-        date: '2017-08-01T07:26:27.574Z',
-        month: '2017-08'
-      });
+    await client.query(nextKey);
+    const queryArgs = dynamoDBDocumentClient.query.args[0][0];
+    expect(queryArgs.ExpressionAttributeValues).to.eql({
+      ':m': '2017-08'
+    });
+    expect(queryArgs.ExclusiveStartKey).to.eql({
+      id: 'ID',
+      date: '2017-08-01T07:26:27.574Z',
+      month: '2017-08'
     });
   });
 
-  it('returns a key for next page if it exists', () => {
+  it('returns a key for next page if it exists', async () => {
     const dynamoDBDocumentClient = {
       query: sinon.stub().returns(awsSdkResponse({
         Items: [],
@@ -84,12 +81,11 @@ describe('Server DoneQueryHelper', () => {
     setupServiceLocator({dynamoDBDocumentClient});
 
     const client = new DoneQueryHelper('TABLE_NAME');
-    return client.query().then(result => {
-      expect(result.nextKey).to.eql('{"id":"ID","date":"2017-08-01T07:26:27.574Z"}');
-    });
+    const result = await client.query();
+    expect(result.nextKey).to.eql('{"id":"ID","date":"2017-08-01T07:26:27.574Z"}');
   });
 
-  it('automatically queries next month if result does not have enough records', () => {
+  it('automatically queries next month if result does not have enough records', async () => {
     const queryStub = sinon.stub();
     queryStub.onCall(0).returns(awsSdkResponse({
       Items: '.'.repeat(17).split('').map((v, i) => `ITEM-1-${i}`)
@@ -101,15 +97,14 @@ describe('Server DoneQueryHelper', () => {
     setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
 
     const client = new DoneQueryHelper('TABLE_NAME');
-    return client.query().then(() => {
-      expect(dynamoDBDocumentClient.query.args[0][0].ExpressionAttributeValues)
-        .to.eql({':m': '2017-08'});
-      expect(dynamoDBDocumentClient.query.args[1][0].ExpressionAttributeValues)
-        .to.eql({':m': '2017-07'});
-    });
+    await client.query();
+    expect(dynamoDBDocumentClient.query.args[0][0].ExpressionAttributeValues)
+      .to.eql({':m': '2017-08'});
+    expect(dynamoDBDocumentClient.query.args[1][0].ExpressionAttributeValues)
+      .to.eql({':m': '2017-07'});
   });
 
-  it('automatically queries for next 2 months if result does not have enough records', () => {
+  it('automatically queries for next 2 months if result does not have enough records', async () => {
     const queryStub = sinon.stub();
     queryStub.onCall(0).returns(awsSdkResponse({
       Items: '.'.repeat(15).split('').map((v, i) => `ITEM-1-${i}`)
@@ -124,18 +119,17 @@ describe('Server DoneQueryHelper', () => {
     setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
 
     const client = new DoneQueryHelper('TABLE_NAME');
-    return client.query().then(() => {
-      expect(dynamoDBDocumentClient.query.args.length).to.eql(3); // tslint:disable-line:no-unused-expression
-      expect(dynamoDBDocumentClient.query.args[0][0].ExpressionAttributeValues)
-        .to.eql({':m': '2017-08'});
-      expect(dynamoDBDocumentClient.query.args[1][0].ExpressionAttributeValues)
-        .to.eql({':m': '2017-07'});
-      expect(dynamoDBDocumentClient.query.args[2][0].ExpressionAttributeValues)
-        .to.eql({':m': '2017-06'});
-    });
+    await client.query();
+    expect(dynamoDBDocumentClient.query.args.length).to.eql(3); // tslint:disable-line:no-unused-expression
+    expect(dynamoDBDocumentClient.query.args[0][0].ExpressionAttributeValues)
+      .to.eql({':m': '2017-08'});
+    expect(dynamoDBDocumentClient.query.args[1][0].ExpressionAttributeValues)
+      .to.eql({':m': '2017-07'});
+    expect(dynamoDBDocumentClient.query.args[2][0].ExpressionAttributeValues)
+      .to.eql({':m': '2017-06'});
   });
 
-  it('automatically fetches the number of items that satisfies original fetch limit', () => {
+  it('automatically fetches the number of items that satisfies original fetch limit', async () => {
     const queryStub = sinon.stub();
     queryStub.onCall(0).returns(awsSdkResponse({
       Items: '.'.repeat(17).split('').map((v, i) => `ITEM-1-${i}`)
@@ -147,34 +141,31 @@ describe('Server DoneQueryHelper', () => {
     setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
 
     const client = new DoneQueryHelper('TABLE_NAME');
-    return client.query().then(() => {
-      expect(dynamoDBDocumentClient.query.args[0][0].Limit).to.eql(20);
-      expect(dynamoDBDocumentClient.query.args[1][0].Limit).to.eql(3);
-    });
+    await client.query();
+    expect(dynamoDBDocumentClient.query.args[0][0].Limit).to.eql(20);
+    expect(dynamoDBDocumentClient.query.args[1][0].Limit).to.eql(3);
   });
 
-  it('tries to find items as old as March 2015', () => {
+  it('tries to find items as old as March 2015', async () => {
     const dynamoDBDocumentClient = {query: sinon.stub().returns(awsSdkResponse({Items: []}))};
     setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
 
     const client = new DoneQueryHelper('TABLE_NAME');
-    return client.query().then(() => {
-      expect(dynamoDBDocumentClient.query.args.length).to.eql(30);
-      expect(dynamoDBDocumentClient.query.args[29][0].ExpressionAttributeValues)
-        .to.eql({':m': '2015-03'});
-    });
+    await client.query();
+    expect(dynamoDBDocumentClient.query.args.length).to.eql(30);
+    expect(dynamoDBDocumentClient.query.args[29][0].ExpressionAttributeValues)
+      .to.eql({':m': '2015-03'});
   });
 
-  it('does not return a key for next page if it does not exist', () => {
+  it('does not return a key for next page if it does not exist', async () => {
     const dynamoDBDocumentClient = {
       query: sinon.stub().returns(awsSdkResponse({Items: []}))
     };
     setupServiceLocator({dynamoDBDocumentClient});
 
     const client = new DoneQueryHelper('TABLE_NAME');
-    return client.query().then(result => {
-      expect(result.nextKey).to.be.undefined; // tslint:disable-line:no-unused-expression
-    });
+    const result = await client.query();
+    expect(result.nextKey).to.be.undefined; // tslint:disable-line:no-unused-expression
   });
 
   function setupServiceLocator({dynamoDBDocumentClient, currentDate}: any) {

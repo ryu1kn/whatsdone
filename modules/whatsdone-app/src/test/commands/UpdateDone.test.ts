@@ -17,7 +17,7 @@ describe('Server UpdateDoneCommand', () => {
     INTERNAL_DATA: '..'
   };
 
-  it('returns updated done item with all internal data stripped', () => {
+  it('returns updated done item with all internal data stripped', async () => {
     ServiceLocator.load({
       createDoneRepository: () => ({
         update: () => Promise.resolve(doneUpdated)
@@ -25,13 +25,12 @@ describe('Server UpdateDoneCommand', () => {
     } as ServiceFactory);
     const command = new UpdateDoneCommand();
 
-    return command.execute(doneDiff, 'DONE_ID', 'USER_ID').then(result => {
-      expect(result).to.eql({
-        doneThing: 'DONE_THING',
-        date: 'DATE',
-        id: 'DONE_ID',
-        userId: 'USER_ID',
-      });
+    const result = await command.execute(doneDiff, 'DONE_ID', 'USER_ID');
+    expect(result).to.eql({
+      doneThing: 'DONE_THING',
+      date: 'DATE',
+      id: 'DONE_ID',
+      userId: 'USER_ID',
     });
   });
 });
