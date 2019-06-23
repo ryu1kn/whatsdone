@@ -21,7 +21,7 @@ describe('Server LambdaRequestHandler', () => {
     }
   };
 
-  it('bridges lambda request/response world to lambda agnostic http request processor', () => {
+  it('bridges lambda request/response world to lambda agnostic http request processor', async () => {
     const normalisedRequest = {
       REQUEST_DATA: '..',
       userInfo: {
@@ -41,22 +41,21 @@ describe('Server LambdaRequestHandler', () => {
     } as ServiceFactory);
     const handler = new LambdaRequestHandler(requestProcessor);
 
-    return handler.handle(lambdaEvent).then(response => {
-      expect(requestNormaliser.normalise.args[0]).to.eql([lambdaEvent]);
-      expect(userIdRepository.getByCognitoUserId.args[0]).to.eql(['COGNITO_USER_ID']);
-      expect(requestProcessor.process.args[0]).to.eql([
-        normalisedRequest,
-        {
-          userId: 'USER_ID',
-          username: 'COGNITO_USER_NAME'
-        }
-      ]);
-      expect(responseFormatter.format.args[0]).to.eql(['RESPONSE']);
-      expect(response).to.eql('LAMBDA_RESPONSE');
-    });
+    const response = await handler.handle(lambdaEvent);
+    expect(requestNormaliser.normalise.args[0]).to.eql([lambdaEvent]);
+    expect(userIdRepository.getByCognitoUserId.args[0]).to.eql(['COGNITO_USER_ID']);
+    expect(requestProcessor.process.args[0]).to.eql([
+      normalisedRequest,
+      {
+        userId: 'USER_ID',
+        username: 'COGNITO_USER_NAME'
+      }
+    ]);
+    expect(responseFormatter.format.args[0]).to.eql(['RESPONSE']);
+    expect(response).to.eql('LAMBDA_RESPONSE');
   });
 
-  it('catches an exception occurred during request process step', () => {
+  it('catches an exception occurred during request process step', async () => {
     const requestNormaliser = {normalise: () => ({
       REQUEST_DATA: '..',
       userInfo: {sub: 'COGNITO_USER_ID'}
@@ -72,11 +71,9 @@ describe('Server LambdaRequestHandler', () => {
     } as ServiceFactory);
     const handler = new LambdaRequestHandler(requestProcessor);
 
-    return handler.handle(lambdaEvent).then(response => {
-      expect(requestProcessErrorProcessor.process.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');
-      expect(responseFormatter.format.args[0]).to.eql(['ERROR_RESPONSE']);
-      expect(response).to.eql('LAMBDA_RESPONSE');
-    });
+    const response = await handler.handle(lambdaEvent);
+    expect(requestProcessErrorProcessor.process.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');
+    expect(responseFormatter.format.args[0]).to.eql(['ERROR_RESPONSE']);
+    expect(response).to.eql('LAMBDA_RESPONSE');
   });
-
 });

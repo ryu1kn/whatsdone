@@ -18,14 +18,13 @@ describe('Server GetDonesRequestProcessor', () => {
 
   const processor = new GetDonesRequestProcessor();
 
-  it('invokes get dones command with next page key', () => {
+  it('invokes get dones command with next page key', async () => {
     const req = Object.assign({}, request, {query: {nextKey: 'NEXT_KEY'}});
-    return processor.process(req, session).then(result => {
-      expect(result).to.eql({
-        statusCode: '200',
-        headers: {'Content-Type': 'application/json'},
-        body: '"COMMAND_OUTPUT"'
-      });
+    const result = await processor.process(req, session);
+    expect(result).to.eql({
+      statusCode: '200',
+      headers: {'Content-Type': 'application/json'},
+      body: '"COMMAND_OUTPUT"'
     });
   });
 

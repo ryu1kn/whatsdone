@@ -7,15 +7,14 @@ import ServiceFactory from '../../lib/ServiceFactory';
 import {request, session} from '../helper/NormalisedRequestData';
 
 describe('Server DeleteDoneRequestProcessor', () => {
-  it('deletes a done item', () => {
+  it('deletes a done item', async () => {
     const doneRepository = {remove: sinon.stub().returns(Promise.resolve())};
     ServiceLocator.load({createDoneRepository: () => doneRepository} as ServiceFactory);
     const processor = new DeleteDoneRequestProcessor();
 
-    return processor.process(request, session).then(response => {
-      expect(response).to.eql({statusCode: '200'});
-      expect(doneRepository.remove.args[0]).to.eql(['DONE_ID', 'USER_ID']);
-    });
+    const response = await processor.process(request, session);
+    expect(response).to.eql({statusCode: '200'});
+    expect(doneRepository.remove.args[0]).to.eql(['DONE_ID', 'USER_ID']);
   });
 
   it('propagates error', () => {

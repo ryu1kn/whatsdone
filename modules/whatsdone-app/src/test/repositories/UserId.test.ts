@@ -6,20 +6,18 @@ import * as td from 'testdouble';
 
 describe('Server UserIdRepository', () => {
 
-  it('finds a cognito user id', () => {
+  it('finds a cognito user id', async () => {
     const dynamoDBDocumentClient = createDynamoDBDocumentClient();
     const repository = createUserIdRepository(dynamoDBDocumentClient);
-    return repository.getCognitoUserId('USER_ID').then(result => {
-      expect(result).to.eql('COGNITO_USER_ID');
-    });
+    const result = await repository.getCognitoUserId('USER_ID');
+    expect(result).to.eql('COGNITO_USER_ID');
   });
 
-  it('finds a user id', () => {
+  it('finds a user id', async () => {
     const dynamoDBDocumentClient = createDynamoDBDocumentClient();
     const repository = createUserIdRepository(dynamoDBDocumentClient);
-    return repository.getByCognitoUserId('COGNITO_USER_ID').then(result => {
-      expect(result).to.eql('OLD_USER_ID');
-    });
+    const result = repository.getByCognitoUserId('COGNITO_USER_ID');
+    expect(result).to.eql('OLD_USER_ID');
   });
 
   function createDynamoDBDocumentClient(): AWS.DynamoDB.DocumentClient {

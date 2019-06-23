@@ -7,12 +7,11 @@ import {CognitoIdentityServiceProvider} from 'aws-sdk';
 
 describe('Server CognitoUserFinder', () => {
 
-  it('uses CognitoIdentityServiceProvider to get the first matching user\'s info', () => {
+  it('uses CognitoIdentityServiceProvider to get the first matching user\'s info', async () => {
     const cognitoIdentityServiceProvider = createCognitoIdentityServiceProvider();
     const userFinder = createCognitoUserFinder(cognitoIdentityServiceProvider);
-    return userFinder.find('ID').then(user => {
-      expect(user).to.eql('USER_1');
-    });
+    const user = await userFinder.find('ID');
+    expect(user).to.eql('USER_1');
   });
 
   function createCognitoIdentityServiceProvider() {

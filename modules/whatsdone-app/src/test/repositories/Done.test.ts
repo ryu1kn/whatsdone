@@ -7,19 +7,18 @@ import ServiceFactory from '../../lib/ServiceFactory';
 
 describe('Server DoneRepository', () => {
 
-  it('reads done items from DB', () => {
+  it('reads done items from DB', async () => {
     const doneQueryHelper = {
       query: () => Promise.resolve('QUERY_RESULT')
     };
     initialiseServiceLocator(doneQueryHelper);
     const repository = new DoneRepository();
 
-    return repository.read().then(result => {
-      expect(result).to.eql('QUERY_RESULT');
-    });
+    const result = await repository.read();
+    expect(result).to.eql('QUERY_RESULT');
   });
 
-  it('record a new done item', () => {
+  it('record a new done item', async () => {
     const doneDynamoTableClient = {
       put: sinon.stub().returns(Promise.resolve('DONE_ID')),
       getById: () => {}
@@ -31,15 +30,14 @@ describe('Server DoneRepository', () => {
       date: '2017-08-14T12:26:26.227Z',
       doneThing: 'DONE_THING'
     };
-    return repository.write(done).then(() => {
-      expect(doneDynamoTableClient.put.args[0][0]).to.includes({
-        date: '2017-08-14T12:26:26.227Z',
-        doneThing: 'DONE_THING'
-      });
+    await repository.write(done);
+    expect(doneDynamoTableClient.put.args[0][0]).to.includes({
+      date: '2017-08-14T12:26:26.227Z',
+      doneThing: 'DONE_THING'
     });
   });
 
-  it('gets the newly created done item back', () => {
+  it('gets the newly created done item back', async () => {
     const doneDynamoTableClient = {
       put: () => Promise.resolve('DONE_ID'),
       getById: sinon.stub().returns(Promise.resolve({DATA: '..'}))
@@ -50,13 +48,12 @@ describe('Server DoneRepository', () => {
       date: '2017-08-14T12:26:26.227Z',
       doneThing: 'DONE_THING'
     };
-    return repository.write(done).then(newDone => {
-      expect(newDone).to.eql({DATA: '..'});
-      expect(doneDynamoTableClient.getById.args[0]).to.eql(['DONE_ID']);
-    });
+    const newDone = await repository.write(done);
+    expect(newDone).to.eql({DATA: '..'});
+    expect(doneDynamoTableClient.getById.args[0]).to.eql(['DONE_ID']);
   });
 
-  it('adds "month" fields when it saves a done', () => {
+  it('adds "month" fields when it saves a done', async () => {
     const doneDynamoTableClient = {
       put: sinon.stub().returns(Promise.resolve('DONE_ID')),
       getById: () => Promise.resolve()
@@ -68,16 +65,15 @@ describe('Server DoneRepository', () => {
       date: '2017-08-14T12:26:26.227Z',
       doneThing: 'DONE_THING'
     };
-    return repository.write(done).then(() => {
-      expect(doneDynamoTableClient.put.args[0]).to.eql([{
-        date: '2017-08-14T12:26:26.227Z',
-        doneThing: 'DONE_THING',
-        month: '2017-08'
-      }]);
-    });
+    await repository.write(done);
+    expect(doneDynamoTableClient.put.args[0]).to.eql([{
+      date: '2017-08-14T12:26:26.227Z',
+      doneThing: 'DONE_THING',
+      month: '2017-08'
+    }]);
   });
 
-  it('does not return "month" field when returning created done', () => {
+  it('does not return "month" field when returning created done', async () => {
     const doneDynamoTableClient = {
       put: () => Promise.resolve('DONE_ID'),
       getById: sinon.stub().returns(Promise.resolve({
@@ -91,12 +87,11 @@ describe('Server DoneRepository', () => {
       date: '2017-08-14T12:26:26.227Z',
       doneThing: 'DONE_THING'
     };
-    return repository.write(done).then(newDone => {
-      expect(newDone).to.eql({DATA: '..'});
-    });
+    const newDone = await repository.write(done);
+    expect(newDone).to.eql({DATA: '..'});
   });
 
-  it('remove a done if the requesting user is the owner', () => {
+  it('remove a done if the requesting user is the owner', async () => {
     const matchingDone = {userId: 'USER_ID', DATA: '..'};
     const doneDynamoTableClient = {
       getById: sinon.stub().returns(Promise.resolve(matchingDone)),
@@ -105,13 +100,12 @@ describe('Server DoneRepository', () => {
     initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
 
-    return repository.remove('DONE_ID', 'USER_ID').then(() => {
-      expect(doneDynamoTableClient.getById.args[0]).to.eql(['DONE_ID']);
-      expect(doneDynamoTableClient.delete.args[0]).to.eql(['DONE_ID']);
-    });
+    await repository.remove('DONE_ID', 'USER_ID');
+    expect(doneDynamoTableClient.getById.args[0]).to.eql(['DONE_ID']);
+    expect(doneDynamoTableClient.delete.args[0]).to.eql(['DONE_ID']);
   });
 
-  it('updates a done if the requesting user is the owner', () => {
+  it('updates a done if the requesting user is the owner', async () => {
     const matchingDone = {
       userId: 'USER_ID',
       date: 'DATE',
@@ -130,18 +124,17 @@ describe('Server DoneRepository', () => {
       doneThing: 'NEW_DONE_THING',
       NON_UPDATABLE_KEY: 'NEW ..'
     };
-    return repository.update('DONE_ID', 'USER_ID', newData).then(() => {
-      expect(doneDynamoTableClient.getById.args[0]).to.eql(['DONE_ID']);
-      const updateArgs = doneDynamoTableClient.update.args[0];
-      expect(updateArgs[0]).to.eql('DONE_ID');
-      expect(updateArgs[1]).to.include({
-        date: '2017-08-14T12:26:26.227Z',
-        doneThing: 'NEW_DONE_THING'
-      });
+    await repository.update('DONE_ID', 'USER_ID', newData);
+    expect(doneDynamoTableClient.getById.args[0]).to.eql(['DONE_ID']);
+    const updateArgs = doneDynamoTableClient.update.args[0];
+    expect(updateArgs[0]).to.eql('DONE_ID');
+    expect(updateArgs[1]).to.include({
+      date: '2017-08-14T12:26:26.227Z',
+      doneThing: 'NEW_DONE_THING'
     });
   });
 
-  it('updates "month" field if date is going to be updated', () => {
+  it('updates "month" field if date is going to be updated', async () => {
     const matchingDone = {
       userId: 'USER_ID',
       date: 'DATE',
@@ -158,16 +151,15 @@ describe('Server DoneRepository', () => {
       date: '2017-08-14T12:26:26.227Z',
       doneThing: 'NEW_DONE_THING'
     };
-    return repository.update('DONE_ID', 'USER_ID', newData).then(() => {
-      const newDone = doneDynamoTableClient.update.args[0][1];
-      expect(newDone).to.include({
-        date: '2017-08-14T12:26:26.227Z',
-        month: '2017-08'
-      });
+    await repository.update('DONE_ID', 'USER_ID', newData);
+    const newDone = doneDynamoTableClient.update.args[0][1];
+    expect(newDone).to.include({
+      date: '2017-08-14T12:26:26.227Z',
+      month: '2017-08'
     });
   });
 
-  it('does not include "month" in the update response', () => {
+  it('does not include "month" in the update response', async () => {
     const matchingDone = {
       userId: 'USER_ID',
       date: 'DATE',
@@ -184,9 +176,8 @@ describe('Server DoneRepository', () => {
     const repository = new DoneRepository();
 
     const newData = {doneThing: 'NEW_DONE_THING'};
-    return repository.update('DONE_ID', 'USER_ID', newData).then(done => {
-      expect(done).to.eql({DATA: '..'});
-    });
+    const done = await repository.update('DONE_ID', 'USER_ID', newData);
+    expect(done).to.eql({DATA: '..'});
   });
 
   let initialiseServiceLocator = function (doneQueryHelper: {query: any} | {}, doneDynamoTableClient?: {getById: any, update?: any, delete?: any, put?: any}) {

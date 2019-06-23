@@ -19,12 +19,11 @@ describe('Server UserNameService', () => {
   } as ServiceFactory);
   const service = new UserNameService();
 
-  it('looks up a user', () => {
-    return service.getUsernames(['ID']).then(result => {
-      expect(result).to.eql([{
-        id: 'ID',
-        name: 'USER_NAME'
-      }]);
-    });
+  it('looks up a user', async () => {
+    const result = await service.getUsernames(['ID']);
+    expect(result).to.eql([{
+      id: 'ID',
+      name: 'USER_NAME'
+    }]);
   });
 });

@@ -8,7 +8,7 @@ import CreateDoneCommand from '../../lib/commands/CreateDone';
 
 describe('Server PostDoneRequestProcessor', () => {
 
-  it('saves a done item', () => {
+  it('saves a done item', async () => {
     const done = {doneThing: 'SOMETHING', date: 'DATE'};
     const session = {userId: 'USER_ID', username: 'USER_NAME'};
 
@@ -19,13 +19,11 @@ describe('Server PostDoneRequestProcessor', () => {
     const processor = new PostDoneRequestProcessor();
 
     const req = Object.assign({}, request, {body: done});
-    return processor.process(req, session).then(response => {
-      expect(response).to.eql({
-        statusCode: '200',
-        headers: {'Content-Type': 'application/json'},
-        body: '{\"doneThing\":\"SOMETHING\",\"userId\":\"USER_ID\",\"username\":\"USER_NAME\"}'
-      });
+    const response = await processor.process(req, session);
+    expect(response).to.eql({
+      statusCode: '200',
+      headers: {'Content-Type': 'application/json'},
+      body: '{\"doneThing\":\"SOMETHING\",\"userId\":\"USER_ID\",\"username\":\"USER_NAME\"}'
     });
   });
-
 });
