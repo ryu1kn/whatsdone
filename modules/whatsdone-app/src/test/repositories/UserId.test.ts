@@ -16,7 +16,7 @@ describe('Server UserIdRepository', () => {
   it('finds a user id', async () => {
     const dynamoDBDocumentClient = createDynamoDBDocumentClient();
     const repository = createUserIdRepository(dynamoDBDocumentClient);
-    const result = repository.getByCognitoUserId('COGNITO_USER_ID');
+    const result = await repository.getByCognitoUserId('COGNITO_USER_ID');
     expect(result).to.eql('OLD_USER_ID');
   });
 
