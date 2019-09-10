@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ScalaSbtSettings">
+    <option name="customVMPath" />
     <option name="linkedExternalProjectsSettings">
       <SbtProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/test/performance" />
@@ -11,6 +12,17 @@
           </set>
         </option>
         <option name="sbtVersion" value="1.1.0" />
+      </SbtProjectSettings>
+      <SbtProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/tools/data-migrator" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/tools/data-migrator" />
+            <option value="$PROJECT_DIR$/tools/data-migrator/project" />
+          </set>
+        </option>
+        <option name="sbtVersion" value="1.2.8" />
+        <option name="useQualifiedModuleNames" value="true" />
       </SbtProjectSettings>
     </option>
   </component>
