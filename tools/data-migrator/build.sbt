@@ -15,7 +15,8 @@ scalacOptions ++= Seq(
 
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % "2.0.0-M4",
-  "org.scalatest" %% "scalatest" % "3.0.8" % "test"
+  "org.scalatest" %% "scalatest" % "3.0.8" % "test",
+  "software.amazon.awssdk" % "dynamodb" % "2.5.63"
 )
 
 addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
