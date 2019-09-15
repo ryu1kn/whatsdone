@@ -5,24 +5,24 @@ import java.util.concurrent.CompletableFuture
 import cats.instances.string._
 import cats.syntax.semigroup._
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
-import software.amazon.awssdk.services.dynamodb.model.ListTablesRequest
+import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, ScanRequest}
 
 import scala.jdk.CollectionConverters._
 
 object Main extends App {
   println("Hello " |+| "Cats!")
-  DynamoTest.listTables()
+  DynamoTest.dumpItems()
 }
 
 object DynamoTest {
-  def listTables(): Unit = {
+  def dumpItems(): Unit = {
     val client = DynamoDbAsyncClient.create
-    val response = client.listTables(ListTablesRequest.builder.build)
-    val tableNames: CompletableFuture[List[String]] = response.thenApply(_.tableNames().asScala.toList)
-    tableNames.whenComplete((tables, err) => {
+    val response = client.scan(ScanRequest.builder.tableName("whatsdone-dones").build())
+    val items: CompletableFuture[List[Map[String, AttributeValue]]] = response.thenApply(_.items().asScala.toList.map(_.asScala.toMap))
+    items.whenComplete((items, err) => {
       try {
-        if (tables != null) {
-          tables.foreach(println)
+        if (items != null) {
+          items.foreach(println)
         } else {
           err.printStackTrace()
         }
@@ -31,6 +31,6 @@ object DynamoTest {
       }
     })
 
-    tableNames.join()
+    items.join()
   }
 }
