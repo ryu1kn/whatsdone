@@ -11,13 +11,13 @@ import scala.jdk.CollectionConverters._
 
 object Main extends App {
   println("Hello " |+| "Cats!")
-  DynamoTest.dumpItems()
+  DynamoTest.dumpItems(args(0))
 }
 
 object DynamoTest {
-  def dumpItems(): Unit = {
+  def dumpItems(tableName: String): Unit = {
     val client = DynamoDbAsyncClient.create
-    val response = client.scan(ScanRequest.builder.tableName("whatsdone-dones").build())
+    val response = client.scan(ScanRequest.builder.tableName(tableName).build())
     val items: CompletableFuture[List[Map[String, AttributeValue]]] = response.thenApply(_.items().asScala.toList.map(_.asScala.toMap))
     items.whenComplete((items, err) => {
       try {
