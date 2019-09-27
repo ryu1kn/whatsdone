@@ -18,7 +18,7 @@ class DoneForm extends React.Component {
         <div className="form-group">
           <label className="sr-only" htmlFor="doneInput">Done Thing</label>
           <input type="text" className="form-control" id="doneInput"
-                 placeholder="What have you done today?" ref="doneThing" />
+            placeholder="What have you done today?" ref="doneThing" />
         </div>
         <button type="submit" className="btn btn-default">Done!</button>
       </form>

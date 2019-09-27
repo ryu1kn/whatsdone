@@ -1,5 +1,4 @@
 root: true
-extends: xo
 env:
   node: true
   es6: true

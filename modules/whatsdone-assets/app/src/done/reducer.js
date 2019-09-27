@@ -47,7 +47,7 @@ function mergeDoneList(items1, items2) {
   return [...items1, ...items2].sort(
     (a, b) =>
       a.date < b.date ? 1 :
-      a.date > b.date ? -1 : 0
+        a.date > b.date ? -1 : 0
   );
 }
 
