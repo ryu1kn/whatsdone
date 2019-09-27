@@ -8,10 +8,10 @@ After you create a user, you need to create an access key.
 
 ## Create an IAM user
 
-To create the user:
+To create/update the user:
 
 ```sh
-$ AWS_PROFILE=<YOUR_PROFILE_NAME> make create-ci-user
+$ AWS_PROFILE=<YOUR_PROFILE_NAME> make deploy-ci-user
 ```
 
 To create an access key for the user
@@ -26,10 +26,4 @@ To set the access key id and secret access key, do the following:
 
 ```sh
 $ travis encrypt AWS_ACCESS_KEY_ID='YOUR_ACCESS_KEY_ID' --add
-```
-
-## Update the CI user
-
-```sh
-$ AWS_PROFILE=<YOUR_PROFILE_NAME> make update-ci-user
 ```
