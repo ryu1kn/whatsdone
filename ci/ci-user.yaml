@@ -36,9 +36,12 @@ Resources:
                   - apigateway:PATCH
                   - apigateway:POST
                   - apigateway:PUT
+                  - cloudformation:CreateChangeSet
                   - cloudformation:CreateStack
                   - cloudformation:DeleteStack
+                  - cloudformation:DescribeChangeSet
                   - cloudformation:DescribeStacks
+                  - cloudformation:GetTemplateSummary
                   - cloudformation:UpdateStack
                   - cloudformation:UpdateTerminationProtection
                   - cloudfront:CreateCloudFrontOriginAccessIdentity
