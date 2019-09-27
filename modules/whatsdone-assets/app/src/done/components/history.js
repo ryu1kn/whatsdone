@@ -49,9 +49,9 @@ class DoneHistory extends React.Component {
     return (
       <div className="donehistory">
         {_.sortBy(_.toPairs(grouped), pair => pair[0]).reverse()
-            .map((data, index) =>
-              <DoneList title={this.getFriendlyDayLabel(data[0])} data={data[1]} key={index} />
-        )}
+          .map((data, index) =>
+            <DoneList title={this.getFriendlyDayLabel(data[0])} data={data[1]} key={index} />
+          )}
         {this.props.done.nextKey ? <DoneLoader nextKey={this.props.done.nextKey} /> : ''}
       </div>
     );
