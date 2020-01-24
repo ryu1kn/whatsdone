@@ -40,6 +40,18 @@
       "outputsName": "PublicDomain"
     },
     {
+      "id": "fetch-certificate-arn",
+      "type": "custom",
+      "run": {
+        "script": "aws acm list-certificates --region us-east-1 --query CertificateSummaryList | jq \"map(select(.DomainName == \\\"$CERT_DOMAIN_NAME\\\") | .CertificateArn)[1]\" > $TASK_OUTPUTS_FILE",
+        "envVars": {
+          "TASK_OUTPUTS_FILE": {"$ref": "#/_taskOutputsFile"},
+          "CERT_DOMAIN_NAME": {"$ref": "#/_deploymentConfig/certDomainName"}
+        }
+      },
+      "outputsName": "CertificateArn"
+    },
+    {
       "id": "prepare-cloudfront",
       "type": "cf-stack",
       "stackName": {"Fn::Join": ["-", [{"$ref": "#/_env"}, "whatsdone-web-cache-module"]]},
@@ -50,6 +62,7 @@
         }
       },
       "stackParams": {
+        "CertificateArn": {"$ref": "#/_deploymentOutputs/CertificateArn"},
         "PublicDomain": {"$ref": "#/_deploymentOutputs/PublicDomain"},
         "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
         "WebappDomain": {"$ref": "#/_dataSourceData/whatsdone-assets/WebappDomain"},
