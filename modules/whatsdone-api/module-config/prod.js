@@ -3,6 +3,5 @@ const { deploymentOutputsBucket, hostedZoneId } = require('../../../config/commo
 module.exports = {
   deploymentOutputsBucket,
   hostedZoneId,
-  certDomainName: '*.ryuichi.io',
   domainName: 'whatsdone-api.ryuichi.io',
 };

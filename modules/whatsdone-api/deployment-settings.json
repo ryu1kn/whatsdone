@@ -52,18 +52,6 @@
   },
   "tasks": [
     {
-      "id": "fetch-certificate-arn",
-      "type": "custom",
-      "run": {
-        "script": "aws acm list-certificates --region us-east-1 --query CertificateSummaryList | jq \"map(select(.DomainName == \\\"$CERT_DOMAIN_NAME\\\") | .CertificateArn)[1]\" > $TASK_OUTPUTS_FILE",
-        "envVars": {
-          "TASK_OUTPUTS_FILE": {"$ref": "#/_taskOutputsFile"},
-          "CERT_DOMAIN_NAME": {"$ref": "#/_deploymentConfig/certDomainName"}
-        }
-      },
-      "outputsName": "certificateArn"
-    },
-    {
       "id": "deploy-api",
       "type": "cf-stack",
       "stackName": {"Fn::Join": ["-", [{"$ref": "#/_env"}, "whatsdone-api"]]},
@@ -77,7 +65,7 @@
         "EnvName": {"$ref": "#/_env"},
         "DomainName": {"$ref": "#/_deploymentConfig/domainName"},
         "HostedZoneId": {"$ref": "#/_deploymentConfig/hostedZoneId"},
-        "CertificateArn": {"$ref": "#/_deploymentOutputs/certificateArn"},
+        "CertificateArn": {"$ref": "#/_dataSourceData/whatsdone-web-cache/CertificateArn"},
         "DbRegion": {"$ref": "#/_taskRegion"},
         "WebappEndpoint": {"Fn::Join": ["", ["https://", {"$ref": "#/_dataSourceData/whatsdone-web-cache/PublicDomain"}]]},
         "DoneTableName": {"$ref": "#/_dataSourceData/done-store/TableName"},

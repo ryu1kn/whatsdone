@@ -13,6 +13,9 @@
     },
     "LoggingBucket": {
       "Type": "String"
+    },
+    "CertificateArn": {
+      "Type": "String"
     }
   },
   "Mappings": {
@@ -74,7 +77,7 @@
           "DefaultRootObject": "index.html",
           "PriceClass": "PriceClass_All",
           "ViewerCertificate": {
-            "AcmCertificateArn": "arn:aws:acm:us-east-1:650892143834:certificate/e6b12c23-57a8-4314-a125-0af07077140b",
+            "AcmCertificateArn": {"Ref": "CertificateArn"},
             "MinimumProtocolVersion": "TLSv1",
             "SslSupportMethod": "sni-only"
           }
