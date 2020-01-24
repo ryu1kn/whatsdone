@@ -74,7 +74,7 @@
           "DefaultRootObject": "index.html",
           "PriceClass": "PriceClass_All",
           "ViewerCertificate": {
-            "AcmCertificateArn": "arn:aws:acm:us-east-1:650892143834:certificate/00cb96a1-2a06-4216-a30d-e810f2a6e6a8",
+            "AcmCertificateArn": "arn:aws:acm:us-east-1:650892143834:certificate/e6b12c23-57a8-4314-a125-0af07077140b",
             "MinimumProtocolVersion": "TLSv1",
             "SslSupportMethod": "sni-only"
           }
