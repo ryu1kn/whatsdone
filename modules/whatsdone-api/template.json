@@ -101,9 +101,7 @@
                 }]
               },
               "Id": "whatsdone-api",
-              "CustomOriginConfig": {
-                "OriginProtocolPolicy": "https-only"
-              }
+              "CustomOriginConfig": {"OriginProtocolPolicy": "https-only"}
             }
           ],
           "PriceClass": "PriceClass_All",
