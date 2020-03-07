@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ScalaCompilerConfiguration">
-    <profile name="sbt 1" modules="data-migrator_9903,performance_4961,whatsdone-load-test" />
+    <profile name="sbt 1" modules="data-migrator_9903,performance-whatsdone-load-test,performance_4961,whatsdone-load-test" />
     <profile name="sbt 2" modules="data-migrator">
       <option name="higherKinds" value="true" />
       <option name="deprecationWarnings" value="true" />
@@ -12,6 +12,20 @@
         <parameter value="UTF-8" />
         <parameter value="-Xlint" />
         <parameter value="-Xfatal-warnings" />
+      </parameters>
+      <plugins>
+        <plugin path="$USER_HOME$/.ivy2/cache/org.typelevel/kind-projector_2.13/jars/kind-projector_2.13-0.10.3.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 3" modules="tools.data-migrator">
+      <option name="higherKinds" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-encoding" />
+        <parameter value="UTF-8" />
+        <parameter value="-Xlint" />
       </parameters>
       <plugins>
         <plugin path="$USER_HOME$/.ivy2/cache/org.typelevel/kind-projector_2.13/jars/kind-projector_2.13-0.10.3.jar" />
