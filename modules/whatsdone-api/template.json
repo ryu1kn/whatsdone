@@ -386,7 +386,7 @@
           }
         },
         "TracingConfig": {"Mode": "Active"},
-        "Runtime": "nodejs10.x",
+        "Runtime": "nodejs12.x",
         "Timeout": "10"
       }
     },
