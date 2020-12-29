@@ -3,17 +3,20 @@
 set -euo pipefail
 
 function main() {
-    if [[ "$TRAVIS_BRANCH" = "master" ]] ; then
-        ENV_NAME=prod build_and_deploy
-    else
-        ENV_NAME=dev-ryuichi build_and_deploy
+    echo "Deploying to \"${ENV_NAME?:ENV_NAME must be specified}\" environment..."
+
+    if [[ "${TRAVIS_BRANCH:-}" != "master" ]] ; then
+        echo 'Deployment can happen only from "master" branch'
+        exit 0
     fi
+
+    build_and_deploy
 }
 
 function build_and_deploy() {
     echo "Commit range: $TRAVIS_COMMIT_RANGE"
 
-    echo "List of changed file(s) in the range:"
+    echo 'List of changed file(s) in the range:'
     git diff --name-only "$TRAVIS_COMMIT_RANGE"
     echo
 
