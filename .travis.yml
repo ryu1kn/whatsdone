@@ -22,6 +22,4 @@ before_install:
 install:
 - yarn install
 script:
-- ENV_NAME=ci yarn run travis-build
-- echo 'Write some end-to-end tests'
-- ENV_NAME=prod yarn run travis-build
+- ./travis-build.sh

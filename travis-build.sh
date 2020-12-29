@@ -3,8 +3,6 @@
 set -euo pipefail
 
 function main() {
-    echo "Deploying to \"${ENV_NAME?:ENV_NAME must be specified}\" environment..."
-
     if [[ "${TRAVIS_BRANCH:-}" != "master" ]] ; then
         echo 'Deployment can happen only from "master" branch'
         exit 0
