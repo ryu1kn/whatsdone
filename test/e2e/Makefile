@@ -4,6 +4,7 @@ node_modules:
 
 .PHONY: test
 test: node_modules
+	$(MAKE) get-foo
 	PASSWORD="$$($(MAKE) get-password)" node --unhandled-rejections=strict test
 
 .PHONY: deploy
@@ -16,3 +17,7 @@ deploy:
 get-password:
 	@aws secretsmanager get-secret-value --secret-id /whatsdone/ci/e2e-test --region "$$AWS_REGION" \
 		| jq -r '.SecretString | fromjson | .password'
+
+.PHONY: get-foo
+get-foo:
+	aws secretsmanager get-secret-value --secret-id /whatsdone/ci/foo --region "$$AWS_REGION"
