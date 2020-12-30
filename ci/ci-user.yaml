@@ -87,3 +87,8 @@ Resources:
                   - route53:GetHostedZone
                   - s3:*
                 Resource: "*"
+              - Sid: Stmt1489901204001
+                Effect: Allow
+                Action:
+                  - secretsmanager:GetSecretValue
+                Resource: !Sub 'arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:/whatsdone/ci/*'
