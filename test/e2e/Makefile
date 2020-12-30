@@ -4,7 +4,8 @@ node_modules:
 
 .PHONY: test
 test: node_modules
-	PASSWORD="$$($(MAKE) get-password)" node --unhandled-rejections=strict test
+	echo "[make] AWS_REGION is $$AWS_REGION"
+	PASSWORD="$$(AWS_REGION=ap-southeast-2 $(MAKE) get-password)" node --unhandled-rejections=strict test
 
 .PHONY: deploy
 deploy:
