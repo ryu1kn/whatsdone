@@ -20,7 +20,8 @@ const store = createStore(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 ServiceLocator.cognitoUserInitialiser.initialise()
-  .then(() => store.dispatch({type: 'API_READY'}));
+  .then(() => store.dispatch({type: 'API_READY'}))
+  .catch(e => { console.error(e.stack); });
 
 ReactDOM.render(
   (
