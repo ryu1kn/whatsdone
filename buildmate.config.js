@@ -9,7 +9,7 @@ module.exports = {
     },
     {
       description: "Run end-to-end tests on CI environment",
-      path: /^modules\/.*/,
+      path: /^(modules|test\/e2e)\/.*/,
       command: 'cd test/e2e && make test'
     },
     {

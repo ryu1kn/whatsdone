@@ -14,6 +14,7 @@ const { chromium } = require('playwright');
 
   await page.press('(//input[normalize-space(@placeholder)=\'Username\' and normalize-space(@type)=\'text\' and normalize-space(@name)=\'username\'])[2]', 'Tab');
 
+  console.log('password length', process.env.PASSWORD.length);
   await page.fill('(//input[normalize-space(@placeholder)=\'Password\' and normalize-space(@type)=\'password\' and normalize-space(@name)=\'password\'])[2]', process.env.PASSWORD);
 
   await page.press('(//input[normalize-space(@placeholder)=\'Password\' and normalize-space(@type)=\'password\' and normalize-space(@name)=\'password\'])[2]', 'Enter');
