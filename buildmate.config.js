@@ -10,7 +10,7 @@ module.exports = {
     {
       description: "Run end-to-end tests on CI environment",
       path: /^modules\/.*/,
-      command: 'cd test/e2e && echo "[buildmate] AWS_REGION is $AWS_REGION" && make test'
+      command: 'cd test/e2e && make test'
     },
     {
       description: "Deploy to Production environment",

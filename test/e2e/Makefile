@@ -4,8 +4,7 @@ node_modules:
 
 .PHONY: test
 test: node_modules
-	echo "[make] AWS_REGION is $$AWS_REGION"
-	PASSWORD="$$(AWS_REGION=ap-southeast-2 $(MAKE) get-password)" node --unhandled-rejections=strict test
+	PASSWORD="$$($(MAKE) get-password)" node --unhandled-rejections=strict test
 
 .PHONY: deploy
 deploy:
@@ -15,5 +14,5 @@ deploy:
 
 .PHONY: get-password
 get-password:
-	@aws secretsmanager get-secret-value --secret-id /whatsdone/ci/e2e-test \
+	@aws secretsmanager get-secret-value --secret-id /whatsdone/ci/e2e-test --region "$$AWS_REGION" \
 		| jq -r '.SecretString | fromjson | .password'
