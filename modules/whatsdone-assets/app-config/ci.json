@@ -1,3 +1,7 @@
 {
-  "API_ORIGIN": "https://whatsdone-ci-api.ryuichi.io"
+  "API_ORIGIN": "https://whatsdone-ci-api.ryuichi.io",
+  "REGION": "ap-southeast-2",
+  "IDENTITY_POOL_ID": "ap-southeast-2:beec0a76-db84-4359-a404-1734d1dd71db",
+  "USER_POOL_ID": "ap-southeast-2_bpJAtzEKA",
+  "CLIENT_ID": "s6onvlog4hqsbcbmgmtthterd"
 }
