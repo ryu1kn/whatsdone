@@ -10,7 +10,7 @@ module.exports = {
     {
       description: "Run end-to-end tests on CI environment",
       path: /^modules\/.*/,
-      command: 'echo "Run some end-to-end tests"'
+      command: 'cd test/e2e && make test'
     },
     {
       description: "Deploy to Production environment",
