@@ -13,5 +13,9 @@ node_modules
 /.idea/tasks.xml
 /.idea/dictionaries
 
+# IntelliJ generates these for Scala projects
+/project
+/target
+
 # Visual Studio Code
 /.vscode
