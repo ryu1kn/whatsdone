@@ -5,7 +5,7 @@ node_modules:
 .PHONY: test
 test: node_modules
 	$(MAKE) get-foo
-	PASSWORD="$$($(MAKE) get-foo)" node --unhandled-rejections=strict test
+	FOO="$$($(MAKE) get-foo)" node --unhandled-rejections=strict test
 
 .PHONY: deploy
 deploy:
