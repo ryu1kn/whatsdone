@@ -9,14 +9,9 @@ const { chromium } = require('playwright');
 
   await page.goto('https://whatsdone-ci.ryuichi.io/', {waitUntil: 'networkidle'});
 
-  await page.click('(//input[normalize-space(@placeholder)=\'Username\' and normalize-space(@type)=\'text\' and normalize-space(@name)=\'username\'])[2]');
-  await page.fill('(//input[normalize-space(@placeholder)=\'Username\' and normalize-space(@type)=\'text\' and normalize-space(@name)=\'username\'])[2]', 'test-e2e');
-
-  await page.press('(//input[normalize-space(@placeholder)=\'Username\' and normalize-space(@type)=\'text\' and normalize-space(@name)=\'username\'])[2]', 'Tab');
-
-  await page.fill('(//input[normalize-space(@placeholder)=\'Password\' and normalize-space(@type)=\'password\' and normalize-space(@name)=\'password\'])[2]', process.env.E2E_USER_PASSWORD);
-
-  await page.press('(//input[normalize-space(@placeholder)=\'Password\' and normalize-space(@type)=\'password\' and normalize-space(@name)=\'password\'])[2]', 'Enter');
+  await page.fill('.modal-content.visible-md input[placeholder="Username"]', 'test-e2e');
+  await page.fill('.modal-content.visible-md input[placeholder="Password"]', process.env.E2E_USER_PASSWORD);
+  await page.click('.modal-content.visible-md input[value="Sign in"]');
 
   await page.click('input[placeholder="What have you done today?"]');
   await page.fill('input[placeholder="What have you done today?"]', 'test message');
