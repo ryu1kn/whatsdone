@@ -4,7 +4,7 @@ node_modules:
 
 .PHONY: test
 test: node_modules
-	PASSWORD="$$($(MAKE) --no-print-directory get-password)" node --unhandled-rejections=strict test
+	E2E_USER_PASSWORD="$$($(MAKE) --no-print-directory get-password)" node --unhandled-rejections=strict test
 
 .PHONY: deploy
 deploy:
