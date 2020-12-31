@@ -13,18 +13,19 @@ const { chromium } = require('playwright');
   await page.fill('.modal-content.visible-md input[placeholder="Password"]', process.env.E2E_USER_PASSWORD);
   await page.click('.modal-content.visible-md input[value="Sign in"]');
 
-  await page.fill('input[placeholder="What have you done today?"]', 'test message');
+  const testText = 'test message';
+  await page.fill('input[placeholder="What have you done today?"]', testText);
   await page.press('input[placeholder="What have you done today?"]', 'Enter');
   await page.waitForLoadState('networkidle')
 
   await page.reload({waitUntil: 'networkidle'})
-  await page.waitForSelector("text='test message'")
+  await page.waitForSelector(`text='${testText}'`)
 
-  await page.hover("//*[text()[contains(.,'test message')]]//ancestor::*[@class='doneitem']");
-  await page.click("//*[text()[contains(.,'test message')]]//ancestor::*[@class='doneitem']/div[3]");
+  await page.hover(`//*[text()[contains(.,'${testText}')]]//ancestor::*[@class='doneitem']`);
+  await page.click(`//*[text()[contains(.,'${testText}')]]//ancestor::*[@class='doneitem']/div[3]`);
 
   await page.reload({waitUntil: 'networkidle'})
-  const el2 = await page.$("text='test message'")
+  const el2 = await page.$(`text='${testText}'`)
   if (el2) throw new Error('This item should have been successfully deleted.')
 
   await page.close();
