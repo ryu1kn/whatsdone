@@ -13,7 +13,6 @@ const { chromium } = require('playwright');
   await page.fill('.modal-content.visible-md input[placeholder="Password"]', process.env.E2E_USER_PASSWORD);
   await page.click('.modal-content.visible-md input[value="Sign in"]');
 
-  await page.click('input[placeholder="What have you done today?"]');
   await page.fill('input[placeholder="What have you done today?"]', 'test message');
   await page.press('input[placeholder="What have you done today?"]', 'Enter');
   await page.waitForLoadState('networkidle')
