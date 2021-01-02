@@ -2,9 +2,10 @@ import ServiceLocator from '../../../lib/ServiceLocator';
 import DoneQueryHelper from '../../../lib/repositories/done-helpers/query';
 import {expect} from 'chai';
 import ServiceFactory from '../../../lib/ServiceFactory';
-import sinon = require('sinon');
 import * as td from 'testdouble';
 import {Logger} from '../../../lib/Logger';
+import {deepStrictEqual} from 'assert';
+import sinon = require('sinon');
 
 describe('Server DoneQueryHelper', () => {
 
@@ -42,7 +43,7 @@ describe('Server DoneQueryHelper', () => {
 
     const client = new DoneQueryHelper('TABLE_NAME');
     const result = await client.query();
-    expect(result.items[0]).to.eql({DATA: '..'});
+    deepStrictEqual(result.items[0], {DATA: '..'});
   });
 
   it('returns items honouring next page key', async () => {
@@ -83,7 +84,7 @@ describe('Server DoneQueryHelper', () => {
 
     const client = new DoneQueryHelper('TABLE_NAME');
     const result = await client.query();
-    expect(result.nextKey).to.eql('{"id":"ID","date":"2017-08-01T07:26:27.574Z"}');
+    deepStrictEqual(result.nextKey, '{"id":"ID","date":"2017-08-01T07:26:27.574Z"}');
   });
 
   it('automatically queries next month if result does not have enough records', async () => {
@@ -121,7 +122,7 @@ describe('Server DoneQueryHelper', () => {
 
     const client = new DoneQueryHelper('TABLE_NAME');
     await client.query();
-    expect(dynamoDBDocumentClient.query.args.length).to.eql(3); // tslint:disable-line:no-unused-expression
+    deepStrictEqual(dynamoDBDocumentClient.query.args.length, 3); // tslint:disable-line:no-unused-expression
     expect(dynamoDBDocumentClient.query.args[0][0].ExpressionAttributeValues)
       .to.eql({':m': '2017-08'});
     expect(dynamoDBDocumentClient.query.args[1][0].ExpressionAttributeValues)
@@ -143,8 +144,8 @@ describe('Server DoneQueryHelper', () => {
 
     const client = new DoneQueryHelper('TABLE_NAME');
     await client.query();
-    expect(dynamoDBDocumentClient.query.args[0][0].Limit).to.eql(20);
-    expect(dynamoDBDocumentClient.query.args[1][0].Limit).to.eql(3);
+    deepStrictEqual(dynamoDBDocumentClient.query.args[0][0].Limit, 20);
+    deepStrictEqual(dynamoDBDocumentClient.query.args[1][0].Limit, 3);
   });
 
   it('tries to find items as old as March 2015', async () => {
@@ -153,7 +154,7 @@ describe('Server DoneQueryHelper', () => {
 
     const client = new DoneQueryHelper('TABLE_NAME');
     await client.query();
-    expect(dynamoDBDocumentClient.query.args.length).to.eql(30);
+    deepStrictEqual(dynamoDBDocumentClient.query.args.length, 30);
     expect(dynamoDBDocumentClient.query.args[29][0].ExpressionAttributeValues)
       .to.eql({':m': '2015-03'});
   });

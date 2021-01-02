@@ -1,11 +1,11 @@
 import ServiceLocator from '../../lib/ServiceLocator';
 import UserIdRepository from '../../lib/repositories/UserId';
-import {expect} from 'chai';
 import ServiceFactory from '../../lib/ServiceFactory';
 import * as td from 'testdouble';
 import {PromiseResult} from 'aws-sdk/lib/request';
 import {AWSError} from 'aws-sdk';
 import {GetItemOutput, QueryOutput} from 'aws-sdk/clients/dynamodb';
+import {deepStrictEqual} from 'assert';
 
 describe('Server UserIdRepository', () => {
 
@@ -13,14 +13,14 @@ describe('Server UserIdRepository', () => {
     const dynamoDBDocumentClient = createDynamoDBDocumentClient();
     const repository = createUserIdRepository(dynamoDBDocumentClient);
     const result = await repository.getCognitoUserId('USER_ID');
-    expect(result).to.eql('COGNITO_USER_ID');
+    deepStrictEqual(result, 'COGNITO_USER_ID');
   });
 
   it('finds a user id', async () => {
     const dynamoDBDocumentClient = createDynamoDBDocumentClient();
     const repository = createUserIdRepository(dynamoDBDocumentClient);
     const result = await repository.getByCognitoUserId('COGNITO_USER_ID');
-    expect(result).to.eql('OLD_USER_ID');
+    deepStrictEqual(result, 'OLD_USER_ID');
   });
 
   function createDynamoDBDocumentClient(): AWS.DynamoDB.DocumentClient {

@@ -1,9 +1,10 @@
 import LambdaRequestHandler from '../lib/LambdaRequestHandler';
 import ServiceLocator from '../lib/ServiceLocator';
 import {expect} from 'chai';
-import sinon = require('sinon');
 import {Event} from '../lib/models/Lambda';
 import ServiceFactory from '../lib/ServiceFactory';
+import {deepStrictEqual} from 'assert';
+import sinon = require('sinon');
 
 describe('Server LambdaRequestHandler', () => {
   const lambdaEvent: Event = {
@@ -42,8 +43,8 @@ describe('Server LambdaRequestHandler', () => {
     const handler = new LambdaRequestHandler(requestProcessor);
 
     const response = await handler.handle(lambdaEvent);
-    expect(requestNormaliser.normalise.args[0]).to.eql([lambdaEvent]);
-    expect(userIdRepository.getByCognitoUserId.args[0]).to.eql(['COGNITO_USER_ID']);
+    deepStrictEqual(requestNormaliser.normalise.args[0], [lambdaEvent]);
+    deepStrictEqual(userIdRepository.getByCognitoUserId.args[0], ['COGNITO_USER_ID']);
     expect(requestProcessor.process.args[0]).to.eql([
       normalisedRequest,
       {
@@ -51,8 +52,8 @@ describe('Server LambdaRequestHandler', () => {
         username: 'COGNITO_USER_NAME'
       }
     ]);
-    expect(responseFormatter.format.args[0]).to.eql(['RESPONSE']);
-    expect(response).to.eql('LAMBDA_RESPONSE');
+    deepStrictEqual(responseFormatter.format.args[0], ['RESPONSE']);
+    deepStrictEqual(response, 'LAMBDA_RESPONSE');
   });
 
   it('catches an exception occurred during request process step', async () => {
@@ -73,7 +74,7 @@ describe('Server LambdaRequestHandler', () => {
 
     const response = await handler.handle(lambdaEvent);
     expect(requestProcessErrorProcessor.process.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');
-    expect(responseFormatter.format.args[0]).to.eql(['ERROR_RESPONSE']);
-    expect(response).to.eql('LAMBDA_RESPONSE');
+    deepStrictEqual(responseFormatter.format.args[0], ['ERROR_RESPONSE']);
+    deepStrictEqual(response, 'LAMBDA_RESPONSE');
   });
 });

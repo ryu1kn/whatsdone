@@ -1,9 +1,9 @@
-
 import ServiceLocator from '../../lib/ServiceLocator';
 import DoneRepository from '../../lib/repositories/Done';
 import {expect} from 'chai';
-import sinon = require('sinon');
 import ServiceFactory from '../../lib/ServiceFactory';
+import {deepStrictEqual} from 'assert';
+import sinon = require('sinon');
 
 describe('Server DoneRepository', () => {
 
@@ -15,7 +15,7 @@ describe('Server DoneRepository', () => {
     const repository = new DoneRepository();
 
     const result = await repository.read();
-    expect(result).to.eql('QUERY_RESULT');
+    deepStrictEqual(result, 'QUERY_RESULT');
   });
 
   it('record a new done item', async () => {
@@ -49,8 +49,8 @@ describe('Server DoneRepository', () => {
       doneThing: 'DONE_THING'
     };
     const newDone = await repository.write(done);
-    expect(newDone).to.eql({DATA: '..'});
-    expect(doneDynamoTableClient.getById.args[0]).to.eql(['DONE_ID']);
+    deepStrictEqual(newDone, {DATA: '..'});
+    deepStrictEqual(doneDynamoTableClient.getById.args[0], ['DONE_ID']);
   });
 
   it('adds "month" fields when it saves a done', async () => {
@@ -88,7 +88,7 @@ describe('Server DoneRepository', () => {
       doneThing: 'DONE_THING'
     };
     const newDone = await repository.write(done);
-    expect(newDone).to.eql({DATA: '..'});
+    deepStrictEqual(newDone, {DATA: '..'});
   });
 
   it('remove a done if the requesting user is the owner', async () => {
@@ -101,8 +101,8 @@ describe('Server DoneRepository', () => {
     const repository = new DoneRepository();
 
     await repository.remove('DONE_ID', 'USER_ID');
-    expect(doneDynamoTableClient.getById.args[0]).to.eql(['DONE_ID']);
-    expect(doneDynamoTableClient.delete.args[0]).to.eql(['DONE_ID']);
+    deepStrictEqual(doneDynamoTableClient.getById.args[0], ['DONE_ID']);
+    deepStrictEqual(doneDynamoTableClient.delete.args[0], ['DONE_ID']);
   });
 
   it('updates a done if the requesting user is the owner', async () => {
@@ -125,9 +125,9 @@ describe('Server DoneRepository', () => {
       NON_UPDATABLE_KEY: 'NEW ..'
     };
     await repository.update('DONE_ID', 'USER_ID', newData);
-    expect(doneDynamoTableClient.getById.args[0]).to.eql(['DONE_ID']);
+    deepStrictEqual(doneDynamoTableClient.getById.args[0], ['DONE_ID']);
     const updateArgs = doneDynamoTableClient.update.args[0];
-    expect(updateArgs[0]).to.eql('DONE_ID');
+    deepStrictEqual(updateArgs[0], 'DONE_ID');
     expect(updateArgs[1]).to.include({
       date: '2017-08-14T12:26:26.227Z',
       doneThing: 'NEW_DONE_THING'
@@ -177,7 +177,7 @@ describe('Server DoneRepository', () => {
 
     const newData = {doneThing: 'NEW_DONE_THING'};
     const done = await repository.update('DONE_ID', 'USER_ID', newData);
-    expect(done).to.eql({DATA: '..'});
+    deepStrictEqual(done, {DATA: '..'});
   });
 
   let initialiseServiceLocator = function (doneQueryHelper: {query: any} | {}, doneDynamoTableClient?: {getById: any, update?: any, delete?: any, put?: any}) {
