@@ -3,6 +3,9 @@ import UserIdRepository from '../../lib/repositories/UserId';
 import {expect} from 'chai';
 import ServiceFactory from '../../lib/ServiceFactory';
 import * as td from 'testdouble';
+import {PromiseResult} from 'aws-sdk/lib/request';
+import {AWSError} from 'aws-sdk';
+import {GetItemOutput, QueryOutput} from 'aws-sdk/clients/dynamodb';
 
 describe('Server UserIdRepository', () => {
 
@@ -28,7 +31,7 @@ describe('Server UserIdRepository', () => {
     })).thenReturn({
       promise: () => Promise.resolve({
         Item: {cognitoUserId: 'COGNITO_USER_ID'}
-      })
+      } as unknown as PromiseResult<GetItemOutput, AWSError>)
     });
     td.when(docClient.query({
       TableName: 'USER_ID_TABLE_NAME',
@@ -39,7 +42,7 @@ describe('Server UserIdRepository', () => {
     })).thenReturn({
       promise: () => Promise.resolve({
         Items: [{id: 'OLD_USER_ID'}]
-      })
+      } as unknown as PromiseResult<QueryOutput, AWSError>)
     });
     return docClient;
   }

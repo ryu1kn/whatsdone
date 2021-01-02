@@ -7,11 +7,19 @@ import UserNameService from '../../lib/UserNameService';
 import DoneRepository from '../../lib/repositories/Done';
 
 describe('Server GetDonesCommand', () => {
+  const doneItem = {
+    id: 'ID',
+    date: 'DATE',
+    month: 'MONTH',
+    userId: 'USER_ID',
+    doneThing: '..'
+  };
+
   const userNameService = td.object('getUsernames') as UserNameService;
   td.when(userNameService.getUsernames(['USER_ID'])).thenResolve([{id: 'USER_ID', name: 'USER'}]);
 
   const doneRepository = td.object('read') as DoneRepository;
-  td.when(doneRepository.read(undefined)).thenResolve({items: [{userId: 'USER_ID', SOME_DATA: '..'}]});
+  td.when(doneRepository.read(undefined)).thenResolve({items: [doneItem]});
 
   ServiceLocator.load({
     createUserNameService: () => userNameService,
@@ -21,11 +29,7 @@ describe('Server GetDonesCommand', () => {
 
   it('returns list of dones with the names of their owners', async () => {
     const result = await command.execute();
-    expect(result.items).to.eql([{
-      userId: 'USER_ID',
-      username: 'USER',
-      SOME_DATA: '..'
-    }]);
+    expect(result.items).to.eql([{...doneItem, username: 'USER'}]);
   });
 
 });

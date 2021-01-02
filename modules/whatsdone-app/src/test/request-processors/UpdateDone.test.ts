@@ -12,7 +12,7 @@ describe('Server UpdateDoneRequestProcessor', () => {
     const doneDiff = {doneThing: '..'};
     const updateDoneCommand = td.object('execute') as UpdateDoneCommand;
     td.when(updateDoneCommand.execute(doneDiff, 'DONE_ID', 'USER_ID'))
-      .thenResolve({UPDATED_DONE_ITEM: '..'});
+      .thenResolve({doneThing: 'UPDATED_DONE_THING'});
     ServiceLocator.load({
       createUpdateDoneCommand: () => updateDoneCommand
     } as ServiceFactory);
@@ -26,7 +26,7 @@ describe('Server UpdateDoneRequestProcessor', () => {
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache'
       },
-      body: '{"UPDATED_DONE_ITEM":".."}'
+      body: '{"doneThing":"UPDATED_DONE_THING"}'
     });
   });
 
