@@ -23,6 +23,7 @@ const { chromium } = require('playwright');
 
   await page.hover(`//*[text()[contains(.,'${testText}')]]//ancestor::*[@class='doneitem']`);
   await page.click(`//*[text()[contains(.,'${testText}')]]//ancestor::*[@class='doneitem']/div[3]`);
+  await page.waitForLoadState('networkidle')
 
   await page.reload({waitUntil: 'networkidle'})
   const el2 = await page.$(`text='${testText}'`)
