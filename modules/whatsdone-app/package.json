@@ -29,7 +29,6 @@
     "uuid": "~8.3.2"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.14",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.keyby": "^4.6.6",
     "@types/lodash.map": "^4.6.13",
@@ -40,7 +39,6 @@
     "@types/route-parser": "^0.1.3",
     "@types/sinon": "^9.0.10",
     "@types/uuid": "^8.3.0",
-    "chai": "^4.2.0",
     "mocha": "^8.2.1",
     "nyc": "^15.1.0",
     "sinon": "^9.2.2",

@@ -1,6 +1,5 @@
 import ServiceLocator from '../../lib/ServiceLocator';
 import DoneRepository from '../../lib/repositories/Done';
-import {expect} from 'chai';
 import ServiceFactory from '../../lib/ServiceFactory';
 import {deepStrictEqual} from 'assert';
 import sinon = require('sinon');
@@ -31,8 +30,9 @@ describe('Server DoneRepository', () => {
       doneThing: 'DONE_THING'
     };
     await repository.write(done);
-    expect(doneDynamoTableClient.put.args[0][0]).to.includes({
+    deepStrictEqual(doneDynamoTableClient.put.args[0][0], {
       date: '2017-08-14T12:26:26.227Z',
+      month: '2017-08',
       doneThing: 'DONE_THING'
     });
   });
@@ -128,8 +128,9 @@ describe('Server DoneRepository', () => {
     deepStrictEqual(doneDynamoTableClient.getById.args[0], ['DONE_ID']);
     const updateArgs = doneDynamoTableClient.update.args[0];
     deepStrictEqual(updateArgs[0], 'DONE_ID');
-    expect(updateArgs[1]).to.include({
+    deepStrictEqual(updateArgs[1], {
       date: '2017-08-14T12:26:26.227Z',
+      month: '2017-08',
       doneThing: 'NEW_DONE_THING'
     });
   });
@@ -153,9 +154,10 @@ describe('Server DoneRepository', () => {
     };
     await repository.update('DONE_ID', 'USER_ID', newData);
     const newDone = doneDynamoTableClient.update.args[0][1];
-    expect(newDone).to.include({
+    deepStrictEqual(newDone, {
       date: '2017-08-14T12:26:26.227Z',
-      month: '2017-08'
+      month: '2017-08',
+      doneThing: 'NEW_DONE_THING'
     });
   });
 

@@ -1,6 +1,5 @@
 import ServiceLocator from '../../../lib/ServiceLocator';
 import DoneQueryHelper from '../../../lib/repositories/done-helpers/query';
-import {expect} from 'chai';
 import ServiceFactory from '../../../lib/ServiceFactory';
 import * as td from 'testdouble';
 import {Logger} from '../../../lib/Logger';
@@ -161,7 +160,7 @@ describe('Server DoneQueryHelper', () => {
 
     const client = new DoneQueryHelper('TABLE_NAME');
     const result = await client.query();
-    expect(result.nextKey).to.be.undefined; // tslint:disable-line:no-unused-expression
+    deepStrictEqual(result.nextKey, undefined);
   });
 
   function setupServiceLocator({dynamoDBDocumentClient, currentDate}: any) {

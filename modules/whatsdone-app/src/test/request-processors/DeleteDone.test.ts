@@ -1,6 +1,5 @@
 import DeleteDoneRequestProcessor from '../../lib/request-processors/DeleteDone';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect} from 'chai';
 import {throwError} from '../helper/TestUtils';
 import ServiceFactory from '../../lib/ServiceFactory';
 import {request, session} from '../helper/NormalisedRequestData';
@@ -29,7 +28,7 @@ describe('Server DeleteDoneRequestProcessor', () => {
     return processor.process(request, session).then(
       throwError,
       e => {
-        expect(e).to.have.property('message', 'UNEXPECTED_ERROR');
+        deepStrictEqual(e.message, 'UNEXPECTED_ERROR');
       }
     );
   });

@@ -1,6 +1,5 @@
 import GetDonesRequestProcessor from '../../lib/request-processors/GetDones';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect} from 'chai';
 import {throwError} from '../helper/TestUtils';
 import ServiceFactory from '../../lib/ServiceFactory';
 import {request, session} from '../helper/NormalisedRequestData';
@@ -43,7 +42,7 @@ describe('Server GetDonesRequestProcessor', () => {
     return processor.process(req, session).then(
       throwError,
       e => {
-        expect(e).to.have.property('message', 'UNEXPECTED_ERROR');
+        deepStrictEqual(e.message, 'UNEXPECTED_ERROR');
       }
     );
   });
