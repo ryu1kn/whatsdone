@@ -66,7 +66,7 @@ describe('Server DoneRepository', () => {
       doneThing: 'DONE_THING'
     };
     await repository.write(done);
-    expect(doneDynamoTableClient.put.args[0]).to.eql([{
+    deepStrictEqual(doneDynamoTableClient.put.args[0], [{
       date: '2017-08-14T12:26:26.227Z',
       doneThing: 'DONE_THING',
       month: '2017-08'

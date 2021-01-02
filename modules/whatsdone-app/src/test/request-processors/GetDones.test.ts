@@ -6,6 +6,7 @@ import ServiceFactory from '../../lib/ServiceFactory';
 import {request, session} from '../helper/NormalisedRequestData';
 import * as td from 'testdouble';
 import GetDonesCommand from '../../lib/commands/GetDones';
+import {deepStrictEqual} from 'assert';
 
 describe('Server GetDonesRequestProcessor', () => {
   const commandOutput = {
@@ -30,7 +31,7 @@ describe('Server GetDonesRequestProcessor', () => {
   it('invokes get dones command with next page key', async () => {
     const req = Object.assign({}, request, {query: {nextKey: 'NEXT_KEY'}});
     const result = await processor.process(req, session);
-    expect(result).to.eql({
+    deepStrictEqual(result, {
       statusCode: '200',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(commandOutput)

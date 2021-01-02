@@ -1,9 +1,9 @@
 import RequestProcessErrorProcessor from '../lib/RequestProcessErrorProcessor';
 import {Logger} from '../lib/Logger';
 import ServiceLocator from '../lib/ServiceLocator';
-import {expect} from 'chai';
 import ServiceFactory from '../lib/ServiceFactory';
 import * as td from 'testdouble';
+import {deepStrictEqual} from 'assert';
 
 describe('Server RequestProcessErrorProcessor', () => {
 
@@ -15,7 +15,7 @@ describe('Server RequestProcessErrorProcessor', () => {
     const processor = new RequestProcessErrorProcessor();
     const result = processor.process(new Error('[NotFound]: NOT_FOUND'));
 
-    expect(result).to.eql({
+    deepStrictEqual(result, {
       statusCode: '404',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({errors: [{title: '404: Not Found'}]})
@@ -31,7 +31,7 @@ describe('Server RequestProcessErrorProcessor', () => {
     const processor = new RequestProcessErrorProcessor();
     const result = processor.process(new Error('[AccessDenied]: ACCESS_DENIED'));
 
-    expect(result).to.eql({
+    deepStrictEqual(result, {
       statusCode: '403',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({errors: [{title: '403: Forbidden'}]})
@@ -47,7 +47,7 @@ describe('Server RequestProcessErrorProcessor', () => {
     const processor = new RequestProcessErrorProcessor();
     const result = processor.process(new Error('UNKNOWN ERROR'));
 
-    expect(result).to.eql({
+    deepStrictEqual(result, {
       statusCode: '500',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({errors: [{title: '500: Internal Server Error'}]})
