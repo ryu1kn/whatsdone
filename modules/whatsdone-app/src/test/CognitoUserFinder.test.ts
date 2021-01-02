@@ -3,7 +3,9 @@ import CognitoUserFinder from '../lib/CognitoUserFinder';
 import {expect} from 'chai';
 import * as td from 'testdouble';
 import ServiceFactory from '../lib/ServiceFactory';
-import {CognitoIdentityServiceProvider} from 'aws-sdk';
+import {AWSError, CognitoIdentityServiceProvider} from 'aws-sdk';
+import {PromiseResult} from 'aws-sdk/lib/request';
+import {ListUsersResponse} from 'aws-sdk/clients/cognitoidentityserviceprovider';
 
 describe('Server CognitoUserFinder', () => {
 
@@ -21,7 +23,7 @@ describe('Server CognitoUserFinder', () => {
       AttributesToGet: [],
       Filter: 'sub = "ID"'
     })).thenReturn({
-      promise: () => Promise.resolve({Users: ['USER_1']})
+      promise: () => Promise.resolve({Users: ['USER_1']} as unknown as PromiseResult<ListUsersResponse, AWSError>)
     });
     return cognito;
   }

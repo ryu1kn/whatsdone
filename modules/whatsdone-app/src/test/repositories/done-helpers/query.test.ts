@@ -4,6 +4,7 @@ import {expect} from 'chai';
 import ServiceFactory from '../../../lib/ServiceFactory';
 import sinon = require('sinon');
 import * as td from 'testdouble';
+import {Logger} from '../../../lib/Logger';
 
 describe('Server DoneQueryHelper', () => {
 
@@ -175,7 +176,7 @@ describe('Server DoneQueryHelper', () => {
     const factory = td.object(['createDynamoDBDocumentClient', 'createDateProvider', 'createLogger']) as ServiceFactory;
     td.when(factory.createDynamoDBDocumentClient()).thenReturn(dynamoDBDocumentClient);
     td.when(factory.createDateProvider()).thenReturn(dateProvider);
-    td.when(factory.createLogger()).thenReturn({log: () => {}});
+    td.when(factory.createLogger()).thenReturn({error: () => {}} as Logger);
     ServiceLocator.load(factory);
   }
 

@@ -8,9 +8,18 @@ import * as td from 'testdouble';
 import GetDonesCommand from '../../lib/commands/GetDones';
 
 describe('Server GetDonesRequestProcessor', () => {
+  const commandOutput = {
+    items: [{
+      id: 'ID',
+      date: 'DATE',
+      month: 'MONTH',
+      userId: 'USER_ID',
+      doneThing: 'DONE'
+    }]
+  };
   const getDonesCommand = td.object('execute') as GetDonesCommand;
   td.when(getDonesCommand.execute('NEXT_KEY'))
-    .thenResolve('COMMAND_OUTPUT');
+    .thenResolve(commandOutput);
   td.when(getDonesCommand.execute('CAUSE_ERROR'))
     .thenReject(new Error('UNEXPECTED_ERROR'));
 
@@ -24,7 +33,7 @@ describe('Server GetDonesRequestProcessor', () => {
     expect(result).to.eql({
       statusCode: '200',
       headers: {'Content-Type': 'application/json'},
-      body: '"COMMAND_OUTPUT"'
+      body: JSON.stringify(commandOutput)
     });
   });
 
