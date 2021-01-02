@@ -1,5 +1,6 @@
 import {expect} from 'chai';
 import {EnvVars} from '../lib/EnvVars';
+import {deepStrictEqual} from 'assert';
 import ProcessEnv = NodeJS.ProcessEnv;
 
 describe('Server EnvVars', () => {
@@ -12,11 +13,11 @@ describe('Server EnvVars', () => {
       USER_ID_TABLE_NAME: 'user-id-table-name'
     };
     const envVars = new EnvVars(env);
-    expect(envVars.DB_REGION).to.eql('db-region');
-    expect(envVars.DONE_TABLE_NAME).to.eql('done-table-name');
-    expect(envVars.USER_ID_TABLE_NAME).to.eql('user-id-table-name');
-    expect(envVars.USER_POOL_ID).to.eql('user-pool-id');
-    expect(envVars.WEBAPP_ORIGIN).to.eql('webapp-origin');
+    deepStrictEqual(envVars.DB_REGION, 'db-region');
+    deepStrictEqual(envVars.DONE_TABLE_NAME, 'done-table-name');
+    deepStrictEqual(envVars.USER_ID_TABLE_NAME, 'user-id-table-name');
+    deepStrictEqual(envVars.USER_POOL_ID, 'user-pool-id');
+    deepStrictEqual(envVars.WEBAPP_ORIGIN, 'webapp-origin');
   });
 
   it('errors out if required env vars are missing', () => {

@@ -1,8 +1,9 @@
 import DynamoTableClient from '../../lib/repositories/DynamoTableClient';
 import ServiceLocator from '../../lib/ServiceLocator';
 import {expect} from 'chai';
-import sinon = require('sinon');
 import ServiceFactory from '../../lib/ServiceFactory';
+import {deepStrictEqual} from 'assert';
+import sinon = require('sinon');
 
 describe('Server DynamoTableClient', () => {
 
@@ -15,7 +16,7 @@ describe('Server DynamoTableClient', () => {
     initialiseServiceLocator({dynamoDBDocumentClient});
     const client = new DynamoTableClient('TABLE_NAME', 'id');
     const item = await client.getById('ITEM_ID');
-    expect(item).to.eql('ITEM');
+    deepStrictEqual(item, 'ITEM');
     expect(dynamoDBDocumentClient.get.args[0]).to.eql([{
       TableName: 'TABLE_NAME',
       Key: {id: 'ITEM_ID'}
@@ -35,7 +36,7 @@ describe('Server DynamoTableClient', () => {
     const client = new DynamoTableClient('TABLE_NAME', 'id');
     const newItem = {DATA: '..'};
     const newId = await client.put(newItem);
-    expect(newId).to.eql('UUID');
+    deepStrictEqual(newId, 'UUID');
     expect(dynamoDBDocumentClient.put.args[0]).to.eql([{
       TableName: 'TABLE_NAME',
       Item: {
@@ -73,7 +74,7 @@ describe('Server DynamoTableClient', () => {
     const client = new DynamoTableClient('TABLE_NAME', 'id');
     const newData = {KEY_1: 'VALUE_1', KEY_2: 'VALUE_2'};
     const item = await client.update('ITEM_ID', newData);
-    expect(item).to.eql('ITEM');
+    deepStrictEqual(item, 'ITEM');
     expect(dynamoDBDocumentClient.update.args[0]).to.eql([{
       TableName: 'TABLE_NAME',
       Key: {id: 'ITEM_ID'},

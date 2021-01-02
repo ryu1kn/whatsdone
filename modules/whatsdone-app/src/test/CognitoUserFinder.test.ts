@@ -1,11 +1,11 @@
 import ServiceLocator from '../lib/ServiceLocator';
 import CognitoUserFinder from '../lib/CognitoUserFinder';
-import {expect} from 'chai';
 import * as td from 'testdouble';
 import ServiceFactory from '../lib/ServiceFactory';
 import {AWSError, CognitoIdentityServiceProvider} from 'aws-sdk';
 import {PromiseResult} from 'aws-sdk/lib/request';
 import {ListUsersResponse} from 'aws-sdk/clients/cognitoidentityserviceprovider';
+import {deepStrictEqual} from 'assert';
 
 describe('Server CognitoUserFinder', () => {
 
@@ -13,7 +13,7 @@ describe('Server CognitoUserFinder', () => {
     const cognitoIdentityServiceProvider = createCognitoIdentityServiceProvider();
     const userFinder = createCognitoUserFinder(cognitoIdentityServiceProvider);
     const user = await userFinder.find('ID');
-    expect(user).to.eql('USER_1');
+    deepStrictEqual(user, 'USER_1');
   });
 
   function createCognitoIdentityServiceProvider() {

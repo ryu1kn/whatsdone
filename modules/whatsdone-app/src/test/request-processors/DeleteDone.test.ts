@@ -2,9 +2,10 @@ import DeleteDoneRequestProcessor from '../../lib/request-processors/DeleteDone'
 import ServiceLocator from '../../lib/ServiceLocator';
 import {expect} from 'chai';
 import {throwError} from '../helper/TestUtils';
-import sinon = require('sinon');
 import ServiceFactory from '../../lib/ServiceFactory';
 import {request, session} from '../helper/NormalisedRequestData';
+import {deepStrictEqual} from 'assert';
+import sinon = require('sinon');
 
 describe('Server DeleteDoneRequestProcessor', () => {
   it('deletes a done item', async () => {
@@ -13,8 +14,8 @@ describe('Server DeleteDoneRequestProcessor', () => {
     const processor = new DeleteDoneRequestProcessor();
 
     const response = await processor.process(request, session);
-    expect(response).to.eql({statusCode: '200'});
-    expect(doneRepository.remove.args[0]).to.eql(['DONE_ID', 'USER_ID']);
+    deepStrictEqual(response, {statusCode: '200'});
+    deepStrictEqual(doneRepository.remove.args[0], ['DONE_ID', 'USER_ID']);
   });
 
   it('propagates error', () => {

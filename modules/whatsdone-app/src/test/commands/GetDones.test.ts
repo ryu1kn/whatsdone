@@ -1,10 +1,10 @@
 import GetDonesCommand from '../../lib/commands/GetDones';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect} from 'chai';
 import ServiceFactory from '../../lib/ServiceFactory';
 import * as td from 'testdouble';
 import UserNameService from '../../lib/UserNameService';
 import DoneRepository from '../../lib/repositories/Done';
+import {deepStrictEqual} from 'assert';
 
 describe('Server GetDonesCommand', () => {
   const doneItem = {
@@ -29,7 +29,7 @@ describe('Server GetDonesCommand', () => {
 
   it('returns list of dones with the names of their owners', async () => {
     const result = await command.execute();
-    expect(result.items).to.eql([{...doneItem, username: 'USER'}]);
+    deepStrictEqual(result.items, [{...doneItem, username: 'USER'}]);
   });
 
 });

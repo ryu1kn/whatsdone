@@ -1,9 +1,9 @@
 import CreateDoneCommand from '../../lib/commands/CreateDone';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect} from 'chai';
 import ServiceFactory from '../../lib/ServiceFactory';
 import * as td from 'testdouble';
 import DoneRepository from '../../lib/repositories/Done';
+import {deepStrictEqual} from 'assert';
 
 describe('Server CreateDoneCommand', () => {
 
@@ -19,7 +19,7 @@ describe('Server CreateDoneCommand', () => {
     const command = new CreateDoneCommand();
 
     const result = await command.execute(done, 'USER_ID');
-    expect(result).to.eql(doneWithUserId);
+    deepStrictEqual(result, doneWithUserId);
   });
 
 });
