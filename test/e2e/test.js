@@ -26,7 +26,7 @@ const { chromium } = require('playwright');
 
   await page.reload({waitUntil: 'networkidle'})
   const el2 = await page.$(`text='${testText}'`)
-  if (el2) throw new Error('This item should have been successfully deleted.')
+  if (el2) throw new Error(`The item "${testText}" should have been successfully deleted.`)
 
   await page.close();
 
