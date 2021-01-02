@@ -1,6 +1,5 @@
 import DynamoTableClient from '../../lib/repositories/DynamoTableClient';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect} from 'chai';
 import ServiceFactory from '../../lib/ServiceFactory';
 import {deepStrictEqual} from 'assert';
 import sinon = require('sinon');
@@ -17,7 +16,7 @@ describe('Server DynamoTableClient', () => {
     const client = new DynamoTableClient('TABLE_NAME', 'id');
     const item = await client.getById('ITEM_ID');
     deepStrictEqual(item, 'ITEM');
-    expect(dynamoDBDocumentClient.get.args[0]).to.eql([{
+    deepStrictEqual(dynamoDBDocumentClient.get.args[0], [{
       TableName: 'TABLE_NAME',
       Key: {id: 'ITEM_ID'}
     }]);
@@ -37,7 +36,7 @@ describe('Server DynamoTableClient', () => {
     const newItem = {DATA: '..'};
     const newId = await client.put(newItem);
     deepStrictEqual(newId, 'UUID');
-    expect(dynamoDBDocumentClient.put.args[0]).to.eql([{
+    deepStrictEqual(dynamoDBDocumentClient.put.args[0], [{
       TableName: 'TABLE_NAME',
       Item: {
         DATA: '..',
@@ -55,7 +54,7 @@ describe('Server DynamoTableClient', () => {
     initialiseServiceLocator({dynamoDBDocumentClient});
     const client = new DynamoTableClient('TABLE_NAME', 'id');
     await client.delete('ITEM_ID');
-    expect(dynamoDBDocumentClient.delete.args[0]).to.eql([{
+    deepStrictEqual(dynamoDBDocumentClient.delete.args[0], [{
       TableName: 'TABLE_NAME',
       Key: {id: 'ITEM_ID'}
     }]);
@@ -75,7 +74,7 @@ describe('Server DynamoTableClient', () => {
     const newData = {KEY_1: 'VALUE_1', KEY_2: 'VALUE_2'};
     const item = await client.update('ITEM_ID', newData);
     deepStrictEqual(item, 'ITEM');
-    expect(dynamoDBDocumentClient.update.args[0]).to.eql([{
+    deepStrictEqual(dynamoDBDocumentClient.update.args[0], [{
       TableName: 'TABLE_NAME',
       Key: {id: 'ITEM_ID'},
       AttributeUpdates: {
@@ -89,7 +88,7 @@ describe('Server DynamoTableClient', () => {
         }
       }
     }]);
-    expect(dynamoDBDocumentClient.get.args[0]).to.eql([{
+    deepStrictEqual(dynamoDBDocumentClient.get.args[0], [{
       TableName: 'TABLE_NAME',
       Key: {id: 'ITEM_ID'}
     }]);

@@ -1,10 +1,10 @@
 import PostDoneRequestProcessor from '../../lib/request-processors/PostDone';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect} from 'chai';
 import ServiceFactory from '../../lib/ServiceFactory';
 import {request} from '../helper/NormalisedRequestData';
 import * as td from 'testdouble';
 import CreateDoneCommand from '../../lib/commands/CreateDone';
+import {deepStrictEqual} from 'assert';
 
 describe('Server PostDoneRequestProcessor', () => {
 
@@ -20,7 +20,7 @@ describe('Server PostDoneRequestProcessor', () => {
 
     const req = Object.assign({}, request, {body: done});
     const response = await processor.process(req, session);
-    expect(response).to.eql({
+    deepStrictEqual(response, {
       statusCode: '200',
       headers: {'Content-Type': 'application/json'},
       body: '{\"doneThing\":\"SOMETHING\",\"userId\":\"USER_ID\",\"username\":\"USER_NAME\"}'

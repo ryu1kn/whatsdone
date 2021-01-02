@@ -1,6 +1,5 @@
-import {expect} from 'chai';
 import {EnvVars} from '../lib/EnvVars';
-import {deepStrictEqual} from 'assert';
+import {deepStrictEqual, throws} from 'assert';
 import ProcessEnv = NodeJS.ProcessEnv;
 
 describe('Server EnvVars', () => {
@@ -21,8 +20,8 @@ describe('Server EnvVars', () => {
   });
 
   it('errors out if required env vars are missing', () => {
-    expect(() => {
+    throws(() => {
       new EnvVars({} as ProcessEnv);  // tslint:disable-line:no-unused-expression
-    }).throws();
+    });
   });
 });

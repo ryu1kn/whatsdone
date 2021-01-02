@@ -1,7 +1,7 @@
 import UpdateDoneCommand from '../../lib/commands/UpdateDone';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {expect} from 'chai';
 import ServiceFactory from '../../lib/ServiceFactory';
+import {deepStrictEqual} from 'assert';
 
 describe('Server UpdateDoneCommand', () => {
 
@@ -26,7 +26,7 @@ describe('Server UpdateDoneCommand', () => {
     const command = new UpdateDoneCommand();
 
     const result = await command.execute(doneDiff, 'DONE_ID', 'USER_ID');
-    expect(result).to.eql({
+    deepStrictEqual(result, {
       doneThing: 'DONE_THING',
       date: 'DATE',
       id: 'DONE_ID',

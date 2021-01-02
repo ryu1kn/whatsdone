@@ -1,10 +1,10 @@
-import {expect} from 'chai';
 import * as td from 'testdouble';
 import UpdateDoneRequestProcessor from '../../lib/request-processors/UpdateDone';
 import ServiceLocator from '../../lib/ServiceLocator';
 import ServiceFactory from '../../lib/ServiceFactory';
 import {request, session} from '../helper/NormalisedRequestData';
 import UpdateDoneCommand from '../../lib/commands/UpdateDone';
+import {deepStrictEqual} from 'assert';
 
 describe('Server UpdateDoneRequestProcessor', () => {
 
@@ -20,7 +20,7 @@ describe('Server UpdateDoneRequestProcessor', () => {
 
     const req = Object.assign({}, request, {body: doneDiff});
     const response = await processor.process(req, session);
-    expect(response).to.eql({
+    deepStrictEqual(response, {
       statusCode: '200',
       headers: {
         'Content-Type': 'application/json',

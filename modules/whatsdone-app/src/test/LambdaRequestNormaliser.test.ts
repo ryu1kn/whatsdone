@@ -1,7 +1,7 @@
-
 import LambdaRequestNormaliser from '../lib/LambdaRequestNormaliser';
 import {expect} from 'chai';
 import {Event} from '../lib/models/Lambda';
+import {deepStrictEqual} from 'assert';
 
 describe('Server LambdaRequestNormaliser', () => {
   const normaliser = new LambdaRequestNormaliser();
@@ -31,7 +31,7 @@ describe('Server LambdaRequestNormaliser', () => {
   });
 
   it('gives you path parameters', () => {
-    expect(normaliser.normalise(lambdaEvent).params).to.eql({
+    deepStrictEqual(normaliser.normalise(lambdaEvent).params, {
       PATH_PARAM_KEY: 'PATH_PARAM_VALUE'
     });
   });

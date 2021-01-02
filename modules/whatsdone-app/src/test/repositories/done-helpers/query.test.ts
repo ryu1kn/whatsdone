@@ -17,7 +17,7 @@ describe('Server DoneQueryHelper', () => {
 
     const client = new DoneQueryHelper('TABLE_NAME');
     await client.query();
-    expect(dynamoDBDocumentClient.query.args[0]).to.eql([{
+    deepStrictEqual(dynamoDBDocumentClient.query.args[0], [{
       TableName: 'TABLE_NAME',
       IndexName: 'date',
       Limit: 20,
@@ -59,10 +59,10 @@ describe('Server DoneQueryHelper', () => {
     });
     await client.query(nextKey);
     const queryArgs = dynamoDBDocumentClient.query.args[0][0];
-    expect(queryArgs.ExpressionAttributeValues).to.eql({
+    deepStrictEqual(queryArgs.ExpressionAttributeValues, {
       ':m': '2017-08'
     });
-    expect(queryArgs.ExclusiveStartKey).to.eql({
+    deepStrictEqual(queryArgs.ExclusiveStartKey, {
       id: 'ID',
       date: '2017-08-01T07:26:27.574Z',
       month: '2017-08'
@@ -100,10 +100,8 @@ describe('Server DoneQueryHelper', () => {
 
     const client = new DoneQueryHelper('TABLE_NAME');
     await client.query();
-    expect(dynamoDBDocumentClient.query.args[0][0].ExpressionAttributeValues)
-      .to.eql({':m': '2017-08'});
-    expect(dynamoDBDocumentClient.query.args[1][0].ExpressionAttributeValues)
-      .to.eql({':m': '2017-07'});
+    deepStrictEqual(dynamoDBDocumentClient.query.args[0][0].ExpressionAttributeValues, {':m': '2017-08'});
+    deepStrictEqual(dynamoDBDocumentClient.query.args[1][0].ExpressionAttributeValues, {':m': '2017-07'});
   });
 
   it('automatically queries for next 2 months if result does not have enough records', async () => {
@@ -123,12 +121,9 @@ describe('Server DoneQueryHelper', () => {
     const client = new DoneQueryHelper('TABLE_NAME');
     await client.query();
     deepStrictEqual(dynamoDBDocumentClient.query.args.length, 3); // tslint:disable-line:no-unused-expression
-    expect(dynamoDBDocumentClient.query.args[0][0].ExpressionAttributeValues)
-      .to.eql({':m': '2017-08'});
-    expect(dynamoDBDocumentClient.query.args[1][0].ExpressionAttributeValues)
-      .to.eql({':m': '2017-07'});
-    expect(dynamoDBDocumentClient.query.args[2][0].ExpressionAttributeValues)
-      .to.eql({':m': '2017-06'});
+    deepStrictEqual(dynamoDBDocumentClient.query.args[0][0].ExpressionAttributeValues, {':m': '2017-08'});
+    deepStrictEqual(dynamoDBDocumentClient.query.args[1][0].ExpressionAttributeValues, {':m': '2017-07'});
+    deepStrictEqual(dynamoDBDocumentClient.query.args[2][0].ExpressionAttributeValues, {':m': '2017-06'});
   });
 
   it('automatically fetches the number of items that satisfies original fetch limit', async () => {
@@ -155,8 +150,7 @@ describe('Server DoneQueryHelper', () => {
     const client = new DoneQueryHelper('TABLE_NAME');
     await client.query();
     deepStrictEqual(dynamoDBDocumentClient.query.args.length, 30);
-    expect(dynamoDBDocumentClient.query.args[29][0].ExpressionAttributeValues)
-      .to.eql({':m': '2015-03'});
+    deepStrictEqual(dynamoDBDocumentClient.query.args[29][0].ExpressionAttributeValues, {':m': '2015-03'});
   });
 
   it('does not return a key for next page if it does not exist', async () => {

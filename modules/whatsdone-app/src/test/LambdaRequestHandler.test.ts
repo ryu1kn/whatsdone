@@ -45,7 +45,7 @@ describe('Server LambdaRequestHandler', () => {
     const response = await handler.handle(lambdaEvent);
     deepStrictEqual(requestNormaliser.normalise.args[0], [lambdaEvent]);
     deepStrictEqual(userIdRepository.getByCognitoUserId.args[0], ['COGNITO_USER_ID']);
-    expect(requestProcessor.process.args[0]).to.eql([
+    deepStrictEqual(requestProcessor.process.args[0], [
       normalisedRequest,
       {
         userId: 'USER_ID',

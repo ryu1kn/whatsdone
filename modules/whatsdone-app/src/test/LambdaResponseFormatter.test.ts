@@ -1,7 +1,7 @@
 import ServiceLocator from '../lib/ServiceLocator';
 import LambdaResponseFormatter from '../lib/LambdaResponseFormatter';
-import {expect} from 'chai';
 import ServiceFactory from '../lib/ServiceFactory';
+import {deepStrictEqual} from 'assert';
 
 describe('Server LambdaResponseFormatter', () => {
 
@@ -17,7 +17,7 @@ describe('Server LambdaResponseFormatter', () => {
       headers: {'X-ANY-HEADER': '..'},
       NON_HEADER_VALUES: '..'
     };
-    expect(formatter.format(response)).to.eql({
+    deepStrictEqual(formatter.format(response), {
       statusCode: '200',
       headers: {
         'X-ANY-HEADER': '..',
