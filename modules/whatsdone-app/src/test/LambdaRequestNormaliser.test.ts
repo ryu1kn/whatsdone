@@ -1,5 +1,4 @@
 import LambdaRequestNormaliser from '../lib/LambdaRequestNormaliser';
-import {expect} from 'chai';
 import {Event} from '../lib/models/Lambda';
 import {deepStrictEqual} from 'assert';
 
@@ -25,9 +24,7 @@ describe('Server LambdaRequestNormaliser', () => {
   };
 
   it('gives you request path', () => {
-    expect(normaliser.normalise(lambdaEvent)).to.include({
-      path: 'PATH'
-    });
+    deepStrictEqual(normaliser.normalise(lambdaEvent).path, 'PATH');
   });
 
   it('gives you path parameters', () => {
@@ -37,20 +34,16 @@ describe('Server LambdaRequestNormaliser', () => {
   });
 
   it('gives you query parameters', () => {
-    expect(normaliser.normalise(lambdaEvent).query).to.include({
-      QUERY_PARAM_KEY: 'QUERY_PARAM_VALUE'
-    });
+    deepStrictEqual(normaliser.normalise(lambdaEvent).query.QUERY_PARAM_KEY, 'QUERY_PARAM_VALUE');
   });
 
   it('gives you an empty object for query parameters if it is not given', () => {
     const event = removeProperty(lambdaEvent, 'queryStringParameters');
-    expect(normaliser.normalise(event).query).to.include({});
+    deepStrictEqual(normaliser.normalise(event).query, {});
   });
 
   it('parses the request body as json string if content-type is application/json', () => {
-    expect(normaliser.normalise(lambdaEvent).body).to.include({
-      KEY: 'VALUE'
-    });
+    deepStrictEqual(normaliser.normalise(lambdaEvent).body, {KEY: 'VALUE'});
   });
 
   it('parses the request body as query string if content-type is not application/json', () => {
@@ -60,9 +53,7 @@ describe('Server LambdaRequestNormaliser', () => {
       body: 'KEY=VALUE'
     };
     const event = Object.assign({}, lambdaEvent, overwrite);
-    expect(normaliser.normalise(event).body).to.include({
-      KEY: 'VALUE'
-    });
+    deepStrictEqual(normaliser.normalise(event).body, Object.assign(Object.create(null), {KEY: 'VALUE'}));
   });
 
   function removeProperty(event: Event, propertyKey: string) {

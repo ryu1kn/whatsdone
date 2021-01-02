@@ -1,6 +1,5 @@
 import LambdaRequestHandler from '../lib/LambdaRequestHandler';
 import ServiceLocator from '../lib/ServiceLocator';
-import {expect} from 'chai';
 import {Event} from '../lib/models/Lambda';
 import ServiceFactory from '../lib/ServiceFactory';
 import {deepStrictEqual} from 'assert';
@@ -73,7 +72,7 @@ describe('Server LambdaRequestHandler', () => {
     const handler = new LambdaRequestHandler(requestProcessor);
 
     const response = await handler.handle(lambdaEvent);
-    expect(requestProcessErrorProcessor.process.args[0][0]).to.have.property('message', 'UNEXPECTED_ERROR');
+    deepStrictEqual(requestProcessErrorProcessor.process.args[0][0].message, 'UNEXPECTED_ERROR');
     deepStrictEqual(responseFormatter.format.args[0], ['ERROR_RESPONSE']);
     deepStrictEqual(response, 'LAMBDA_RESPONSE');
   });
