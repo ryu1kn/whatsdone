@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  test:
+    image: mozilla/sbt
+    build:
+      context: .
+      args:
+        OPENJDK_TAG: 8u232
+        SBT_VERSION: 1.1.0
+    volumes:
+      - ./src:/work/src
+      - ./build.sbt:/work/build.sbt
+      - ./project/build.properties:/work/project/build.properties
+      - ./project/gatling.sbt:/work/project/gatling.sbt
+      - ~/.ivy2:/root/.ivy2
+      - ~/.sbt:/root/.sbt
+    working_dir: /work
+    command: ["sbt", "gatling:test"]
