@@ -30,7 +30,7 @@
         "ClientName": "Webapp",
         "UserPoolId": {"Ref": "UserPool"},
         "RefreshTokenValidity": 1,
-        "SupportedIdentityProviders": "COGNITO",
+        "SupportedIdentityProviders": ["COGNITO"],
         "AllowedOAuthFlowsUserPoolClient": true,
         "AllowedOAuthFlows": ["code", "implicit"],
         "AllowedOAuthScopes": ["openid"],
