@@ -7,6 +7,9 @@
     },
     "IdentityPoolName": {
       "Type": "String"
+    },
+    "ExplicitAuthFlows": {
+      "Type": "CommaDelimitedList"
     }
   },
   "Resources": {
@@ -22,7 +25,8 @@
       "Type": "AWS::Cognito::UserPoolClient",
       "Properties": {
         "ClientName": "Webapp",
-        "UserPoolId": {"Ref": "UserPool"}
+        "UserPoolId": {"Ref": "UserPool"},
+        "ExplicitAuthFlows": {"Ref": "ExplicitAuthFlows"}
       }
     },
     "IdentityPool": {

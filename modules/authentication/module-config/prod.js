@@ -1,4 +1,5 @@
 const { deploymentOutputsBucket } = require('../../../config/common');
+const { explicitAuthFlows } = require('./common');
 const hostName = 'whatsdone';
 
 module.exports = {
@@ -6,5 +7,6 @@ module.exports = {
   identityPoolName: 'Whatsdone PROD',
   userPoolName: `${hostName}-prod`,
   userPoolDomain: hostName,
-  callbackUrls: `["https://${hostName}.ryuichi.io"]`
+  callbackUrls: `["https://${hostName}.ryuichi.io"]`,
+  explicitAuthFlows
 };
