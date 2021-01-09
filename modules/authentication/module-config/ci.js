@@ -7,6 +7,6 @@ module.exports = {
   identityPoolName: 'Whatsdone CI',
   userPoolName: hostName,
   userPoolDomain: hostName,
-  callbackUrls: `["https://${hostName}.ryuichi.io"]`,
+  callbackUrls: `https://${hostName}.ryuichi.io`,
   explicitAuthFlows: [explicitAuthFlows, 'ALLOW_USER_PASSWORD_AUTH'].join(',')
 };

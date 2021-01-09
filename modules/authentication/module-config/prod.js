@@ -7,6 +7,6 @@ module.exports = {
   identityPoolName: 'Whatsdone PROD',
   userPoolName: `${hostName}-prod`,
   userPoolDomain: hostName,
-  callbackUrls: `["https://${hostName}.ryuichi.io"]`,
+  callbackUrls: `https://${hostName}.ryuichi.io`,
   explicitAuthFlows
 };

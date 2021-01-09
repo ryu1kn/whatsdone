@@ -10,6 +10,9 @@
     },
     "ExplicitAuthFlows": {
       "Type": "CommaDelimitedList"
+    },
+    "CallbackUrls": {
+      "Type": "CommaDelimitedList"
     }
   },
   "Resources": {
@@ -26,7 +29,13 @@
       "Properties": {
         "ClientName": "Webapp",
         "UserPoolId": {"Ref": "UserPool"},
-        "ExplicitAuthFlows": {"Ref": "ExplicitAuthFlows"}
+        "RefreshTokenValidity": 1,
+        "SupportedIdentityProviders": "COGNITO",
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthFlows": ["code", "implicit"],
+        "AllowedOAuthScopes": ["openid"],
+        "ExplicitAuthFlows": {"Ref": "ExplicitAuthFlows"},
+        "CallbackURLs": {"Ref": "CallbackUrls"}
       }
     },
     "IdentityPool": {
@@ -47,9 +56,6 @@
   "Outputs": {
     "UserPoolId": {
       "Value": {"Ref": "UserPool"}
-    },
-    "UserPoolClientId": {
-      "Value": {"Ref": "UserPoolClient"}
     },
     "IdentityPoolId": {
       "Value": {"Ref": "IdentityPool"}

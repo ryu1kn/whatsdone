@@ -28,30 +28,8 @@ module.exports = {
       stackParams: {
         IdentityPoolName: {$ref: '#/_deploymentConfig/identityPoolName'},
         UserPoolName: {$ref: '#/_deploymentConfig/userPoolName'},
-        ExplicitAuthFlows: {$ref: '#/_deploymentConfig/explicitAuthFlows'}
-      }
-    },
-    {
-      id: 'configure-user-pool',
-      type: 'custom',
-      run: {
-        script: `aws cognito-idp update-user-pool-client \\
-                    --user-pool-id $USER_POOL_ID \\
-                    --client-id $USER_POOL_CLIENT_ID \\
-                    --refresh-token-validity 1 \\
-                    --supported-identity-providers "COGNITO" \\
-                    --allowed-o-auth-flows-user-pool-client \\
-                    --allowed-o-auth-flows "code" "implicit" \\
-                    --allowed-o-auth-scopes "openid" \\
-                    --callback-urls $CALLBACK_URLS \\
-                    --region $TASK_REGION
-                `,
-        envVars: {
-          TASK_REGION: {$ref: '#/_args/region'},
-          USER_POOL_ID: {$ref: '#/_deploymentOutputs/UserPoolId'},
-          USER_POOL_CLIENT_ID: {$ref: '#/_deploymentOutputs/UserPoolClientId'},
-          CALLBACK_URLS: {$ref: '#/_deploymentConfig/callbackUrls'}
-        }
+        ExplicitAuthFlows: {$ref: '#/_deploymentConfig/explicitAuthFlows'},
+        CallbackUrls: {$ref: '#/_deploymentConfig/callbackUrls'}
       }
     },
     {
