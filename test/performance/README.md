@@ -1,8 +1,6 @@
 
 # What's Done Load Test
 
-**NOTE: Performance test is not following the app change of using AWS Cognito for authentication**
-
 ## Prerequisite
 
 Gatling 2.x is not compatible Java version 9+; so run with Java 8.

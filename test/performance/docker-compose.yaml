@@ -14,5 +14,8 @@ services:
       - ./project/gatling.sbt:/work/project/gatling.sbt
       - ~/.ivy2:/root/.ivy2
       - ~/.sbt:/root/.sbt
+      - ~/.aws:/root/.aws
+    environment:
+      - AWS_PROFILE
     working_dir: /work
     command: ["sbt", "gatling:test"]
