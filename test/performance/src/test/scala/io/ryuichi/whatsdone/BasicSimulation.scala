@@ -5,10 +5,10 @@ import io.gatling.http.Predef._
 import io.ryuichi.whatsdone.helper.{TokenProvider, UserProvider}
 
 class BasicSimulation extends Simulation {
-  val REQUEST_NAME = "Get Dones"
+  private val REQUEST_NAME = "Get Dones"
   private val token = TokenProvider.token(UserProvider.testUser)
 
-  val httpConf = http
+  private val httpConf = http
     .baseURL("https://whatsdone-ci-api.ryuichi.io")
     .acceptHeader("application/json")
     .header(HttpHeaderNames.Authorization, token.authHeader)
@@ -16,7 +16,7 @@ class BasicSimulation extends Simulation {
     .acceptLanguageHeader("en-US,en;q=0.5")
     .acceptEncodingHeader("gzip, deflate")
 
-  val scn = scenario("BasicSimulation")
+  private val scn = scenario(this.getClass.getSimpleName)
     .exec(http(REQUEST_NAME).get("/dones"))
     .pause(5)
 
