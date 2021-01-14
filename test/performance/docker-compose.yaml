@@ -11,7 +11,7 @@ services:
       - ./src:/work/src
       - ./build.sbt:/work/build.sbt
       - ./project/build.properties:/work/project/build.properties
-      - ./project/gatling.sbt:/work/project/gatling.sbt
+      - ./project/plugins.sbt:/work/project/plugins.sbt
       - ~/.ivy2:/root/.ivy2
       - ~/.sbt:/root/.sbt
       - ~/.aws:/root/.aws

@@ -13,7 +13,7 @@ class BasicSimulation extends Simulation {
   private val token = new TokenProvider(cognitoResource).token(userProvider.testUser)
 
   private val httpConf = http
-    .baseURL("https://whatsdone-ci-api.ryuichi.io")
+    .baseUrl("https://whatsdone-ci-api.ryuichi.io")
     .acceptHeader("application/json")
     .header(HttpHeaderNames.Authorization, token.authHeader)
     .doNotTrackHeader("1")
