@@ -3,6 +3,18 @@
 
 ## Prerequisite
 
-```sh
-$ docker-compose run test
-```
+* Docker
+
+## Running test
+
+* With docker
+
+  ```sh
+  $ docker-compose run test
+  ```
+
+* Without docker
+
+  ```sh
+  $ sbt gatling:test
+  ```
