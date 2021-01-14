@@ -6,20 +6,20 @@ import software.amazon.awssdk.services.cognitoidentityprovider.model.{AuthFlowTy
 
 import scala.collection.JavaConverters.mapAsJavaMap
 
-object TokenProvider {
-  private val client = CognitoIdentityProviderClient.builder().region(Region.AP_SOUTHEAST_2).build()
-  private val clientId = "s6onvlog4hqsbcbmgmtthterd"
+class TokenProvider(cognito: CognitoResource) {
+  private val client = CognitoIdentityProviderClient.builder().region(cognito.region).build()
 
-  def token(user: LoginInfo): Token = {
-    val initiateAuthRequest = InitiateAuthRequest.builder()
-      .authFlow(AuthFlowType.USER_PASSWORD_AUTH)
-      .clientId(clientId)
-      .authParameters(mapAsJavaMap(Map("USERNAME" -> user.username, "PASSWORD" -> user.password)))
-      .build()
-    val result = client.initiateAuth(initiateAuthRequest).authenticationResult()
-    Token(result)
-  }
+  def token(user: LoginInfo): Token =
+    Token(client.initiateAuth(makeAuthRequest(user)).authenticationResult())
+
+  private def makeAuthRequest(user: LoginInfo) = InitiateAuthRequest.builder()
+    .authFlow(AuthFlowType.USER_PASSWORD_AUTH)
+    .clientId(cognito.clientId)
+    .authParameters(mapAsJavaMap(Map("USERNAME" -> user.username, "PASSWORD" -> user.password)))
+    .build()
 }
+
+case class CognitoResource(clientId: String, region: Region)
 
 case class Token(authResult: AuthenticationResultType) {
   val authHeader = s"${authResult.tokenType()} ${authResult.idToken()}"
