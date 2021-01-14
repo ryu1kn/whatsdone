@@ -2,11 +2,7 @@ version: '3'
 
 services:
   test:
-    build:
-      context: .
-      args:
-        OPENJDK_TAG: 8u232
-        SBT_VERSION: 1.1.0
+    image: mozilla/sbt:11.0.8_1.3.13
     volumes:
       - ./src:/work/src
       - ./build.sbt:/work/build.sbt
