@@ -4,7 +4,7 @@ import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient
 import software.amazon.awssdk.services.cognitoidentityprovider.model.{AuthFlowType, AuthenticationResultType, InitiateAuthRequest}
 
-import scala.collection.JavaConverters.mapAsJavaMap
+import scala.jdk.CollectionConverters.MapHasAsJava
 
 class TokenProvider(cognito: CognitoResource) {
   private val client = CognitoIdentityProviderClient.builder().region(cognito.region).build()
@@ -15,7 +15,7 @@ class TokenProvider(cognito: CognitoResource) {
   private def makeAuthRequest(user: LoginInfo) = InitiateAuthRequest.builder()
     .authFlow(AuthFlowType.USER_PASSWORD_AUTH)
     .clientId(cognito.clientId)
-    .authParameters(mapAsJavaMap(Map("USERNAME" -> user.username, "PASSWORD" -> user.password)))
+    .authParameters(Map("USERNAME" -> user.username, "PASSWORD" -> user.password).asJava)
     .build()
 }
 
