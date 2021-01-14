@@ -2,11 +2,15 @@ package io.ryuichi.whatsdone
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import io.ryuichi.whatsdone.helper.{TokenProvider, UserProvider}
+import io.ryuichi.whatsdone.helper.{CognitoResource, TokenProvider, UserProvider}
+import software.amazon.awssdk.regions.Region
 
 class BasicSimulation extends Simulation {
   private val REQUEST_NAME = "Get Dones"
-  private val token = TokenProvider.token(UserProvider.testUser)
+
+  private val userProvider = new UserProvider("/whatsdone/ci/e2e-test")
+  private val cognitoResource = CognitoResource("s6onvlog4hqsbcbmgmtthterd", Region.AP_SOUTHEAST_2)
+  private val token = new TokenProvider(cognitoResource).token(userProvider.testUser)
 
   private val httpConf = http
     .baseURL("https://whatsdone-ci-api.ryuichi.io")
@@ -23,7 +27,7 @@ class BasicSimulation extends Simulation {
   setUp(
     scn.inject(atOnceUsers(100)).protocols(httpConf)
   ).assertions(
-    details(REQUEST_NAME).responseTime.mean.lt(2000),
+    details(REQUEST_NAME).responseTime.mean.lt(15000),
     details(REQUEST_NAME).allRequests.percent.is(100),
     details(REQUEST_NAME).failedRequests.percent.is(0)
   )
