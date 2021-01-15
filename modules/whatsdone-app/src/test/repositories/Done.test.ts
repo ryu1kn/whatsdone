@@ -3,12 +3,23 @@ import DoneRepository from '../../lib/repositories/Done';
 import ServiceFactory from '../../lib/ServiceFactory';
 import {deepStrictEqual} from 'assert';
 import * as td from 'testdouble';
+import {ObjectMap} from '../../lib/models/Collection';
 import sinon = require('sinon');
 
+const clean = (obj: ObjectMap<any>) =>
+  Object.keys(obj).reduce((res, currentKey) => {
+    const currentValue = obj[currentKey];
+    const newVal = typeof currentValue !== 'undefined' ? {[currentKey]: currentValue} : {};
+    return {...res, ...newVal};
+  }, {});
+
 describe('Server DoneRepository', () => {
+  const doneId = 'DONE_ID';
+  const userId = 'USER_ID';
   const doneItem = {
     date: '2017-08-14T12:26:26.227Z',
-    doneThing: 'DONE_THING'
+    doneThing: 'DONE_THING',
+    userId
   };
   const doneItemWithMonth = {...doneItem, month: '2017-08'};
 
@@ -26,7 +37,7 @@ describe('Server DoneRepository', () => {
   it('records a new done with its month and returns it except "month"', async () => {
     const doneDynamoTableClient = {
       put: td.when(td.func()(doneItemWithMonth)).thenResolve('DONE_ID'),
-      getById: td.when(td.func()('DONE_ID')).thenResolve(doneItemWithMonth)
+      getById: td.when(td.func()(doneId)).thenResolve(doneItemWithMonth)
     };
     initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
@@ -37,47 +48,38 @@ describe('Server DoneRepository', () => {
   });
 
   it('remove a done if the requesting user is the owner', async () => {
-    const matchingDone = {userId: 'USER_ID', DATA: '..'};
     const doneDynamoTableClient = {
-      getById: sinon.stub().returns(Promise.resolve(matchingDone)),
-      delete: sinon.spy()
+      getById: td.when(td.func()(doneId)).thenResolve(doneItemWithMonth),
+      delete: td.func()
     };
     initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
 
-    await repository.remove('DONE_ID', 'USER_ID');
-    deepStrictEqual(doneDynamoTableClient.getById.args[0], ['DONE_ID']);
-    deepStrictEqual(doneDynamoTableClient.delete.args[0], ['DONE_ID']);
+    await repository.remove(doneId, userId);
+
+    td.verify(doneDynamoTableClient.delete(doneId));
   });
 
   it('updates a done if the requesting user is the owner', async () => {
-    const matchingDone = {
-      userId: 'USER_ID',
-      date: 'DATE',
-      doneThing: 'DONE_THING',
-      NON_UPDATABLE_KEY: '..'
-    };
+    const matchingDone = {...doneItemWithMonth, NON_UPDATABLE_KEY: '..'};
     const doneDynamoTableClient = {
-      getById: sinon.stub().returns(Promise.resolve(matchingDone)),
-      update: sinon.stub().returns(Promise.resolve())
+      getById: td.when(td.func()(doneId)).thenResolve(matchingDone),
+      update: td.func()
     };
     initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
 
     const newData = {
-      date: '2017-08-14T12:26:26.227Z',
+      ...doneItem,
       doneThing: 'NEW_DONE_THING',
       NON_UPDATABLE_KEY: 'NEW ..'
     };
     await repository.update('DONE_ID', 'USER_ID', newData);
-    deepStrictEqual(doneDynamoTableClient.getById.args[0], ['DONE_ID']);
-    const updateArgs = doneDynamoTableClient.update.args[0];
-    deepStrictEqual(updateArgs[0], 'DONE_ID');
-    deepStrictEqual(updateArgs[1], {
-      date: '2017-08-14T12:26:26.227Z',
-      month: '2017-08',
-      doneThing: 'NEW_DONE_THING'
-    });
+
+    td.verify(doneDynamoTableClient.update(
+      doneId,
+      clean({...doneItemWithMonth, doneThing: 'NEW_DONE_THING', userId: undefined})
+    ));
   });
 
   it('updates "month" field if date is going to be updated', async () => {
