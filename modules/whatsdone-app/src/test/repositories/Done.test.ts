@@ -15,6 +15,7 @@ describe('Server DoneRepository', () => {
     userId
   };
   const doneItemWithMonth = {...doneItem, month: '2017-08'};
+  const doneItemSaved = {...doneItemWithMonth, doneId};
 
   it('reads done items from DB', async () => {
     const doneQueryHelper = {
@@ -30,19 +31,19 @@ describe('Server DoneRepository', () => {
   it('records a new done with its month and returns it except "month"', async () => {
     const doneDynamoTableClient = td.instance(DynamoTableClient);
     td.when(doneDynamoTableClient.put(doneItemWithMonth)).thenResolve(doneId);
-    td.when(doneDynamoTableClient.getById(doneId)).thenResolve(doneItemWithMonth);
+    td.when(doneDynamoTableClient.getById(doneId)).thenResolve(doneItemSaved);
 
     initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
 
     const newDone = await repository.write(doneItem);
 
-    deepStrictEqual(newDone, doneItem);
+    deepStrictEqual(newDone, _omit(doneItemSaved, 'month'));
   });
 
   it('remove a done if the requesting user is the owner', async () => {
     const doneDynamoTableClient = td.instance(DynamoTableClient);
-    td.when(doneDynamoTableClient.getById(doneId)).thenResolve(doneItemWithMonth);
+    td.when(doneDynamoTableClient.getById(doneId)).thenResolve(doneItemSaved);
 
     initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
@@ -54,7 +55,7 @@ describe('Server DoneRepository', () => {
 
   it('updates a done if the requesting user is the owner', async () => {
     const doneDynamoTableClient = td.instance(DynamoTableClient);
-    td.when(doneDynamoTableClient.getById(doneId)).thenResolve({...doneItemWithMonth, NON_UPDATABLE_KEY: '..'});
+    td.when(doneDynamoTableClient.getById(doneId)).thenResolve({...doneItemSaved, NON_UPDATABLE_KEY: '..'});
 
     initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
@@ -72,6 +73,7 @@ describe('Server DoneRepository', () => {
     ));
   });
 
+  // TODO: Revise the test data
   it('updates "month" field if date is going to be updated', async () => {
     const matchingDone = {
       userId: 'USER_ID',
