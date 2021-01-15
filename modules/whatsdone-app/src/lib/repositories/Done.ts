@@ -1,11 +1,10 @@
-
 import _pick = require('lodash.pick');
 import _omit = require('lodash.omit');
 import ServiceLocator from '../ServiceLocator';
 import * as utils from './utils';
 import DynamoTableClient from './DynamoTableClient';
 import DoneQueryHelper, {DoneQueryResult} from './done-helpers/query';
-import {DoneDiff, UserDone} from '../models/Done';
+import {DoneDiff, DoneInDb, UserDone} from '../models/Done';
 
 const MODIFIABLE_FIELDS = ['date', 'doneThing'];
 
@@ -22,14 +21,14 @@ export default class DoneRepository {
     return this._doneQueryHelper.query(nextKey);
   }
 
-  async write(done: UserDone) {
+  async write(done: UserDone): Promise<Omit<DoneInDb, 'month'>> {
     const finalDone = utils.getDoneWithMonth(done);
     const id = await this._doneDynamoTableClient.put(finalDone);
     const doneWithId = await this._doneDynamoTableClient.getById(id);
     return _omit(doneWithId, 'month');
   }
 
-  async remove(id: string, currentUserId: string) {
+  async remove(id: string, currentUserId: string): Promise<void> {
     const found = await this._doneDynamoTableClient.getById(id);
     if (found === null) {
       throw new Error('[NotFound]: Done item not found');
@@ -40,7 +39,7 @@ export default class DoneRepository {
     return this._doneDynamoTableClient.delete(id);
   }
 
-  async update(id: string, currentUserId: string, newData: DoneDiff) {
+  async update(id: string, currentUserId: string, newData: DoneDiff): Promise<Omit<DoneInDb, 'month'>> {
     const found = await this._doneDynamoTableClient.getById(id);
     if (found === null) {
       throw new Error('[NotFound]: Done item not found');
