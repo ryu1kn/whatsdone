@@ -1,4 +1,3 @@
-
 import AWS = require('aws-sdk');
 import ServiceLocator from '../ServiceLocator';
 import WrappedError from '../WrappedError';
@@ -18,7 +17,7 @@ export default class DynamoTableClient {
     this._idName = idName;
   }
 
-  async getById(id: string): Promise<ObjectMap<any>> {
+  async getById(id: string): Promise<DoneInDb> {
     const params = {
       TableName: this.getTableName(),
       Key: this.toIdObject(id)
@@ -31,7 +30,7 @@ export default class DynamoTableClient {
     }
   }
 
-  async put(newData: ObjectMap<any>) {
+  async put(newData: ObjectMap<any>): Promise<string> {
     const id = this._uuidGenerator.generate();
     const params = {
       TableName: this.getTableName(),
@@ -45,19 +44,19 @@ export default class DynamoTableClient {
     }
   }
 
-  async delete(id: string) {
+  async delete(id: string): Promise<void> {
     const params = {
       TableName: this.getTableName(),
       Key: this.toIdObject(id)
     };
     try {
-      return await this._docClient.delete(params).promise();
+      await this._docClient.delete(params).promise();
     } catch (e) {
       throw new WrappedError(e, params);
     }
   }
 
-  async update(id: string, newData: ObjectMap<any>) {
+  async update(id: string, newData: ObjectMap<any>): Promise<DoneInDb> {
     const params = {
       TableName: this.getTableName(),
       Key: this.toIdObject(id),

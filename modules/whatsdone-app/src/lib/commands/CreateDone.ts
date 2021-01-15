@@ -1,6 +1,6 @@
 import ServiceLocator from '../ServiceLocator';
 import DoneRepository from '../repositories/Done';
-import {Done} from '../models/Done';
+import {Done, DoneInDb} from '../models/Done';
 
 export default class CreateDoneCommand {
   private _doneRepository: DoneRepository;
@@ -9,7 +9,7 @@ export default class CreateDoneCommand {
     this._doneRepository = ServiceLocator.doneRepository;
   }
 
-  async execute(data: Done, userId: string) {
+  async execute(data: Done, userId: string): Promise<Omit<DoneInDb, 'month'>> {
     const writeParams = Object.assign({}, data, {userId});
     return this._doneRepository.write(writeParams);
   }
