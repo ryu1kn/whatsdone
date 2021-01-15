@@ -2,9 +2,15 @@ import ServiceLocator from '../../lib/ServiceLocator';
 import DoneRepository from '../../lib/repositories/Done';
 import ServiceFactory from '../../lib/ServiceFactory';
 import {deepStrictEqual} from 'assert';
+import * as td from 'testdouble';
 import sinon = require('sinon');
 
 describe('Server DoneRepository', () => {
+  const doneItem = {
+    date: '2017-08-14T12:26:26.227Z',
+    doneThing: 'DONE_THING'
+  };
+  const doneItemWithMonth = {...doneItem, month: '2017-08'};
 
   it('reads done items from DB', async () => {
     const doneQueryHelper = {
@@ -17,78 +23,17 @@ describe('Server DoneRepository', () => {
     deepStrictEqual(result, 'QUERY_RESULT');
   });
 
-  it('record a new done item', async () => {
+  it('records a new done with its month and returns it except "month"', async () => {
     const doneDynamoTableClient = {
-      put: sinon.stub().returns(Promise.resolve('DONE_ID')),
-      getById: () => {}
+      put: td.when(td.func()(doneItemWithMonth)).thenResolve('DONE_ID'),
+      getById: td.when(td.func()('DONE_ID')).thenResolve(doneItemWithMonth)
     };
     initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
 
-    const done = {
-      date: '2017-08-14T12:26:26.227Z',
-      doneThing: 'DONE_THING'
-    };
-    await repository.write(done);
-    deepStrictEqual(doneDynamoTableClient.put.args[0][0], {
-      date: '2017-08-14T12:26:26.227Z',
-      month: '2017-08',
-      doneThing: 'DONE_THING'
-    });
-  });
+    const newDone = await repository.write(doneItem);
 
-  it('gets the newly created done item back', async () => {
-    const doneDynamoTableClient = {
-      put: () => Promise.resolve('DONE_ID'),
-      getById: sinon.stub().returns(Promise.resolve({DATA: '..'}))
-    };
-    initialiseServiceLocator({}, doneDynamoTableClient);
-    const repository = new DoneRepository();
-    const done = {
-      date: '2017-08-14T12:26:26.227Z',
-      doneThing: 'DONE_THING'
-    };
-    const newDone = await repository.write(done);
-    deepStrictEqual(newDone, {DATA: '..'});
-    deepStrictEqual(doneDynamoTableClient.getById.args[0], ['DONE_ID']);
-  });
-
-  it('adds "month" fields when it saves a done', async () => {
-    const doneDynamoTableClient = {
-      put: sinon.stub().returns(Promise.resolve('DONE_ID')),
-      getById: () => Promise.resolve()
-    };
-    initialiseServiceLocator({}, doneDynamoTableClient);
-    const repository = new DoneRepository();
-
-    const done = {
-      date: '2017-08-14T12:26:26.227Z',
-      doneThing: 'DONE_THING'
-    };
-    await repository.write(done);
-    deepStrictEqual(doneDynamoTableClient.put.args[0], [{
-      date: '2017-08-14T12:26:26.227Z',
-      doneThing: 'DONE_THING',
-      month: '2017-08'
-    }]);
-  });
-
-  it('does not return "month" field when returning created done', async () => {
-    const doneDynamoTableClient = {
-      put: () => Promise.resolve('DONE_ID'),
-      getById: sinon.stub().returns(Promise.resolve({
-        DATA: '..',
-        month: 'MONTH'
-      }))
-    };
-    initialiseServiceLocator({}, doneDynamoTableClient);
-    const repository = new DoneRepository();
-    const done = {
-      date: '2017-08-14T12:26:26.227Z',
-      doneThing: 'DONE_THING'
-    };
-    const newDone = await repository.write(done);
-    deepStrictEqual(newDone, {DATA: '..'});
+    deepStrictEqual(newDone, doneItem);
   });
 
   it('remove a done if the requesting user is the owner', async () => {
