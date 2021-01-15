@@ -4,7 +4,6 @@ import ServiceFactory from '../../lib/ServiceFactory';
 import {deepStrictEqual} from 'assert';
 import * as td from 'testdouble';
 import DynamoTableClient from '../../lib/repositories/DynamoTableClient';
-import sinon = require('sinon');
 import _omit = require('lodash.omit');
 
 describe('Server DoneRepository', () => {
@@ -79,10 +78,14 @@ describe('Server DoneRepository', () => {
       date: 'DATE',
       doneThing: 'DONE_THING'
     };
-    const doneDynamoTableClient = {
-      getById: sinon.stub().returns(Promise.resolve(matchingDone)),
-      update: sinon.stub().returns(Promise.resolve())
-    };
+    const doneDynamoTableClient = td.instance(DynamoTableClient);
+    td.when(doneDynamoTableClient.getById(doneId)).thenResolve(matchingDone);
+    td.when(doneDynamoTableClient.update(doneId, {
+      date: '2017-08-14T12:26:26.227Z',
+      month: '2017-08',
+      doneThing: 'NEW_DONE_THING'
+    })).thenResolve({...doneItemWithMonth, doneThing: 'NEW_DONE_THING'});
+
     initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
 
@@ -90,37 +93,12 @@ describe('Server DoneRepository', () => {
       date: '2017-08-14T12:26:26.227Z',
       doneThing: 'NEW_DONE_THING'
     };
-    await repository.update('DONE_ID', 'USER_ID', newData);
-    const newDone = doneDynamoTableClient.update.args[0][1];
-    deepStrictEqual(newDone, {
-      date: '2017-08-14T12:26:26.227Z',
-      month: '2017-08',
-      doneThing: 'NEW_DONE_THING'
-    });
+    const result = await repository.update('DONE_ID', 'USER_ID', newData);
+
+    deepStrictEqual(result, {...doneItem, doneThing: 'NEW_DONE_THING'});
   });
 
-  it('does not include "month" in the update response', async () => {
-    const matchingDone = {
-      userId: 'USER_ID',
-      date: 'DATE',
-      doneThing: 'DONE_THING'
-    };
-    const doneDynamoTableClient = {
-      getById: sinon.stub().returns(Promise.resolve(matchingDone)),
-      update: sinon.stub().returns(Promise.resolve({
-        DATA: '..',
-        month: 'MONTH'
-      }))
-    };
-    initialiseServiceLocator({}, doneDynamoTableClient);
-    const repository = new DoneRepository();
-
-    const newData = {doneThing: 'NEW_DONE_THING'};
-    const done = await repository.update('DONE_ID', 'USER_ID', newData);
-    deepStrictEqual(done, {DATA: '..'});
-  });
-
-  let initialiseServiceLocator = function (doneQueryHelper: {query: any} | {}, doneDynamoTableClient?: {getById: any, update?: any, delete?: any, put?: any}) {
+  let initialiseServiceLocator = function (doneQueryHelper: {query: any} | {}, doneDynamoTableClient?: DynamoTableClient) {
     ServiceLocator.load({
       createDoneDynamoTableClient: () => doneDynamoTableClient,
       createDoneQueryHelper: () => doneQueryHelper
