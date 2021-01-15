@@ -3,15 +3,8 @@ import DoneRepository from '../../lib/repositories/Done';
 import ServiceFactory from '../../lib/ServiceFactory';
 import {deepStrictEqual} from 'assert';
 import * as td from 'testdouble';
-import {ObjectMap} from '../../lib/models/Collection';
 import sinon = require('sinon');
-
-const clean = (obj: ObjectMap<any>) =>
-  Object.keys(obj).reduce((res, currentKey) => {
-    const currentValue = obj[currentKey];
-    const newVal = typeof currentValue !== 'undefined' ? {[currentKey]: currentValue} : {};
-    return {...res, ...newVal};
-  }, {});
+import _omit = require('lodash.omit');
 
 describe('Server DoneRepository', () => {
   const doneId = 'DONE_ID';
@@ -78,7 +71,7 @@ describe('Server DoneRepository', () => {
 
     td.verify(doneDynamoTableClient.update(
       doneId,
-      clean({...doneItemWithMonth, doneThing: 'NEW_DONE_THING', userId: undefined})
+      _omit({...doneItemWithMonth, doneThing: 'NEW_DONE_THING'}, 'userId')
     ));
   });
 
