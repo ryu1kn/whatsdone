@@ -25,7 +25,7 @@ class BasicSimulation extends Simulation {
     .pause(5)
 
   setUp(
-    scn.inject(atOnceUsers(100)).protocols(httpConf)
+    scn.inject(atOnceUsers(5)).protocols(httpConf)
   ).assertions(
     details(REQUEST_NAME).responseTime.mean.lt(15000),
     details(REQUEST_NAME).allRequests.percent.is(100),
