@@ -10,8 +10,6 @@ export default class CreateDoneCommand {
   }
 
   async execute(data: Done, userId: string): Promise<Omit<DoneInDb, 'month'>> {
-    const writeParams = Object.assign({}, data, {userId});
-    return this._doneRepository.write(writeParams);
+    return this._doneRepository.write({...data, userId});
   }
-
 }
