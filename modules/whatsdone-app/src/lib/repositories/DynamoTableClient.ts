@@ -1,7 +1,6 @@
 import AWS = require('aws-sdk');
 import ServiceLocator from '../ServiceLocator';
 import WrappedError from '../WrappedError';
-import {DoneInDb} from '../models/Done';
 import {ObjectMap} from '../models/Collection';
 
 export default class DynamoTableClient {
@@ -17,14 +16,14 @@ export default class DynamoTableClient {
     this._idName = idName;
   }
 
-  async getById(id: string): Promise<DoneInDb> {
+  async getById(id: string): Promise<ObjectMap<any>> {
     const params = {
       TableName: this.getTableName(),
       Key: this.toIdObject(id)
     };
     try {
       const response = await this._docClient.get(params).promise();
-      return response.Item as DoneInDb;
+      return response.Item as ObjectMap<any>;
     } catch (e) {
       throw new WrappedError(e, params);
     }
@@ -56,7 +55,7 @@ export default class DynamoTableClient {
     }
   }
 
-  async update(id: string, newData: ObjectMap<any>): Promise<DoneInDb> {
+  async update(id: string, newData: ObjectMap<any>): Promise<ObjectMap<any>> {
     const params = {
       TableName: this.getTableName(),
       Key: this.toIdObject(id),
@@ -87,5 +86,4 @@ export default class DynamoTableClient {
       return result;
     }, {});
   }
-
 }

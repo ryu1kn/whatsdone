@@ -24,7 +24,7 @@ export default class DoneRepository {
   async write(done: UserDone): Promise<Omit<DoneInDb, 'month'>> {
     const finalDone = utils.getDoneWithMonth(done);
     const id = await this._doneDynamoTableClient.put(finalDone);
-    const doneWithId = await this._doneDynamoTableClient.getById(id);
+    const doneWithId = await this._doneDynamoTableClient.getById(id) as DoneInDb;
     return _omit(doneWithId, 'month');
   }
 
@@ -49,7 +49,7 @@ export default class DoneRepository {
     }
     const doneOverwrite = _pick(newData, MODIFIABLE_FIELDS);
     const finalOverwrite = utils.getDoneWithMonth(doneOverwrite);
-    const done = await this._doneDynamoTableClient.update(id, finalOverwrite);
+    const done = await this._doneDynamoTableClient.update(id, finalOverwrite) as DoneInDb;
     return _omit(done, 'month');
   }
 
