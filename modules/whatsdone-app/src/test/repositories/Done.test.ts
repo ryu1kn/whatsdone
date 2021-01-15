@@ -3,6 +3,7 @@ import DoneRepository from '../../lib/repositories/Done';
 import ServiceFactory from '../../lib/ServiceFactory';
 import {deepStrictEqual} from 'assert';
 import * as td from 'testdouble';
+import DynamoTableClient from '../../lib/repositories/DynamoTableClient';
 import sinon = require('sinon');
 import _omit = require('lodash.omit');
 
@@ -28,10 +29,10 @@ describe('Server DoneRepository', () => {
   });
 
   it('records a new done with its month and returns it except "month"', async () => {
-    const doneDynamoTableClient = {
-      put: td.when(td.func()(doneItemWithMonth)).thenResolve('DONE_ID'),
-      getById: td.when(td.func()(doneId)).thenResolve(doneItemWithMonth)
-    };
+    const doneDynamoTableClient = td.instance(DynamoTableClient);
+    td.when(doneDynamoTableClient.put(doneItemWithMonth)).thenResolve(doneId);
+    td.when(doneDynamoTableClient.getById(doneId)).thenResolve(doneItemWithMonth);
+
     initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
 
@@ -41,10 +42,9 @@ describe('Server DoneRepository', () => {
   });
 
   it('remove a done if the requesting user is the owner', async () => {
-    const doneDynamoTableClient = {
-      getById: td.when(td.func()(doneId)).thenResolve(doneItemWithMonth),
-      delete: td.func()
-    };
+    const doneDynamoTableClient = td.instance(DynamoTableClient);
+    td.when(doneDynamoTableClient.getById(doneId)).thenResolve(doneItemWithMonth);
+
     initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
 
@@ -54,11 +54,9 @@ describe('Server DoneRepository', () => {
   });
 
   it('updates a done if the requesting user is the owner', async () => {
-    const matchingDone = {...doneItemWithMonth, NON_UPDATABLE_KEY: '..'};
-    const doneDynamoTableClient = {
-      getById: td.when(td.func()(doneId)).thenResolve(matchingDone),
-      update: td.func()
-    };
+    const doneDynamoTableClient = td.instance(DynamoTableClient);
+    td.when(doneDynamoTableClient.getById(doneId)).thenResolve({...doneItemWithMonth, NON_UPDATABLE_KEY: '..'});
+
     initialiseServiceLocator({}, doneDynamoTableClient);
     const repository = new DoneRepository();
 
