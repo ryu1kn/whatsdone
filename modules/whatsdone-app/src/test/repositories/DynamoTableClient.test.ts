@@ -1,88 +1,76 @@
 import DynamoTableClient from '../../lib/repositories/DynamoTableClient';
 import ServiceLocator from '../../lib/ServiceLocator';
 import ServiceFactory from '../../lib/ServiceFactory';
-import {deepStrictEqual} from 'assert';
+import {deepStrictEqual, doesNotReject} from 'assert';
 import {awsSdkResponse} from '../helper/AwsHelper';
-import sinon = require('sinon');
+import * as td from 'testdouble';
+import {DynamoDB} from 'aws-sdk';
 
 describe('Server DynamoTableClient', () => {
+  const dynamoDBDocumentClient = td.instance(DynamoDB.DocumentClient);
+  td.when(dynamoDBDocumentClient.get({TableName: 'TABLE_NAME', Key: {id: 'ITEM_ID'}})).thenReturn(awsSdkResponse({Item: 'ITEM'}));
+  td.when(dynamoDBDocumentClient.put({
+    TableName: 'TABLE_NAME',
+    Item: {
+      DATA: '..',
+      id: 'UUID'
+    }
+  })).thenReturn(awsSdkResponse());
+  td.when(dynamoDBDocumentClient.delete({
+    TableName: 'TABLE_NAME',
+    Key: {id: 'ITEM_ID'}
+  })).thenReturn(awsSdkResponse());
+  td.when(dynamoDBDocumentClient.update({
+    TableName: 'TABLE_NAME',
+    Key: {id: 'ITEM_ID'},
+    AttributeUpdates: {
+      KEY_1: {
+        Action: 'PUT',
+        Value: 'VALUE_1'
+      },
+      KEY_2: {
+        Action: 'PUT',
+        Value: 'VALUE_2'
+      }
+    }
+  })).thenReturn(awsSdkResponse());
 
   it('finds one item by ID', async () => {
-    const dynamoDBDocumentClient = {
-      get: sinon.stub().returns(awsSdkResponse({Item: 'ITEM'}))
-    };
     initialiseServiceLocator({dynamoDBDocumentClient});
     const client = new DynamoTableClient('TABLE_NAME', 'id');
+
     const item = await client.getById('ITEM_ID');
+
     deepStrictEqual(item, 'ITEM');
-    deepStrictEqual(dynamoDBDocumentClient.get.args[0], [{
-      TableName: 'TABLE_NAME',
-      Key: {id: 'ITEM_ID'}
-    }]);
   });
 
   it('stores a new item', async () => {
-    const dynamoDBDocumentClient = {
-      put: sinon.stub().returns(awsSdkResponse())
-    };
     initialiseServiceLocator({
       dynamoDBDocumentClient,
       uuidGenerator: {generate: () => 'UUID'}
     });
     const client = new DynamoTableClient('TABLE_NAME', 'id');
-    const newItem = {DATA: '..'};
-    const newId = await client.put(newItem);
+
+    const newId = await client.put({DATA: '..'});
+
     deepStrictEqual(newId, 'UUID');
-    deepStrictEqual(dynamoDBDocumentClient.put.args[0], [{
-      TableName: 'TABLE_NAME',
-      Item: {
-        DATA: '..',
-        id: 'UUID'
-      }
-    }]);
   });
 
   it('deletes one item', async () => {
-    const dynamoDBDocumentClient = {
-      delete: sinon.stub().returns(awsSdkResponse())
-    };
     initialiseServiceLocator({dynamoDBDocumentClient});
     const client = new DynamoTableClient('TABLE_NAME', 'id');
-    await client.delete('ITEM_ID');
-    deepStrictEqual(dynamoDBDocumentClient.delete.args[0], [{
-      TableName: 'TABLE_NAME',
-      Key: {id: 'ITEM_ID'}
-    }]);
+
+    await doesNotReject(client.delete('ITEM_ID'));
   });
 
   it('updates one item', async () => {
-    const dynamoDBDocumentClient = {
-      update: sinon.stub().returns(awsSdkResponse()),
-      get: sinon.stub().returns(awsSdkResponse({Item: 'ITEM'}))
-    };
     initialiseServiceLocator({dynamoDBDocumentClient});
     const client = new DynamoTableClient('TABLE_NAME', 'id');
     const newData = {KEY_1: 'VALUE_1', KEY_2: 'VALUE_2'};
+
     const item = await client.update('ITEM_ID', newData);
+
     deepStrictEqual(item, 'ITEM');
-    deepStrictEqual(dynamoDBDocumentClient.update.args[0], [{
-      TableName: 'TABLE_NAME',
-      Key: {id: 'ITEM_ID'},
-      AttributeUpdates: {
-        KEY_1: {
-          Action: 'PUT',
-          Value: 'VALUE_1'
-        },
-        KEY_2: {
-          Action: 'PUT',
-          Value: 'VALUE_2'
-        }
-      }
-    }]);
-    deepStrictEqual(dynamoDBDocumentClient.get.args[0], [{
-      TableName: 'TABLE_NAME',
-      Key: {id: 'ITEM_ID'}
-    }]);
   });
 
   function initialiseServiceLocator({dynamoDBDocumentClient = {}, uuidGenerator = {}} = {}) {
