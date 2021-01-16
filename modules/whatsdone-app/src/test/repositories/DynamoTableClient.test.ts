@@ -2,15 +2,14 @@ import DynamoTableClient from '../../lib/repositories/DynamoTableClient';
 import ServiceLocator from '../../lib/ServiceLocator';
 import ServiceFactory from '../../lib/ServiceFactory';
 import {deepStrictEqual} from 'assert';
+import {awsSdkResponse} from '../helper/AwsHelper';
 import sinon = require('sinon');
 
 describe('Server DynamoTableClient', () => {
 
   it('finds one item by ID', async () => {
     const dynamoDBDocumentClient = {
-      get: sinon.stub().returns({
-        promise: () => Promise.resolve({Item: 'ITEM'})
-      })
+      get: sinon.stub().returns(awsSdkResponse({Item: 'ITEM'}))
     };
     initialiseServiceLocator({dynamoDBDocumentClient});
     const client = new DynamoTableClient('TABLE_NAME', 'id');
@@ -24,9 +23,7 @@ describe('Server DynamoTableClient', () => {
 
   it('stores a new item', async () => {
     const dynamoDBDocumentClient = {
-      put: sinon.stub().returns({
-        promise: () => Promise.resolve()
-      })
+      put: sinon.stub().returns(awsSdkResponse())
     };
     initialiseServiceLocator({
       dynamoDBDocumentClient,
@@ -47,9 +44,7 @@ describe('Server DynamoTableClient', () => {
 
   it('deletes one item', async () => {
     const dynamoDBDocumentClient = {
-      delete: sinon.stub().returns({
-        promise: () => Promise.resolve()
-      })
+      delete: sinon.stub().returns(awsSdkResponse())
     };
     initialiseServiceLocator({dynamoDBDocumentClient});
     const client = new DynamoTableClient('TABLE_NAME', 'id');
@@ -62,12 +57,8 @@ describe('Server DynamoTableClient', () => {
 
   it('updates one item', async () => {
     const dynamoDBDocumentClient = {
-      update: sinon.stub().returns({
-        promise: () => Promise.resolve()
-      }),
-      get: sinon.stub().returns({
-        promise: () => Promise.resolve({Item: 'ITEM'})
-      })
+      update: sinon.stub().returns(awsSdkResponse()),
+      get: sinon.stub().returns(awsSdkResponse({Item: 'ITEM'}))
     };
     initialiseServiceLocator({dynamoDBDocumentClient});
     const client = new DynamoTableClient('TABLE_NAME', 'id');

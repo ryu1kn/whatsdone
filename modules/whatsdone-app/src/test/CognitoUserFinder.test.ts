@@ -6,6 +6,7 @@ import {AWSError, CognitoIdentityServiceProvider} from 'aws-sdk';
 import {PromiseResult} from 'aws-sdk/lib/request';
 import {ListUsersResponse} from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import {deepStrictEqual} from 'assert';
+import {awsSdkResponse} from './helper/AwsHelper';
 
 describe('Server CognitoUserFinder', () => {
 
@@ -22,9 +23,7 @@ describe('Server CognitoUserFinder', () => {
       UserPoolId: 'USER_POOL_ID',
       AttributesToGet: [],
       Filter: 'sub = "ID"'
-    })).thenReturn({
-      promise: () => Promise.resolve({Users: ['USER_1']} as unknown as PromiseResult<ListUsersResponse, AWSError>)
-    });
+    })).thenReturn(awsSdkResponse({Users: ['USER_1']} as unknown as PromiseResult<ListUsersResponse, AWSError>));
     return cognito;
   }
 
