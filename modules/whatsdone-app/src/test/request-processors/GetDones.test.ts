@@ -1,11 +1,10 @@
 import GetDonesRequestProcessor from '../../lib/request-processors/GetDones';
 import ServiceLocator from '../../lib/ServiceLocator';
-import {throwError} from '../helper/TestUtils';
 import ServiceFactory from '../../lib/ServiceFactory';
 import {request, session} from '../helper/NormalisedRequestData';
 import * as td from 'testdouble';
 import GetDonesCommand from '../../lib/commands/GetDones';
-import {deepStrictEqual} from 'assert';
+import {deepStrictEqual, rejects} from 'assert';
 
 describe('Server GetDonesRequestProcessor', () => {
   const commandOutput = {
@@ -37,14 +36,10 @@ describe('Server GetDonesRequestProcessor', () => {
     });
   });
 
-  it('propagates error', () => {
-    const req = Object.assign({}, request, {query: {nextKey: 'CAUSE_ERROR'}});
-    return processor.process(req, session).then(
-      throwError,
-      e => {
-        deepStrictEqual(e.message, 'UNEXPECTED_ERROR');
-      }
-    );
+  it('propagates error', async () => {
+    const req = {...request, query: {nextKey: 'CAUSE_ERROR'}};
+
+    await rejects(processor.process(req, session), new Error('UNEXPECTED_ERROR'));
   });
 });
 
