@@ -29,11 +29,11 @@ describe('Server DoneRepository', () => {
   });
 
   it('records a new done with its month and returns it except "month"', async () => {
-    const doneDynamoTableClient = td.instance(DynamoTableClient);
-    td.when(doneDynamoTableClient.put(doneItemWithMonth)).thenResolve(doneId);
-    td.when(doneDynamoTableClient.getById(doneId)).thenResolve(doneItemSaved);
+    const dynamoTableClient = td.instance(DynamoTableClient);
+    td.when(dynamoTableClient.put(doneItemWithMonth)).thenResolve(doneId);
+    td.when(dynamoTableClient.getById(doneId)).thenResolve(doneItemSaved);
 
-    initialiseServiceLocator({}, doneDynamoTableClient);
+    initialiseServiceLocator({}, dynamoTableClient);
     const repository = new DoneRepository();
 
     const newDone = await repository.write(doneItem);
@@ -42,22 +42,22 @@ describe('Server DoneRepository', () => {
   });
 
   it('remove a done if the requesting user is the owner', async () => {
-    const doneDynamoTableClient = td.instance(DynamoTableClient);
-    td.when(doneDynamoTableClient.getById(doneId)).thenResolve(doneItemSaved);
+    const dynamoTableClient = td.instance(DynamoTableClient);
+    td.when(dynamoTableClient.getById(doneId)).thenResolve(doneItemSaved);
 
-    initialiseServiceLocator({}, doneDynamoTableClient);
+    initialiseServiceLocator({}, dynamoTableClient);
     const repository = new DoneRepository();
 
     await repository.remove(doneId, userId);
 
-    td.verify(doneDynamoTableClient.delete(doneId));
+    td.verify(dynamoTableClient.delete(doneId));
   });
 
   it('updates a done if the requesting user is the owner', async () => {
-    const doneDynamoTableClient = td.instance(DynamoTableClient);
-    td.when(doneDynamoTableClient.getById(doneId)).thenResolve({...doneItemSaved, NON_UPDATABLE_KEY: '..'});
+    const dynamoTableClient = td.instance(DynamoTableClient);
+    td.when(dynamoTableClient.getById(doneId)).thenResolve({...doneItemSaved, NON_UPDATABLE_KEY: '..'});
 
-    initialiseServiceLocator({}, doneDynamoTableClient);
+    initialiseServiceLocator({}, dynamoTableClient);
     const repository = new DoneRepository();
 
     const newData = {
@@ -67,7 +67,7 @@ describe('Server DoneRepository', () => {
     };
     await repository.update('DONE_ID', 'USER_ID', newData);
 
-    td.verify(doneDynamoTableClient.update(
+    td.verify(dynamoTableClient.update(
       doneId,
       _omit({...doneItemWithMonth, doneThing: 'NEW_DONE_THING'}, 'userId')
     ));
@@ -80,15 +80,15 @@ describe('Server DoneRepository', () => {
       date: 'DATE',
       doneThing: 'DONE_THING'
     };
-    const doneDynamoTableClient = td.instance(DynamoTableClient);
-    td.when(doneDynamoTableClient.getById(doneId)).thenResolve(matchingDone);
-    td.when(doneDynamoTableClient.update(doneId, {
+    const dynamoTableClient = td.instance(DynamoTableClient);
+    td.when(dynamoTableClient.getById(doneId)).thenResolve(matchingDone);
+    td.when(dynamoTableClient.update(doneId, {
       date: '2017-08-14T12:26:26.227Z',
       month: '2017-08',
       doneThing: 'NEW_DONE_THING'
     })).thenResolve({...doneItemWithMonth, doneThing: 'NEW_DONE_THING'});
 
-    initialiseServiceLocator({}, doneDynamoTableClient);
+    initialiseServiceLocator({}, dynamoTableClient);
     const repository = new DoneRepository();
 
     const newData = {
@@ -100,9 +100,9 @@ describe('Server DoneRepository', () => {
     deepStrictEqual(result, {...doneItem, doneThing: 'NEW_DONE_THING'});
   });
 
-  let initialiseServiceLocator = function (doneQueryHelper: {query: any} | {}, doneDynamoTableClient?: DynamoTableClient) {
+  let initialiseServiceLocator = function (doneQueryHelper: {query: any} | {}, dynamoTableClient?: DynamoTableClient) {
     ServiceLocator.load({
-      createDoneDynamoTableClient: () => doneDynamoTableClient,
+      createDoneDynamoTableClient: () => dynamoTableClient,
       createDoneQueryHelper: () => doneQueryHelper
     } as ServiceFactory);
   };
