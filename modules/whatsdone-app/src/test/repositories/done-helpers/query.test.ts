@@ -25,7 +25,7 @@ describe('Server DoneQueryHelper', () => {
     ProjectionExpression: 'id, #date, doneThing, userId',
     Select: 'SPECIFIC_ATTRIBUTES'
   };
-  const makeItems = (size: number) => [...Array(size)].map(() => ({DATA: '..'}));
+  const makeItems = (size: number, group = 1) => [...Array(size)].map((_, i) => ({DATA: `ITEM-${group}-${i}`}));
 
   it('queries 20 items and that\'s everything', async () => {
     const items = makeItems(20);
@@ -61,79 +61,57 @@ describe('Server DoneQueryHelper', () => {
   });
 
   it('returns a key for next page if it exists', async () => {
-    const dynamoDBDocumentClient = {
-      query: sinon.stub().returns(awsSdkResponse({
-        Items: [],
-        LastEvaluatedKey: {
-          id: 'ID',
-          date: '2017-08-01T07:26:27.574Z',
-          month: '2017-08'
-        }
-      }))
-    };
-    setupServiceLocator({dynamoDBDocumentClient});
+    const dynamoDBDocumentClient = td.instance(DynamoDB.DocumentClient);
+    td.when(dynamoDBDocumentClient.query(queryWithoutNextKey)).thenReturn(awsSdkResponse({
+      Items: makeItems(23),
+      LastEvaluatedKey: {
+        id: 'ID',
+        date: '2017-08-02T07:26:27.574Z',
+        month: '2017-08'
+      }
+    }));
+    setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
 
     const client = new DoneQueryHelper('TABLE_NAME');
     const result = await client.query();
-    deepStrictEqual(result.nextKey, '{"id":"ID","date":"2017-08-01T07:26:27.574Z"}');
+    deepStrictEqual(result.nextKey, '{"id":"ID","date":"2017-08-02T07:26:27.574Z"}');
   });
 
-  it('automatically queries next month if result does not have enough records', async () => {
-    const queryStub = sinon.stub();
-    queryStub.onCall(0).returns(awsSdkResponse({
-      Items: '.'.repeat(17).split('').map((v, i) => `ITEM-1-${i}`)
-    }));
-    queryStub.onCall(1).returns(awsSdkResponse({
-      Items: '.'.repeat(3).split('').map((v, i) => `ITEM-2-${i}`)
-    }));
-    const dynamoDBDocumentClient = {query: queryStub};
+  it('automatically queries previous month if result does not have enough records', async () => {
+    const dynamoDBDocumentClient = td.instance(DynamoDB.DocumentClient);
+    td.when(dynamoDBDocumentClient.query(queryWithoutNextKey))
+      .thenReturn(awsSdkResponse({Items: makeItems(17, 1)}));
+    td.when(dynamoDBDocumentClient.query({...queryWithoutNextKey, ExpressionAttributeValues: {':m': '2017-07'}, Limit: 3}))
+      .thenReturn(awsSdkResponse({Items: makeItems(3, 2)}));
     setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
 
     const client = new DoneQueryHelper('TABLE_NAME');
-    await client.query();
-    deepStrictEqual(dynamoDBDocumentClient.query.args[0][0].ExpressionAttributeValues, {':m': '2017-08'});
-    deepStrictEqual(dynamoDBDocumentClient.query.args[1][0].ExpressionAttributeValues, {':m': '2017-07'});
+
+    deepStrictEqual(await client.query(), {
+      items: [...makeItems(17, 1), ...makeItems(3, 2)],
+      nextKey: undefined
+    });
   });
 
-  it('automatically queries for next 2 months if result does not have enough records', async () => {
-    const queryStub = sinon.stub();
-    queryStub.onCall(0).returns(awsSdkResponse({
-      Items: '.'.repeat(15).split('').map((v, i) => `ITEM-1-${i}`)
-    }));
-    queryStub.onCall(1).returns(awsSdkResponse({
-      Items: '.'.repeat(3).split('').map((v, i) => `ITEM-2-${i}`)
-    }));
-    queryStub.onCall(2).returns(awsSdkResponse({
-      Items: '.'.repeat(2).split('').map((v, i) => `ITEM-3-${i}`)
-    }));
-    const dynamoDBDocumentClient = {query: queryStub};
+  it('automatically queries for previous 2 months if result does not have enough records', async () => {
+    const dynamoDBDocumentClient = td.instance(DynamoDB.DocumentClient);
+    td.when(dynamoDBDocumentClient.query(queryWithoutNextKey))
+      .thenReturn(awsSdkResponse({Items: makeItems(15, 1)}));
+    td.when(dynamoDBDocumentClient.query({...queryWithoutNextKey, ExpressionAttributeValues: {':m': '2017-07'}, Limit: 5}))
+      .thenReturn(awsSdkResponse({Items: makeItems(3, 2)}));
+    td.when(dynamoDBDocumentClient.query({...queryWithoutNextKey, ExpressionAttributeValues: {':m': '2017-06'}, Limit: 2}))
+      .thenReturn(awsSdkResponse({Items: makeItems(2, 3)}));
     setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
 
     const client = new DoneQueryHelper('TABLE_NAME');
-    await client.query();
-    deepStrictEqual(dynamoDBDocumentClient.query.args.length, 3); // tslint:disable-line:no-unused-expression
-    deepStrictEqual(dynamoDBDocumentClient.query.args[0][0].ExpressionAttributeValues, {':m': '2017-08'});
-    deepStrictEqual(dynamoDBDocumentClient.query.args[1][0].ExpressionAttributeValues, {':m': '2017-07'});
-    deepStrictEqual(dynamoDBDocumentClient.query.args[2][0].ExpressionAttributeValues, {':m': '2017-06'});
+
+    deepStrictEqual(await client.query(), {
+      items: [...makeItems(15, 1), ...makeItems(3, 2), ...makeItems(2, 3)],
+      nextKey: undefined
+    });
   });
 
-  it('automatically fetches the number of items that satisfies original fetch limit', async () => {
-    const queryStub = sinon.stub();
-    queryStub.onCall(0).returns(awsSdkResponse({
-      Items: '.'.repeat(17).split('').map((v, i) => `ITEM-1-${i}`)
-    }));
-    queryStub.onCall(1).returns(awsSdkResponse({
-      Items: '.'.repeat(3).split('').map((v, i) => `ITEM-2-${i}`)
-    }));
-    const dynamoDBDocumentClient = {query: queryStub};
-    setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
-
-    const client = new DoneQueryHelper('TABLE_NAME');
-    await client.query();
-    deepStrictEqual(dynamoDBDocumentClient.query.args[0][0].Limit, 20);
-    deepStrictEqual(dynamoDBDocumentClient.query.args[1][0].Limit, 3);
-  });
-
+  // XXX: This rule causes the very slow response time when it queries the DB 30 times!
   it('tries to find items as old as March 2015', async () => {
     const dynamoDBDocumentClient = {query: sinon.stub().returns(awsSdkResponse({Items: []}))};
     setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
@@ -142,17 +120,6 @@ describe('Server DoneQueryHelper', () => {
     await client.query();
     deepStrictEqual(dynamoDBDocumentClient.query.args.length, 30);
     deepStrictEqual(dynamoDBDocumentClient.query.args[29][0].ExpressionAttributeValues, {':m': '2015-03'});
-  });
-
-  it('does not return a key for next page if it does not exist', async () => {
-    const dynamoDBDocumentClient = {
-      query: sinon.stub().returns(awsSdkResponse({Items: []}))
-    };
-    setupServiceLocator({dynamoDBDocumentClient});
-
-    const client = new DoneQueryHelper('TABLE_NAME');
-    const result = await client.query();
-    deepStrictEqual(result.nextKey, undefined);
   });
 
   function setupServiceLocator({dynamoDBDocumentClient, currentDate}: any) {
