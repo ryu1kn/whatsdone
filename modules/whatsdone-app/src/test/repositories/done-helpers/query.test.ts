@@ -4,6 +4,7 @@ import ServiceFactory from '../../../lib/ServiceFactory';
 import * as td from 'testdouble';
 import {Logger} from '../../../lib/Logger';
 import {deepStrictEqual} from 'assert';
+import {awsSdkResponse} from '../../helper/AwsHelper';
 import sinon = require('sinon');
 
 describe('Server DoneQueryHelper', () => {
@@ -173,11 +174,4 @@ describe('Server DoneQueryHelper', () => {
     td.when(factory.createLogger()).thenReturn({error: () => {}} as Logger);
     ServiceLocator.load(factory);
   }
-
-  function awsSdkResponse(response: any) {
-    const finalResponse = response instanceof Error ?
-      Promise.reject(response) : Promise.resolve(response);
-    return {promise: () => finalResponse};
-  }
-
 });

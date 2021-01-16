@@ -6,15 +6,14 @@ import {PromiseResult} from 'aws-sdk/lib/request';
 import {AWSError, DynamoDB} from 'aws-sdk';
 import {GetItemOutput, QueryOutput} from 'aws-sdk/clients/dynamodb';
 import {deepStrictEqual} from 'assert';
+import {awsSdkResponse} from '../helper/AwsHelper';
 
 describe('Server UserIdRepository', () => {
-  const awsResponse = (res: any) => ({promise: () => Promise.resolve(res)});
-
   const docClient = td.instance(DynamoDB.DocumentClient);
   td.when(docClient.get({
     TableName: 'USER_ID_TABLE_NAME',
     Key: {id: 'USER_ID'}
-  })).thenReturn(awsResponse({
+  })).thenReturn(awsSdkResponse({
     Item: {cognitoUserId: 'COGNITO_USER_ID'}
   } as unknown as PromiseResult<GetItemOutput, AWSError>));
   td.when(docClient.query({
@@ -23,7 +22,7 @@ describe('Server UserIdRepository', () => {
     KeyConditionExpression: 'cognitoUserId = :hkey',
     ExpressionAttributeValues: {':hkey': 'COGNITO_USER_ID'},
     ProjectionExpression: 'id'
-  })).thenReturn(awsResponse({
+  })).thenReturn(awsSdkResponse({
     Items: [{id: 'OLD_USER_ID'}]
   } as unknown as PromiseResult<QueryOutput, AWSError>));
 
