@@ -65,7 +65,7 @@ describe('Server DoneRepository', () => {
       doneThing: 'NEW_DONE_THING',
       NON_UPDATABLE_KEY: 'NEW ..'
     };
-    await repository.update('DONE_ID', 'USER_ID', newData);
+    await repository.update(doneId, userId, newData);
 
     td.verify(dynamoTableClient.update(
       doneId,
@@ -73,18 +73,12 @@ describe('Server DoneRepository', () => {
     ));
   });
 
-  // TODO: Revise the test data
   it('updates "month" field if date is going to be updated', async () => {
-    const matchingDone = {
-      userId: 'USER_ID',
-      date: 'DATE',
-      doneThing: 'DONE_THING'
-    };
     const dynamoTableClient = td.instance(DynamoTableClient);
-    td.when(dynamoTableClient.getById(doneId)).thenResolve(matchingDone);
+    td.when(dynamoTableClient.getById(doneId)).thenResolve(doneItemWithMonth);
     td.when(dynamoTableClient.update(doneId, {
-      date: '2017-08-14T12:26:26.227Z',
-      month: '2017-08',
+      date: '2017-09-14T12:26:26.227Z',
+      month: '2017-09',
       doneThing: 'NEW_DONE_THING'
     })).thenResolve({...doneItemWithMonth, doneThing: 'NEW_DONE_THING'});
 
@@ -92,10 +86,10 @@ describe('Server DoneRepository', () => {
     const repository = new DoneRepository();
 
     const newData = {
-      date: '2017-08-14T12:26:26.227Z',
+      date: '2017-09-14T12:26:26.227Z',
       doneThing: 'NEW_DONE_THING'
     };
-    const result = await repository.update('DONE_ID', 'USER_ID', newData);
+    const result = await repository.update(doneId, userId, newData);
 
     deepStrictEqual(result, {...doneItem, doneThing: 'NEW_DONE_THING'});
   });
