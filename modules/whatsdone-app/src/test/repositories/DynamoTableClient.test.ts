@@ -8,7 +8,10 @@ import {DynamoDB} from 'aws-sdk';
 
 describe('Server DynamoTableClient', () => {
   const dynamoDBDocumentClient = td.instance(DynamoDB.DocumentClient);
-  td.when(dynamoDBDocumentClient.get({TableName: 'TABLE_NAME', Key: {id: 'ITEM_ID'}})).thenReturn(awsSdkResponse({Item: 'ITEM'}));
+
+  td.when(dynamoDBDocumentClient.get({TableName: 'TABLE_NAME', Key: {id: 'ITEM_ID'}}))
+    .thenReturn(awsSdkResponse({Item: 'ITEM'}));
+
   td.when(dynamoDBDocumentClient.put({
     TableName: 'TABLE_NAME',
     Item: {
@@ -16,10 +19,12 @@ describe('Server DynamoTableClient', () => {
       id: 'UUID'
     }
   })).thenReturn(awsSdkResponse());
+
   td.when(dynamoDBDocumentClient.delete({
     TableName: 'TABLE_NAME',
     Key: {id: 'ITEM_ID'}
   })).thenReturn(awsSdkResponse());
+
   td.when(dynamoDBDocumentClient.update({
     TableName: 'TABLE_NAME',
     Key: {id: 'ITEM_ID'},
@@ -35,48 +40,33 @@ describe('Server DynamoTableClient', () => {
     }
   })).thenReturn(awsSdkResponse());
 
-  it('finds one item by ID', async () => {
-    initialiseServiceLocator({dynamoDBDocumentClient});
-    const client = new DynamoTableClient('TABLE_NAME', 'id');
+  ServiceLocator.load({
+    createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
+    createUuidGenerator: () => ({generate: () => 'UUID'})
+  } as ServiceFactory);
+  const client = new DynamoTableClient('TABLE_NAME', 'id');
 
+  it('finds one item by ID', async () => {
     const item = await client.getById('ITEM_ID');
 
     deepStrictEqual(item, 'ITEM');
   });
 
   it('stores a new item', async () => {
-    initialiseServiceLocator({
-      dynamoDBDocumentClient,
-      uuidGenerator: {generate: () => 'UUID'}
-    });
-    const client = new DynamoTableClient('TABLE_NAME', 'id');
-
     const newId = await client.put({DATA: '..'});
 
     deepStrictEqual(newId, 'UUID');
   });
 
   it('deletes one item', async () => {
-    initialiseServiceLocator({dynamoDBDocumentClient});
-    const client = new DynamoTableClient('TABLE_NAME', 'id');
-
     await doesNotReject(client.delete('ITEM_ID'));
   });
 
   it('updates one item', async () => {
-    initialiseServiceLocator({dynamoDBDocumentClient});
-    const client = new DynamoTableClient('TABLE_NAME', 'id');
     const newData = {KEY_1: 'VALUE_1', KEY_2: 'VALUE_2'};
 
     const item = await client.update('ITEM_ID', newData);
 
     deepStrictEqual(item, 'ITEM');
   });
-
-  function initialiseServiceLocator({dynamoDBDocumentClient = {}, uuidGenerator = {}} = {}) {
-    ServiceLocator.load({
-      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-      createUuidGenerator: () => uuidGenerator
-    } as ServiceFactory);
-  }
 });
