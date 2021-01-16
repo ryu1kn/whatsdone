@@ -5,45 +5,36 @@ import * as td from 'testdouble';
 import {Logger} from '../../../lib/Logger';
 import {deepStrictEqual} from 'assert';
 import {awsSdkResponse} from '../../helper/AwsHelper';
+import {DynamoDB} from 'aws-sdk';
 import sinon = require('sinon');
 
 describe('Server DoneQueryHelper', () => {
+  const queryWithoutNextKey = {
+    TableName: 'TABLE_NAME',
+    IndexName: 'date',
+    Limit: 20,
+    KeyConditionExpression: '#month = :m',
+    ExpressionAttributeNames: {
+      '#month': 'month',
+      '#date': 'date'
+    },
+    ExpressionAttributeValues: {
+      ':m': '2017-08'
+    },
+    ScanIndexForward: false,
+    ProjectionExpression: 'id, #date, doneThing, userId',
+    Select: 'SPECIFIC_ATTRIBUTES'
+  };
+  const makeItems = (size: number) => [...Array(size)].map(() => ({DATA: '..'}));
 
-  it('uses DynamoDB#query to get done items', async () => {
-    const dynamoDBDocumentClient = {
-      query: sinon.stub().returns(awsSdkResponse({Items: [{DATA: '..'}]}))
-    };
+  it('queries 20 items and that\'s everything', async () => {
+    const items = makeItems(20);
+    const dynamoDBDocumentClient = td.instance(DynamoDB.DocumentClient);
+    td.when(dynamoDBDocumentClient.query(queryWithoutNextKey)).thenReturn(awsSdkResponse({Items: items}));
     setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
 
     const client = new DoneQueryHelper('TABLE_NAME');
-    await client.query();
-    deepStrictEqual(dynamoDBDocumentClient.query.args[0], [{
-      TableName: 'TABLE_NAME',
-      IndexName: 'date',
-      Limit: 20,
-      KeyConditionExpression: '#month = :m',
-      ExpressionAttributeNames: {
-        '#month': 'month',
-        '#date': 'date'
-      },
-      ExpressionAttributeValues: {
-        ':m': '2017-08'
-      },
-      ScanIndexForward: false,
-      ProjectionExpression: 'id, #date, doneThing, userId',
-      Select: 'SPECIFIC_ATTRIBUTES'
-    }]);
-  });
-
-  it('returns items', async () => {
-    const dynamoDBDocumentClient = {
-      query: sinon.stub().returns(awsSdkResponse({Items: [{DATA: '..'}]}))
-    };
-    setupServiceLocator({dynamoDBDocumentClient});
-
-    const client = new DoneQueryHelper('TABLE_NAME');
-    const result = await client.query();
-    deepStrictEqual(result.items[0], {DATA: '..'});
+    deepStrictEqual(await client.query(), {items, nextKey: undefined});
   });
 
   it('returns items honouring next page key', async () => {
@@ -168,10 +159,11 @@ describe('Server DoneQueryHelper', () => {
     const dateProvider = {
       getCurrentDate: () => currentDate ? new Date(currentDate) : new Date()
     };
-    const factory = td.object(['createDynamoDBDocumentClient', 'createDateProvider', 'createLogger']) as ServiceFactory;
-    td.when(factory.createDynamoDBDocumentClient()).thenReturn(dynamoDBDocumentClient);
-    td.when(factory.createDateProvider()).thenReturn(dateProvider);
-    td.when(factory.createLogger()).thenReturn({error: () => {}} as Logger);
-    ServiceLocator.load(factory);
+    const logger = {error: () => {}} as Logger;
+    ServiceLocator.load({
+      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
+      createDateProvider: () => dateProvider,
+      createLogger: () => logger
+    } as ServiceFactory);
   }
 });
