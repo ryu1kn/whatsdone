@@ -5,15 +5,26 @@ import * as td from 'testdouble';
 import ServiceLocator from '../src/service-locator';
 import smartFetch from '../src/smart-fetch';
 
+const responseBody = '{"DATA": ".."}';
+const defaultReqOptions = {headers: {'Accept-Encoding': 'gzip, deflate'}};
+
+const fetch = td.function();
+
+td.when(fetch('URL_FOR_JSON_RESPONSE', defaultReqOptions)).thenResolve({
+  headers: {get: headerName => headerName === 'Content-Type' && 'application/json'},
+  json: () => Promise.resolve(JSON.parse(responseBody)),
+});
+td.when(fetch('URL_FOR_TEXT_RESPONSE', defaultReqOptions)).thenResolve({
+  headers: {get: () => {}},
+  text: () => Promise.resolve(responseBody)
+});
+
+ServiceLocator.load({createFetch: () => fetch});
+
 test('smartFetch fetches json data', async t => {
   t.plan(1);
 
-  const fakeFetch = createFakeFetch();
-  ServiceLocator.load({
-    createFetch: () => fakeFetch
-  });
-
-  const response = await smartFetch('URL')
+  const response = await smartFetch('URL_FOR_JSON_RESPONSE')
 
   t.deepEqual(response.body, {DATA: '..'});
 });
@@ -21,30 +32,7 @@ test('smartFetch fetches json data', async t => {
 test('smartFetch treats response body as text if no content-type is specified', async t => {
   t.plan(1);
 
-  const fakeFetch = createFakeFetch({contentType: null});
-  ServiceLocator.load({
-    createFetch: () => fakeFetch
-  });
-
-  const response = await smartFetch('URL')
+  const response = await smartFetch('URL_FOR_TEXT_RESPONSE')
 
   t.deepEqual(response.body, '{"DATA": ".."}');
 });
-
-function createFakeFetch({contentType} = {}) {
-  const responseBody = '{"DATA": ".."}';
-  const responseHeaders = {
-    'Content-Type': typeof contentType !== 'undefined' ? contentType : 'application/json'
-  };
-
-  const fetch = td.function();
-  td.when(fetch('URL', {headers: {'Accept-Encoding': 'gzip, deflate'}})).thenResolve({
-    headers: {
-      get: headerName => responseHeaders[headerName]
-    },
-    json: () => Promise.resolve(JSON.parse(responseBody)),
-    text: () => Promise.resolve(responseBody)
-  })
-
-  return fetch;
-}
