@@ -81,6 +81,7 @@ export default class DoneQueryHelper {
         monthKey: prevMonthKey,
         limit: DEFAULT_SCAN_LIMIT - newAccumulatedResponse.Items.length
       });
+      // TODO: Recursive calls don't use LastEvaluatedKey. Is this correct?
       return queryUntil(nextParams, newAccumulatedResponse);
     };
     const params = this.buildQueryFromStartKey(startKey);
