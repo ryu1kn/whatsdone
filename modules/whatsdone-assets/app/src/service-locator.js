@@ -1,8 +1,9 @@
 
 class ServiceLocator {
 
-  load(serviceFactory) {
+  load(serviceFactory, overrideServiceFactory) {
     this._serviceFactory = serviceFactory;
+    this._overrideServiceFactory = overrideServiceFactory || Object.create(null);
     this._cache = Object.create(null);
   }
 
@@ -49,7 +50,10 @@ class ServiceLocator {
 
   _getFromServiceFactory(serviceName) {
     const methodName = this._getFactoryName(serviceName);
-    return this._serviceFactory[methodName]();
+
+    return this._overrideServiceFactory[methodName] ?
+      this._overrideServiceFactory[methodName]() :
+      this._serviceFactory[methodName]();
   }
 
   // fooBar -> getFooBar
