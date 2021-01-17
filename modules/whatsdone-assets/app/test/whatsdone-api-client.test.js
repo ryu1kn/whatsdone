@@ -6,75 +6,79 @@ import ServiceLocator from '../src/service-locator';
 import WhatsdoneApiClient from '../src/whatsdone-api-client';
 import ServiceFactory from '../src/service-factory';
 
-test('WhatsdoneApiClient fetch all done items', t => {
+test('WhatsdoneApiClient fetch all done items', async t => {
   t.plan(1);
 
   const smartFetch = fakeSmartFetch();
   const apiClient = new WhatsdoneApiClient();
-  apiClient.getDones().then(() => {
-    t.deepEqual(smartFetch.args[2], [
-      'https://api_origin/dones',
-      {
-        mode: 'cors',
-        credentials: 'include',
-        headers: {
-          Authorization: 'JWT_ID_TOKEN'
-        }
+
+  await apiClient.getDones()
+
+  t.deepEqual(smartFetch.args[2], [
+    'https://api_origin/dones',
+    {
+      mode: 'cors',
+      credentials: 'include',
+      headers: {
+        Authorization: 'JWT_ID_TOKEN'
       }
-    ]);
-  });
+    }
+  ]);
 });
 
-test('WhatsdoneApiClient fetch done items by sending a key', t => {
+test('WhatsdoneApiClient fetch done items by sending a key', async t => {
   t.plan(1);
 
   const smartFetch = fakeSmartFetch();
   const apiClient = new WhatsdoneApiClient();
-  apiClient.getDones('NEXT KEY').then(() => {
-    t.deepEqual(smartFetch.args[2][0], 'https://api_origin/dones?nextKey=NEXT%20KEY');
-  });
+
+  await apiClient.getDones('NEXT KEY')
+
+  t.deepEqual(smartFetch.args[2][0], 'https://api_origin/dones?nextKey=NEXT%20KEY');
 });
 
-test('WhatsdoneApiClient record new done item', t => {
+test('WhatsdoneApiClient record new done item', async t => {
   t.plan(1);
 
   const smartFetch = fakeSmartFetch();
   const apiClient = new WhatsdoneApiClient();
-  apiClient.postDone({KEY: 'VALUE'}).then(() => {
-    t.deepEqual(smartFetch.args[2], [
-      'https://api_origin/dones',
-      {
-        method: 'POST',
-        mode: 'cors',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          Authorization: 'JWT_ID_TOKEN'
-        },
-        body: 'KEY=VALUE'
-      }
-    ]);
-  });
+
+  await apiClient.postDone({KEY: 'VALUE'})
+
+  t.deepEqual(smartFetch.args[2], [
+    'https://api_origin/dones',
+    {
+      method: 'POST',
+      mode: 'cors',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        Authorization: 'JWT_ID_TOKEN'
+      },
+      body: 'KEY=VALUE'
+    }
+  ]);
 });
 
-test('WhatsdoneApiClient deletes one done item', t => {
+test('WhatsdoneApiClient deletes one done item', async t => {
   t.plan(1);
 
   const smartFetch = fakeSmartFetch();
   const apiClient = new WhatsdoneApiClient();
-  apiClient.deleteDone('DONE_ID').then(() => {
-    t.deepEqual(smartFetch.args[2], [
-      'https://api_origin/dones/DONE_ID',
-      {
-        method: 'DELETE',
-        mode: 'cors',
-        credentials: 'include',
-        headers: {
-          Authorization: 'JWT_ID_TOKEN'
-        },
-      }
-    ]);
-  });
+
+  await apiClient.deleteDone('DONE_ID')
+
+  t.deepEqual(smartFetch.args[2], [
+    'https://api_origin/dones/DONE_ID',
+    {
+      method: 'DELETE',
+      mode: 'cors',
+      credentials: 'include',
+      headers: {
+        Authorization: 'JWT_ID_TOKEN'
+      },
+    }
+  ]);
 });
 
 function fakeSmartFetch() {
