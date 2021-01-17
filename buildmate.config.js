@@ -13,6 +13,11 @@ module.exports = {
       command: 'cd test/e2e && make test'
     },
     {
+      description: "Check if docker is available",
+      path: /.*/,
+      command: 'command -v docker && command -v docker-compose'
+    },
+    {
       description: "Deploy to Production environment",
       path: /^modules\/.*/,
       command: `
