@@ -6,7 +6,6 @@ import {Logger} from '../../../lib/Logger';
 import {deepStrictEqual} from 'assert';
 import {awsSdkResponse} from '../../helper/AwsHelper';
 import {DynamoDB} from 'aws-sdk';
-import sinon = require('sinon');
 
 describe('Server DoneQueryHelper', () => {
   const padMonth = (n: number) => n < 10 ? `0${n}` : n;
@@ -44,26 +43,26 @@ describe('Server DoneQueryHelper', () => {
   });
 
   it('returns items honouring next page key', async () => {
-    const dynamoDBDocumentClient = {
-      query: sinon.stub().returns(awsSdkResponse({Items: []}))
-    };
-    setupServiceLocator({dynamoDBDocumentClient});
+    const dynamoDBDocumentClient = td.instance(DynamoDB.DocumentClient);
+    td.when(dynamoDBDocumentClient.query({
+      ...queryWithoutNextKey,
+      ExclusiveStartKey: {
+        id: 'ID',
+        date: '2017-08-01T07:26:27.574Z',
+        month: '2017-08'
+      }
+    })).thenReturn(awsSdkResponse({Items: makeItems(20)}));
 
+    setupServiceLocator({dynamoDBDocumentClient});
     const client = new DoneQueryHelper('TABLE_NAME');
+
     const nextKey = JSON.stringify({
       date: '2017-08-01T07:26:27.574Z',
       id: 'ID'
     });
-    await client.query(nextKey);
-    const queryArgs = dynamoDBDocumentClient.query.args[0][0];
-    deepStrictEqual(queryArgs.ExpressionAttributeValues, {
-      ':m': '2017-08'
-    });
-    deepStrictEqual(queryArgs.ExclusiveStartKey, {
-      id: 'ID',
-      date: '2017-08-01T07:26:27.574Z',
-      month: '2017-08'
-    });
+    const result = await client.query(nextKey);
+
+    deepStrictEqual(result.items, makeItems(20));
   });
 
   it('returns a key for next page if it exists', async () => {
