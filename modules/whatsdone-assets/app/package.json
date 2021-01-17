@@ -53,7 +53,6 @@
     "json-loader": "^0.5.7",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
-    "sinon": "^2.3.8",
     "style-loader": "^0.18.2",
     "tape": "^4.8.0",
     "testdouble": "^3.16.1",
