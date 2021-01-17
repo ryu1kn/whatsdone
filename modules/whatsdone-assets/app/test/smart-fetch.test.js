@@ -1,6 +1,6 @@
 import 'babel-polyfill';
 import test from 'tape';
-import sinon from 'sinon';
+import * as td from 'testdouble';
 
 import ServiceLocator from '../src/service-locator';
 import smartFetch from '../src/smart-fetch';
@@ -36,12 +36,15 @@ function createFakeFetch({contentType} = {}) {
   const responseHeaders = {
     'Content-Type': typeof contentType !== 'undefined' ? contentType : 'application/json'
   };
-  const response = {
+
+  const fetch = td.function();
+  td.when(fetch('URL', {headers: {'Accept-Encoding': 'gzip, deflate'}})).thenResolve({
     headers: {
       get: headerName => responseHeaders[headerName]
     },
     json: () => Promise.resolve(JSON.parse(responseBody)),
     text: () => Promise.resolve(responseBody)
-  };
-  return sinon.stub().returns(Promise.resolve(response));
+  })
+
+  return fetch;
 }
