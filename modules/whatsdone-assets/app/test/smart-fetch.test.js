@@ -13,9 +13,9 @@ test('smartFetch fetches json data', async t => {
     createFetch: () => fakeFetch
   });
 
-  await smartFetch('URL')
+  const response = await smartFetch('URL')
 
-  t.deepEqual(fakeFetch.args[0][0], 'URL');
+  t.deepEqual(response.body, {DATA: '..'});
 });
 
 test('smartFetch treats response body as text if no content-type is specified', async t => {
