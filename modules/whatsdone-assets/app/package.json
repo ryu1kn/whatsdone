@@ -1,22 +1,6 @@
 {
   "name": "whatsdone-assets-app",
   "private": true,
-  "dependencies": {
-    "amazon-cognito-identity-js": "^1.31.0",
-    "aws-sdk": "^2.184.0",
-    "babel-polyfill": "^6.26.0",
-    "bootstrap": "^3.3.7",
-    "jquery": "^3.5.0",
-    "jwt-decode": "^2.2.0",
-    "lodash": "~4.17.19",
-    "react": "~15.4.1",
-    "react-dom": "~15.4.1",
-    "react-redux": "~5.0.5",
-    "react-router-dom": "~4.1.1",
-    "redux": "~3.7.2",
-    "showdown": "^1.9.1",
-    "whatwg-fetch": "~2.0.3"
-  },
   "engines": {
     "node": ">= 12"
   },
@@ -36,6 +20,22 @@
     "remove-dup-static": "mv $npm_package_config_buildDir/static/static/* $npm_package_config_buildDir/static && rmdir $npm_package_config_buildDir/static/static # HACK",
     "test": "tape --require babel-register test/**/*.test.js",
     "clean": "rm -rf $npm_package_config_buildDir"
+  },
+  "dependencies": {
+    "amazon-cognito-identity-js": "^1.31.0",
+    "aws-sdk": "^2.184.0",
+    "babel-polyfill": "^6.26.0",
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.5.0",
+    "jwt-decode": "^2.2.0",
+    "lodash": "~4.17.19",
+    "react": "~15.4.1",
+    "react-dom": "~15.4.1",
+    "react-redux": "~5.0.5",
+    "react-router-dom": "~4.1.1",
+    "redux": "~3.7.2",
+    "showdown": "^1.9.1",
+    "whatwg-fetch": "~2.0.3"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
