@@ -9,6 +9,12 @@ import {DynamoDB} from 'aws-sdk';
 import sinon = require('sinon');
 
 describe('Server DoneQueryHelper', () => {
+  const padMonth = (n: number) => n < 10 ? `0${n}` : n;
+  const prevMonth = (yearMonth: string) => {
+    const [year, month] = yearMonth.split('-').map(n => parseInt(n, 10));
+    return month > 1 ? `${year}-${padMonth(month - 1)}` : `${year - 1}-12`;
+  };
+
   const queryWithoutNextKey = {
     TableName: 'TABLE_NAME',
     IndexName: 'date',
@@ -113,13 +119,20 @@ describe('Server DoneQueryHelper', () => {
 
   // XXX: This rule causes the very slow response time when it queries the DB 30 times!
   it('tries to find items as old as March 2015', async () => {
-    const dynamoDBDocumentClient = {query: sinon.stub().returns(awsSdkResponse({Items: []}))};
+    const dynamoDBDocumentClient = td.instance(DynamoDB.DocumentClient);
+    for (let yearMonth = '2017-08'; yearMonth !== '2015-02'; yearMonth = prevMonth(yearMonth)) {
+      td.when(dynamoDBDocumentClient.query(td.matchers.contains({ExpressionAttributeValues: {':m': yearMonth}})))
+        .thenReturn(awsSdkResponse({Items: [], LastEvaluatedKey: {date: `${yearMonth}-01T07:26:27.574Z`}}));
+    }
     setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
 
     const client = new DoneQueryHelper('TABLE_NAME');
     await client.query();
-    deepStrictEqual(dynamoDBDocumentClient.query.args.length, 30);
-    deepStrictEqual(dynamoDBDocumentClient.query.args[29][0].ExpressionAttributeValues, {':m': '2015-03'});
+
+    deepStrictEqual(await client.query(), {
+      items: [],
+      nextKey: '{"date":"2015-03-01T07:26:27.574Z"}'
+    });
   });
 
   function setupServiceLocator({dynamoDBDocumentClient, currentDate}: any) {
