@@ -1,11 +1,11 @@
-
+import 'babel-polyfill';
 import test from 'tape';
 import sinon from 'sinon';
 
 import ServiceLocator from '../src/service-locator';
 import smartFetch from '../src/smart-fetch';
 
-test('smartFetch fetches json data', t => {
+test('smartFetch fetches json data', async t => {
   t.plan(1);
 
   const fakeFetch = createFakeFetch();
@@ -13,12 +13,12 @@ test('smartFetch fetches json data', t => {
     createFetch: () => fakeFetch
   });
 
-  smartFetch('URL').then(_response => {
-    t.deepEqual(fakeFetch.args[0][0], 'URL');
-  });
+  await smartFetch('URL')
+
+  t.deepEqual(fakeFetch.args[0][0], 'URL');
 });
 
-test('smartFetch treats response body as text if no content-type is specified', t => {
+test('smartFetch treats response body as text if no content-type is specified', async t => {
   t.plan(1);
 
   const fakeFetch = createFakeFetch({contentType: null});
@@ -26,9 +26,9 @@ test('smartFetch treats response body as text if no content-type is specified', 
     createFetch: () => fakeFetch
   });
 
-  smartFetch('URL').then(response => {
-    t.deepEqual(response.body, '{"DATA": ".."}');
-  });
+  const response = await smartFetch('URL')
+
+  t.deepEqual(response.body, '{"DATA": ".."}');
 });
 
 function createFakeFetch({contentType} = {}) {
