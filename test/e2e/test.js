@@ -23,7 +23,7 @@ const { chromium } = require('playwright');
 
   await page.hover(`//*[text()[contains(.,'${testText}')]]//ancestor::*[@class='doneitem']`);
   await page.click(`//*[text()[contains(.,'${testText}')]]//ancestor::*[@class='doneitem']/div[3]`);
-  await page.waitForLoadState('networkidle')
+  await wait(20000);  // DEBUG: Confirming if `DELETE` request is not completing
 
   await page.reload({waitUntil: 'networkidle'})
   const el2 = await page.$(`text='${testText}'`)
@@ -34,3 +34,7 @@ const { chromium } = require('playwright');
   await context.close();
   await browser.close();
 })();
+
+function wait(msec) {
+  return new Promise(resolve => setTimeout(resolve, msec));
+}
