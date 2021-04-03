@@ -2,7 +2,7 @@ version: '3'
 
 services:
   test:
-    image: mozilla/sbt:11.0.8_1.3.13
+    image: mozilla/sbt:8u232_1.4.5
     volumes:
       - ./src:/work/src
       - ./build.sbt:/work/build.sbt
