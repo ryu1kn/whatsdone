@@ -1,0 +1,6 @@
+version: '3'
+
+services:
+  test:
+    volumes:
+      - ~/Library/Caches/Coursier/v1:/root/.cache/coursier/v1

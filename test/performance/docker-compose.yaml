@@ -8,7 +8,6 @@ services:
       - ./build.sbt:/work/build.sbt
       - ./project/build.properties:/work/project/build.properties
       - ./project/plugins.sbt:/work/project/plugins.sbt
-      - ~/.ivy2:/root/.ivy2
       - ~/.sbt:/root/.sbt
       - ~/.aws:/root/.aws
     environment:
