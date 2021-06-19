@@ -1,10 +1,14 @@
 import ServiceLocator from './service-locator';
 
+interface RequestOptions {
+  headers?: {[k: string]: string}
+}
+
 const DEFAULT_HEADERS = {
   'Accept-Encoding': 'gzip, deflate'
 };
 
-export default (uri, options = {}) => {
+export default (uri, options: RequestOptions = {}) => {
   const headers = Object.assign({}, DEFAULT_HEADERS, options.headers);
   const finalOptions = Object.assign({}, options, {headers});
   return ServiceLocator.fetch(uri, finalOptions)
