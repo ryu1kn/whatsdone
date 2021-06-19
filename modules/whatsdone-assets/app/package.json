@@ -1,6 +1,7 @@
 {
   "name": "whatsdone-assets-app",
   "private": true,
+  "types": "src/main.d.ts",
   "engines": {
     "node": ">= 14"
   },
