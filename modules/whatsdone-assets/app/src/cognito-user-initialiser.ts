@@ -11,6 +11,13 @@ import {
   CognitoUserSession
 } from 'amazon-cognito-identity-js';
 
+interface JwtToken {
+  id_token: string
+  access_token: string
+  expires_in: string
+  token_type: string
+}
+
 export class CognitoUserInitialiser {
   private readonly _configProvider: any;
   private readonly _cookieStorage: any;
@@ -30,7 +37,7 @@ export class CognitoUserInitialiser {
     });
 
     const hash = window.location.hash.substr(1);
-    const token = parse(hash);
+    const token = parse(hash) as unknown as JwtToken;
 
     if (token.id_token && token.access_token) {
       const userData = {
@@ -42,6 +49,7 @@ export class CognitoUserInitialiser {
       const userSession = new CognitoUserSession({
         IdToken: new CognitoIdToken({IdToken: token.id_token}),
         AccessToken: new CognitoAccessToken({AccessToken: token.access_token}),
+        // @ts-ignore
         RefreshToken: new CognitoRefreshToken()
       });
       cognitoUser.setSignInUserSession(userSession);
