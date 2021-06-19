@@ -16,8 +16,9 @@ This is my toy project that I experiment different technologies/tools I want to 
   - ~~JavaScript~~ (deployed on AWS Lambda)
   - TypeScript (deployed on AWS Lambda) ⬅️ Now here
 - frontend
-  - ~~React + flux~~
-  - React + Redux ⬅️ Now here
+  - ~~JavaScript + React + flux~~
+  - ~~JavaScript + React + Redux~~
+  - TypeScript + React + Redux ⬅️ Now here
 
 ## Continuous Integration / Continuous Delivery
 
