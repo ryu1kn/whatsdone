@@ -1,4 +1,3 @@
-
 import ActionType from './action-type';
 
 const initialState = {
@@ -7,7 +6,7 @@ const initialState = {
   apiReady: false
 };
 
-module.exports = (state = initialState, action) => {
+export default (state = initialState, action) => {
   switch (action.type) {
   case 'API_READY':
     return Object.assign({}, state, {apiReady: true});

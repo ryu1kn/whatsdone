@@ -3,6 +3,7 @@ import {CognitoUserInitialiser} from './cognito-user-initialiser';
 import ConfigProvider from './config-provider';
 import WhatsdoneApiClient from './whatsdone-api-client';
 import {CookieStorage} from 'amazon-cognito-identity-js';
+import smartFetch from './smart-fetch';
 
 class ServiceFactory {
 
@@ -28,7 +29,7 @@ class ServiceFactory {
   }
 
   createSmartFetch() {
-    return require('./smart-fetch');
+    return smartFetch;
   }
 
   createWhatsdoneApiClient() {
