@@ -1,21 +1,21 @@
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const SRC_DIR = path.resolve(__dirname, 'src');
 const BUILD_DIR = path.resolve(__dirname, process.env.npm_package_config_buildDir);
 const BYTE_LIMIT = 100000;
 
-const extractLess = new ExtractTextPlugin('style-[hash].css');
-const jsMinifyPlugins = process.env.NODE_ENV === 'production' ? [
+const devMode = process.env.NODE_ENV !== 'production'
+const jsMinifyPlugins = devMode ? [] : [
   new webpack.DefinePlugin({
     'process.env': {NODE_ENV: JSON.stringify('production')}
-  }),
-  new webpack.optimize.UglifyJsPlugin()
-] : [];
+  })
+];
 
 module.exports = {
   entry: [
@@ -27,6 +27,11 @@ module.exports = {
     path: `${BUILD_DIR}/static`,
     filename: 'build-[hash].js'
   },
+  resolve: {
+    fallback: {
+      util: require.resolve('util')
+    }
+  },
   module: {
     rules: [
       {
@@ -36,10 +41,11 @@ module.exports = {
       },
       {
         test: /\.(less|css)$/,
-        use: extractLess.extract({
-          use: ['css-loader', 'less-loader'],
-          fallback: 'style-loader'
-        })
+        use: [
+          devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+          'less-loader',
+        ]
       },
       {
         test: /\.(woff|woff2)$/,
@@ -71,6 +77,9 @@ module.exports = {
       }
     ]
   },
+  optimization: {
+    minimizer: [new UglifyJsPlugin()],
+  },
   plugins: [
     new webpack.ProvidePlugin({
       $: 'jquery',
@@ -84,7 +93,7 @@ module.exports = {
       template: `${__dirname}/index.ejs`,
       filename: `${BUILD_DIR}/index.html`
     }),
-    extractLess,
+    new MiniCssExtractPlugin({filename: 'style-[hash].css'}),
     ...jsMinifyPlugins
   ]
 };
