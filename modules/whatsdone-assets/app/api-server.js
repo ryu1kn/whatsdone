@@ -13,6 +13,8 @@ const corsOptions = {
 
 const dones = dummyDones();
 
+app.options('/dones', cors(corsOptions))
+
 app.get('/dones', cors(corsOptions), (req, res) => {
   res.status(200).json({
     items: dones
