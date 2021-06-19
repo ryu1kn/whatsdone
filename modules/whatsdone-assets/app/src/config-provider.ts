@@ -1,4 +1,3 @@
-
 import ServiceLocator from './service-locator';
 
 class ConfigProvider {

@@ -1,4 +1,3 @@
-
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.min';
 
@@ -10,10 +9,10 @@ import {createStore} from 'redux';
 
 import ServiceLocator from './service-locator';
 import ServiceFactory from './service-factory';
-ServiceLocator.load(new ServiceFactory());
-
 import reducer from './reducer';
 import DonePage from './done/components/page';
+
+ServiceLocator.load(new ServiceFactory());
 
 const store = createStore(
   reducer,

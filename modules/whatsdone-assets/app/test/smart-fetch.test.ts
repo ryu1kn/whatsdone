@@ -1,5 +1,4 @@
 import 'babel-polyfill';
-import test from 'tape';
 import * as td from 'testdouble';
 
 import ServiceLocator from '../src/service-locator';
@@ -21,18 +20,14 @@ td.when(fetch('URL_FOR_TEXT_RESPONSE', defaultReqOptions)).thenResolve({
 
 ServiceLocator.load({createFetch: () => fetch});
 
-test('smartFetch fetches json data', async t => {
-  t.plan(1);
-
+test('smartFetch fetches json data', async () => {
   const response = await smartFetch('URL_FOR_JSON_RESPONSE')
 
-  t.deepEqual(response.body, {DATA: '..'});
+  expect(response.body).toEqual({DATA: '..'})
 });
 
-test('smartFetch treats response body as text if no content-type is specified', async t => {
-  t.plan(1);
-
+test('smartFetch treats response body as text if no content-type is specified', async () => {
   const response = await smartFetch('URL_FOR_TEXT_RESPONSE')
 
-  t.deepEqual(response.body, '{"DATA": ".."}');
+  expect(response.body).toEqual('{"DATA": ".."}')
 });

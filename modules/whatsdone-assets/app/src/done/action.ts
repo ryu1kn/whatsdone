@@ -1,4 +1,3 @@
-
 import ActionType from './action-type';
 
 export default {

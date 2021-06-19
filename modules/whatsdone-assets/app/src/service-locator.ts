@@ -1,7 +1,7 @@
 
 class ServiceLocator {
 
-  load(serviceFactory, overrideServiceFactory) {
+  load(serviceFactory, overrideServiceFactory?) {
     this._serviceFactory = serviceFactory;
     this._overrideServiceFactory = overrideServiceFactory || Object.create(null);
     this._cache = Object.create(null);
