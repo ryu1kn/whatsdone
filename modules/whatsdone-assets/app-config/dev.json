@@ -1,3 +1,5 @@
 {
-  "API_ORIGIN": "http://localhost:8081"
+  "API_ORIGIN": "http://localhost:8081",
+  "USER_POOL_ID": "ap-southeast-2_devDummy",
+  "CLIENT_ID": "DevDummyDevDummyDevDummyD"
 }
