@@ -18,7 +18,7 @@
     "postbuild:dev": "yarn run remove-dup-static",
     "postbuild:production": "yarn run remove-dup-static",
     "remove-dup-static": "mv $npm_package_config_buildDir/static/static/* $npm_package_config_buildDir/static && rmdir $npm_package_config_buildDir/static/static # HACK",
-    "test": "tape --require babel-register test/**/*.test.js",
+    "test": "tape --require @babel/register test/**/*.test.js",
     "clean": "rm -rf $npm_package_config_buildDir"
   },
   "dependencies": {
