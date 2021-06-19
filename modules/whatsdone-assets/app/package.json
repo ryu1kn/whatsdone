@@ -9,7 +9,7 @@
   },
   "scripts": {
     "prestart:dev": "yarn run build:dev && cp ../app-config/dev.json $npm_package_config_buildDir/appConfig.json",
-    "start:dev": "webpack-dev-server --content-base $npm_package_config_buildDir",
+    "start:dev": "webpack server --mode development --content-base $npm_package_config_buildDir",
     "start:api": "node api-server.js",
     "prebuild:dev": "yarn run clean",
     "build:dev": "NODE_ENV=dev webpack",
