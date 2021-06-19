@@ -1,6 +1,8 @@
 import ServiceLocator from './service-locator';
 
 class ConfigProvider {
+  private readonly _smartFetch: any;
+  private _APP_CONFIG: any;
 
   constructor() {
     this._smartFetch = ServiceLocator.smartFetch;

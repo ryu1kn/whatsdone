@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import util from '../../../util';
+import {getColorCode} from '../../../util';
 
 const showdown = require('showdown');
 const converter = new showdown.Converter();
@@ -27,7 +27,7 @@ export class DoneItem extends React.Component {
   }
 
   getIconColor(name) {
-    return name ? util.getColorCode(name) : '#DDDDDD';
+    return name ? getColorCode(name) : '#DDDDDD';
   }
 
   delete(e) {

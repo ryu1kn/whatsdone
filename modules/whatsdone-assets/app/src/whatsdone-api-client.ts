@@ -8,6 +8,9 @@ const DEFAULT_OPTIONS = {
 };
 
 class WhatsdoneApiClient {
+  private readonly _smartFetch: any;
+  private readonly _configProvider: any;
+  private readonly _authTokenProvider: any;
 
   constructor() {
     this._smartFetch = ServiceLocator.smartFetch;
@@ -25,7 +28,7 @@ class WhatsdoneApiClient {
     };
   }
 
-  getDones(nextKey) {
+  getDones(nextKey?) {
     const qs = nextKey ? `?${querystring.stringify({nextKey})}` : '';
     return this._relayFetch(`/dones${qs}`);
   }
@@ -38,7 +41,7 @@ class WhatsdoneApiClient {
     return this._relayFetch(`/dones/${doneId}`, {method: 'DELETE'});
   }
 
-  _relayFetch(path, options) {
+  _relayFetch(path, options?) {
     return Promise.all([this._getApiOrigin(), this._authTokenProvider.getIdToken()])
       .then(([apiOrigin, idToken]) => {
         const uri = url.resolve(apiOrigin, path);

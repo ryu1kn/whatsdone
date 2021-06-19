@@ -16,13 +16,8 @@ function intToARGB(i) {
   /* eslint-enable no-bitwise */
 }
 
-module.exports = {
-
-  // Taken from http://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
-  getColorCode: str => {
-    const code = intToARGB(hashCode(str));
-    return '#' + code.substr(0, 6);
-  }
-
-};
-
+// Taken from http://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
+export const getColorCode = str => {
+  const code = intToARGB(hashCode(str));
+  return '#' + code.substr(0, 6);
+}

@@ -1,5 +1,8 @@
 
 class ServiceLocator {
+  private _serviceFactory: any;
+  private _overrideServiceFactory: any;
+  private _cache: {string: any};
 
   load(serviceFactory, overrideServiceFactory?) {
     this._serviceFactory = serviceFactory;

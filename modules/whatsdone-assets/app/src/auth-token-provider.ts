@@ -1,6 +1,8 @@
 import ServiceLocator from './service-locator';
 
 class AuthTokenProvider {
+  private readonly _configProvider: any;
+  private readonly _cookieStorage: any;
 
   constructor() {
     this._configProvider = ServiceLocator.configProvider;
