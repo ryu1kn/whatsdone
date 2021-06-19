@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {Provider} from 'react-redux';
-import {compose, createStore} from 'redux';
+import {createStore} from 'redux';
 
 import ServiceLocator from './service-locator';
 import ServiceFactory from './service-factory';
@@ -13,10 +13,6 @@ import reducer from './reducer';
 import DonePage from './done/components/page';
 
 ServiceLocator.load(new ServiceFactory());
-
-declare global {
-    interface Window {__REDUX_DEVTOOLS_EXTENSION__?: typeof compose;}
-}
 
 const store = createStore(
   reducer,
