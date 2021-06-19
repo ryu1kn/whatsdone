@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import util from '../../../util';
@@ -6,7 +5,7 @@ import util from '../../../util';
 const showdown = require('showdown');
 const converter = new showdown.Converter();
 
-class DoneItem extends React.Component {
+export class DoneItem extends React.Component {
 
   formatTime(date) {
     let hour = date.getHours();
@@ -59,5 +58,3 @@ class DoneItem extends React.Component {
   }
 
 }
-
-module.exports = DoneItem;

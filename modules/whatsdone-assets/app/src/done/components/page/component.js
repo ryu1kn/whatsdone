@@ -5,7 +5,7 @@ import React from 'react';
 import DoneHistory from '../history';
 import DoneForm from '../form';
 
-class DonePage extends React.Component {
+export class DonePage extends React.Component {
 
   constructor(params) {
     super(params);
@@ -31,5 +31,3 @@ class DonePage extends React.Component {
   }
 
 }
-
-module.exports = DonePage;

@@ -1,7 +1,6 @@
-
 import React from 'react';
 
-class DoneForm extends React.Component {
+export class DoneForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
@@ -26,5 +25,3 @@ class DoneForm extends React.Component {
   }
 
 }
-
-module.exports = DoneForm;

@@ -1,5 +1,5 @@
 import AuthTokenProvider from './auth-token-provider';
-import CognitoUserInitialiser from './cognito-user-initialiser';
+import {CognitoUserInitialiser} from './cognito-user-initialiser';
 import ConfigProvider from './config-provider';
 import WhatsdoneApiClient from './whatsdone-api-client';
 import {CookieStorage} from 'amazon-cognito-identity-js';
