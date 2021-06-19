@@ -11,7 +11,7 @@ import {
   CognitoUserSession
 } from 'amazon-cognito-identity-js';
 
-class CognitoUserInitialiser {
+export class CognitoUserInitialiser {
 
   constructor() {
     this._configProvider = ServiceLocator.configProvider;
@@ -54,5 +54,3 @@ class CognitoUserInitialiser {
   }
 
 }
-
-module.exports = CognitoUserInitialiser;

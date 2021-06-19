@@ -1,7 +1,6 @@
-
 import React from 'react';
 
-class DoneLoader extends React.Component {
+export class DoneLoader extends React.Component {
 
   fetchDones() {
     this.props.fetchDones(this.props.nextKey);
@@ -18,5 +17,3 @@ class DoneLoader extends React.Component {
   }
 
 }
-
-module.exports = DoneLoader;
