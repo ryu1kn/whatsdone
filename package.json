@@ -8,7 +8,7 @@
   ],
   "author": "Ryuichi Inagaki",
   "engines": {
-    "node": ">= 12"
+    "node": ">= 14"
   },
   "devDependencies": {
     "buildmate": "0.0.3"
