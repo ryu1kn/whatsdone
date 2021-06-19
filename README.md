@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ryu1kn/whatsdone.svg?branch=master)](https://travis-ci.org/ryu1kn/whatsdone)
+[![Build Status](https://www.travis-ci.com/ryu1kn/whatsdone.svg?branch=master)](https://www.travis-ci.com/ryu1kn/whatsdone)
 
 # What's Done
 
