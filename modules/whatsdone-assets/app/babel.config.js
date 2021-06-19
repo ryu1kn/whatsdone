@@ -12,7 +12,11 @@ module.exports = function config(api) {
 
     overrides: [
       {
-        test: /\.jsx?$/,
+        test: /\.tsx?$/,
+        presets: ['@babel/preset-typescript'],
+      },
+      {
+        test: /\.tsx$/,
         presets: ['@babel/preset-react']
       }
     ]

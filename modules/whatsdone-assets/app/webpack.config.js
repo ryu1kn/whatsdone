@@ -21,13 +21,14 @@ module.exports = {
   entry: [
     'babel-polyfill',
     'whatwg-fetch',
-    `${SRC_DIR}/app.js`
+    `${SRC_DIR}/app.tsx`
   ],
   output: {
     path: `${BUILD_DIR}/static`,
     filename: 'build-[hash].js'
   },
   resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.d.ts', '.tsx', '.json'],
     fallback: {
       util: require.resolve('util')
     }
@@ -35,7 +36,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.tsx?$/,
         include: `${SRC_DIR}`,
         loader: 'babel-loader'
       },

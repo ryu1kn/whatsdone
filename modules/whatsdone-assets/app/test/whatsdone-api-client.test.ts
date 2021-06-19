@@ -1,5 +1,4 @@
 import 'babel-polyfill';
-import test from 'tape';
 import * as td from 'testdouble';
 
 import ServiceLocator from '../src/service-locator';
@@ -38,42 +37,34 @@ const createWhatsdoneApiClient = () => {
   return new WhatsdoneApiClient();
 };
 
-test('WhatsdoneApiClient fetch all done items', async t => {
-  t.plan(1);
-
+test('WhatsdoneApiClient fetch all done items', async () => {
   const apiClient = createWhatsdoneApiClient();
 
   const response = await apiClient.getDones()
 
-  t.deepEqual(response, 'RESPONSE_1');
+  expect(response).toBe('RESPONSE_1');
 });
 
-test('WhatsdoneApiClient fetch done items by sending a key', async t => {
-  t.plan(1);
-
+test('WhatsdoneApiClient fetch done items by sending a key', async () => {
   const apiClient = createWhatsdoneApiClient();
 
   const response = await apiClient.getDones('NEXT KEY')
 
-  t.deepEqual(response, 'RESPONSE_2');
+  expect(response).toBe('RESPONSE_2');
 });
 
-test('WhatsdoneApiClient record new done item', async t => {
-  t.plan(1);
-
+test('WhatsdoneApiClient record new done item', async () => {
   const apiClient = createWhatsdoneApiClient();
 
   const response = await apiClient.postDone({KEY: 'VALUE'})
 
-  t.deepEqual(response, 'RESPONSE_3');
+  expect(response).toBe('RESPONSE_3');
 });
 
-test('WhatsdoneApiClient deletes one done item', async t => {
-  t.plan(1);
-
+test('WhatsdoneApiClient deletes one done item', async () => {
   const apiClient = createWhatsdoneApiClient();
 
   const response = await apiClient.deleteDone('DONE_ID')
 
-  t.deepEqual(response, 'RESPONSE_4');
+  expect(response).toBe('RESPONSE_4');
 });

@@ -1,4 +1,3 @@
-
 import Action from '../../action';
 import ServiceLocator from '../../../service-locator';
 
