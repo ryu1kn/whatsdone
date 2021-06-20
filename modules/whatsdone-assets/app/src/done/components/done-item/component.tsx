@@ -5,7 +5,15 @@ import {getColorCode} from '../../../util';
 const showdown = require('showdown');
 const converter = new showdown.Converter();
 
-export class DoneItem extends React.Component {
+interface DoneItemProps {
+  doneId: string
+  date: Date
+  username: string
+  deleteDone: (id: string) => void
+  children: string
+}
+
+export class DoneItem extends React.Component<DoneItemProps> {
 
   formatTime(date) {
     let hour = date.getHours();
@@ -32,7 +40,7 @@ export class DoneItem extends React.Component {
 
   delete(e) {
     e.stopPropagation();
-    ReactDOM.findDOMNode(this).setAttribute('style', 'display:none;');
+    (ReactDOM.findDOMNode(this) as Element).setAttribute('style', 'display:none;');
     this.props.deleteDone(this.props.doneId);
   }
 

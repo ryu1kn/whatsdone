@@ -2,7 +2,20 @@ import React from 'react';
 
 import DoneItem from './done-item';
 
-class DoneList extends React.Component {
+// TODO: Can this go to non-UI file?
+interface DoneItemData {
+  id: string
+  date: Date
+  username: string
+  doneThing: string
+}
+
+export interface DoneListProps {
+  title: string
+  data: DoneItemData[]
+}
+
+class DoneList extends React.Component<DoneListProps> {
 
   render() {
     const doneItemNodes = this.props.data.map(function (doneItem, index) {

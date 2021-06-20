@@ -9,7 +9,7 @@ charset = utf-8
 trim_trailing_whitespace = true
 indent_size = 4
 
-[*.{ts,js,jsx,json,yaml,html,css,less,scala}]
+[*.{ts,tsx,js,jsx,json,yaml,html,css,less,scala}]
 indent_size = 2
 
 [*Makefile]
