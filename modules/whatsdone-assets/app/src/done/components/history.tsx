@@ -3,10 +3,11 @@ import React from 'react';
 
 import DoneList from './done-list';
 import DoneLoader from './done-loader';
+import {DoneState} from '../reducer';
 
 const ONEDAY_MS = 24 * 60 * 60 * 1000;
 
-class DoneHistory extends React.Component {
+class DoneHistory extends React.Component<{done: DoneState}> {
 
   getLocalDateString(d) {
     let month = d.getMonth() + 1;
