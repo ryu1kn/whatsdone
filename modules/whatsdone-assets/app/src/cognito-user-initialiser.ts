@@ -41,7 +41,7 @@ export class CognitoUserInitialiser {
 
     if (token.id_token && token.access_token) {
       const userData = {
-        Username: jwtDecode(token.id_token)['cognito:username'],
+        Username: jwtDecode<{'cognito:username': string}>(token.id_token)['cognito:username'],
         Pool: userPool,
         Storage: this._cookieStorage
       };
