@@ -30,7 +30,7 @@ class DoneHistory extends React.Component<{done: DoneState}> {
   getFriendlyDayLabel(dateString) {
     const now = new Date();
     const today = this.getLocalDateString(now);
-    const yesterday = this.getLocalDateString(new Date(now - ONEDAY_MS));
+    const yesterday = this.getLocalDateString(new Date(now.getTime() - ONEDAY_MS));
     switch (dateString) {
     case today:
       return 'Today';
