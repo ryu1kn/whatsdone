@@ -1,10 +1,6 @@
 import Action from '../../action';
 import ServiceLocator from '../../../service-locator';
 
-const mapStateToProps = state => {
-  return {nextKey: state.done.nextKey};
-};
-
 const mapDispatchToProps = dispatch => {
   return {
     fetchDones: nextKey => {
@@ -27,4 +23,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export {mapStateToProps, mapDispatchToProps};
+export {mapDispatchToProps};
