@@ -1,4 +1,5 @@
 import ServiceLocator from './service-locator';
+import {SmartFetch} from './smart-fetch';
 
 export interface AppConfig {
   CLIENT_ID: string
@@ -9,7 +10,7 @@ export interface AppConfig {
 }
 
 class ConfigProvider {
-  private readonly _smartFetch: any;
+  private readonly _smartFetch: SmartFetch;
   private _APP_CONFIG: AppConfig;
 
   constructor() {

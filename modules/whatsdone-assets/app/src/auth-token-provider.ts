@@ -1,9 +1,10 @@
 import ServiceLocator from './service-locator';
 import ConfigProvider from './config-provider';
+import {CookieStorage} from 'amazon-cognito-identity-js';
 
 class AuthTokenProvider {
   private readonly _configProvider: ConfigProvider;
-  private readonly _cookieStorage: any;
+  private readonly _cookieStorage: CookieStorage;
 
   constructor() {
     this._configProvider = ServiceLocator.configProvider;

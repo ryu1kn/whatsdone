@@ -8,7 +8,8 @@ import {
   CognitoRefreshToken,
   CognitoUser,
   CognitoUserPool,
-  CognitoUserSession
+  CognitoUserSession,
+  CookieStorage
 } from 'amazon-cognito-identity-js';
 import ConfigProvider, {AppConfig} from './config-provider';
 
@@ -21,7 +22,7 @@ interface JwtToken {
 
 export class CognitoUserInitialiser {
   private readonly _configProvider: ConfigProvider;
-  private readonly _cookieStorage: any;
+  private readonly _cookieStorage: CookieStorage;
 
   constructor() {
     this._configProvider = ServiceLocator.configProvider;

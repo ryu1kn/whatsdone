@@ -4,8 +4,6 @@ import * as td from 'testdouble';
 import ServiceLocator from '../src/service-locator';
 import WhatsdoneApiClient from '../src/whatsdone-api-client';
 import ServiceFactory from '../src/service-factory';
-import {SmartFetch} from '../src/smart-fetch';
-import {CognitoUserInitialiser} from '../src/cognito-user-initialiser';
 import {CookieStorage} from 'amazon-cognito-identity-js';
 
 const baseOption = {
@@ -31,8 +29,8 @@ td.when(smartFetch('https://api_origin/dones/DONE_ID', Object.assign({}, baseOpt
 
 const createWhatsdoneApiClient = () => {
   ServiceLocator.load(new ServiceFactory(), {
-    createSmartFetch: () => smartFetch as SmartFetch,
-    createCognitoUserInitialiser: () => ({} as CognitoUserInitialiser),
+    createSmartFetch: () => smartFetch,
+    createCognitoUserInitialiser: () => ({}),
     createCookieStorage: () => ({
       getItem: () => 'JWT_ID_TOKEN'
     } as unknown as CookieStorage)

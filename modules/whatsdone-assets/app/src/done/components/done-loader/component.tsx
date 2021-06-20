@@ -1,8 +1,9 @@
 import React from 'react';
+import {NextKey} from '../../reducer';
 
 interface DoneLoaderProps {
-  fetchDones: (nextKey: any) => void
-  nextKey: any
+  fetchDones: (nextKey: NextKey) => void
+  nextKey: NextKey
 }
 
 export class DoneLoader extends React.Component<DoneLoaderProps> {

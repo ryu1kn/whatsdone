@@ -4,6 +4,7 @@ import url from 'url';
 import ConfigProvider from './config-provider';
 import {NextKey, RawDoneItem} from './done/reducer';
 import {SmartFetch, SmartFetchResponse} from './smart-fetch';
+import AuthTokenProvider from './auth-token-provider';
 
 const DEFAULT_OPTIONS = {
   mode: 'cors',
@@ -27,7 +28,7 @@ export type GetDonesResponse = SmartFetchResponse & {
 class WhatsdoneApiClient {
   private readonly _smartFetch: SmartFetch;
   private readonly _configProvider: ConfigProvider;
-  private readonly _authTokenProvider: any;
+  private readonly _authTokenProvider: AuthTokenProvider;
 
   constructor() {
     this._smartFetch = ServiceLocator.smartFetch;
