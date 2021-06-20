@@ -1,14 +1,19 @@
 import React from 'react';
 
-export class DoneForm extends React.Component {
+interface DoneFormProps {
+  onSubmit: (doneThing: string) => void
+}
+
+export class DoneForm extends React.Component<DoneFormProps> {
 
   handleSubmit(e) {
     e.preventDefault();
-    const doneThing = this.refs.doneThing.value.trim();
+    const doneThingElement = this.refs.doneThing as HTMLInputElement;
+    const doneThing = doneThingElement.value.trim();
     if (!doneThing) return;
 
     this.props.onSubmit(doneThing);
-    this.refs.doneThing.value = '';
+    doneThingElement.value = '';
   }
 
   render() {

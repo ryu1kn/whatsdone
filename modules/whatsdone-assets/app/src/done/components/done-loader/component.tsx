@@ -1,6 +1,11 @@
 import React from 'react';
 
-export class DoneLoader extends React.Component {
+interface DoneLoaderProps {
+  fetchDones: (nextKey: any) => void
+  nextKey: any
+}
+
+export class DoneLoader extends React.Component<DoneLoaderProps> {
 
   fetchDones() {
     this.props.fetchDones(this.props.nextKey);
