@@ -11,7 +11,7 @@
     "noEmit": true,
     "isolatedModules": true,
     // "strict": true,
-    // "noImplicitAny": true,
+    "noImplicitAny": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictBindCallApply": true,

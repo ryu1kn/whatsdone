@@ -3,22 +3,20 @@ import React from 'react';
 
 import DoneList from './done-list';
 import DoneLoader from './done-loader';
-import {DoneState} from '../reducer';
+import {DoneItem, DoneState} from '../reducer';
+import {pad0} from './date-util';
 
 const ONEDAY_MS = 24 * 60 * 60 * 1000;
 
 class DoneHistory extends React.Component<{done: DoneState}> {
 
-  getLocalDateString(d) {
-    let month = d.getMonth() + 1;
-    let date = d.getDate();
-    month = month < 10 ? `0${month}` : month;
-    date = date < 10 ? `0${date}` : date;
-
-    return `${d.getFullYear()}-${month}-${date}`;
+  getLocalDateString(d: Date) {
+    const month = d.getMonth() + 1;
+    const date = d.getDate();
+    return `${d.getFullYear()}-${pad0(month)}-${pad0(date)}`;
   }
 
-  getDayLabel(date) {
+  getDayLabel(date: Date) {
     return date.toLocaleDateString('en-GB', {
       weekday: 'short',
       year: 'numeric',
@@ -27,7 +25,7 @@ class DoneHistory extends React.Component<{done: DoneState}> {
     });
   }
 
-  getFriendlyDayLabel(dateString) {
+  getFriendlyDayLabel(dateString: string) {
     const now = new Date();
     const today = this.getLocalDateString(now);
     const yesterday = this.getLocalDateString(new Date(now.getTime() - ONEDAY_MS));
@@ -44,7 +42,7 @@ class DoneHistory extends React.Component<{done: DoneState}> {
   render() {
     const grouped = _.groupBy(
       this.props.done.items,
-      entry => this.getLocalDateString(entry.date)
+      (entry: DoneItem) => this.getLocalDateString(entry.date)
     );
     return (
       <div className="donehistory">

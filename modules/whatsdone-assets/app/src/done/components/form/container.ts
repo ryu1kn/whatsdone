@@ -1,9 +1,10 @@
 import Action from '../../action';
 import ServiceLocator from '../../../service-locator';
+import {Dispatch} from 'redux';
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    onSubmit: doneThing => {
+    onSubmit: (doneThing: string) => {
       const doneItem = {
         doneThing,
         date: new Date().toISOString()

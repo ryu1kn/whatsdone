@@ -1,17 +1,27 @@
-import ServiceLocator, {SmartFetch} from './service-locator';
+import ServiceLocator from './service-locator';
 import querystring from 'querystring';
 import url from 'url';
 import ConfigProvider from './config-provider';
-import {NextKey} from './done/reducer';
+import {NextKey, RawDoneItem} from './done/reducer';
+import {SmartFetch, SmartFetchResponse} from './smart-fetch';
 
 const DEFAULT_OPTIONS = {
   mode: 'cors',
   credentials: 'include'
 };
 
-type PostDoneItem = {
+export type PostDoneItem = {
   doneThing: string
   date: string
+}
+
+export type PostDoneResponse = SmartFetchResponse & {body: RawDoneItem}
+
+export type GetDonesResponse = SmartFetchResponse & {
+  body: {
+    items: RawDoneItem[],
+    nextKey: NextKey
+  }
 }
 
 class WhatsdoneApiClient {
@@ -35,12 +45,12 @@ class WhatsdoneApiClient {
     };
   }
 
-  getDones(nextKey?: NextKey) {
+  getDones(nextKey?: NextKey): Promise<GetDonesResponse> {
     const qs = nextKey ? `?${querystring.stringify({nextKey})}` : '';
     return this._relayFetch(`/dones${qs}`);
   }
 
-  postDone(doneItem: PostDoneItem) {
+  postDone(doneItem: PostDoneItem): Promise<PostDoneResponse> {
     return this._relayFetch('/dones', this._buildPostOption(doneItem));
   }
 
@@ -48,7 +58,7 @@ class WhatsdoneApiClient {
     return this._relayFetch(`/dones/${doneId}`, {method: 'DELETE'});
   }
 
-  _relayFetch(path: string, options?: RequestInit) {
+  _relayFetch(path: string, options?: RequestInit): Promise<SmartFetchResponse> {
     return Promise.all([this._getApiOrigin(), this._authTokenProvider.getIdToken()])
       .then(([apiOrigin, idToken]) => {
         const uri = url.resolve(apiOrigin, path);

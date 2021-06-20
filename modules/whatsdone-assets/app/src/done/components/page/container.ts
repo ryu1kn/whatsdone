@@ -2,6 +2,7 @@ import Action from '../../action';
 import ServiceLocator from '../../../service-locator';
 import {MapStateToPropsParam} from 'react-redux';
 import {RootState} from '../../../reducer';
+import {Dispatch} from 'redux';
 
 interface ContainerState {
   ownProps?: any
@@ -14,7 +15,7 @@ const mapStateToProps: MapStateToPropsParam<RootState, ContainerState, RootState
   return {done: state.done};
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     fetchDones: () => {
       dispatch(Action.getDones());
@@ -24,14 +25,16 @@ const mapDispatchToProps = dispatch => {
           case 200: {
             const body = response.body;
             const dones = body.items || body;
-            return dispatch(Action.markGetDonesSuccess(dones, body.nextKey));
+            dispatch(Action.markGetDonesSuccess(dones, body.nextKey));
+            return
           }
           case 401:
-            return ServiceLocator.configProvider.getConfig()
+            ServiceLocator.configProvider.getConfig()
               .then(appConfig => {
                 const signinUrl = buildSigninUrl(appConfig.CLIENT_ID);
                 window.location.replace(signinUrl);
               });
+            return
           default:
             throw new Error(`Unexpected response code ${response.status}`);
           }
@@ -42,7 +45,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-function buildSigninUrl(clientId) {
+function buildSigninUrl(clientId: string) {
   const host = window.location.hostname;
   const hostname = host.split('.')[0];
   return `https://${hostname}.auth.ap-southeast-2.amazoncognito.com/login?response_type=token&client_id=${clientId}&redirect_uri=https://${host}`;

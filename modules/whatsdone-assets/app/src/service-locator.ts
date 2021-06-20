@@ -1,7 +1,7 @@
 import ServiceFactory from './service-factory';
 import ConfigProvider from './config-provider';
-
-export type SmartFetch = (uri: string, options?: RequestInit) => Promise<{status: number, body: any}>;
+import WhatsdoneApiClient from './whatsdone-api-client';
+import {SmartFetch} from './smart-fetch';
 
 class ServiceLocator {
   private _serviceFactory: any;
@@ -38,7 +38,7 @@ class ServiceLocator {
     return this._get('smartFetch');
   }
 
-  get whatsdoneApiClient() {
+  get whatsdoneApiClient(): WhatsdoneApiClient {
     return this._get('whatsdoneApiClient');
   }
 

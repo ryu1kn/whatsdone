@@ -1,5 +1,5 @@
 
-function hashCode(str) { // java String#hashCode
+function hashCode(str: string): number { // java String#hashCode
   var hash = 0;
   for (var i = 0; i < str.length; i++) {
     hash = str.charCodeAt(i) + ((hash << 5) - hash);  // eslint-disable-line no-bitwise
@@ -7,7 +7,7 @@ function hashCode(str) { // java String#hashCode
   return hash;
 }
 
-function intToARGB(i) {
+function intToARGB(i: number): string {
   /* eslint-disable no-bitwise */
   return ((i >> 24) & 0xFF).toString(16) +
          ((i >> 16) & 0xFF).toString(16) +
@@ -17,7 +17,7 @@ function intToARGB(i) {
 }
 
 // Taken from http://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
-export const getColorCode = str => {
+export const getColorCode: (s: string) => string = str => {
   const code = intToARGB(hashCode(str));
   return '#' + code.substr(0, 6);
 }

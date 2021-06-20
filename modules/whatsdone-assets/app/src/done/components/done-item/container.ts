@@ -1,9 +1,10 @@
 import Action from '../../action';
 import ServiceLocator from '../../../service-locator';
+import {Dispatch} from 'redux';
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    deleteDone: id => {
+    deleteDone: (id: string) => {
       dispatch(Action.deleteDone(id));
       ServiceLocator.whatsdoneApiClient.deleteDone(id)
         .then(() => {

@@ -1,9 +1,11 @@
 import Action from '../../action';
 import ServiceLocator from '../../../service-locator';
+import {Dispatch} from 'redux';
+import {NextKey} from '../../reducer';
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    fetchDones: nextKey => {
+    fetchDones: (nextKey?: NextKey) => {
       dispatch(Action.getDones());
       ServiceLocator.whatsdoneApiClient.getDones(nextKey)
         .then(response => {
