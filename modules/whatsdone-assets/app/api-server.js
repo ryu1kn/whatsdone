@@ -15,7 +15,7 @@ const dones = dummyDones();
 
 app.options('/dones', cors(corsOptions))
 
-app.get('/dones', cors(corsOptions), (req, res) => {
+app.get('/dones', cors(corsOptions), (_req, res) => {
   res.status(200).json({
     items: dones
   });
@@ -32,7 +32,7 @@ app.post('/dones', cors(corsOptions), (req, res) => {
     .catch(e => console.error(e.stack));
 });
 
-app.get('*', (req, res) => {
+app.get('*', (_req, res) => {
   res.sendStatus(404);
 });
 
