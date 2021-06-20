@@ -1,12 +1,18 @@
 import ActionType from './action-type';
 
+export interface DoneState {
+  items: any[]
+  nextKey: any
+  apiReady: boolean
+}
+
 const initialState = {
   items: [],
   nextKey: null,
   apiReady: false
 };
 
-export default (state = initialState, action) => {
+export default (state: DoneState = initialState, action) => {
   switch (action.type) {
   case 'API_READY':
     return Object.assign({}, state, {apiReady: true});

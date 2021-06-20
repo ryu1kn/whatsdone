@@ -1,9 +1,15 @@
 import Action from '../../action';
 import ServiceLocator from '../../../service-locator';
+import {MapStateToPropsParam} from 'react-redux';
+import {RootState} from '../../../reducer';
 
-const containerState = {};
+interface ContainerState {
+  ownProps?: any
+}
 
-const mapStateToProps = (state, ownProps) => {
+const containerState: ContainerState = {};
+
+const mapStateToProps: MapStateToPropsParam<RootState, ContainerState, RootState> = (state, ownProps) => {
   containerState.ownProps = ownProps;
   return {done: state.done};
 };
