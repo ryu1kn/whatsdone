@@ -1,7 +1,8 @@
 import ServiceLocator from './service-locator';
+import ConfigProvider from './config-provider';
 
 class AuthTokenProvider {
-  private readonly _configProvider: any;
+  private readonly _configProvider: ConfigProvider;
   private readonly _cookieStorage: any;
 
   constructor() {
@@ -14,7 +15,7 @@ class AuthTokenProvider {
       .then(appConfig => this._readIdTokenFromCookie(appConfig.CLIENT_ID));
   }
 
-  _readIdTokenFromCookie(appClientId) {
+  _readIdTokenFromCookie(appClientId: string) {
     const lastAuthUser = this._cookieStorage.getItem(`CognitoIdentityServiceProvider.${appClientId}.LastAuthUser`);
     return this._cookieStorage.getItem(`CognitoIdentityServiceProvider.${appClientId}.${lastAuthUser}.idToken`);
   }

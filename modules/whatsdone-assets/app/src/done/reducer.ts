@@ -1,8 +1,10 @@
 import ActionType from './action-type';
 
+export type NextKey = string
+
 export interface DoneState {
   items: any[]
-  nextKey: any
+  nextKey: NextKey
   apiReady: boolean
 }
 

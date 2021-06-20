@@ -10,6 +10,7 @@ import {
   CognitoUserPool,
   CognitoUserSession
 } from 'amazon-cognito-identity-js';
+import ConfigProvider, {AppConfig} from './config-provider';
 
 interface JwtToken {
   id_token: string
@@ -19,7 +20,7 @@ interface JwtToken {
 }
 
 export class CognitoUserInitialiser {
-  private readonly _configProvider: any;
+  private readonly _configProvider: ConfigProvider;
   private readonly _cookieStorage: any;
 
   constructor() {
@@ -56,7 +57,7 @@ export class CognitoUserInitialiser {
     }
   }
 
-  _configureAWSSdk(appConfig) {
+  _configureAWSSdk(appConfig: AppConfig) {
     AWS.config.region = appConfig.REGION;
     AWS.config.credentials = new AWS.CognitoIdentityCredentials({
       IdentityPoolId: appConfig.IDENTITY_POOL_ID
