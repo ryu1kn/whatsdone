@@ -4,6 +4,9 @@ import * as td from 'testdouble';
 import ServiceLocator from '../src/service-locator';
 import WhatsdoneApiClient from '../src/whatsdone-api-client';
 import ServiceFactory from '../src/service-factory';
+import {SmartFetch} from '../src/smart-fetch';
+import {CognitoUserInitialiser} from '../src/cognito-user-initialiser';
+import {CookieStorage} from 'amazon-cognito-identity-js';
 
 const baseOption = {
   mode: 'cors',
@@ -21,19 +24,19 @@ td.when(smartFetch('https://api_origin/dones', Object.assign({}, baseOption, {
     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
     Authorization: 'JWT_ID_TOKEN'
   },
-  body: 'KEY=VALUE'
+  body: 'doneThing=foobar&date=sometime'
 }))).thenResolve('RESPONSE_3');
 td.when(smartFetch('https://api_origin/dones/DONE_ID', Object.assign({}, baseOption, {method: 'DELETE'})))
   .thenResolve(('RESPONSE_4'));
 
 const createWhatsdoneApiClient = () => {
   ServiceLocator.load(new ServiceFactory(), {
-    createSmartFetch: () => smartFetch,
-    createCognitoUserInitialiser: () => ({}),
+    createSmartFetch: () => smartFetch as SmartFetch,
+    createCognitoUserInitialiser: () => ({} as CognitoUserInitialiser),
     createCookieStorage: () => ({
       getItem: () => 'JWT_ID_TOKEN'
-    })
-  });
+    } as unknown as CookieStorage)
+  } as ServiceFactory);
   return new WhatsdoneApiClient();
 };
 
@@ -56,7 +59,7 @@ test('WhatsdoneApiClient fetch done items by sending a key', async () => {
 test('WhatsdoneApiClient record new done item', async () => {
   const apiClient = createWhatsdoneApiClient();
 
-  const response = await apiClient.postDone({KEY: 'VALUE'})
+  const response = await apiClient.postDone({doneThing: 'foobar', date: 'sometime'})
 
   expect(response).toBe('RESPONSE_3');
 });

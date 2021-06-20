@@ -8,7 +8,7 @@ import {DoneState} from '../../reducer';
 
 export class DonePage extends React.Component<{done: DoneState, fetchDones: () => void}> {
 
-  constructor(params) {
+  constructor(params: any) {
     super(params);
 
     const fetchDones = () => {

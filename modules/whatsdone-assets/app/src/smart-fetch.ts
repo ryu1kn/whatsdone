@@ -4,6 +4,10 @@ const DEFAULT_HEADERS = {
   'Accept-Encoding': 'gzip, deflate'
 };
 
+export type SmartFetchResponse = { status: number, body: any }
+
+export type SmartFetch = (uri: string, options?: RequestInit) => Promise<SmartFetchResponse>;
+
 export default (uri: string, options?: RequestInit) => {
   const headers = Object.assign({}, DEFAULT_HEADERS, options?.headers);
   const finalOptions = Object.assign({}, options, {headers});
@@ -11,7 +15,7 @@ export default (uri: string, options?: RequestInit) => {
     .then((response: Response) => parse(response));
 };
 
-function parse(response: Response): Promise<{status: number, body: any}> {
+function parse(response: Response): Promise<SmartFetchResponse> {
   const promiseOfBody = shouldBeJson(response) ? response.json() : response.text();
   return promiseOfBody.then(body => ({
     status: response.status,

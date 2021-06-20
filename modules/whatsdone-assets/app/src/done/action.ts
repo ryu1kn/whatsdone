@@ -1,4 +1,6 @@
 import ActionType from './action-type';
+import {PostDoneItem} from '../whatsdone-api-client';
+import {NextKey, RawDoneItem} from './reducer';
 
 export default {
   getDones,
@@ -12,42 +14,42 @@ export default {
   markDeleteDoneFailed
 };
 
-function postDone(item) {
+function postDone(item: PostDoneItem) {
   return {
     type: ActionType.POST_DONE_REQUEST,
     item
   };
 }
 
-function markPostDoneSuccess(item) {
+function markPostDoneSuccess(item: RawDoneItem) {
   return {
     type: ActionType.POST_DONE_SUCCESS,
     item
   };
 }
 
-function markPostDoneFailed(e) {
+function markPostDoneFailed(e: Error) {
   return {
     type: ActionType.POST_DONE_FAILURE,
     error: e
   };
 }
 
-function deleteDone(id) {
+function deleteDone(id: string) {
   return {
     type: ActionType.DELETE_DONE_REQUEST,
     id
   };
 }
 
-function markDeleteDoneSuccess(id) {
+function markDeleteDoneSuccess(id: string) {
   return {
     type: ActionType.DELETE_DONE_SUCCESS,
     id
   };
 }
 
-function markDeleteDoneFailed(e) {
+function markDeleteDoneFailed(e: Error) {
   return {
     type: ActionType.DELETE_DONE_FAILURE,
     error: e
@@ -60,7 +62,7 @@ function getDones() {
   };
 }
 
-function markGetDonesSuccess(dones, nextKey) {
+function markGetDonesSuccess(dones: RawDoneItem[], nextKey: NextKey) {
   return {
     type: ActionType.GET_DONE_SUCCESS,
     dones,
@@ -68,7 +70,7 @@ function markGetDonesSuccess(dones, nextKey) {
   };
 }
 
-function markGetDonesFailed(e) {
+function markGetDonesFailed(e: Error) {
   return {
     type: ActionType.GET_DONE_FAILURE,
     error: e

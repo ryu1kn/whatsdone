@@ -20,7 +20,7 @@ const store = createStore(
 );
 ServiceLocator.cognitoUserInitialiser.initialise()
   .then(() => store.dispatch({type: 'API_READY'}))
-  .catch(e => { console.error(e.stack); });
+  .catch((e: Error) => { console.error(e.stack); });
 
 ReactDOM.render(
   (

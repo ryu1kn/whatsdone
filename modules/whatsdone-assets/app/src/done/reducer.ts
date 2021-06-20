@@ -1,10 +1,21 @@
 import ActionType from './action-type';
+import {AnyAction} from 'redux';
 
 export type NextKey = string
 
-export interface DoneState {
-  items: any[]
-  nextKey: NextKey
+export type RawDoneItem = {
+  date: string
+  doneThing: string
+  id: string
+  userId: string
+  username: string
+}
+
+export type DoneItem = Omit<RawDoneItem, 'date'> & {date: Date}
+
+export type DoneState = {
+  items: DoneItem[]
+  nextKey: NextKey | null
   apiReady: boolean
 }
 
@@ -14,7 +25,7 @@ const initialState = {
   apiReady: false
 };
 
-export default (state: DoneState = initialState, action) => {
+export default (state: DoneState = initialState, action: AnyAction) => {
   switch (action.type) {
   case 'API_READY':
     return Object.assign({}, state, {apiReady: true});
@@ -50,7 +61,7 @@ export default (state: DoneState = initialState, action) => {
   }
 };
 
-function mergeDoneList(items1, items2) {
+function mergeDoneList(items1: DoneItem[], items2: DoneItem[]) {
   return [...items1, ...items2].sort(
     (a, b) =>
       a.date < b.date ? 1 :
@@ -58,11 +69,11 @@ function mergeDoneList(items1, items2) {
   );
 }
 
-function normaliseDoneItem(doneItem) {
+function normaliseDoneItem(doneItem: RawDoneItem): DoneItem {
   return Object.assign({}, doneItem, {date: new Date(doneItem.date)});
 }
 
-function updateDones(dones, doneItem) {
+function updateDones(dones: DoneItem[], doneItem: DoneItem) {
   const index = dones.findIndex(done => done.date.getTime() === doneItem.date.getTime());
   if (index === -1) return dones;
   return [...dones.slice(0, index), doneItem, ...dones.slice(index + 1)];

@@ -1,14 +1,7 @@
 import React from 'react';
 
 import DoneItem from './done-item';
-
-// TODO: Can this go to non-UI file?
-interface DoneItemData {
-  id: string
-  date: Date
-  username: string
-  doneThing: string
-}
+import {DoneItem as DoneItemData} from '../reducer';
 
 export interface DoneListProps {
   title: string

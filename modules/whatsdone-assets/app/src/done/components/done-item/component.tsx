@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {getColorCode} from '../../../util';
+import {pad0} from '../date-util';
 
 const showdown = require('showdown');
 const converter = new showdown.Converter();
@@ -15,7 +16,7 @@ interface DoneItemProps {
 
 export class DoneItem extends React.Component<DoneItemProps> {
 
-  formatTime(date) {
+  formatTime(date: Date) {
     let hour = date.getHours();
     let mins = date.getMinutes();
     const ampm = hour < 12 ? 'am' : 'pm';
@@ -23,22 +24,19 @@ export class DoneItem extends React.Component<DoneItemProps> {
     if (hour > 12) {
       hour -= 12;
     }
-    if (mins < 10) {
-      mins = '0' + mins;
-    }
 
-    return `${hour}:${mins} ${ampm}`;
+    return `${hour}:${pad0(mins)} ${ampm}`;
   }
 
-  getFirstLetter(name) {
+  getFirstLetter(name: string) {
     return (name || '').charAt(0).toUpperCase() || '?';
   }
 
-  getIconColor(name) {
+  getIconColor(name: string) {
     return name ? getColorCode(name) : '#DDDDDD';
   }
 
-  delete(e) {
+  delete(e: any) {
     e.stopPropagation();
     (ReactDOM.findDOMNode(this) as Element).setAttribute('style', 'display:none;');
     this.props.deleteDone(this.props.doneId);
