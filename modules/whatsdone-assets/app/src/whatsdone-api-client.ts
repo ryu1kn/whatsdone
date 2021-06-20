@@ -1,15 +1,22 @@
-import ServiceLocator from './service-locator';
+import ServiceLocator, {SmartFetch} from './service-locator';
 import querystring from 'querystring';
 import url from 'url';
+import ConfigProvider from './config-provider';
+import {NextKey} from './done/reducer';
 
 const DEFAULT_OPTIONS = {
   mode: 'cors',
   credentials: 'include'
 };
 
+type PostDoneItem = {
+  doneThing: string
+  date: string
+}
+
 class WhatsdoneApiClient {
-  private readonly _smartFetch: any;
-  private readonly _configProvider: any;
+  private readonly _smartFetch: SmartFetch;
+  private readonly _configProvider: ConfigProvider;
   private readonly _authTokenProvider: any;
 
   constructor() {
@@ -18,7 +25,7 @@ class WhatsdoneApiClient {
     this._authTokenProvider = ServiceLocator.authTokenProvider;
   }
 
-  _buildPostOption(data) {
+  _buildPostOption(data: PostDoneItem) {
     return {
       method: 'POST',
       headers: {
@@ -28,25 +35,24 @@ class WhatsdoneApiClient {
     };
   }
 
-  getDones(nextKey?) {
+  getDones(nextKey?: NextKey) {
     const qs = nextKey ? `?${querystring.stringify({nextKey})}` : '';
     return this._relayFetch(`/dones${qs}`);
   }
 
-  postDone(doneItem) {
+  postDone(doneItem: PostDoneItem) {
     return this._relayFetch('/dones', this._buildPostOption(doneItem));
   }
 
-  deleteDone(doneId) {
+  deleteDone(doneId: string) {
     return this._relayFetch(`/dones/${doneId}`, {method: 'DELETE'});
   }
 
-  _relayFetch(path, options?) {
+  _relayFetch(path: string, options?: RequestInit) {
     return Promise.all([this._getApiOrigin(), this._authTokenProvider.getIdToken()])
       .then(([apiOrigin, idToken]) => {
         const uri = url.resolve(apiOrigin, path);
-        const headers = (options && options.headers) || {};
-        const finalHeaders = Object.assign({}, headers, {Authorization: idToken});
+        const finalHeaders = Object.assign({}, options?.headers, {Authorization: idToken});
         const finalOptions = Object.assign({}, DEFAULT_OPTIONS, options, {headers: finalHeaders});
         return this._smartFetch(uri, finalOptions);
       });
