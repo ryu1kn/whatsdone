@@ -2,6 +2,9 @@ import ServiceFactory from './service-factory';
 import ConfigProvider from './config-provider';
 import WhatsdoneApiClient from './whatsdone-api-client';
 import {SmartFetch} from './smart-fetch';
+import {CookieStorage} from 'amazon-cognito-identity-js';
+import {CognitoUserInitialiser} from './cognito-user-initialiser';
+import AuthTokenProvider from './auth-token-provider';
 
 class ServiceLocator {
   private _serviceFactory: any;
@@ -14,11 +17,11 @@ class ServiceLocator {
     this._cache = Object.create(null);
   }
 
-  get authTokenProvider() {
+  get authTokenProvider(): AuthTokenProvider {
     return this._get('authTokenProvider');
   }
 
-  get cognitoUserInitialiser() {
+  get cognitoUserInitialiser(): CognitoUserInitialiser {
     return this._get('cognitoUserInitialiser');
   }
 
@@ -26,7 +29,7 @@ class ServiceLocator {
     return this._get('configProvider');
   }
 
-  get cookieStorage() {
+  get cookieStorage(): CookieStorage {
     return this._get('cookieStorage');
   }
 
