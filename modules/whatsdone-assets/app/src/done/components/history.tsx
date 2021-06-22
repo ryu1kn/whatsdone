@@ -4,17 +4,11 @@ import React from 'react';
 import DoneList from './done-list';
 import DoneLoader from './done-loader';
 import {DoneItem, DoneState} from '../reducer';
-import {pad0} from './date-util';
+import {getLocalDateString} from './date-util';
 
 const ONEDAY_MS = 24 * 60 * 60 * 1000;
 
 class DoneHistory extends React.Component<{done: DoneState}> {
-
-  getLocalDateString(d: Date) {
-    const month = d.getMonth() + 1;
-    const date = d.getDate();
-    return `${d.getFullYear()}-${pad0(month)}-${pad0(date)}`;
-  }
 
   getDayLabel(date: Date) {
     return date.toLocaleDateString('en-GB', {
@@ -27,8 +21,8 @@ class DoneHistory extends React.Component<{done: DoneState}> {
 
   getFriendlyDayLabel(dateString: string) {
     const now = new Date();
-    const today = this.getLocalDateString(now);
-    const yesterday = this.getLocalDateString(new Date(now.getTime() - ONEDAY_MS));
+    const today = getLocalDateString(now);
+    const yesterday = getLocalDateString(new Date(now.getTime() - ONEDAY_MS));
     switch (dateString) {
     case today:
       return 'Today';
@@ -42,7 +36,7 @@ class DoneHistory extends React.Component<{done: DoneState}> {
   render() {
     const grouped = _.groupBy(
       this.props.done.items,
-      (entry: DoneItem) => this.getLocalDateString(entry.date)
+      (entry: DoneItem) => getLocalDateString(entry.date)
     );
     return (
       <div className="donehistory">
