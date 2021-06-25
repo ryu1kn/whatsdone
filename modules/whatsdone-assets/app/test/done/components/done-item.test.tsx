@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import {DoneItem} from '../../../src/done/components/done-item/component';
-import {fireEvent, render, screen, waitFor} from '@testing-library/react';
+import {render, screen, waitFor} from '@testing-library/react';
 import React from 'react';
 import 'regenerator-runtime/runtime';
 
@@ -13,8 +13,6 @@ test('Show easy to read time of the user region (This test passes in Melbourne)'
       {'DONE SOMETHING'}
     </DoneItem>
   )
-
-  fireEvent.doubleClick(screen.getByText('DONE SOMETHING'))
 
   await waitFor(() => screen.getByText('10:06 pm'))
 });
