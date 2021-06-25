@@ -45,7 +45,7 @@ class ServiceLocator {
     return this._get('whatsdoneApiClient');
   }
 
-  _get(serviceName: string) {
+  private _get(serviceName: string) {
     const cachedInstance = this._getCachedInstance(serviceName);
     if (cachedInstance) return cachedInstance;
 
@@ -54,11 +54,11 @@ class ServiceLocator {
     return instance;
   }
 
-  _getCachedInstance(serviceName: string) {
+  private _getCachedInstance(serviceName: string) {
     return this._cache[this._getCacheName(serviceName)];
   }
 
-  _getFromServiceFactory(serviceName: string) {
+  private _getFromServiceFactory(serviceName: string) {
     const methodName = this._getFactoryName(serviceName);
 
     return this._overrideServiceFactory[methodName] ?
@@ -67,20 +67,19 @@ class ServiceLocator {
   }
 
   // fooBar -> getFooBar
-  _getFactoryName(name: string) {
+  private _getFactoryName(name: string) {
     // @ts-ignore: name is not an empty string; hence name[0] cannot be undefined
     return ['create', name[0].toUpperCase(), name.substring(1)].join('');
   }
 
-  _cacheInstance(serviceName: string, serviceInstance: any) {
+  private _cacheInstance(serviceName: string, serviceInstance: any) {
     const cacheName = this._getCacheName(serviceName);
     this._cache[cacheName] = serviceInstance;
   }
 
-  _getCacheName(name: string) {
+  private _getCacheName(name: string) {
     return `_${name}`;
   }
-
 }
 
 export default new ServiceLocator();

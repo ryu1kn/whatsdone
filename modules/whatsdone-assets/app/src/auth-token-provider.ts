@@ -16,11 +16,10 @@ class AuthTokenProvider {
       .then(appConfig => this._readIdTokenFromCookie(appConfig.CLIENT_ID));
   }
 
-  _readIdTokenFromCookie(appClientId: string) {
+  private _readIdTokenFromCookie(appClientId: string) {
     const lastAuthUser = this._cookieStorage.getItem(`CognitoIdentityServiceProvider.${appClientId}.LastAuthUser`);
     return this._cookieStorage.getItem(`CognitoIdentityServiceProvider.${appClientId}.${lastAuthUser}.idToken`);
   }
-
 }
 
 export default AuthTokenProvider;

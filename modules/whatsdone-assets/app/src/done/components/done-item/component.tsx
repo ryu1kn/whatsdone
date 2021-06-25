@@ -16,15 +16,15 @@ interface DoneItemProps {
 
 export class DoneItem extends React.Component<DoneItemProps> {
 
-  getFirstLetter(name: string) {
+  private getFirstLetter(name: string) {
     return (name || '').charAt(0).toUpperCase() || '?';
   }
 
-  getIconColor(name: string) {
+  private getIconColor(name: string) {
     return name ? getColorCode(name) : '#DDDDDD';
   }
 
-  delete(e: any) {
+  private delete(e: any) {
     e.stopPropagation();
     (ReactDOM.findDOMNode(this) as Element).setAttribute('style', 'display:none;');
     this.props.deleteDone(this.props.doneId);
@@ -50,5 +50,4 @@ export class DoneItem extends React.Component<DoneItemProps> {
       </div>
     );
   }
-
 }
