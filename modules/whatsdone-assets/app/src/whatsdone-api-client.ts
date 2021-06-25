@@ -36,7 +36,7 @@ class WhatsdoneApiClient {
     this._authTokenProvider = ServiceLocator.authTokenProvider;
   }
 
-  _buildPostOption(data: PostDoneItem) {
+  private _buildPostOption(data: PostDoneItem) {
     return {
       method: 'POST',
       headers: {
@@ -59,7 +59,7 @@ class WhatsdoneApiClient {
     return this._relayFetch(`/dones/${doneId}`, {method: 'DELETE'});
   }
 
-  _relayFetch(path: string, options?: RequestInit): Promise<SmartFetchResponse> {
+  private _relayFetch(path: string, options?: RequestInit): Promise<SmartFetchResponse> {
     return Promise.all([this._getApiOrigin(), this._authTokenProvider.getIdToken()])
       .then(([apiOrigin, idToken]) => {
         const uri = url.resolve(apiOrigin, path);
@@ -69,11 +69,10 @@ class WhatsdoneApiClient {
       });
   }
 
-  _getApiOrigin() {
+  private _getApiOrigin() {
     return this._configProvider.getConfig()
       .then(appConfig => appConfig.API_ORIGIN);
   }
-
 }
 
 export default WhatsdoneApiClient;

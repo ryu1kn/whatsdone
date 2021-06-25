@@ -8,7 +8,7 @@ interface DoneLoaderProps {
 
 export class DoneLoader extends React.Component<DoneLoaderProps> {
 
-  fetchDones() {
+  private fetchDones() {
     this.props.fetchDones(this.props.nextKey);
   }
 
@@ -21,5 +21,4 @@ export class DoneLoader extends React.Component<DoneLoaderProps> {
       </div>
     );
   }
-
 }

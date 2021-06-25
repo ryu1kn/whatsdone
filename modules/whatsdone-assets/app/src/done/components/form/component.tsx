@@ -6,7 +6,7 @@ interface DoneFormProps {
 
 export class DoneForm extends React.Component<DoneFormProps> {
 
-  handleSubmit(e: any) {
+  private handleSubmit(e: any) {
     e.preventDefault();
     const doneThingElement = this.refs.doneThing as HTMLInputElement;
     const doneThing = doneThingElement.value.trim();
@@ -28,5 +28,4 @@ export class DoneForm extends React.Component<DoneFormProps> {
       </form>
     );
   }
-
 }

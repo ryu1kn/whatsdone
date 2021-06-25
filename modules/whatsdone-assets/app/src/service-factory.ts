@@ -35,7 +35,6 @@ class ServiceFactory {
   createWhatsdoneApiClient() {
     return new WhatsdoneApiClient();
   }
-
 }
 
 export default ServiceFactory;

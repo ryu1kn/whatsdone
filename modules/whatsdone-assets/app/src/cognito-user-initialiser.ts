@@ -58,11 +58,10 @@ export class CognitoUserInitialiser {
     }
   }
 
-  _configureAWSSdk(appConfig: AppConfig) {
+  private _configureAWSSdk(appConfig: AppConfig) {
     AWS.config.region = appConfig.REGION;
     AWS.config.credentials = new AWS.CognitoIdentityCredentials({
       IdentityPoolId: appConfig.IDENTITY_POOL_ID
     });
   }
-
 }
