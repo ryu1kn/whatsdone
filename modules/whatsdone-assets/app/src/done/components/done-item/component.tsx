@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {getColorCode} from '../../../util';
 import {formatTime} from '../date-util';
+import {Converter} from 'showdown';
 
-const showdown = require('showdown');
-const converter = new showdown.Converter();
+const converter = new Converter();
 
 interface DoneItemProps {
   doneId: string
@@ -14,15 +14,11 @@ interface DoneItemProps {
   children: string
 }
 
+const getFirstLetter = (name: string) => (name || '').charAt(0).toUpperCase() || '?';
+
+const getIconColor = (name: string) => name ? getColorCode(name) : '#DDDDDD';
+
 export class DoneItem extends React.Component<DoneItemProps> {
-
-  private getFirstLetter(name: string) {
-    return (name || '').charAt(0).toUpperCase() || '?';
-  }
-
-  private getIconColor(name: string) {
-    return name ? getColorCode(name) : '#DDDDDD';
-  }
 
   private delete(e: any) {
     e.stopPropagation();
@@ -31,12 +27,12 @@ export class DoneItem extends React.Component<DoneItemProps> {
   }
 
   render() {
-    var rawMarkup = converter.makeHtml(this.props.children.toString());
+    const rawMarkup = converter.makeHtml(this.props.children.toString());
     return (
       <div className="doneitem">
         <div className="doneitem__user">
-          <div className="doneitem__user-icon" style={{backgroundColor: this.getIconColor(this.props.username)}}>
-            {this.getFirstLetter(this.props.username)}
+          <div className="doneitem__user-icon" style={{backgroundColor: getIconColor(this.props.username)}}>
+            {getFirstLetter(this.props.username)}
           </div>
           <div className="doneiten__user-name">{this.props.username}</div>
         </div>
