@@ -11,8 +11,7 @@ export type SmartFetch = (uri: string, options?: RequestInit) => Promise<SmartFe
 export default (uri: string, options?: RequestInit) => {
   const headers = Object.assign({}, DEFAULT_HEADERS, options?.headers);
   const finalOptions = Object.assign({}, options, {headers});
-  return ServiceLocator.fetch(uri, finalOptions)
-    .then((response: Response) => parse(response));
+  return ServiceLocator.fetch(uri, finalOptions).then(parse);
 };
 
 function parse(response: Response): Promise<SmartFetchResponse> {
