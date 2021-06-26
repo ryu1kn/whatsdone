@@ -47,7 +47,7 @@ export const DoneItem = (props: DoneItemProps) => {
         </div>
         <div className={doneItemCss('user-name')}>{props.username}</div>
       </div>
-      <div>
+      <div className={doneItemCss('body')}>
         {props.editInProgress ?
           <DoneThingInEdit doneThing={doneThing} updateDone={updateDone}/> :
           <DoneThingInView doneThing={doneThing}/>}
