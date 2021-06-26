@@ -11,7 +11,10 @@ export type RawDoneItem = {
   username: string
 }
 
-export type DoneItem = Omit<RawDoneItem, 'date'> & {date: Date}
+export type DoneItem = Omit<RawDoneItem, 'date'> & {
+  date: Date
+  editInProgress?: boolean
+}
 
 export type DoneState = {
   items: DoneItem[]
@@ -51,9 +54,24 @@ export default (state: DoneState = initialState, action: AnyAction) => {
       items: state.items.filter(done => done.id !== action.id),
       nextKey: state.nextKey
     };
+  case ActionType.START_EDIT_DONE:
+    return {
+      ...state,
+      items: updateDoneById(state.items, action.id, done => ({...done, editInProgress: true}))
+    };
+  case ActionType.UPDATE_DONE_REQUEST:
+    return {
+      ...state,
+      items: updateDoneById(state.items, action.id, done => ({
+        ...done,
+        doneThing: action.doneThing,
+        editInProgress: false
+      }))
+    };
   case ActionType.GET_DONE_FAILURE:
   case ActionType.POST_DONE_FAILURE:
   case ActionType.DELETE_DONE_FAILURE:
+  case ActionType.UPDATE_DONE_FAILURE:
     console.error(action.error.stack);
     /* fall through */
   default:
@@ -77,4 +95,9 @@ function updateDones(dones: DoneItem[], doneItem: DoneItem) {
   const index = dones.findIndex(done => done.date.getTime() === doneItem.date.getTime());
   if (index === -1) return dones;
   return [...dones.slice(0, index), doneItem, ...dones.slice(index + 1)];
+}
+
+function updateDoneById(dones: DoneItem[], id: string, convert: (i: DoneItem) => DoneItem) {
+  const index = dones.findIndex(done => done.id === id);
+  return [...dones.slice(0, index), convert(dones[index]!), ...dones.slice(index + 1)];
 }

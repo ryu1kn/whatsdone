@@ -59,6 +59,14 @@ class WhatsdoneApiClient {
     return this._relayFetch(`/dones/${doneId}`, {method: 'DELETE'});
   }
 
+  updateDone(doneId: string, doneThing: string) {
+    return this._relayFetch(`/dones/${doneId}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+      body: querystring.stringify({doneThing})
+    });
+  }
+
   private _relayFetch(path: string, options?: RequestInit): Promise<SmartFetchResponse> {
     return Promise.all([this._getApiOrigin(), this._authTokenProvider.getIdToken()])
       .then(([apiOrigin, idToken]) => {

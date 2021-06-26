@@ -11,7 +11,11 @@ export default {
   markPostDoneFailed,
   deleteDone,
   markDeleteDoneSuccess,
-  markDeleteDoneFailed
+  markDeleteDoneFailed,
+  startEditDone,
+  updateDone,
+  markUpdateDoneSuccess,
+  markUpdateDoneFailed
 };
 
 function postDone(item: PostDoneItem) {
@@ -73,6 +77,35 @@ function markGetDonesSuccess(dones: RawDoneItem[], nextKey: NextKey) {
 function markGetDonesFailed(e: Error) {
   return {
     type: ActionType.GET_DONE_FAILURE,
+    error: e
+  };
+}
+
+function startEditDone(id: string) {
+  return {
+    type: ActionType.START_EDIT_DONE,
+    id
+  };
+}
+
+function updateDone(id: string, doneThing: string) {
+  return {
+    type: ActionType.UPDATE_DONE_REQUEST,
+    id,
+    doneThing
+  };
+}
+
+function markUpdateDoneSuccess(id: string) {
+  return {
+    type: ActionType.UPDATE_DONE_SUCCESS,
+    id
+  };
+}
+
+function markUpdateDoneFailed(e: Error) {
+  return {
+    type: ActionType.UPDATE_DONE_FAILURE,
     error: e
   };
 }
