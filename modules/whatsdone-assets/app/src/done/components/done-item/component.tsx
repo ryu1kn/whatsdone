@@ -2,7 +2,6 @@ import React from 'react';
 import {getColorCode} from '../../../util';
 import {formatTime} from '../date-util';
 import {Converter} from 'showdown';
-import {flow} from 'lodash';
 
 const converter = new Converter();
 
@@ -14,20 +13,14 @@ interface DoneItemProps {
   children: string
 }
 
-const DONE_CSS_NAMESPACE = 'doneitem';
-const doneItemCss = (...components: string[]) => [DONE_CSS_NAMESPACE, ...components].join('__')
+const doneItemCss = (...components: string[]) => ['doneitem', ...components].join('__')
 
 const getFirstLetter = (name: string) => (name || '').charAt(0).toUpperCase() || '?';
 
 const getIconColor = (name: string) => name ? getColorCode(name) : '#DDDDDD';
 
-const grabTopElement = (el: Element) => el.closest(`.${DONE_CSS_NAMESPACE}`);
-const hideElement = (el: Element) => el.setAttribute('style', 'display:none;');
-const hideDone = flow(grabTopElement, hideElement)
-
 const createOnClickDelete = (deleteDone: () => void) => (e: any) => {
   e.stopPropagation();
-  hideDone(e.target as Element);
   deleteDone();
 };
 
