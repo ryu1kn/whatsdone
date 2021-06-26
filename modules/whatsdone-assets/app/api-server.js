@@ -14,6 +14,7 @@ const corsOptions = {
 const dones = dummyDones();
 
 app.options('/dones', cors(corsOptions))
+app.options('/dones/:id', cors(corsOptions))
 
 app.get('/dones', cors(corsOptions), (_req, res) => {
   res.status(200).json({
@@ -30,6 +31,13 @@ app.post('/dones', cors(corsOptions), (req, res) => {
       res.status(202).json(newDone);
     })
     .catch(e => console.error(e.stack));
+});
+
+app.put('/dones/:id', cors(corsOptions), async (req, res) => {
+  const bodyString = await promiseToGetBody(req);
+  const done = dones.find(done => done.id === req.params.id)
+  done.doneThing = querystring.parse(bodyString).doneThing;
+  res.status(202).json(done);
 });
 
 app.get('*', (_req, res) => {
