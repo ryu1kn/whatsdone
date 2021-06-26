@@ -1,4 +1,3 @@
-
 const express = require('express');
 const querystring = require('querystring');
 const cors = require('cors');
@@ -17,27 +16,29 @@ app.options('/dones', cors(corsOptions))
 app.options('/dones/:id', cors(corsOptions))
 
 app.get('/dones', cors(corsOptions), (_req, res) => {
-  res.status(200).json({
-    items: dones
-  });
+  res.status(200).json({items: dones});
 });
 
-app.post('/dones', cors(corsOptions), (req, res) => {
-  promiseToGetBody(req)
-    .then(bodyString => {
-      const parsedBody = querystring.parse(bodyString);
-      const newDone = Object.assign({}, parsedBody, {id: generateDummyId()});
-      dones.push(newDone);
-      res.status(202).json(newDone);
-    })
-    .catch(e => console.error(e.stack));
+app.post('/dones', cors(corsOptions), async (req, res) => {
+  try {
+    const bodyString = await promiseToGetBody(req)
+    const newDone = {...querystring.parse(bodyString), id: generateDummyId()};
+    dones.push(newDone);
+    res.status(202).json(newDone);
+  } catch (e) {
+    console.error(e.stack);
+  }
 });
 
 app.put('/dones/:id', cors(corsOptions), async (req, res) => {
-  const bodyString = await promiseToGetBody(req);
-  const done = dones.find(done => done.id === req.params.id)
-  done.doneThing = querystring.parse(bodyString).doneThing;
-  res.status(202).json(done);
+  try {
+    const bodyString = await promiseToGetBody(req);
+    const done = dones.find(done => done.id === req.params.id)
+    done.doneThing = querystring.parse(bodyString).doneThing;
+    res.status(202).json(done);
+  } catch (e) {
+    console.error(e.stack);
+  }
 });
 
 app.get('*', (_req, res) => {
@@ -50,8 +51,8 @@ app.listen(PORT, () => {
   console.log(`Production Express server running at localhost: ${PORT}`);
 });
 
-function promiseToGetBody(req) {
-  return new Promise((resolve, reject) => {
+const promiseToGetBody = (req) =>
+  new Promise((resolve, reject) => {
     const tmp = {string: ''};
     req.on('data', data => {
       tmp.string += data.toString();
@@ -59,7 +60,6 @@ function promiseToGetBody(req) {
     req.on('end', () => resolve(tmp.string));
     req.on('error', e => reject(e));
   });
-}
 
 function dummyDones() {
   return [
