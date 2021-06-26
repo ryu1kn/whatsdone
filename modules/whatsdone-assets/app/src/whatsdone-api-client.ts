@@ -36,23 +36,16 @@ class WhatsdoneApiClient {
     this._authTokenProvider = ServiceLocator.authTokenProvider;
   }
 
-  private _buildPostOption(data: PostDoneItem) {
-    return {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-      },
-      body: querystring.stringify(data)
-    };
-  }
-
   getDones(nextKey?: NextKey): Promise<GetDonesResponse> {
     const qs = nextKey ? `?${querystring.stringify({nextKey})}` : '';
     return this._relayFetch(`/dones${qs}`);
   }
 
   postDone(doneItem: PostDoneItem): Promise<PostDoneResponse> {
-    return this._relayFetch('/dones', this._buildPostOption(doneItem));
+    return this._relayFetch('/dones', withFormBody({
+      method: 'POST',
+      body: doneItem
+    }));
   }
 
   deleteDone(doneId: string) {
@@ -60,11 +53,10 @@ class WhatsdoneApiClient {
   }
 
   updateDone(doneId: string, doneThing: string) {
-    return this._relayFetch(`/dones/${doneId}`, {
+    return this._relayFetch(`/dones/${doneId}`, withFormBody({
       method: 'PUT',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
-      body: querystring.stringify({doneThing})
-    });
+      body: {doneThing}
+    }));
   }
 
   private _relayFetch(path: string, options?: RequestInit): Promise<SmartFetchResponse> {
@@ -82,5 +74,12 @@ class WhatsdoneApiClient {
       .then(appConfig => appConfig.API_ORIGIN);
   }
 }
+
+const withFormBody: (opts: Omit<RequestInit, 'body'> & {body: any}) => RequestInit =
+  (options) => ({
+    ...options,
+    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+    body: querystring.stringify(options.body)
+  })
 
 export default WhatsdoneApiClient;
