@@ -28,7 +28,7 @@ const createOnClickDelete = (deleteDone: () => void) => (e: any) => {
 };
 
 const DoneThingInEdit = ({doneThing, updateDone}: { doneThing: string, updateDone: (done: string) => void }) =>
-  <input type="text" className="form-control" defaultValue={doneThing}
+  <input type="text" className="form-control" defaultValue={doneThing} autoFocus={true}
          onKeyPress={e => e.key === 'Enter' && updateDone((e.target as HTMLInputElement).value)}/>;
 
 const DoneThingInView = ({doneThing}: { doneThing: string }) =>
