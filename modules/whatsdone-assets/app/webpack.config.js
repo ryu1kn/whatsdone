@@ -11,11 +11,6 @@ const BUILD_DIR = path.resolve(__dirname, process.env.npm_package_config_buildDi
 const BYTE_LIMIT = 100000;
 
 const devMode = process.env.NODE_ENV !== 'production'
-const jsMinifyPlugins = devMode ? [] : [
-  new webpack.DefinePlugin({
-    'process.env': {NODE_ENV: JSON.stringify('production')}
-  })
-];
 
 module.exports = {
   entry: [
@@ -79,9 +74,12 @@ module.exports = {
     ]
   },
   optimization: {
-    minimizer: [new UglifyJsPlugin()],
+    minimizer: devMode ? [] : [new UglifyJsPlugin()]
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    }),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery'
@@ -94,7 +92,6 @@ module.exports = {
       template: `${__dirname}/index.ejs`,
       filename: `${BUILD_DIR}/index.html`
     }),
-    new MiniCssExtractPlugin({filename: 'style-[hash].css'}),
-    ...jsMinifyPlugins
+    new MiniCssExtractPlugin({filename: 'style-[hash].css'})
   ]
 };
