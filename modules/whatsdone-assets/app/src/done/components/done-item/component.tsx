@@ -15,6 +15,7 @@ interface DoneItemProps {
 }
 
 const DONE_CSS_NAMESPACE = 'doneitem';
+const doneItemCss = (...components: string[]) => [DONE_CSS_NAMESPACE, ...components].join('__')
 
 const getFirstLetter = (name: string) => (name || '').charAt(0).toUpperCase() || '?';
 
@@ -34,20 +35,20 @@ export const DoneItem = (props: DoneItemProps) => {
   const rawMarkup = converter.makeHtml(props.children.toString());
   const deleteDone = () => props.deleteDone(props.doneId);
   return (
-    <div className={DONE_CSS_NAMESPACE}>
-      <div className="doneitem__user">
-        <div className="doneitem__user-icon" style={{backgroundColor: getIconColor(props.username)}}>
+    <div className={doneItemCss()}>
+      <div className={doneItemCss('user')}>
+        <div className={doneItemCss('user-icon')} style={{backgroundColor: getIconColor(props.username)}}>
           {getFirstLetter(props.username)}
         </div>
-        <div className="doneitem__user-name">{props.username}</div>
+        <div className={doneItemCss('user-name')}>{props.username}</div>
       </div>
       <div>
-        <div className="doneitem__done-thing" dangerouslySetInnerHTML={{__html: rawMarkup}}/>
-        <p className="doneitem__time">
+        <div className={doneItemCss('done-thing')} dangerouslySetInnerHTML={{__html: rawMarkup}}/>
+        <p className={doneItemCss('time')}>
           {formatTime(props.date)}
         </p>
       </div>
-      <div className="doneitem__delete-action glyphicon glyphicon-trash" onClick={createOnClickDelete(deleteDone)}/>
+      <div className={doneItemCss('delete-action') + ' glyphicon glyphicon-trash'} onClick={createOnClickDelete(deleteDone)}/>
     </div>
   );
-};
+}
