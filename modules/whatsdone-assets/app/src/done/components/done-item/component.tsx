@@ -15,7 +15,7 @@ interface DoneItemProps {
 
 const doneItemCss = (...components: string[]) => ['doneitem', ...components].join('__')
 
-const getFirstLetter = (name: string) => (name || '').charAt(0).toUpperCase() || '?';
+const getFirstLetter = (name: string) => (name || '?')[0]!.toUpperCase();
 
 const getIconColor = (name: string) => name ? getColorCode(name) : '#DDDDDD';
 
