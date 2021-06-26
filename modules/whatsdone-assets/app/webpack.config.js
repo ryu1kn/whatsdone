@@ -93,5 +93,10 @@ module.exports = {
       filename: `${BUILD_DIR}/index.html`
     }),
     new MiniCssExtractPlugin({filename: 'style-[hash].css'})
-  ]
+  ],
+  devServer: {
+    contentBase: BUILD_DIR,
+    watchContentBase: true,
+    liveReload: true
+  }
 };
