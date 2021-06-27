@@ -3,6 +3,7 @@
 npm-debug.log
 yarn-error.log
 __*
+!__*__
 node_modules
 
 # IntelliJ
