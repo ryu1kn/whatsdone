@@ -5,12 +5,12 @@ import {render, waitFor} from '@testing-library/react';
 import React from 'react';
 import 'regenerator-runtime/runtime';
 import {Provider} from 'react-redux';
-import DonePage from '../../../src/done/components/page';
-import reducer from '../../../src/reducer';
+import DonePage from '../../src/done/components/page';
+import reducer from '../../src/reducer';
 import {createStore} from 'redux';
-import WhatsdoneApiClient from '../../../src/whatsdone-api-client';
-import ServiceFactory from '../../../src/service-factory';
-import ServiceLocator from '../../../src/service-locator';
+import WhatsdoneApiClient from '../../src/whatsdone-api-client';
+import ServiceFactory from '../../src/service-factory';
+import ServiceLocator from '../../src/service-locator';
 
 test('Show easy to read time of the user region (This test passes in Melbourne)', async () => {
   ServiceLocator.load({
