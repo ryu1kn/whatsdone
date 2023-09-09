@@ -12,13 +12,25 @@ function main() {
 }
 
 function build_and_deploy() {
-    echo "Commit range: $TRAVIS_COMMIT_RANGE"
+    local commit_range="$(get_commit_range)"
+    echo "Commit range: $commit_range"
 
     echo 'List of changed file(s) in the range:'
-    git diff --name-only "$TRAVIS_COMMIT_RANGE"
+    git diff --name-only "$commit_range"
     echo
 
-    git diff --name-only "$TRAVIS_COMMIT_RANGE" | BUILD_NUMBER="$TRAVIS_BUILD_NUMBER" ./node_modules/.bin/buildmate
+    git diff --name-only "$commit_range" | BUILD_NUMBER="$TRAVIS_BUILD_NUMBER" ./node_modules/.bin/buildmate
+}
+
+function get_commit_range() {
+    local one_line_message="$(tr '\n' ' ' <<< "$COMMIT_MESSAGE")"
+    local potential_range="$(sed 's/.*\[COMMIT_RANGE:\([^]]*\)\].*/\1/' <<< "$one_line_message")"
+
+    if [[ "$potential_range" != "$one_line_message" ]] ; then
+        echo "$potential_range"
+    else
+        echo "$TRAVIS_COMMIT_RANGE"
+    fi
 }
 
 main "$@"
