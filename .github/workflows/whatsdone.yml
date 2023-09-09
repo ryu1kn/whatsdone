@@ -27,9 +27,8 @@ jobs:
     - run: yarn install
     - run: ./travis-build.sh
       env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         TRAVIS_COMMIT_RANGE: ${{ github.event.before }}..${{ github.event.after }}
         TRAVIS_BUILD_NUMBER: ${{ github.run_number }}-${{ github.run_id }}
         TRAVIS_BRANCH: ${{ github.ref_name }}
-    - run: echo "Intentionally trying to print dummy secret \"$DUMMY_SECRET\""
-      env:
-        DUMMY_SECRET: ${{ secrets.DUMMY_SECRET }}
