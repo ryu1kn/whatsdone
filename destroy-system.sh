@@ -9,3 +9,9 @@ MODULES=(
 for MODULE in ${MODULES[*]} ; do
     (cd modules/$MODULE && yarn run destroy --env $ENV_NAME --region ap-southeast-2)
 done
+
+echo
+echo "========================"
+echo " Deployment completed!! "
+echo "========================"
+echo
