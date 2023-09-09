@@ -11,7 +11,7 @@ for MODULE in ${MODULES[*]} ; do
 done
 
 echo
-echo "========================"
-echo " Deployment completed!! "
-echo "========================"
+echo "==========================="
+echo " Un-deployment completed!! "
+echo "==========================="
 echo

@@ -9,8 +9,7 @@ main() {
     parseArgs "$@"
 
     for MODULE in ${POSITIONAL_ARGS[@]:1} ; do
-        echo
-        echo "=== Deploying module $MODULE ==="
+        echo -e "\n=== Deploying module $MODULE ==="
         (cd modules/$MODULE && yarn run deploy --env $ENV_NAME --region $AWS_REGION)
         echo
     done
