@@ -1,7 +1,7 @@
 {
   "moduleName": "whatsdone-api",
   "config": {
-    "script": "node -p \"JSON.stringify(require('./module-config/$ENV.js'))\" | kumo decrypt --profile $ENV --inputFormat json",
+    "script": "node -p \"JSON.stringify(require('./module-config/$ENV.js'))\"",
     "envVars": {
       "ENV": {"$ref": "#/_env"}
     }
