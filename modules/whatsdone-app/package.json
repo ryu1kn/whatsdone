@@ -26,6 +26,7 @@
     "lodash.omit": "~4.5.0",
     "lodash.pick": "~4.4.0",
     "route-parser": "0.0.5",
+    "tslib": "^2.6.2",
     "uuid": "~8.3.2"
   },
   "devDependencies": {
