@@ -12,7 +12,7 @@ concurrency:
 env:
   AWS_REGION: ap-southeast-2
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
     - name: checkout
