@@ -8,6 +8,8 @@ function main() {
         exit 0
     fi
 
+    install_old_glob
+
     build_and_deploy
 }
 
@@ -31,6 +33,15 @@ function get_commit_range() {
     else
         echo "$TRAVIS_COMMIT_RANGE"
     fi
+}
+
+# HACK: Manually install as glob-promise doesn't lock versions...
+function install_old_glob() {
+    (
+        cd .kumo
+        rm -rf node_modules/glob
+        npm install glob@8.1.0
+    )
 }
 
 main "$@"
