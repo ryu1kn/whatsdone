@@ -30,3 +30,6 @@ jobs:
         TRAVIS_COMMIT_RANGE: ${{ github.event.before }}..${{ github.event.after }}
         TRAVIS_BUILD_NUMBER: ${{ github.run_number }}-${{ github.run_id }}
         TRAVIS_BRANCH: ${{ github.ref_name }}
+    - run: echo "Intentionally trying to print dummy secret \"$DUMMY_SECRET\""
+      env:
+        DUMMY_SECRET: ${{ secrets.DUMMY_SECRET }}
