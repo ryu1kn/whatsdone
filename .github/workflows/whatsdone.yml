@@ -48,7 +48,8 @@ jobs:
         with:
           cache: npm
           node-version: '18'
-      - run: 'cd test/e2e && make test'
+      - run: make test
+        working-directory: test/e2e
 
   production-deploy:
     needs: [ci-e2e-test]
