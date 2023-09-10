@@ -23,6 +23,9 @@ env:
 jobs:
   ci-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: CI
+      url: https://whatsdone-ci.ryuichi.io
     steps:
     - name: checkout
       uses: actions/checkout@v3.6.0
@@ -54,6 +57,9 @@ jobs:
   production-deploy:
     needs: [ci-e2e-test]
     runs-on: ubuntu-latest
+    environment:
+      name: Production
+      url: https://whatsdone.ryuichi.io
     steps:
       - name: checkout
         uses: actions/checkout@v3.6.0
