@@ -1,4 +1,4 @@
-[![Build Status](https://www.travis-ci.com/ryu1kn/whatsdone.svg?branch=master)](https://www.travis-ci.com/ryu1kn/whatsdone)
+[![ryu1kn/whatsdone](https://github.com/ryu1kn/whatsdone/actions/workflows/whatsdone.yml/badge.svg)](https://github.com/ryu1kn/whatsdone/actions/workflows/whatsdone.yml)
 
 # What's Done
 
@@ -25,7 +25,8 @@ This is my toy project that I experiment different technologies/tools I want to 
 Commits to the master branch automatically goes to the production after the successful test execution.
 This includes the changes to the infrastructure.
 
-For CI/CD, What's Done uses Travis CI. For more information about CI setup, see its [README](./ci/README.md).
+For CI/CD, What's Done uses [GitHub Actions](https://github.com/ryu1kn/whatsdone/actions).
+For more information about CI setup, see its [README](./ci/README.md).
 
 ### Deploying entire system
 
