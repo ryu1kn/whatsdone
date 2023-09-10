@@ -28,6 +28,18 @@ This includes the changes to the infrastructure.
 For CI/CD, What's Done uses [GitHub Actions](https://github.com/ryu1kn/whatsdone/actions).
 For more information about CI setup, see its [README](./ci/README.md).
 
+### Partial build
+
+To reduce the build time, What's Done CI leverages [Build Mate](https://www.npmjs.com/package/buildmate)
+to trigger commands that are relevant to files changed.
+
+Currently, What's Done CI checks git commit range of the current build to find changed files.
+However, this is sometimes not what you want. To force the build to get the file list of
+desired commit range, you can include `[COMMIT_RANGE:sha1...sha2]` in your commit message.
+
+Note that the actual commit used in the build is still `HEAD`. It is just to make the build
+to work on different file list.
+
 ### Deploying entire system
 
 If you want to deploy `prod` environment, you need to have `prod` config in modules then execute:
