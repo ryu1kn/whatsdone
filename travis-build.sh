@@ -3,7 +3,7 @@
 set -euo pipefail
 
 function main() {
-    if [[ "${TRAVIS_BRANCH:-}" != "master" ]] ; then
+    if [[ "${BUILD_BRANCH:-}" != "master" ]] ; then
         echo 'Deployment can happen only from "master" branch'
         exit 0
     fi
@@ -31,7 +31,7 @@ function get_commit_range() {
     if [[ "$potential_range" != "$one_line_message" ]] ; then
         echo "$potential_range"
     else
-        echo "$TRAVIS_COMMIT_RANGE"
+        echo "$BUILD_COMMIT_RANGE"
     fi
 }
 
