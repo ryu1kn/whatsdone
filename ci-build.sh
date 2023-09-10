@@ -8,6 +8,8 @@ function main() {
         exit 0
     fi
 
+    install_build_dependencies
+
     install_old_glob
 
     build_and_deploy
@@ -33,6 +35,13 @@ function get_commit_range() {
     else
         echo "$BUILD_COMMIT_RANGE"
     fi
+}
+
+function install_build_dependencies() {
+    aws configure set s3.signature_version s3v4
+    yarn global add kumo
+    kumo install
+    yarn install
 }
 
 # HACK: Manually install as glob-promise doesn't lock versions...

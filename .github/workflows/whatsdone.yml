@@ -23,10 +23,6 @@ jobs:
       with:
         cache: npm
         node-version: '18'
-    - run: aws configure set s3.signature_version s3v4
-    - run: yarn global add kumo
-    - run: kumo install
-    - run: yarn install
     - run: ./ci-build.sh
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
