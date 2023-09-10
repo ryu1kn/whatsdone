@@ -33,5 +33,5 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         BUILD_COMMIT_RANGE: ${{ github.event.before }}...${{ github.event.after }}
-        TRAVIS_BUILD_NUMBER: ${{ github.run_number }}-${{ github.run_id }}
+        BUILD_NUMBER: ${{ github.run_number }}-${{ github.run_id }}
         BUILD_BRANCH: ${{ github.ref_name }}
