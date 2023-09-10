@@ -4,15 +4,24 @@ on:
     branches:
     - "**/*"
   pull_request:
+
 concurrency:
 #   # This item has no matching transformer
 #   maximum_number_of_builds: 1
   group: "${{ github.ref }}"
   cancel-in-progress: true
+
 env:
   AWS_REGION: ap-southeast-2
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+  BUILD_COMMIT_RANGE: ${{ github.event.before }}...${{ github.event.after }}
+  BUILD_NUMBER: ${{ github.run_number }}-${{ github.run_id }}
+  BUILD_BRANCH: ${{ github.ref_name }}
+
 jobs:
-  build:
+  ci-deploy:
     runs-on: ubuntu-latest
     steps:
     - name: checkout
@@ -25,9 +34,34 @@ jobs:
         node-version: '18'
     - run: ./ci-build.sh
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-        BUILD_COMMIT_RANGE: ${{ github.event.before }}...${{ github.event.after }}
-        BUILD_NUMBER: ${{ github.run_number }}-${{ github.run_id }}
-        BUILD_BRANCH: ${{ github.ref_name }}
+        ENV_NAME: ci
+
+  ci-e2e-test:
+    needs: [ci-deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3.6.0
+        with:
+          fetch-depth: 10
+      - uses: actions/setup-node@v3.8.1
+        with:
+          cache: npm
+          node-version: '18'
+      - run: 'cd test/e2e && make test'
+
+  production-deploy:
+    needs: [ci-e2e-test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3.6.0
+        with:
+          fetch-depth: 10
+      - uses: actions/setup-node@v3.8.1
+        with:
+          cache: npm
+          node-version: '18'
+      - run: ./ci-build.sh
+        env:
+          ENV_NAME: prod
