@@ -34,7 +34,7 @@ jobs:
     - uses: actions/setup-node@v3.8.1
       with:
         cache: npm
-        node-version: '18'
+        node-version: '20'
     - run: ./ci-build.sh
       env:
         ENV_NAME: ci
@@ -50,7 +50,7 @@ jobs:
       - uses: actions/setup-node@v3.8.1
         with:
           cache: npm
-          node-version: '18'
+          node-version: '20'
       - run: make test
         working-directory: test/e2e
 
@@ -68,7 +68,7 @@ jobs:
       - uses: actions/setup-node@v3.8.1
         with:
           cache: npm
-          node-version: '18'
+          node-version: '20'
       - run: ./ci-build.sh
         env:
           ENV_NAME: prod
