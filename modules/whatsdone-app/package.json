@@ -2,7 +2,7 @@
   "name": "whatsdone-app",
   "private": true,
   "engines": {
-    "node": ">= 18"
+    "node": ">= 20"
   },
   "config": {
     "BUILD_DIR_NAME": "dist"
