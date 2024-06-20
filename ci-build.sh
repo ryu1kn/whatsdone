@@ -3,8 +3,8 @@
 set -euo pipefail
 
 function main() {
-    if [[ "${BUILD_BRANCH:-}" != "master" ]] ; then
-        echo 'Deployment can happen only from "master" branch'
+    if [[ "${BUILD_BRANCH:-}" != "main" ]] ; then
+        echo 'Deployment can happen only from "main" branch'
         exit 0
     fi
 
