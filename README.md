@@ -22,7 +22,7 @@ This is my toy project that I experiment different technologies/tools I want to 
 
 ## Continuous Integration / Continuous Delivery
 
-Commits to the master branch automatically goes to the production after the successful test execution.
+Commits to the `main` branch automatically goes to the production after the successful test execution.
 This includes the changes to the infrastructure.
 
 For CI/CD, What's Done uses [GitHub Actions](https://github.com/ryu1kn/whatsdone/actions).
