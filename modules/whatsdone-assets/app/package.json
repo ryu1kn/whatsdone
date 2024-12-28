@@ -57,7 +57,7 @@
     "babel-loader": "^8.2.2",
     "cors": "^2.8.4",
     "css-loader": "^5.2.6",
-    "express": "^4.19.2",
+    "express": "^4.20.0",
     "favicons": "^6.2.2",
     "favicons-webpack-plugin": "^5.0.2",
     "file-loader": "^6.2.0",
