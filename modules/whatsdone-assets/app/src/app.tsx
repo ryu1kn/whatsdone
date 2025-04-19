@@ -18,6 +18,14 @@ const store = createStore(
   reducer,
   window.__REDUX_DEVTOOLS_EXTENSION__?.()
 );
+
+// Initialize features based on URL parameters
+const feature = new URLSearchParams(window.location.search).get('feature');
+store.dispatch({
+  type: 'INIT_FEATURES',
+  features: feature ? [feature] : []
+});
+
 ServiceLocator.cognitoUserInitialiser.initialise()
   .then(() => store.dispatch({type: 'API_READY'}))
   .catch((e: Error) => { console.error(e.stack); });

@@ -48,6 +48,15 @@ If you want to deploy `prod` environment, you need to have `prod` config in modu
 $ AWS_PROFILE=your-profile AWS_REGION=ap-southeast-2 ENV_NAME=prod ./deploy-system.sh
 ```
 
+## Installing dev dependencies
+
+This project uses [mise](https://github.com/jdx/mise) to install necessary dependencies.
+
+```sh
+mise trust
+mise install
+```
+
 ## Test
 
 * Unit test: Backend/frontend modules have their own unit test.
