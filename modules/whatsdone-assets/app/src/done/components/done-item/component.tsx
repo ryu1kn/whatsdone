@@ -34,18 +34,9 @@ const DoneThingInEdit = ({doneThing, updateDone}: { doneThing: string, updateDon
          onKeyPress={e => e.key === 'Enter' && updateDone((e.target as HTMLInputElement).value)}/>;
 
 const DoneThingInView = ({doneThing}: { doneThing: string }) => {
-  const isTopicTaggingEnabled = useSelector((state: RootState) => state.done.features.includes('topicTagging'));
-
   return (
-    <div>
-      <div className={doneItemCss('done-thing')}
-           dangerouslySetInnerHTML={{__html: converter.makeHtml(doneThing)}}/>
-      {isTopicTaggingEnabled && (
-        <div className={doneItemCss('topics')}>
-          <span className={doneItemCss('topic')}>foo</span>
-        </div>
-      )}
-    </div>
+    <div className={doneItemCss('done-thing')}
+         dangerouslySetInnerHTML={{__html: converter.makeHtml(doneThing)}}/>
   );
 };
 
@@ -53,6 +44,8 @@ export const DoneItem = (props: DoneItemProps) => {
   const deleteDone = () => props.deleteDone(props.doneId);
   const updateDone = (newDoneThing: string) => props.updateDone(props.doneId, newDoneThing);
   const doneThing = props.children.toString();
+  const isTopicTaggingEnabled = useSelector((state: RootState) => state.done.features.includes('topicTagging'));
+
   return (
     <div className={doneItemCss()} onDoubleClick={() => props.startEditDone(props.doneId)}>
       <div className={doneItemCss('user')}>
@@ -67,6 +60,9 @@ export const DoneItem = (props: DoneItemProps) => {
           <DoneThingInView doneThing={doneThing}/>}
         <p className={doneItemCss('time')}>
           {formatTime(props.date)}
+          {isTopicTaggingEnabled && (
+            <span className={doneItemCss('topic')} style={{ marginLeft: '10px' }}>foo</span>
+          )}
         </p>
       </div>
       <div className={doneItemCss('delete-action') + ' glyphicon glyphicon-trash'}
