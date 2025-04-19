@@ -20,37 +20,48 @@ export type DoneState = {
   items: DoneItem[]
   nextKey: NextKey | null
   apiReady: boolean
+  features: string[]
 }
 
 const initialState = {
   items: [],
   nextKey: null,
-  apiReady: false
+  apiReady: false,
+  features: []
 };
 
 export default (state: DoneState = initialState, action: AnyAction) => {
   switch (action.type) {
   case 'API_READY':
     return Object.assign({}, state, {apiReady: true});
+  case 'INIT_FEATURES':
+    return {
+      ...state,
+      features: action.features || []
+    };
   case ActionType.GET_DONE_REQUEST:
     return state;
   case ActionType.GET_DONE_SUCCESS:
     return {
+      ...state,
       items: mergeDoneList(state.items, action.dones.map(normaliseDoneItem)),
       nextKey: action.nextKey
     };
   case ActionType.POST_DONE_REQUEST:
     return {
+      ...state,
       items: [normaliseDoneItem(action.item), ...state.items],
       nextKey: state.nextKey
     };
   case ActionType.POST_DONE_SUCCESS:
     return {
+      ...state,
       items: updateDones(state.items, normaliseDoneItem(action.item)),
       nextKey: state.nextKey
     };
   case ActionType.DELETE_DONE_REQUEST:
     return {
+      ...state,
       items: state.items.filter(done => done.id !== action.id),
       nextKey: state.nextKey
     };

@@ -1,7 +1,9 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 import {getColorCode} from '../../../util';
 import {formatTime} from '../date-util';
 import {Converter} from 'showdown';
+import {RootState} from '../../../reducer';
 
 const converter = new Converter();
 
@@ -31,9 +33,21 @@ const DoneThingInEdit = ({doneThing, updateDone}: { doneThing: string, updateDon
   <input type="text" className="form-control" defaultValue={doneThing} autoFocus={true}
          onKeyPress={e => e.key === 'Enter' && updateDone((e.target as HTMLInputElement).value)}/>;
 
-const DoneThingInView = ({doneThing}: { doneThing: string }) =>
-  <div className={doneItemCss('done-thing')}
-       dangerouslySetInnerHTML={{__html: converter.makeHtml(doneThing)}}/>;
+const DoneThingInView = ({doneThing}: { doneThing: string }) => {
+  const isTopicTaggingEnabled = useSelector((state: RootState) => state.done.features.includes('topicTagging'));
+
+  return (
+    <div>
+      <div className={doneItemCss('done-thing')}
+           dangerouslySetInnerHTML={{__html: converter.makeHtml(doneThing)}}/>
+      {isTopicTaggingEnabled && (
+        <div className={doneItemCss('topics')}>
+          <span className={doneItemCss('topic')}>foo</span>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export const DoneItem = (props: DoneItemProps) => {
   const deleteDone = () => props.deleteDone(props.doneId);
