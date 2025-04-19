@@ -14,7 +14,7 @@ class DoneList extends React.Component<DoneListProps> {
     const doneItemNodes = this.props.data.map(function (doneItem, index) {
       return (
         <DoneItem doneId={doneItem.id} date={doneItem.date}
-          username={doneItem.username} key={index} editInProgress={doneItem.editInProgress}>
+          username={doneItem.username} topics={doneItem.topics} key={index} editInProgress={doneItem.editInProgress}>
           {doneItem.doneThing}
         </DoneItem>
       );

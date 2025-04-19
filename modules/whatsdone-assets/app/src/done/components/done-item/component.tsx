@@ -12,6 +12,7 @@ interface DoneItemProps {
   date: Date
   username: string
   children: string
+  topics: string[]
   editInProgress?: boolean
   deleteDone: (id: string) => void
   startEditDone: (doneId: string) => void
@@ -60,8 +61,10 @@ export const DoneItem = (props: DoneItemProps) => {
           <DoneThingInView doneThing={doneThing}/>}
         <p className={doneItemCss('time')}>
           {formatTime(props.date)}
-          {isTopicTaggingEnabled && (
-            <span className={doneItemCss('topic')} style={{ marginLeft: '10px' }}>foo</span>
+          {isTopicTaggingEnabled && props.topics.length > 0 && (
+            <span className={doneItemCss('topic')} style={{ marginLeft: '10px' }}>
+              {props.topics.join(', ')}
+            </span>
           )}
         </p>
       </div>

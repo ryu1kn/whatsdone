@@ -9,6 +9,7 @@ export type RawDoneItem = {
   id: string
   userId: string
   username: string
+  topics: string[]
 }
 
 export type DoneItem = Omit<RawDoneItem, 'date'> & {
