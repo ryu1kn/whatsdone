@@ -6,6 +6,54 @@ Personal activity tracker. Take memos of what I (or we) have done today.
 
 This is my toy project that I experiment different technologies/tools I want to try.
 
+## Architecture
+
+```mermaid
+flowchart LR
+    %% ------------- Actor -----------------
+    user([User])
+
+    %% ------------- System boundary -------
+    subgraph whats_done["What's Done"]
+        direction LR
+
+        subgraph auth["Authentication"]
+            cognito["User auth<br/>(Cognito)"]
+        end
+
+        %% ----- Front‑end (static site) ----
+        subgraph frontend["Frontend"]
+            route53_web["Routing<br/>(Route 53)"]
+            cloudfront_web["Content delivery<br/>(CloudFront)"]
+            s3_web["App<br/>(S3. HTML/CSS/JS)"]
+
+            route53_web --> cloudfront_web --> s3_web
+        end
+
+        %% ----- Back‑end (API) -------------
+        subgraph backend["Backend"]
+            route53_api["Routing<br/>(Route 53)"]
+            cloudfront_api["Content delivery<br/>(CloudFront)"]
+            apigw["API<br/>(API Gateway. Auth)"]
+            lambda_fn["App<br/>(Lambda)"]
+            done_db[(Dones)]
+            user_db[(Users)]
+            xray["Tracing<br/>(X-ray)"]
+            cloudwatch_log["Logging<br/>(CloudWatch)"]
+
+            route53_api --> cloudfront_api --> apigw --> lambda_fn
+            lambda_fn -- read/write --> done_db
+            lambda_fn -- read/write --> user_db
+        end
+    end
+
+    user --> cognito
+    user --> route53_web
+    user --> route53_api
+```
+
+## Technology Stack
+
 - infrastructure
   - ~~heroku + MongoDB~~
   - ~~heroku + DynamoDB~~
@@ -22,7 +70,7 @@ This is my toy project that I experiment different technologies/tools I want to 
 
 ## Continuous Integration / Continuous Delivery
 
-Commits to the `main` branch automatically goes to the production after the successful test execution.
+Commits to the `main` branch automatically goes to the production after the successful build/test execution.
 This includes the changes to the infrastructure.
 
 For CI/CD, What's Done uses [GitHub Actions](https://github.com/ryu1kn/whatsdone/actions).
