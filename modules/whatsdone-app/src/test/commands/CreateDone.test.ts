@@ -19,7 +19,7 @@ describe('Server CreateDoneCommand', () => {
     const command = new CreateDoneCommand();
 
     const result = await command.execute(done, 'USER_ID');
-    deepStrictEqual(result, doneWithUserId);
+    deepStrictEqual(result, {...doneWithUserId, topics: ["foo"]});
   });
 
 });
