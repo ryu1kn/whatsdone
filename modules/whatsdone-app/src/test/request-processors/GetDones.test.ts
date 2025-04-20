@@ -13,7 +13,8 @@ describe('Server GetDonesRequestProcessor', () => {
       date: 'DATE',
       month: 'MONTH',
       userId: 'USER_ID',
-      doneThing: 'DONE'
+      doneThing: 'DONE',
+      topics: ['foo']
     }]
   };
   const getDonesCommand = td.object('execute') as GetDonesCommand;

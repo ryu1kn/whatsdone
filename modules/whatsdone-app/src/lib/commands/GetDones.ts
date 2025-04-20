@@ -35,7 +35,7 @@ export default class GetDonesCommand {
     );
   }
 
-  private setDummyTopics(dones: DoneInDb[]) {
+  private setDummyTopics(dones: (DoneInDb | {username?: string})[]) {
     return dones.map(done => Object.assign({}, done, {topics: ["foo"]}));
   }
 }
