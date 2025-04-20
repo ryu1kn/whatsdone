@@ -9,7 +9,8 @@ export default class CreateDoneCommand {
     this._doneRepository = ServiceLocator.doneRepository;
   }
 
-  async execute(data: Done, userId: string): Promise<Omit<DoneInDb, 'month'>> {
-    return this._doneRepository.write({...data, userId});
+  async execute(data: Done, userId: string) {
+    const newDone = await this._doneRepository.write({...data, userId});
+    return {...newDone, topics: ["foo"]};
   }
 }
