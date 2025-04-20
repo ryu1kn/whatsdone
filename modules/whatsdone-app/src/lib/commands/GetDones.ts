@@ -17,9 +17,10 @@ export default class GetDonesCommand {
 
   async execute(nextKey?: string) {
     const result = await this._doneRepository.read(nextKey);
-    const items = await this.setUserNames(result.items);
+    const itemsWithUsernames = await this.setUserNames(result.items);
+    const itemsWithTopics = this.setDummyTopics(itemsWithUsernames);
     return {
-      items,
+      items: itemsWithTopics,
       nextKey: result.nextKey
     };
   }
@@ -34,4 +35,7 @@ export default class GetDonesCommand {
     );
   }
 
+  private setDummyTopics(dones: DoneInDb[]) {
+    return dones.map(done => Object.assign({}, done, {topics: ["foo"]}));
+  }
 }
