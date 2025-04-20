@@ -31,6 +31,7 @@ describe('Server UpdateDoneCommand', () => {
       date: 'DATE',
       id: 'DONE_ID',
       userId: 'USER_ID',
+      topics: ['foo']
     });
   });
 });
