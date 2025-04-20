@@ -67,14 +67,9 @@ function getDones() {
 }
 
 function markGetDonesSuccess(dones: RawDoneItem[], nextKey: NextKey) {
-  const updatedDones = dones.map(done => ({
-    ...done,
-    topics: ["foo"]   // WIP. Hardcode while backend is being built
-  }));
-
   return {
     type: ActionType.GET_DONE_SUCCESS,
-    dones: updatedDones,
+    dones,
     nextKey
   };
 }
