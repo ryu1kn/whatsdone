@@ -29,7 +29,7 @@ describe('Server GetDonesCommand', () => {
 
   it('returns list of dones with the names of their owners', async () => {
     const result = await command.execute();
-    deepStrictEqual(result.items, [{...doneItem, username: 'USER'}]);
+    deepStrictEqual(result.items, [{...doneItem, username: 'USER', topics: ["foo"]}]);
   });
 
 });
