@@ -12,7 +12,7 @@ export default class UpdateDoneCommand {
 
   async execute(data: DoneDiff, doneId: string, userId: string) {
     const done = await this._doneRepository.update(doneId, userId, data);
-    return _pick(done, ['id', 'userId', 'date', 'doneThing']);
+    return {..._pick(done, ['id', 'userId', 'date', 'doneThing']), topics: ["foo"]};
   }
 
 }
