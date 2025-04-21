@@ -1,0 +1,8 @@
+[project]
+name = "whatsdone-topic-classification"
+version = "0.1.0"
+description = "AWS Comprehend custom classifier tools for topic classification"
+requires-python = ">=3.13"
+dependencies = [
+    "boto3>=1.37.37"
+]

@@ -1,0 +1,15 @@
+---
+description: Naming conventions
+globs: ops/**/*
+alwaysApply: true
+---
+
+# Naming conventions
+
+## AWS resources
+
+- CloudFormation stack name has this prefix: {env_name}-whatsdone-
+  - When a resource is not per-environment, starts with: whatsdone-
+
+## AWS CDK resource name
+- Names inside CDK should have this prefix: Whatsdone

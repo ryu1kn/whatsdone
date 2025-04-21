@@ -1,0 +1,34 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+# General guidelines
+
+- Make the code self-explanatory so that you won't need comments. Comments should be to clarify "Why" instead of "What".
+
+  Bad example: "Multiply by 24"
+
+  Good example: "Multiplying by 24 as we need to count for whole day"
+
+- For non-customer facing part, don't use try-catch to just provide custom error messages. It makes the code unnecessarily long
+  and harder to read.
+
+  Bad example:
+
+  ```python
+  try:
+      response = self.comprehend.list_document_classifiers()
+      return response['DocumentClassifierPropertiesList']
+  except Exception as e:
+      print(f"Error listing classifiers: {str(e)}")
+      raise
+  ```
+
+  Good example:
+
+  ```python
+  response = self.comprehend.list_document_classifiers()
+  return response['DocumentClassifierPropertiesList']
+  ```
