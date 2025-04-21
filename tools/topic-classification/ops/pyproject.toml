@@ -1,0 +1,9 @@
+[project]
+name = "whatsdone-topic-classification-ops"
+version = "0.1.0"
+description = "AWS CDK infrastructure for topic classification"
+requires-python = ">=3.13"
+dependencies = [
+    "aws-cdk-lib>=2.124.0",
+    "constructs>=10.3.0",
+]

@@ -1,0 +1,58 @@
+---
+description:
+globs: *.md
+alwaysApply: false
+---
+
+# Markdown
+
+- When writing a codeblock, have a new line above one.
+
+  Bad example:
+
+      ... then create a file with the following
+      ```yaml
+      foo: bar
+      ```
+
+  Good example:
+
+      ... then create a file with the following
+
+      ```yaml
+      foo: bar
+      ```
+
+- Inline codeblocks don't need to have a new line above.
+
+  Original:
+
+      - Run the following: `pytest .`
+
+  Bad example:
+
+      - Run the following
+
+        ```
+        pytest .
+        ```
+
+  Good example:
+
+      - Run the following: `pytest .`
+
+      (Keep the original inline codeblock)
+
+- When writing a shell command code block, use `sh` instead of `bash`.
+
+  Bad example:
+
+      ```bash
+      echo hi
+      ```
+
+  Good example:
+
+      ```sh
+      echo hi
+      ```

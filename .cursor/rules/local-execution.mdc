@@ -1,0 +1,11 @@
+---
+description: Local execution
+globs:
+alwaysApply: false
+---
+
+# Local execution
+
+- Environment variables are provided from terminal through mise.toml (or mise.local.toml for sensitive info) file.
+  Therefore, don't use the libraries like Python `dotenv` that load environment variables from `.env` file.
+- AWS resources should be created in ap-southeast-2 region, unless specified.
