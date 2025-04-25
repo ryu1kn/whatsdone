@@ -4,7 +4,7 @@ set -euo pipefail
 
 readonly account_id="$(aws sts get-caller-identity --query Account --output text)"
 readonly endpoint_name="whatsdone-$ENV-topic-classifier"
-readonly model_arn="arn:aws:comprehend:$TASK_REGION:$account_id:document-classifier/whatsdone-topic-classifier"
+readonly model_arn="arn:aws:comprehend:$TASK_REGION:$account_id:document-classifier/whatsdone-topic-classifier/version/$MODEL_VERSION"
 
 readonly endpoint_arn="arn:aws:comprehend:$TASK_REGION:$account_id:document-classifier-endpoint/$endpoint_name"
 

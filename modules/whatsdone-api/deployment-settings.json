@@ -59,6 +59,7 @@
         "envVars": {
           "TASK_REGION": {"$ref": "#/_taskRegion"},
           "ENV": {"$ref": "#/_env"},
+          "MODEL_VERSION": {"$ref": "#/_deploymentConfig/modelVersion"},
           "TASK_OUTPUTS_FILE": {"$ref": "#/_taskOutputsFile"}
         }
       },
