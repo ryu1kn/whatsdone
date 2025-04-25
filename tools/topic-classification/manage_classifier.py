@@ -21,10 +21,6 @@ class ComprehendClassifierManager:
             f"{self.classifier_version_name}/input/training-data.csv"
         )
 
-    def _list_classifiers(self):
-        response = self.comprehend.list_document_classifiers()
-        return response['DocumentClassifierPropertiesList']
-
     def create_classifier(self):
         response = self.comprehend.create_document_classifier(
             DocumentClassifierName=self.classifier_name,
@@ -59,18 +55,6 @@ class ComprehendClassifierManager:
                 print(f"Training in progress... Checking again in {check_interval} seconds")
             time.sleep(check_interval)
 
-    def delete_if_already_exists(self):
-        for classifier in self._list_classifiers():
-            if classifier['DocumentClassifierArn'].endswith("/" + self.classifier_name):
-                classifier_arn = classifier['DocumentClassifierArn']
-                print(f"Deleting existing classifier: {classifier_arn}")
-                self.comprehend.delete_document_classifier(DocumentClassifierArn=classifier_arn)
-                print(f"Classifier {classifier_arn} deleted successfully")
-
-                # Wait a bit to ensure the classifier is deleted
-                time.sleep(30)
-                break
-
 
 if __name__ == "__main__":
     manager = ComprehendClassifierManager(
@@ -79,7 +63,6 @@ if __name__ == "__main__":
         current_commit_hash=os.popen('git rev-parse --short HEAD').read().strip(),
     )
 
-    # manager.delete_if_already_exists()
     manager.upload_training_data()
 
     print(f"Creating classifier with training data")
