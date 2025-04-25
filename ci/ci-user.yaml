@@ -92,3 +92,14 @@ Resources:
                 Action:
                   - secretsmanager:GetSecretValue
                 Resource: !Sub 'arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:/whatsdone/ci/*'
+              - Sid: Stmt03
+                Effect: Allow
+                Action:
+                  - comprehend:CreateEndpoint
+                  - comprehend:DeleteEndpoint
+                  - comprehend:DescribeEndpoint
+                  - comprehend:ListEndpoints
+                  - comprehend:UpdateEndpoint
+                Resource:
+                  - !Sub 'arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier-endpoint/whatsdone-*-topic-classifier'
+                  - !Sub 'arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier/whatsdone-topic-classifier'
