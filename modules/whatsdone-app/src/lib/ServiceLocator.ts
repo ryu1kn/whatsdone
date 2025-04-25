@@ -15,6 +15,7 @@ import UserNameService from './UserNameService';
 import DoneQueryHelper from './repositories/done-helpers/query';
 import DynamoTableClient from './repositories/DynamoTableClient';
 import {AppConfig} from './AppConfig';
+import TopicClassifier from './services/TopicClassifier';
 
 type InstanceCache = {
   Config?: AppConfig;
@@ -35,10 +36,12 @@ type InstanceCache = {
   UserIdRepository?: UserIdRepository;
   DoneRepository?: DoneRepository;
   DynamoDBDocumentClient?: AWS.DynamoDB.DocumentClient;
+  ComprehendClient?: AWS.Comprehend;
   DoneQueryHelper?: DoneQueryHelper;
   DoneDynamoTableClient?: DynamoTableClient;
   UuidGenerator?: { generate: () => string };
   DateProvider?: { getCurrentDate: () => Date };
+  TopicClassifier?: TopicClassifier;
 };
 
 class ServiceLocator {
@@ -146,6 +149,11 @@ class ServiceLocator {
     return this.cache.DynamoDBDocumentClient!;
   }
 
+  get comprehendClient() {
+    this.cache.ComprehendClient = this.cache.ComprehendClient || this.serviceFactory.createComprehendClient();
+    return this.cache.ComprehendClient!;
+  }
+
   get doneQueryHelper() {
     this.cache.DoneQueryHelper = this.cache.DoneQueryHelper || this.serviceFactory.createDoneQueryHelper();
     return this.cache.DoneQueryHelper!;
@@ -164,6 +172,11 @@ class ServiceLocator {
   get dateProvider() {
     this.cache.DateProvider = this.cache.DateProvider || this.serviceFactory.createDateProvider();
     return this.cache.DateProvider!;
+  }
+
+  get topicClassifier() {
+    this.cache.TopicClassifier = this.cache.TopicClassifier || this.serviceFactory.createTopicClassifier();
+    return this.cache.TopicClassifier!;
   }
 
 }

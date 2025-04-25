@@ -1,7 +1,7 @@
 import ProcessEnv = NodeJS.ProcessEnv;
 
 export class EnvVars {
-  private static REQUIRED_VARS = ['USER_POOL_ID', 'WEBAPP_ORIGIN', 'DB_REGION', 'DONE_TABLE_NAME', 'USER_ID_TABLE_NAME'];
+  private static REQUIRED_VARS = ['USER_POOL_ID', 'WEBAPP_ORIGIN', 'DB_REGION', 'DONE_TABLE_NAME', 'USER_ID_TABLE_NAME', 'COMPREHEND_REGION', 'TOPIC_CLASSIFIER_ARN'];
 
   private env: ProcessEnv;
 
@@ -28,6 +28,14 @@ export class EnvVars {
 
   get USER_ID_TABLE_NAME(): string {
     return this.env.USER_ID_TABLE_NAME!;
+  }
+
+  get COMPREHEND_REGION(): string {
+    return this.env.COMPREHEND_REGION!;
+  }
+
+  get TOPIC_CLASSIFIER_ARN(): string {
+    return this.env.TOPIC_CLASSIFIER_ARN!;
   }
 
   private validate(env: NodeJS.ProcessEnv) {

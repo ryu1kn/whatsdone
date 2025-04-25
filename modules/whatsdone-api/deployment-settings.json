@@ -67,13 +67,15 @@
         "HostedZoneId": {"$ref": "#/_deploymentConfig/hostedZoneId"},
         "CertificateArn": {"$ref": "#/_dataSourceData/whatsdone-web-cache/CertificateArn"},
         "DbRegion": {"$ref": "#/_taskRegion"},
+        "ComprehendRegion": {"$ref": "#/_taskRegion"},
         "WebappEndpoint": {"Fn::Join": ["", ["https://", {"$ref": "#/_dataSourceData/whatsdone-web-cache/PublicDomain"}]]},
         "DoneTableName": {"$ref": "#/_dataSourceData/done-store/TableName"},
         "UserIdTableName": {"$ref": "#/_dataSourceData/user-id-store/TableName"},
         "UserPoolId": {"$ref": "#/_dataSourceData/authentication/UserPoolId"},
         "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
         "LambdaS3Bucket": {"$ref": "#/_dataSourceData/whatsdone-app/packages/backend-app/s3bucket"},
-        "LambdaS3Key": {"$ref": "#/_dataSourceData/whatsdone-app/packages/backend-app/s3key"}
+        "LambdaS3Key": {"$ref": "#/_dataSourceData/whatsdone-app/packages/backend-app/s3key"},
+        "TopicClassifierName": {"$ref": "#/_deploymentConfig/topicClassifierName"}
       }
     },
     {

@@ -3,5 +3,6 @@ const { deploymentOutputsBucket, hostedZoneId } = require('../../../config/commo
 module.exports = {
   deploymentOutputsBucket,
   hostedZoneId,
-  domainName: 'whatsdone-dev-ryuichi-api.ryuichi.io'
+  domainName: 'whatsdone-dev-ryuichi-api.ryuichi.io',
+  topicClassifierName: 'whatsdone-topic-classifier',
 };

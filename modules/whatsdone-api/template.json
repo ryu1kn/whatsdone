@@ -37,6 +37,13 @@
     },
     "WebappEndpoint": {
       "Type": "String"
+    },
+    "TopicClassifierName": {
+      "Type": "String",
+      "Description": "Name of the AWS Comprehend custom classifier endpoint"
+    },
+    "ComprehendRegion": {
+      "Type": "String"
     }
   },
   "Mappings": {
@@ -353,6 +360,13 @@
                     "kms:List*"
                   ],
                   "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "comprehend:ClassifyDocument"
+                  ],
+                  "Resource": "*"
                 }
               ]
             }
@@ -382,7 +396,9 @@
             "WEBAPP_ORIGIN": {"Ref": "WebappEndpoint"},
             "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
             "USER_ID_TABLE_NAME": {"Ref": "UserIdTableName"},
-            "USER_POOL_ID": {"Ref": "UserPoolId"}
+            "USER_POOL_ID": {"Ref": "UserPoolId"},
+            "TOPIC_CLASSIFIER_ARN": {"Fn::Sub": "arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier/${TopicClassifierName}"},
+            "COMPREHEND_REGION": {"Ref": "ComprehendRegion"}
           }
         },
         "TracingConfig": {"Mode": "Active"},
