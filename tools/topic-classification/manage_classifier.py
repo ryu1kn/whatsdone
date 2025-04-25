@@ -1,14 +1,25 @@
 import boto3
 import os
 import time
+import datetime
 
 class ComprehendClassifierManager:
-    def __init__(self, training_space_bucket_uri, aws_comprehend_role_arn):
+    def __init__(self, training_space_bucket_name, aws_comprehend_role_arn, current_commit_hash):
         self.comprehend = boto3.client('comprehend', region_name=os.getenv('AWS_REGION', 'ap-southeast-2'))
+        self.s3 = boto3.client('s3', region_name=os.getenv('AWS_REGION', 'ap-southeast-2'))
         self.classifier_name = "whatsdone-topic-classifier"
-        self.training_space_bucket_uri = training_space_bucket_uri
+        self.training_space_bucket_name = training_space_bucket_name
+        self.classifier_version_name = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S") + "--" + current_commit_hash
         self.role_arn = aws_comprehend_role_arn
         self.classifier_arn = None
+
+    def upload_training_data(self):
+        print(f"Uploading the training data to s3://{self.training_space_bucket_name}/{self.classifier_version_name}/input/")
+        self.s3.upload_file(
+            "./training-data.csv",
+            self.training_space_bucket_name,
+            f"{self.classifier_version_name}/input/training-data.csv"
+        )
 
     def _list_classifiers(self):
         response = self.comprehend.list_document_classifiers()
@@ -17,14 +28,15 @@ class ComprehendClassifierManager:
     def create_classifier(self):
         response = self.comprehend.create_document_classifier(
             DocumentClassifierName=self.classifier_name,
+            VersionName=self.classifier_version_name,
             LanguageCode="en",
             DataAccessRoleArn=self.role_arn,
             InputDataConfig={
-                'S3Uri': self.training_space_bucket_uri + "/input",
+                'S3Uri': f"s3://{self.training_space_bucket_name}/{self.classifier_version_name}/input",
                 'DocumentType': 'PLAIN_TEXT_DOCUMENT'
             },
             OutputDataConfig={
-                'S3Uri': self.training_space_bucket_uri + "/output"
+                'S3Uri': f"s3://{self.training_space_bucket_name}/{self.classifier_version_name}/output"
             }
         )
         print(f"Classifier creation initiated. ARN: {response['DocumentClassifierArn']}")
@@ -62,11 +74,13 @@ class ComprehendClassifierManager:
 
 if __name__ == "__main__":
     manager = ComprehendClassifierManager(
-        training_space_bucket_uri=os.getenv('TRAINING_SPACE_BUCKET_URI'),
-        aws_comprehend_role_arn=os.getenv('AWS_COMPREHEND_ROLE_ARN')
+        training_space_bucket_name=os.getenv('TRAINING_SPACE_BUCKET_NAME'),
+        aws_comprehend_role_arn=os.getenv('AWS_COMPREHEND_ROLE_ARN'),
+        current_commit_hash=os.popen('git rev-parse --short HEAD').read().strip(),
     )
 
-    manager.delete_if_already_exists()
+    # manager.delete_if_already_exists()
+    manager.upload_training_data()
 
     print(f"Creating classifier with training data")
     manager.create_classifier()

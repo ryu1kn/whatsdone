@@ -28,15 +28,15 @@ This directory contains tools for managing AWS Comprehend custom classifier for 
 The training data should be in CSV format with the following structure:
 - Each row represents one document
 - The CSV should have two columns:
-  1. `text`: The content of the "done" entry
-  2. `label`: The topic category for the entry
+  1. `label`: The topic category for the entry
+  2. `text`: The content of the "done" entry
 
 Example:
 
 ```csv
-text,label
-"Completed the user authentication module","Development"
-"Had a team meeting to discuss project timeline","Meeting"
+label,text
+"Development","Completed the user authentication module"
+"Meeting","Had a team meeting to discuss project timeline"
 ```
 
 ## Usage
@@ -47,13 +47,7 @@ text,label
    uv sync
    ```
 
-2. Prepare your training data and upload it to S3
-
-   ```sh
-   aws s3 cp training-data.csv "$TRAINING_SPACE_BUCKET_URI/input/training-data_$(date +%Y%m%d_%H%M%S).csv"
-   ```
-
-3. Create and train a new classifier. It took 40 mins for just 36 samples:
+2. Create and train a new classifier. It took 40 mins for just 36 samples:
 
    ```
    $ python manage_classifier.py
