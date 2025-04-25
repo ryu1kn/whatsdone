@@ -102,6 +102,7 @@ Resources:
                 Resource:
                   - !Sub 'arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier-endpoint/whatsdone-*-topic-classifier'
                   - !Sub 'arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier/whatsdone-topic-classifier'
+                  - !Sub 'arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier/whatsdone-topic-classifier/version/*'
               - Sid: Stmt04
                 Effect: Allow
                 Action:
