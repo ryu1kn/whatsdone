@@ -52,6 +52,19 @@
   },
   "tasks": [
     {
+      "id": "create-custom-classifier-endpoint",
+      "type": "custom",
+      "run": {
+        "script": "bash create-comprehend-endpoint.sh",
+        "envVars": {
+          "TASK_REGION": {"$ref": "#/_taskRegion"},
+          "ENV": {"$ref": "#/_env"},
+          "TASK_OUTPUTS_FILE": {"$ref": "#/_taskOutputsFile"}
+        }
+      },
+      "outputsName": "ComprehendEndpointArn"
+    },
+    {
       "id": "deploy-api",
       "type": "cf-stack",
       "stackName": {"Fn::Join": ["-", [{"$ref": "#/_env"}, "whatsdone-api"]]},
@@ -75,7 +88,7 @@
         "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
         "LambdaS3Bucket": {"$ref": "#/_dataSourceData/whatsdone-app/packages/backend-app/s3bucket"},
         "LambdaS3Key": {"$ref": "#/_dataSourceData/whatsdone-app/packages/backend-app/s3key"},
-        "TopicClassifierName": {"$ref": "#/_deploymentConfig/topicClassifierName"}
+        "TopicClassifierArn": {"$ref": "#/_deploymentOutputs/ComprehendEndpointArn"}
       }
     },
     {
@@ -87,6 +100,16 @@
           "TASK_REGION": {"$ref": "#/_taskRegion"},
           "REST_API_ID": {"$ref": "#/_deploymentOutputs/RestApiId"},
           "STAGE_NAME": {"$ref": "#/_deploymentOutputs/ApiStageName"}
+        }
+      }
+    },
+    {
+      "id": "delete-custom-classifier-endpoint",
+      "type": "custom",
+      "undo": {
+        "script": "aws comprehend delete-endpoint --endpoint-arn \"$COMPREHEND_ENDPOINT_ARN\"",
+        "envVars": {
+          "COMPREHEND_ENDPOINT_ARN": {"$ref": "#/_deploymentOutputs/ComprehendEndpointArn"}
         }
       }
     }

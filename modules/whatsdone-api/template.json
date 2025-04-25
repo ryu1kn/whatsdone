@@ -38,9 +38,9 @@
     "WebappEndpoint": {
       "Type": "String"
     },
-    "TopicClassifierName": {
+    "TopicClassifierArn": {
       "Type": "String",
-      "Description": "Name of the AWS Comprehend custom classifier endpoint"
+      "Description": "ARN of the AWS Comprehend custom classifier endpoint"
     },
     "ComprehendRegion": {
       "Type": "String"
@@ -366,7 +366,9 @@
                   "Action": [
                     "comprehend:ClassifyDocument"
                   ],
-                  "Resource": "*"
+                  "Resource": [
+                    {"Ref": "TopicClassifierArn"}
+                  ]
                 }
               ]
             }
@@ -397,7 +399,7 @@
             "DONE_TABLE_NAME": {"Ref": "DoneTableName"},
             "USER_ID_TABLE_NAME": {"Ref": "UserIdTableName"},
             "USER_POOL_ID": {"Ref": "UserPoolId"},
-            "TOPIC_CLASSIFIER_ARN": {"Fn::Sub": "arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier/${TopicClassifierName}"},
+            "TOPIC_CLASSIFIER_ARN": {"Ref": "TopicClassifierArn"},
             "COMPREHEND_REGION": {"Ref": "ComprehendRegion"}
           }
         },
