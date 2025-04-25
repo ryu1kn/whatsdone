@@ -98,8 +98,13 @@ Resources:
                   - comprehend:CreateEndpoint
                   - comprehend:DeleteEndpoint
                   - comprehend:DescribeEndpoint
-                  - comprehend:ListEndpoints
                   - comprehend:UpdateEndpoint
                 Resource:
                   - !Sub 'arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier-endpoint/whatsdone-*-topic-classifier'
                   - !Sub 'arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier/whatsdone-topic-classifier'
+              - Sid: Stmt04
+                Effect: Allow
+                Action:
+                  - comprehend:ListEndpoints
+                Resource:
+                  - '*'
