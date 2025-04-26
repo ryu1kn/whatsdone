@@ -13,7 +13,7 @@
     "test": "mocha",
     "lint": "tslint -p tslint.json",
     "coverage": "nyc yarn test",
-    "predeploy": "yarn run build",
+    "predeploy": "yarn run build && yarn run coverage",
     "deploy": "cd ops && yarn && kumo deploy-module --verbose",
     "destroy": "cd ops && kumo destroy-module --verbose"
   },
