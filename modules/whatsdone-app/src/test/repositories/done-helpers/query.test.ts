@@ -27,7 +27,7 @@ describe('Server DoneQueryHelper', () => {
       ':m': '2017-08'
     },
     ScanIndexForward: false,
-    ProjectionExpression: 'id, #date, doneThing, userId',
+    ProjectionExpression: 'id, #date, doneThing, userId, topics',
     Select: 'SPECIFIC_ATTRIBUTES'
   };
   const makeItems = (size: number, group = 1) => [...Array(size)].map((_, i) => ({DATA: `ITEM-${group}-${i}`}));
