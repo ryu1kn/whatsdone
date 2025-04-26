@@ -5,7 +5,6 @@ import * as td from 'testdouble';
 import UserNameService from '../../lib/UserNameService';
 import DoneRepository from '../../lib/repositories/Done';
 import {deepStrictEqual} from 'assert';
-import TopicClassifier from '../../lib/services/TopicClassifier';
 
 describe('Server GetDonesCommand', () => {
   const doneItem = {
@@ -13,7 +12,8 @@ describe('Server GetDonesCommand', () => {
     date: 'DATE',
     month: 'MONTH',
     userId: 'USER_ID',
-    doneThing: '..'
+    doneThing: '..',
+    topics: ['foo'],
   };
 
   const userNameService = td.object('getUsernames') as UserNameService;
@@ -21,19 +21,16 @@ describe('Server GetDonesCommand', () => {
 
   const doneRepository = td.object('read') as DoneRepository;
   td.when(doneRepository.read(undefined)).thenResolve({items: [doneItem]});
-  const topicClassifier = td.object('classifyText') as TopicClassifier;
-  td.when(topicClassifier.classifyText('..')).thenResolve(['foo']);
 
   ServiceLocator.load({
     createUserNameService: () => userNameService,
     createDoneRepository: () => doneRepository,
-    createTopicClassifier: () => topicClassifier,
   } as ServiceFactory);
   const command = new GetDonesCommand();
 
   it('returns list of dones with the names of their owners', async () => {
     const result = await command.execute();
-    deepStrictEqual(result.items, [{...doneItem, username: 'USER', topics: ["foo"]}]);
+    deepStrictEqual(result.items, [{...doneItem, username: 'USER'}]);
   });
 
 });
