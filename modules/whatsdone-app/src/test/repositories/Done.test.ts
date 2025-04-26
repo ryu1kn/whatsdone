@@ -12,7 +12,8 @@ describe('Server DoneRepository', () => {
   const doneItem = {
     date: '2017-08-14T12:26:26.227Z',
     doneThing: 'DONE_THING',
-    userId
+    userId,
+    topics: ['foo']
   };
   const doneItemWithMonth = {...doneItem, month: '2017-08'};
   const doneItemSaved = {...doneItemWithMonth, doneId};
@@ -69,7 +70,7 @@ describe('Server DoneRepository', () => {
 
     td.verify(dynamoTableClient.update(
       doneId,
-      _omit({...doneItemWithMonth, doneThing: 'NEW_DONE_THING'}, 'userId')
+      _omit({...doneItemWithMonth, doneThing: 'NEW_DONE_THING'}, 'userId', 'topics')
     ));
   });
 

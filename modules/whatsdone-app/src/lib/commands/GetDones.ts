@@ -17,11 +17,16 @@ export default class GetDonesCommand {
 
   async execute(nextKey?: string) {
     const result = await this._doneRepository.read(nextKey);
-    const itemsWithUsernames = await this.setUserNames(result.items);
+    const itemsWithTopics = this.ensureTopics(result.items);
+    const itemsWithUsernames = await this.setUserNames(itemsWithTopics);
     return {
       items: itemsWithUsernames,
       nextKey: result.nextKey
     };
+  }
+
+  private ensureTopics(dones: DoneInDb[]) {
+    return dones.map(d => ({...d, topics: d.topics ?? []}))
   }
 
   private async setUserNames(dones: DoneInDb[]) {
