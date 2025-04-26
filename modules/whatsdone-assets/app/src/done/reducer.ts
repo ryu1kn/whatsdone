@@ -100,7 +100,11 @@ function mergeDoneList(items1: DoneItem[], items2: DoneItem[]) {
 }
 
 function normaliseDoneItem(doneItem: RawDoneItem): DoneItem {
-  return Object.assign({}, doneItem, {date: new Date(doneItem.date)});
+  return {
+    ...doneItem,
+    date: new Date(doneItem.date),
+    topics: doneItem.topics ?? []
+  };
 }
 
 function updateDones(dones: DoneItem[], doneItem: DoneItem) {
