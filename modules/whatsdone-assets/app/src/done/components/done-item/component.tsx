@@ -62,8 +62,12 @@ export const DoneItem = (props: DoneItemProps) => {
         <p className={doneItemCss('time')}>
           {formatTime(props.date)}
           {isTopicTaggingEnabled && props.topics.length > 0 && (
-            <span className={doneItemCss('topic')} style={{ marginLeft: '10px' }}>
-              {props.topics.join(', ')}
+            <span className={doneItemCss('topics')}>
+              {props.topics.map((topic, index) => (
+                <span key={index} className={doneItemCss('topic')}>
+                  {topic}
+                </span>
+              ))}
             </span>
           )}
         </p>
