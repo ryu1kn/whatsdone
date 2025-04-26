@@ -22,7 +22,7 @@ app.get('/dones', cors(corsOptions), (_req, res) => {
 app.post('/dones', cors(corsOptions), async (req, res) => {
   try {
     const bodyString = await promiseToGetBody(req)
-    const newDone = {...querystring.parse(bodyString), id: generateDummyId()};
+    const newDone = {...querystring.parse(bodyString), id: generateDummyId(), topics: ['topic-new']};
     dones.push(newDone);
     res.status(202).json(newDone);
   } catch (e) {
@@ -68,14 +68,16 @@ function dummyDones() {
       username: 'ryuichi',
       date: '2016-03-27T12:42:32.625Z',
       userId: 'userid000000000000000001',
-      id: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
+      id: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX',
+      topics: ['topic1', 'topic2']
     },
     {
       doneThing: 'Awesome done thing',
       username: 'ryuichi',
       date: '2015-04-28T07:03:08.629Z',
       userId: 'userid000000000000000001',
-      id: 'YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY'
+      id: 'YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY',
+      topics: []
     }
   ];
 }
