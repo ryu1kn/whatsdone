@@ -2,7 +2,7 @@ import AWSXRay = require('aws-xray-sdk');
 import RawAWS = require('aws-sdk');
 import LambdaRequestHandler from './LambdaRequestHandler';
 import Uuid = require('uuid');
-import {Logger} from './Logger';
+import {Logger, LogLevelString} from './Logger';
 import {EnvVars} from './EnvVars';
 
 const AWS = AWSXRay.captureAWS(RawAWS);
@@ -85,7 +85,7 @@ export default class ServiceFactory {
   }
 
   createLogger(): Logger {
-    return console;
+    return new Logger(this.env.LOG_LEVEL as LogLevelString);
   }
 
   createDynamoDBDocumentClient(): AWS.DynamoDB.DocumentClient {
