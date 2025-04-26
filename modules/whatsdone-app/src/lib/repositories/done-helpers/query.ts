@@ -125,7 +125,7 @@ export default class DoneQueryHelper {
         },
         ExpressionAttributeValues: {':m': monthKey},
         ScanIndexForward: false,
-        ProjectionExpression: 'id, #date, doneThing, userId',
+        ProjectionExpression: 'id, #date, doneThing, userId, topics',
         Select: 'SPECIFIC_ATTRIBUTES'
       },
       exclusiveStartKey
