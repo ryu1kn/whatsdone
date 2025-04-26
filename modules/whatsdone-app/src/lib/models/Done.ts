@@ -7,6 +7,7 @@ export type UserDone = {
   doneThing: string;
   date: string;
   userId: string;
+  topics?: string[];
 };
 
 export type DoneDiff = {
