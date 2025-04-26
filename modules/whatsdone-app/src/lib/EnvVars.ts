@@ -38,6 +38,10 @@ export class EnvVars {
     return this.env.TOPIC_CLASSIFIER_ARN!;
   }
 
+  get LOG_LEVEL(): string {
+    return this.env.LOG_LEVEL || 'INFO';
+  }
+
   private validate(env: NodeJS.ProcessEnv) {
     const missingVars = EnvVars.REQUIRED_VARS.filter(v => !env[v]);
     if (missingVars.length !== 0) throw new Error(`Environment variables missing: ${missingVars}`);

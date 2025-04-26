@@ -5,6 +5,7 @@ import * as td from 'testdouble';
 import DoneRepository from '../../lib/repositories/Done';
 import TopicClassifier from '../../lib/services/TopicClassifier';
 import {deepStrictEqual} from 'assert';
+import { Logger } from '../../lib/Logger';
 
 describe('Server CreateDoneCommand', () => {
   it('creates a done item with identified topics', async () => {
@@ -16,13 +17,15 @@ describe('Server CreateDoneCommand', () => {
     };
     const doneRepository = td.object('write') as DoneRepository;
     const topicClassifier = td.object('classifyText') as TopicClassifier;
+    const logger = td.object('logger') as Logger;
 
     td.when(doneRepository.write(finalDone)).thenResolve(finalDone);
     td.when(topicClassifier.classifyText('SOMETHING')).thenResolve(['TOPIC_FOO', 'TOPIC_BAR']);
 
     ServiceLocator.load({
       createDoneRepository: () => doneRepository,
-      createTopicClassifier: () => topicClassifier
+      createTopicClassifier: () => topicClassifier,
+      createLogger: () => logger
     } as ServiceFactory);
     const command = new CreateDoneCommand();
 
@@ -39,13 +42,15 @@ describe('Server CreateDoneCommand', () => {
     };
     const doneRepository = td.object('write') as DoneRepository;
     const topicClassifier = td.object('classifyText') as TopicClassifier;
+    const logger = td.object('logger') as Logger;
 
     td.when(doneRepository.write(finalDone)).thenResolve(finalDone);
     td.when(topicClassifier.classifyText('SOMETHING')).thenReject(new Error('Classification failed'));
 
     ServiceLocator.load({
       createDoneRepository: () => doneRepository,
-      createTopicClassifier: () => topicClassifier
+      createTopicClassifier: () => topicClassifier,
+      createLogger: () => logger
     } as ServiceFactory);
     const command = new CreateDoneCommand();
 
