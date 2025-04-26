@@ -45,7 +45,7 @@ export const DoneItem = (props: DoneItemProps) => {
   const deleteDone = () => props.deleteDone(props.doneId);
   const updateDone = (newDoneThing: string) => props.updateDone(props.doneId, newDoneThing);
   const doneThing = props.children.toString();
-  const isTopicTaggingEnabled = useSelector((state: RootState) => state.done.features.includes('topicTagging'));
+  const isTopicsDisabled = useSelector((state: RootState) => state.done.features.includes('no-topics'));
 
   return (
     <div className={doneItemCss()} onDoubleClick={() => props.startEditDone(props.doneId)}>
@@ -61,7 +61,7 @@ export const DoneItem = (props: DoneItemProps) => {
           <DoneThingInView doneThing={doneThing}/>}
         <p className={doneItemCss('time')}>
           {formatTime(props.date)}
-          {isTopicTaggingEnabled && props.topics.length > 0 && (
+          {!isTopicsDisabled && props.topics.length > 0 && (
             <span className={doneItemCss('topics')}>
               {props.topics.map((topic, index) => (
                 <span key={index} className={doneItemCss('topic')}>
