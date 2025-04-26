@@ -9,7 +9,9 @@ describe('Server EnvVars', () => {
       WEBAPP_ORIGIN: 'webapp-origin',
       DB_REGION: 'db-region',
       DONE_TABLE_NAME: 'done-table-name',
-      USER_ID_TABLE_NAME: 'user-id-table-name'
+      USER_ID_TABLE_NAME: 'user-id-table-name',
+      COMPREHEND_REGION: 'comprehend-region',
+      TOPIC_CLASSIFIER_ARN: 'topic-classifier-arn',
     };
     const envVars = new EnvVars(env);
     deepStrictEqual(envVars.DB_REGION, 'db-region');
@@ -17,6 +19,8 @@ describe('Server EnvVars', () => {
     deepStrictEqual(envVars.USER_ID_TABLE_NAME, 'user-id-table-name');
     deepStrictEqual(envVars.USER_POOL_ID, 'user-pool-id');
     deepStrictEqual(envVars.WEBAPP_ORIGIN, 'webapp-origin');
+    deepStrictEqual(envVars.COMPREHEND_REGION, 'comprehend-region');
+    deepStrictEqual(envVars.TOPIC_CLASSIFIER_ARN, 'topic-classifier-arn');
   });
 
   it('errors out if required env vars are missing', () => {
