@@ -20,4 +20,5 @@ export type DoneInDb = {
   doneThing: string;
   userId: string;
   month: string;
+  topics?: string[];
 };
