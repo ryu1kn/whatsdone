@@ -5,7 +5,7 @@ import Uuid = require('uuid');
 import {Logger, LogLevelString} from './Logger';
 import {EnvVars} from './EnvVars';
 
-const AWS = AWSXRay.captureAWS(RawAWS);
+const AWS = (process.env.IS_LOCAL_RUN === 'true') ? RawAWS : AWSXRay.captureAWS(RawAWS);
 
 export default class ServiceFactory {
   private env: EnvVars;
