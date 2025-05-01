@@ -112,7 +112,7 @@ export default class ServiceFactory {
   }
 
   createUserNameService() {
-    const UserNameService = require('./UserNameService').default;
+    const UserNameService = require('./services/UserNameService').default;
     return new UserNameService();
   }
 

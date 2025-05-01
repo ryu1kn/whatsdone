@@ -11,7 +11,7 @@ import CognitoUserFinder from './CognitoUserFinder';
 import RequestProcessErrorProcessor from './RequestProcessErrorProcessor';
 import LambdaRequestNormaliser from './LambdaRequestNormaliser';
 import LambdaResponseFormatter from './LambdaResponseFormatter';
-import UserNameService from './UserNameService';
+import UserNameService from './services/UserNameService';
 import DoneQueryHelper from './repositories/done-helpers/query';
 import DynamoTableClient from './repositories/DynamoTableClient';
 import {AppConfig} from './AppConfig';

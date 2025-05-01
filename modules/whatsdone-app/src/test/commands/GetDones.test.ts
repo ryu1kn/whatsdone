@@ -2,7 +2,7 @@ import GetDonesCommand from '../../lib/commands/GetDones';
 import ServiceLocator from '../../lib/ServiceLocator';
 import ServiceFactory from '../../lib/ServiceFactory';
 import * as td from 'testdouble';
-import UserNameService from '../../lib/UserNameService';
+import UserNameService from '../../lib/services/UserNameService';
 import DoneRepository from '../../lib/repositories/Done';
 import {deepStrictEqual} from 'assert';
 

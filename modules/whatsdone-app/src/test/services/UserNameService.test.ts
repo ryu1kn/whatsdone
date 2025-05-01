@@ -1,8 +1,8 @@
-import UserNameService from '../lib/UserNameService';
-import ServiceLocator from '../lib/ServiceLocator';
-import ServiceFactory from '../lib/ServiceFactory';
-import CognitoUserFinder from '../lib/CognitoUserFinder';
-import UserIdRepository from '../lib/repositories/UserId';
+import UserNameService from '../../lib/services/UserNameService';
+import ServiceLocator from '../../lib/ServiceLocator';
+import ServiceFactory from '../../lib/ServiceFactory';
+import CognitoUserFinder from '../../lib/CognitoUserFinder';
+import UserIdRepository from '../../lib/repositories/UserId';
 import * as td from 'testdouble';
 import {deepStrictEqual} from 'assert';
 
