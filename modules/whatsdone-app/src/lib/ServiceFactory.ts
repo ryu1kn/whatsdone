@@ -96,6 +96,10 @@ export default class ServiceFactory {
     return new AWS.Comprehend({region: this.env.COMPREHEND_REGION});
   }
 
+  createTranslateClient(): AWS.Translate {
+    return new AWS.Translate({region: this.env.COMPREHEND_REGION});
+  }
+
   createDoneQueryHelper() {
     const DoneQueryHelper = require('./repositories/done-helpers/query').default;
     return new DoneQueryHelper(this.env.DONE_TABLE_NAME);
