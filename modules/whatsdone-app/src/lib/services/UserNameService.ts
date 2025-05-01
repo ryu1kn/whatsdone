@@ -1,6 +1,6 @@
-import ServiceLocator from './ServiceLocator';
-import UserIdRepository from './repositories/UserId';
-import CognitoUserFinder from './CognitoUserFinder';
+import ServiceLocator from '../ServiceLocator';
+import UserIdRepository from '../repositories/UserId';
+import CognitoUserFinder from '../CognitoUserFinder';
 
 export default class UserNameService {
   private _userIdRepository: UserIdRepository;
@@ -26,5 +26,4 @@ export default class UserNameService {
     const user = await this._cognitoUserFinder.find(cognitoUserId);
     return user && user.Username;
   }
-
 }

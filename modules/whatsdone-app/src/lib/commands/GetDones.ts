@@ -2,7 +2,7 @@ import _map = require('lodash.map');
 import _keyBy = require('lodash.keyby');
 import _get = require('lodash.get');
 import ServiceLocator from '../ServiceLocator';
-import UserNameService from '../UserNameService';
+import UserNameService from '../services/UserNameService';
 import DoneRepository from '../repositories/Done';
 import {DoneInDb} from '../models/Done';
 
