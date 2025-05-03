@@ -9,5 +9,5 @@
 ## Locally running topic classifier
 
 ```sh
-ENV_NAME=prod IS_LOCAL_RUN=true yarn ts-node classify-topic.ts "Test topic classification from CLI"
+ENV_NAME=prod IS_LOCAL_RUN=true yarn ts-node src/cli/classify-topic.ts "Test topic classification from CLI"
 ```
