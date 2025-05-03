@@ -52,20 +52,6 @@
   },
   "tasks": [
     {
-      "id": "create-custom-classifier-endpoint",
-      "type": "custom",
-      "run": {
-        "script": "bash create-comprehend-endpoint.sh",
-        "envVars": {
-          "TASK_REGION": {"$ref": "#/_taskRegion"},
-          "ENV": {"$ref": "#/_env"},
-          "MODEL_VERSION": {"$ref": "#/_deploymentConfig/modelVersion"},
-          "TASK_OUTPUTS_FILE": {"$ref": "#/_taskOutputsFile"}
-        }
-      },
-      "outputsName": "ComprehendEndpointArn"
-    },
-    {
       "id": "deploy-api",
       "type": "cf-stack",
       "stackName": {"Fn::Join": ["-", [{"$ref": "#/_env"}, "whatsdone-api"]]},
@@ -81,15 +67,13 @@
         "HostedZoneId": {"$ref": "#/_deploymentConfig/hostedZoneId"},
         "CertificateArn": {"$ref": "#/_dataSourceData/whatsdone-web-cache/CertificateArn"},
         "DbRegion": {"$ref": "#/_taskRegion"},
-        "ComprehendRegion": {"$ref": "#/_taskRegion"},
         "WebappEndpoint": {"Fn::Join": ["", ["https://", {"$ref": "#/_dataSourceData/whatsdone-web-cache/PublicDomain"}]]},
         "DoneTableName": {"$ref": "#/_dataSourceData/done-store/TableName"},
         "UserIdTableName": {"$ref": "#/_dataSourceData/user-id-store/TableName"},
         "UserPoolId": {"$ref": "#/_dataSourceData/authentication/UserPoolId"},
         "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
         "LambdaS3Bucket": {"$ref": "#/_dataSourceData/whatsdone-app/packages/backend-app/s3bucket"},
-        "LambdaS3Key": {"$ref": "#/_dataSourceData/whatsdone-app/packages/backend-app/s3key"},
-        "TopicClassifierArn": {"$ref": "#/_deploymentOutputs/ComprehendEndpointArn"}
+        "LambdaS3Key": {"$ref": "#/_dataSourceData/whatsdone-app/packages/backend-app/s3key"}
       }
     },
     {
@@ -101,16 +85,6 @@
           "TASK_REGION": {"$ref": "#/_taskRegion"},
           "REST_API_ID": {"$ref": "#/_deploymentOutputs/RestApiId"},
           "STAGE_NAME": {"$ref": "#/_deploymentOutputs/ApiStageName"}
-        }
-      }
-    },
-    {
-      "id": "delete-custom-classifier-endpoint",
-      "type": "custom",
-      "undo": {
-        "script": "aws comprehend delete-endpoint --endpoint-arn \"$COMPREHEND_ENDPOINT_ARN\"",
-        "envVars": {
-          "COMPREHEND_ENDPOINT_ARN": {"$ref": "#/_deploymentOutputs/ComprehendEndpointArn"}
         }
       }
     }

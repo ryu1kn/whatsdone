@@ -36,8 +36,6 @@ type InstanceCache = {
   UserIdRepository?: UserIdRepository;
   DoneRepository?: DoneRepository;
   DynamoDBDocumentClient?: AWS.DynamoDB.DocumentClient;
-  ComprehendClient?: AWS.Comprehend;
-  TranslateClient?: AWS.Translate;
   DoneQueryHelper?: DoneQueryHelper;
   DoneDynamoTableClient?: DynamoTableClient;
   UuidGenerator?: { generate: () => string };
@@ -148,16 +146,6 @@ class ServiceLocator {
   get dynamoDBDocumentClient() {
     this.cache.DynamoDBDocumentClient = this.cache.DynamoDBDocumentClient || this.serviceFactory.createDynamoDBDocumentClient();
     return this.cache.DynamoDBDocumentClient!;
-  }
-
-  get comprehendClient() {
-    this.cache.ComprehendClient = this.cache.ComprehendClient || this.serviceFactory.createComprehendClient();
-    return this.cache.ComprehendClient!;
-  }
-
-  get translateClient() {
-    this.cache.TranslateClient = this.cache.TranslateClient || this.serviceFactory.createTranslateClient();
-    return this.cache.TranslateClient!;
   }
 
   get doneQueryHelper() {
