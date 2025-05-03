@@ -1,9 +1,9 @@
 #!/usr/bin/env ts-node
 
 import AWS = require('aws-sdk');
-import { EnvVars } from './src/lib/EnvVars';
-import ServiceFactory from './src/lib/ServiceFactory';
-import ServiceLocator from './src/lib/ServiceLocator';
+import { EnvVars } from '../lib/EnvVars';
+import ServiceFactory from '../lib/ServiceFactory';
+import ServiceLocator from '../lib/ServiceLocator';
 
 async function main() {
   const input = process.argv[2];
