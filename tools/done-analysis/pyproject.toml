@@ -1,0 +1,13 @@
+[project]
+name = "done-analysis"
+version = "0.1.0"
+description = "Data analysis tools and notebooks for What's Done app."
+dependencies = [
+  "jupyter",
+  "notebook",
+  "pandas",
+  "altair"
+]
+
+[tool.uv]
+# uv-specific configuration can go here if needed
