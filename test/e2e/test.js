@@ -17,8 +17,8 @@ const wait = msec => new Promise(resolve => setTimeout(resolve, msec));
   await page.click('.modal-content.visible-md input[value="Sign in"]');
 
   const testText = `test message @ ${new Date().toISOString()}`;
-  await page.fill('input[placeholder="What have you done today?"]', testText);
-  await page.press('input[placeholder="What have you done today?"]', 'Enter');
+  await page.fill('textarea[placeholder="What have you done today?"]', testText);
+  await page.click('button.doneform__button');
   await page.waitForLoadState('networkidle')
 
   await page.reload({waitUntil: 'networkidle'})
