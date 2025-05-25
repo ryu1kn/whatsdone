@@ -8,7 +8,7 @@ export class DoneForm extends React.Component<DoneFormProps> {
 
   private handleSubmit(e: any) {
     e.preventDefault();
-    const doneThingElement = this.refs.doneThing as HTMLInputElement;
+    const doneThingElement = this.refs.doneThing as HTMLTextAreaElement;
     const doneThing = doneThingElement.value.trim();
     if (!doneThing) return;
 
@@ -18,13 +18,13 @@ export class DoneForm extends React.Component<DoneFormProps> {
 
   render() {
     return (
-      <form className="form-inline doneform" onSubmit={this.handleSubmit.bind(this)}>
+      <form className="doneform" onSubmit={this.handleSubmit.bind(this)}>
         <div className="form-group">
           <label className="sr-only" htmlFor="doneInput">Done Thing</label>
-          <input type="text" className="form-control" id="doneInput"
-            placeholder="What have you done today?" ref="doneThing" />
+          <textarea className="form-control" id="doneInput"
+            placeholder="What have you done today?" ref="doneThing" rows={3} />
         </div>
-        <button type="submit" className="btn btn-default">Done!</button>
+        <button type="submit" className="btn btn-default doneform__button">Done!</button>
       </form>
     );
   }

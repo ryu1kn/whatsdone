@@ -3,21 +3,30 @@ p {
 }
 
 .doneform {
-  display: -webkit-flex;
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 .doneform > .form-group {
-  display: -webkit-flex;
-  display: flex;
-  flex: 1;
   display: block;
-  margin-bottom: 0;
+  margin-bottom: 0.5em;
 }
 .doneform > .form-group > input {
   width: 100%;
 }
-.doneform > button {
-  margin-left: .3em;
+.doneform > .form-group > textarea {
+  width: 100%;
+  resize: vertical;
+}
+.doneform__button {
+  width: auto;
+  align-self: flex-end;
+}
+@media (max-width: 600px) {
+  .doneform__button {
+    width: 100%;
+    align-self: stretch;
+  }
 }
 
 .donelist {
