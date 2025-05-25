@@ -30,9 +30,32 @@ const createOnClickDelete = (deleteDone: () => void) => (e: any) => {
   deleteDone();
 };
 
-const DoneThingInEdit = ({doneThing, updateDone}: { doneThing: string, updateDone: (done: string) => void }) =>
-  <input type="text" className="form-control" defaultValue={doneThing} autoFocus={true}
-         onKeyPress={e => e.key === 'Enter' && updateDone((e.target as HTMLInputElement).value)}/>;
+const DoneThingInEdit = ({doneThing, updateDone}: { doneThing: string, updateDone: (done: string) => void }) => {
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+  return (
+    <div className="doneitem__edit-container">
+      <textarea
+        className="form-control"
+        defaultValue={doneThing}
+        autoFocus={true}
+        ref={textareaRef}
+        rows={3}
+        onKeyDown={e => {
+          if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+            updateDone((e.target as HTMLTextAreaElement).value);
+          }
+        }}
+      />
+      <button
+        className="btn btn-default doneform__button"
+        onClick={() => textareaRef.current && updateDone(textareaRef.current.value)}
+        type="button"
+      >
+        Save
+      </button>
+    </div>
+  );
+};
 
 const DoneThingInView = ({doneThing}: { doneThing: string }) => {
   return (
