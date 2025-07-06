@@ -6,8 +6,6 @@ __pycache__/
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
-# uv virtual environment
 /.venv/
 
-# VSCode settings
-.vscode/
+/data-local/

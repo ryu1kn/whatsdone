@@ -8,6 +8,7 @@ alwaysApply: true
 
 - This "What's Done" system is written in TypeScript + React (Node.js).
 - Use `yarn` as a package manager for Node.js. Do not use `npm`.
+- Use `uv` as a package manager for Python. Do not use `pip`.
 
 ## Coding guidelines
 
@@ -53,3 +54,7 @@ alwaysApply: true
   ```sh
   git commit -m "Added feature A"
   ```
+
+## Jupyter notebook
+
+- When asked to create a notebook, create a Jupyter notebook under tools/done-analysis/notebooks.
