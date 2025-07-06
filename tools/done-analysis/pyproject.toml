@@ -2,11 +2,21 @@
 name = "done-analysis"
 version = "0.1.0"
 description = "Data analysis tools and notebooks for What's Done app."
+requires-python = ">=3.13"
 dependencies = [
   "jupyter",
   "notebook",
   "pandas",
-  "altair"
+  "altair",
+  "boto3>=1.38.8",
+  "sentence-transformers",
+  "hdbscan",
+  "scikit-learn",
+  "numpy",
+  "tqdm",
+  "torch>=2.7.0",
+  "plotly>=6.0.1",
+  "umap-learn>=0.5.7",
 ]
 
 [tool.uv]
