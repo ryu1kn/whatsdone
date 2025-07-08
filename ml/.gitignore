@@ -1,0 +1,55 @@
+# Environment variables
+.env
+
+# Data files
+data/raw/*
+data/processed/*
+data/models/*.pkl
+data/models/*.json
+
+# Logs
+logs/
+*.log
+
+# MLflow artifacts
+ops/data/
+ops/mlflow/storage/
+ops/postgresql/data/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+.metaflow/

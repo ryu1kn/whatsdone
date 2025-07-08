@@ -1,0 +1,31 @@
+[project]
+name = "whatsdone-ml"
+version = "0.1.0"
+description = "ML infrastructure for What's Done topic classification"
+requires-python = ">=3.13"
+dependencies = [
+    "metaflow>=2.15.0",
+    "mlflow>=2.10.0",
+    "scikit-learn>=1.4.0",
+    "sentence-transformers>=2.5.0",
+    "pandas>=2.2.0",
+    "numpy>=1.26.0",
+    "boto3>=1.34.0",
+    "joblib>=1.4.0",
+    "hdbscan>=0.8.40",
+    "plotly>=5.20.0",
+    "jupyter>=1.0.0",
+    "notebook>=7.0.0",
+    "psycopg2-binary>=2.9.0",
+    "fastapi>=0.110.0",
+    "uvicorn>=0.27.0",
+    "pydantic>=2.6.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "black>=24.0.0",
+    "flake8>=7.0.0",
+    "mypy>=1.8.0"
+]

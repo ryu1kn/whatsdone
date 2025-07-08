@@ -1,0 +1,15 @@
+FROM python:3.13-slim
+
+WORKDIR /app
+
+# Install MLflow
+RUN pip install mlflow
+
+# Create directories
+RUN mkdir -p /mlflow/artifacts
+
+# Expose port
+EXPOSE 5000
+
+# Default command
+CMD ["mlflow", "server", "--host", "0.0.0.0", "--port", "5000"]
