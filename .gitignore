@@ -1,9 +1,11 @@
 /.kumo
 .DS_Store
+.env
 npm-debug.log
 yarn-error.log
 __*
 !__*__
+!__*__.py
 node_modules
 
 # IntelliJ

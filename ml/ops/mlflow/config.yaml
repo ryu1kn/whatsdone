@@ -1,0 +1,6 @@
+# MLflow configuration
+tracking_uri: sqlite:///mlflow.db
+default_artifact_root: /mlflow/artifacts
+serve_artifacts: true
+artifacts_only: false
+artifacts_destination: /mlflow/artifacts

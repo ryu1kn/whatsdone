@@ -1,0 +1,7 @@
+[tools]
+python = "3.13"
+uv = "latest"
+
+[env]
+_.python.venv = { path = ".venv", create = true }
+MLFLOW_TRACKING_URI = "http://localhost:5001"

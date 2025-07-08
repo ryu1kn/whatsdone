@@ -1,0 +1,4 @@
+{
+  "METAFLOW_DATASTORE": "local",
+  "METAFLOW_DATATOOLS_S3ROOT": "s3://dummy-bucket/metaflow"
+}
