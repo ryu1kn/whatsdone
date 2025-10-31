@@ -57,10 +57,14 @@ const DoneThingInEdit = ({doneThing, updateDone}: { doneThing: string, updateDon
   );
 };
 
-const DoneThingInView = ({doneThing}: { doneThing: string }) => {
+const DoneThingInView = ({doneThing, deleteDone}: { doneThing: string, deleteDone: () => void }) => {
   return (
-    <div className={doneItemCss('done-thing')}
-         dangerouslySetInnerHTML={{__html: converter.makeHtml(doneThing)}}/>
+    <>
+      <div className={doneItemCss('done-thing')}
+           dangerouslySetInnerHTML={{__html: converter.makeHtml(doneThing)}}/>
+      <div className={doneItemCss('delete-action') + ' glyphicon glyphicon-trash'}
+           onClick={createOnClickDelete(deleteDone)}/>
+    </>
   );
 };
 
@@ -81,7 +85,7 @@ export const DoneItem = (props: DoneItemProps) => {
       <div className={doneItemCss('body')}>
         {props.editInProgress ?
           <DoneThingInEdit doneThing={doneThing} updateDone={updateDone}/> :
-          <DoneThingInView doneThing={doneThing}/>}
+          <DoneThingInView doneThing={doneThing} deleteDone={deleteDone}/>}
         <p className={doneItemCss('time')}>
           {formatTime(props.date)}
           {!isTopicsDisabled && props.topics.length > 0 && (
@@ -95,8 +99,6 @@ export const DoneItem = (props: DoneItemProps) => {
           )}
         </p>
       </div>
-      <div className={doneItemCss('delete-action') + ' glyphicon glyphicon-trash'}
-           onClick={createOnClickDelete(deleteDone)}/>
     </div>
   );
 };

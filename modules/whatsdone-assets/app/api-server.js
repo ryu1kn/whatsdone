@@ -41,6 +41,14 @@ app.put('/dones/:id', cors(corsOptions), async (req, res) => {
   }
 });
 
+app.delete('/dones/:id', cors(corsOptions), (req, res) => {
+  const index = dones.findIndex(done => done.id === req.params.id);
+  if (index !== -1) {
+    dones.splice(index, 1);
+  }
+  res.sendStatus(204);
+});
+
 app.get('*', (_req, res) => {
   res.sendStatus(404);
 });
