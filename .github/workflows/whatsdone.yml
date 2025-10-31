@@ -53,6 +53,8 @@ jobs:
           node-version: '20'
       - run: make test
         working-directory: test/e2e
+        env:
+          ENV_NAME: ci
 
   production-deploy:
     needs: [ci-e2e-test]
