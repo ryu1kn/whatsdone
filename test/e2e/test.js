@@ -25,7 +25,7 @@ const wait = msec => new Promise(resolve => setTimeout(resolve, msec));
   await page.waitForSelector(`text='${testText}'`)
 
   await page.hover(`//*[text()[contains(.,'${testText}')]]//ancestor::*[@class='doneitem']`);
-  await page.click(`//*[text()[contains(.,'${testText}')]]//ancestor::*[@class='doneitem']/div[3]`);
+  await page.click(`//*[text()[contains(.,'${testText}')]]//ancestor::*[@class='doneitem']//*[@class='doneitem__delete-action']`);
   await wait(sec(5));  // XXX: waitForLoadState('networkidle') doesn't do the job here
 
   await page.reload({waitUntil: 'networkidle'})
