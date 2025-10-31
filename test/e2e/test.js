@@ -10,11 +10,15 @@ const wait = msec => new Promise(resolve => setTimeout(resolve, msec));
 
   const page = await context.newPage();
 
-  await page.goto('https://whatsdone-ci.ryuichi.io/', {waitUntil: 'networkidle'});
+  if (process.env.ENV_NAME === 'ci') {
+    await page.goto('https://whatsdone-ci.ryuichi.io/', {waitUntil: 'networkidle'});
 
-  await page.fill('.modal-content.visible-md input[placeholder="Username"]', 'test-e2e');
-  await page.fill('.modal-content.visible-md input[placeholder="Password"]', process.env.E2E_USER_PASSWORD);
-  await page.click('.modal-content.visible-md input[value="Sign in"]');
+    await page.fill('.modal-content.visible-md input[placeholder="Username"]', 'test-e2e');
+    await page.fill('.modal-content.visible-md input[placeholder="Password"]', process.env.E2E_USER_PASSWORD);
+    await page.click('.modal-content.visible-md input[value="Sign in"]');
+  } else {
+    await page.goto('http://localhost:8080/', {waitUntil: 'networkidle'});
+  }
 
   const testText = `test message @ ${new Date().toISOString()}`;
   await page.fill('textarea[placeholder="What have you done today?"]', testText);
