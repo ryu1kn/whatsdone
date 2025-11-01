@@ -51,6 +51,7 @@ jobs:
         with:
           cache: npm
           node-version: '22'
+      - run: yarn install
       - run: npx playwright install --with-deps
       - run: make test
         working-directory: test/e2e
