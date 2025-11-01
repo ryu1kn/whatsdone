@@ -4,6 +4,8 @@
 ## How to run/debug
 
 ```sh
+yarn install
+
 export AWS_PROFILE=<your-profile>
 export AWS_REGION=<your-region>
 
