@@ -50,7 +50,8 @@ jobs:
       - uses: actions/setup-node@v3.8.1
         with:
           cache: npm
-          node-version: '20'
+          node-version: '22'
+      - run: npx playwright install --with-deps
       - run: make test
         working-directory: test/e2e
         env:
