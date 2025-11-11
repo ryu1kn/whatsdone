@@ -1,0 +1,19 @@
+# Invoked via: /plan Do blah
+
+description = "Generates a plan."
+
+prompt = """
+Please come up with a plan for the below request. While making the plan, please carefully follow the below instructions.
+
+<instructions>
+- Do NOT implement anything yet, focus on making a plan.
+- Do NOT spell out code snippets unless explicitly asked, as it distracts architecture review processes.
+- Be aware that the guiding principle for our software development is "simplicity".
+  Complexity prevents us going faster and quickly adopt changing requirements; so always keep the simplicity in mind when making a plan.
+- Save your plan under @workspace/plans/ in a markdown format, with the format: NNN--description-of-the-work.md
+</instructions>
+
+Request:
+
+{{args}}
+"""
