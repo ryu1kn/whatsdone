@@ -1,4 +1,0 @@
-# Implementation planning
-
-- Please explain your plan of the implementation for my review. Please do not make changes just yet.
-- Please do NOT spell out code snippets unless explicitly asked, as it distracts architecture review processes.

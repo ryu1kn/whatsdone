@@ -35,6 +35,28 @@
   return response['DocumentClassifierPropertiesList']
   ```
 
+- When referring to a file / directory within a project, always use a relative path and do not hardcode an absolute path.
+  This is to ensure the code can run in other environments (deployed environments, other developers' laptops or CI)
+
+  DON'T:
+
+  ```python
+  with open('/Users/foo/projects/whatsdone/some-file') as f:
+      # Do something with `w`
+  ```
+
+  DO:
+
+  ```python
+  from pathlib import Path
+
+  script_dir = Path(__file__).resolve().parent
+  project_dir = script_dir / path / to / project_root
+
+  with open(project_dir / 'some-file') as f:
+      # Do something with `w`
+  ```
+
 ## Git commits
 
 - Do not add "conventional commit" style message prefix like "feat:".
