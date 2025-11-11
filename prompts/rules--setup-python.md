@@ -1,4 +1,4 @@
-# Rule: Setting up a python project
+# Rules: Setting up a python project
 
 Whenever setting up a python project, carefully follow the below instruction:
 
