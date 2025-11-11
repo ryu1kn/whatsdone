@@ -1,12 +1,4 @@
-# General guidelines
-
-## Project context
-
-- This "What's Done" system is written in TypeScript + React (Node.js).
-- Use `yarn` as a package manager for Node.js. Do not use `npm`.
-- Use `uv` as a package manager for Python. Do not use `pip`.
-
-## Coding guidelines
+# Rules: Coding
 
 - Make the code self-explanatory so that you won't need comments. Comments should be to clarify "Why" instead of "What".
 
@@ -57,22 +49,3 @@
       # Do something with `w`
   ```
 
-## Git commits
-
-- Do not add "conventional commit" style message prefix like "feat:".
-
-  DON'T:
-
-  ```sh
-  git commit -m 'feat: Added feature A"
-  ```
-
-  DO:
-
-  ```sh
-  git commit -m "Added feature A"
-  ```
-
-## Jupyter notebook
-
-- When asked to create a notebook, create a Jupyter notebook under tools/done-analysis/notebooks.

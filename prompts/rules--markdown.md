@@ -1,4 +1,4 @@
-# Rule: Markdown
+# Rules: Markdown
 
 - When writing a codeblock, have a new line above one.
 
