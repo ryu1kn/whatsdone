@@ -1,8 +1,3 @@
----
-description:
-globs:
-alwaysApply: false
----
 # Implementation planning
 
 - Please explain your plan of the implementation for my review. Please do not make changes just yet.

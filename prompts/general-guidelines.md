@@ -1,8 +1,4 @@
----
-description:
-globs:
-alwaysApply: true
----
+# General guidelines
 
 ## Project context
 
