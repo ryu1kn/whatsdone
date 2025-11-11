@@ -1,9 +1,3 @@
----
-description: Local execution
-globs:
-alwaysApply: false
----
-
 # Local execution
 
 - Environment variables are provided from terminal through mise.toml (or mise.local.toml for sensitive info) file.

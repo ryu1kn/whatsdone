@@ -1,10 +1,4 @@
----
-description:
-globs: *.md
-alwaysApply: false
----
-
-# Markdown
+# Rule: Markdown
 
 - When writing a codeblock, have a new line above one.
 

@@ -1,10 +1,4 @@
----
-description: Naming conventions
-globs: ops/**/*
-alwaysApply: true
----
-
-# Naming conventions
+# Cloud Infrastructure Naming conventions
 
 ## AWS resources
 

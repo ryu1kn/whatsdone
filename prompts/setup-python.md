@@ -1,8 +1,5 @@
----
-description:
-globs:
-alwaysApply: false
----
+# Rule: Setting up a python project
+
 Whenever setting up a python project, carefully follow the below instruction:
 
 - Use `mise` to install python interpreter
