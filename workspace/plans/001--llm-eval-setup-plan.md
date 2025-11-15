@@ -23,7 +23,7 @@ tools/llm-eval/
 ├── data/
 │   ├── dataset.jsonl  # Evaluation dataset ("done" text and ground truth topic)
 │   └── topics.json    # List of allowed topics
-├── src/
+├── scripts/
 │   ├── __main__.py    # Main entry point for the evaluation tool
 │   ├── categorizer.py # Logic for interacting with the LLM
 │   └── metrics.py     # Logic for computing evaluation metrics
@@ -47,19 +47,19 @@ tools/llm-eval/
 -   The `name` field represents the topic, and the `description` provides clarifying information on when to use each topic.
 -   This ensures that the categorization is consistent and constrained to a predefined set of topics, with clear guidance for categorization.
 
-### 4.3. Categorizer (`src/categorizer.py`)
+### 4.3. Categorizer (`scripts/categorizer.py`)
 
 -   This module will contain the logic to take a "done" text as input and use an LLM to assign a topic.
 -   It will include an abstraction for the LLM API, making it easy to switch between different LLM providers or models in the future.
 
-### 4.4. Evaluation Runner (`src/__main__.py`)
+### 4.4. Evaluation Runner (`scripts/__main__.py`)
 
 -   This will be the main script to run the evaluation.
 -   It will load the dataset and the topic schema.
 -   It will iterate through the dataset, calling the `Categorizer` for each "done".
 -   It will collect the predictions and pass them to the `Metrics` module.
 
-### 4.5. Metrics Calculator (`src/metrics.py`)
+### 4.5. Metrics Calculator (`scripts/metrics.py`)
 
 -   This module will calculate and display performance metrics.
 -   Initially, we will focus on simple **accuracy**.
@@ -68,7 +68,7 @@ tools/llm-eval/
 ## 5. Workflow
 
 1.  **Data Preparation:** A developer will populate `data/dataset.jsonl` with a representative set of "dones" and their correct topics. `data/topics.json` will also be defined.
-2.  **Run Evaluation:** The developer will run the evaluation tool from the command line: `python -m src`.
+2.  **Run Evaluation:** The developer will run the evaluation tool from the command line: `python3 scripts/evaluate.py`.
 3.  **Processing:** The tool will process each "done" in the dataset, get the predicted topic from the LLM, and compare it to the ground truth.
 4.  **Reporting:** The tool will output a summary report to the console. The report will show the key performance metrics. Detailed reports can be saved to the `reports/` directory.
 
