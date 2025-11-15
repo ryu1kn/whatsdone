@@ -22,7 +22,7 @@ export class DoneForm extends React.Component<DoneFormProps> {
         <div className="form-group">
           <label className="sr-only" htmlFor="doneInput">Done Thing</label>
           <textarea className="form-control" id="doneInput"
-            placeholder="What have you done today?" ref="doneThing" rows={3} />
+            placeholder="What have you done today?" ref="doneThing" rows={6} />
         </div>
         <button type="submit" className="btn btn-default doneform__button">Done!</button>
       </form>
