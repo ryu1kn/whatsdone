@@ -27,6 +27,9 @@ store.dispatch({
 });
 
 ServiceLocator.cognitoUserInitialiser.initialise()
+  .then(() => {
+    window.history.replaceState({}, '', window.location.pathname + window.location.search);
+  })
   .then(() => store.dispatch({type: 'API_READY'}))
   .catch((e: Error) => { console.error(e.stack); });
 
