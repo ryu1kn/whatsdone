@@ -1,6 +1,7 @@
 
 node_modules:
 	yarn install
+	npx playwright install --with-deps
 
 .PHONY: test
 test: node_modules
