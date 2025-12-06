@@ -29,6 +29,13 @@
       "Properties": {
         "ClientName": "Webapp",
         "UserPoolId": {"Ref": "UserPool"},
+        "AccessTokenValidity": 8,
+        "IdTokenValidity": 8,
+        "TokenValidityUnits": {
+          "AccessToken": "hours",
+          "IdToken": "hours",
+          "RefreshToken": "days"
+        },
         "RefreshTokenValidity": 1,
         "SupportedIdentityProviders": ["COGNITO"],
         "AllowedOAuthFlowsUserPoolClient": true,
