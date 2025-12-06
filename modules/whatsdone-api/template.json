@@ -37,6 +37,9 @@
     },
     "WebappEndpoint": {
       "Type": "String"
+    },
+    "NodeVersionMajor": {
+      "Type": "Number"
     }
   },
   "Mappings": {
@@ -386,7 +389,7 @@
           }
         },
         "TracingConfig": {"Mode": "Active"},
-        "Runtime": "nodejs20.x",
+        "Runtime": {"Fn::Sub": "nodejs${NodeVersionMajor}.x"},
         "Timeout": "10"
       }
     },

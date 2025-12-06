@@ -19,6 +19,7 @@ env:
   BUILD_COMMIT_RANGE: ${{ github.event.before }}...${{ github.event.after }}
   BUILD_NUMBER: ${{ github.run_number }}-${{ github.run_id }}
   BUILD_BRANCH: ${{ github.ref_name }}
+  NODE_VERSION: 24
 
 jobs:
   ci-deploy:
@@ -34,7 +35,7 @@ jobs:
     - uses: actions/setup-node@v3.8.1
       with:
         cache: npm
-        node-version: '20'
+        node-version: ${{ env.NODE_VERSION }}
     - run: ./ci-build.sh
       env:
         ENV_NAME: ci
@@ -50,7 +51,7 @@ jobs:
       - uses: actions/setup-node@v3.8.1
         with:
           cache: npm
-          node-version: '22'
+          node-version: ${{ env.NODE_VERSION }}
       - run: make test
         working-directory: test/e2e
         env:
@@ -70,7 +71,7 @@ jobs:
       - uses: actions/setup-node@v3.8.1
         with:
           cache: npm
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
       - run: ./ci-build.sh
         env:
           ENV_NAME: prod

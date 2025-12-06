@@ -65,6 +65,7 @@
         "EnvName": {"$ref": "#/_env"},
         "DomainName": {"$ref": "#/_deploymentConfig/domainName"},
         "HostedZoneId": {"$ref": "#/_deploymentConfig/hostedZoneId"},
+        "NodeVersionMajor": {"$ref": "#/_deploymentConfig/nodeVersionMajor"},
         "CertificateArn": {"$ref": "#/_dataSourceData/whatsdone-web-cache/CertificateArn"},
         "DbRegion": {"$ref": "#/_taskRegion"},
         "WebappEndpoint": {"Fn::Join": ["", ["https://", {"$ref": "#/_dataSourceData/whatsdone-web-cache/PublicDomain"}]]},
