@@ -1,5 +1,6 @@
 [tools]
 yarn = "1.22.19"
+node = "24"
 
 [env]
 AWS_REGION = "ap-southeast-2"
