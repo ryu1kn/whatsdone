@@ -10,10 +10,21 @@ const corsOptions = {
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
+function promiseToGetBody(req) {
+  return new Promise((resolve, reject) => {
+    const tmp = {string: ''};
+    req.on('data', data => {
+      tmp.string += data.toString();
+    });
+    req.on('end', () => resolve(tmp.string));
+    req.on('error', e => reject(e));
+  });
+}
+
 const dones = dummyDones();
 
-app.options('/dones', cors(corsOptions))
-app.options('/dones/:id', cors(corsOptions))
+app.options('/dones', cors(corsOptions));
+app.options('/dones/:id', cors(corsOptions));
 
 app.get('/dones', cors(corsOptions), (_req, res) => {
   res.status(200).json({items: dones});
@@ -21,8 +32,8 @@ app.get('/dones', cors(corsOptions), (_req, res) => {
 
 app.post('/dones', cors(corsOptions), async (req, res) => {
   try {
-    const bodyString = await promiseToGetBody(req)
-    const newDone = {...querystring.parse(bodyString), id: generateDummyId(), topics: ['topic-new']};
+    const bodyString = await promiseToGetBody(req);
+    const newDone = Object.assign({}, querystring.parse(bodyString), {id: generateDummyId(), topics: ['topic-new']});
     dones.push(newDone);
     res.status(202).json(newDone);
   } catch (e) {
@@ -33,7 +44,7 @@ app.post('/dones', cors(corsOptions), async (req, res) => {
 app.put('/dones/:id', cors(corsOptions), async (req, res) => {
   try {
     const bodyString = await promiseToGetBody(req);
-    const done = dones.find(done => done.id === req.params.id)
+    const done = dones.find(done => done.id === req.params.id);
     done.doneThing = querystring.parse(bodyString).doneThing;
     res.status(202).json(done);
   } catch (e) {
@@ -58,16 +69,6 @@ const PORT = process.env.PORT || 8081;
 app.listen(PORT, () => {
   console.log(`Production Express server running at localhost: ${PORT}`);
 });
-
-const promiseToGetBody = (req) =>
-  new Promise((resolve, reject) => {
-    const tmp = {string: ''};
-    req.on('data', data => {
-      tmp.string += data.toString();
-    });
-    req.on('end', () => resolve(tmp.string));
-    req.on('error', e => reject(e));
-  });
 
 function dummyDones() {
   return [

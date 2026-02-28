@@ -12,7 +12,7 @@ export class Logger {
   private _logLevel: LogLevel;
 
   constructor(ls: LogLevelString) {
-    this._logLevel = LogLevel[ls] ?? LogLevel.INFO
+    this._logLevel = LogLevel[ls] ?? LogLevel.INFO;
     console.info(`Logger initialized with level: ${LogLevel[this._logLevel]}`);
   }
 

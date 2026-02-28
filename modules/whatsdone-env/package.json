@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "deploy": "kumo deploy-module --verbose",
-    "destroy": "kumo destroy-module --verbose"
+    "destroy": "kumo destroy-module --verbose",
+    "test_module": "echo \"No test defined\""
   }
 }
