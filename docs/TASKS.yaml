@@ -82,3 +82,18 @@ tasks:
       - "Repository gate (`mise run gate`) passes after the fixes."
     audit:
       change_reason: "Child task added to constrain implementation scope to actionable post-diagnosis fixes."
+  - id: REC-5
+    title: "Add deterministic agent loop script"
+    description: "Create `tools/agent-loop/run.sh` to run Codex in a deterministic backlog loop with gate and clean-repo enforcement between iterations."
+    status: todo
+    depends_on: []
+    supersedes: []
+    acceptance:
+      - "Script `tools/agent-loop/run.sh` exists and supports `--goal`, `--max-iterations`, and `--model` flags."
+      - "Each iteration invokes `codex exec` with a stable prompt instructing the agent to run `$work-on-backlog`."
+      - "After each iteration, script runs `mise run gate` and `git status --porcelain`."
+      - "If gate fails or working tree is dirty, the next `codex exec` prompt includes the captured failing gate output and/or git status output."
+      - "Loop terminates only when all are true: agent outputs `<promise>COMPLETE</promise>`, gate passes, and `git status --porcelain` is empty."
+      - "Usage example works: `./tools/agent-loop/run.sh --goal \"Implement REQ-2 and REQ-3 with tests\" --max-iterations 25 --model gpt-5.3-codex`."
+    audit:
+      change_reason: "Added requested backlog item to implement deterministic `tools/agent-loop/run.sh` orchestration script."
