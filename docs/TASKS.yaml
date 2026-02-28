@@ -1,0 +1,84 @@
+schema_version: "1.0.0"
+backlog_policy: "agent_autonomous_strict"
+
+project:
+  name: "whatsdone"
+  timezone: "Australia/Melbourne"
+  default_gate: "mise run gate"
+
+defaults:
+  owner: "agent"
+  gates:
+    - "mise run gate"
+  max_new_tasks_per_iteration: 3
+  max_tasks_modified_per_iteration: 8
+
+size_profiles:
+  micro:
+    loc_delta_max: 50
+    tests_add_min: 0
+    max_sessions: 1
+  small:
+    loc_delta_max: 250
+    tests_add_min: 1
+    max_sessions: 2
+  medium:
+    loc_delta_max: 600
+    tests_add_min: 2
+    max_sessions: 3
+  large:
+    loc_delta_max: 999999
+    tests_add_min: 0
+    max_sessions: 0
+
+tasks:
+  - id: REC-1
+    title: "Make PR build pass on GitHub"
+    description: "The PR build on GitHub currently never succeeds. Investigate the cause of the failure and implement the necessary fixes to ensure that the PR build passes successfully with all checks green. Additionally, ensure that the PR build does not deploy to ci, dev-* or production environments."
+    status: superseded
+    depends_on: []
+    supersedes: []
+    acceptance:
+      - "A PR build passes successfully on GitHub with all checks green."
+      - "A PR build doesn't deploy to ci, dev-* or production environments."
+    audit:
+      change_reason: "Split into executable subtasks because original acceptance criteria require remote GitHub validation and exceed one safe local session."
+  - id: REC-2
+    title: "Reproduce PR workflow failure locally"
+    description: "Inspect CI workflow definitions and reproduce failing PR workflow steps locally with the same commands and environment assumptions."
+    status: todo
+    depends_on: []
+    supersedes:
+      - REC-1
+    acceptance:
+      - "The failing CI step(s) are identified with a concrete root-cause hypothesis."
+      - "A local command sequence is documented that reproduces the relevant failure."
+    audit:
+      change_reason: "Child task added to make REC-1 executable in small, testable increments."
+  - id: REC-3
+    title: "Prevent deploy jobs from running on pull_request events"
+    description: "Update GitHub Actions workflow conditions so PR runs never deploy to ci, dev-* or production environments."
+    status: todo
+    depends_on:
+      - REC-2
+    supersedes:
+      - REC-1
+    acceptance:
+      - "Deployment jobs are gated to exclude pull_request events."
+      - "Workflow configuration clearly restricts deploy environments to appropriate events/branches."
+    audit:
+      change_reason: "Child task added to isolate deployment-safety requirement from general CI pass requirement."
+  - id: REC-4
+    title: "Fix PR build checks and validate gate parity"
+    description: "Implement targeted fixes for the identified CI failures and ensure local gate parity to keep PR checks green."
+    status: todo
+    depends_on:
+      - REC-2
+      - REC-3
+    supersedes:
+      - REC-1
+    acceptance:
+      - "All PR-targeted CI checks pass using equivalent local commands."
+      - "Repository gate (`mise run gate`) passes after the fixes."
+    audit:
+      change_reason: "Child task added to constrain implementation scope to actionable post-diagnosis fixes."
