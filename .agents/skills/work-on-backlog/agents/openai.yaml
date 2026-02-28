@@ -1,0 +1,4 @@
+interface:
+  display_name: "Work on Backlog"
+  short_description: "Plan and execute backlog items end-to-end"
+  default_prompt: "Use $work-on-backlog to pick a backlog task and implement it with validation."
