@@ -26,7 +26,7 @@ export default class GetDonesCommand {
   }
 
   private ensureTopics(dones: DoneInDb[]) {
-    return dones.map(d => ({...d, topics: d.topics ?? []}))
+    return dones.map(d => ({...d, topics: d.topics ?? []}));
   }
 
   private async setUserNames(dones: DoneInDb[]) {
