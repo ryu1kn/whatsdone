@@ -5,31 +5,31 @@ set -euo pipefail
 usage() {
   cat <<'EOF'
 Usage:
-  ./tools/agent-loop/run.sh --goal "<goal>" --max-iterations <n> [--model <model>]
+  ./tools/agent-loop/run.sh --max-iterations <n> [--model <model>] [--extra-instruction "<text>"]
 
 Flags:
-  --goal             Required. Backlog objective for the agent loop.
   --max-iterations   Required. Positive integer iteration cap.
   --model            Optional. Model name passed to codex exec.
+  --extra-instruction Optional. Extra one-off instruction appended to the prompt.
 EOF
 }
 
-GOAL=""
 MAX_ITERATIONS=""
 MODEL=""
+EXTRA_INSTRUCTION=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --goal)
-      GOAL="${2-}"
-      shift 2
-      ;;
     --max-iterations)
       MAX_ITERATIONS="${2-}"
       shift 2
       ;;
     --model)
       MODEL="${2-}"
+      shift 2
+      ;;
+    --extra-instruction)
+      EXTRA_INSTRUCTION="${2-}"
       shift 2
       ;;
     -h|--help)
@@ -44,7 +44,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -z "$GOAL" || -z "$MAX_ITERATIONS" ]]; then
+if [[ -z "$MAX_ITERATIONS" ]]; then
   echo "Missing required flags." >&2
   usage >&2
   exit 2
@@ -56,31 +56,31 @@ if ! [[ "$MAX_ITERATIONS" =~ ^[1-9][0-9]*$ ]]; then
 fi
 
 build_prompt() {
-  local goal="$1"
-  local iteration="$2"
-  local max_iterations="$3"
-  local diagnostics="$4"
+  local iteration="$1"
+  local max_iterations="$2"
+  local diagnostics="$3"
+  local extra_instruction="$4"
 
   cat <<EOF
 You are running a deterministic backlog loop iteration.
 Run \$work-on-backlog now and execute exactly one safe backlog iteration.
 
-Goal:
-$goal
-
 Iteration:
 $iteration of $max_iterations
 
-Requirements:
-- Use docs/TASKS.yaml as source of truth.
-- Keep changes mergeable and run required validation gates.
-- If the previous iteration had failures, address them first.
-- Output RESULT line per skill contract.
-- Emit <promise>COMPLETE</promise> only when all tasks are done, gate passes, and repo is clean.
+If the previous iteration had failures, address them first.
 
 Previous iteration diagnostics (must fix before new scope):
 $diagnostics
 EOF
+
+  if [[ -n "$extra_instruction" ]]; then
+    cat <<EOF
+
+Extra instruction:
+$extra_instruction
+EOF
+  fi
 }
 
 diagnostics="none"
@@ -88,7 +88,7 @@ tmp_dir="$(mktemp -d)"
 trap 'rm -rf "$tmp_dir"' EXIT
 
 for ((i=1; i<=MAX_ITERATIONS; i++)); do
-  prompt="$(build_prompt "$GOAL" "$i" "$MAX_ITERATIONS" "$diagnostics")"
+  prompt="$(build_prompt "$i" "$MAX_ITERATIONS" "$diagnostics" "$EXTRA_INSTRUCTION")"
 
   codex_output_file="$tmp_dir/codex-${i}.log"
   set +e
