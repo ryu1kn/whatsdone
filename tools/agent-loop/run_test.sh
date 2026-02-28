@@ -115,14 +115,13 @@ run_case_success_first() {
   make_fake_bin "$case_tmp/bin"
 
   PATH="$case_tmp/bin:$PATH" TEST_TMP_DIR="$TEST_TMP_DIR" TEST_SCENARIO="$TEST_SCENARIO" \
-    "$SCRIPT" --goal "Implement REQ-2 and REQ-3 with tests" --max-iterations 3 --model gpt-5.3-codex \
+    "$SCRIPT" --max-iterations 3 --model gpt-5.3-codex \
     >"$case_tmp/stdout.log" 2>"$case_tmp/stderr.log"
 
   assert_contains "$case_tmp/codex_args_1.log" "arg1=exec"
   assert_contains "$case_tmp/codex_args_1.log" "arg2=--model"
   assert_contains "$case_tmp/codex_args_1.log" "arg3=gpt-5.3-codex"
   assert_contains "$case_tmp/prompt_1.txt" 'Run $work-on-backlog now'
-  assert_contains "$case_tmp/prompt_1.txt" "Implement REQ-2 and REQ-3 with tests"
   assert_contains "$case_tmp/stdout.log" "<promise>COMPLETE</promise>"
 }
 
@@ -134,7 +133,7 @@ run_case_success_without_model() {
   make_fake_bin "$case_tmp/bin"
 
   PATH="$case_tmp/bin:$PATH" TEST_TMP_DIR="$TEST_TMP_DIR" TEST_SCENARIO="$TEST_SCENARIO" \
-    "$SCRIPT" --goal "Implement REQ-2 and REQ-3 with tests" --max-iterations 3 \
+    "$SCRIPT" --max-iterations 3 \
     >"$case_tmp/stdout.log" 2>"$case_tmp/stderr.log"
 
   assert_contains "$case_tmp/codex_args_1.log" "arg1=exec"
@@ -154,7 +153,7 @@ run_case_gate_failure_propagates() {
   make_fake_bin "$case_tmp/bin"
 
   PATH="$case_tmp/bin:$PATH" TEST_TMP_DIR="$TEST_TMP_DIR" TEST_SCENARIO="$TEST_SCENARIO" \
-    "$SCRIPT" --goal "Implement REQ-2 and REQ-3 with tests" --max-iterations 2 --model gpt-5.3-codex \
+    "$SCRIPT" --max-iterations 2 --model gpt-5.3-codex \
     >"$case_tmp/stdout.log" 2>"$case_tmp/stderr.log"
 
   assert_contains "$case_tmp/prompt_2.txt" "gate_failed_output:"
@@ -162,8 +161,25 @@ run_case_gate_failure_propagates() {
   assert_contains "$case_tmp/stdout.log" "<promise>COMPLETE</promise>"
 }
 
+run_case_extra_instruction_is_appended() {
+  local case_tmp
+  case_tmp="$(mktemp -d)"
+  TEST_TMP_DIR="$case_tmp"
+  TEST_SCENARIO="success_first"
+  make_fake_bin "$case_tmp/bin"
+
+  PATH="$case_tmp/bin:$PATH" TEST_TMP_DIR="$TEST_TMP_DIR" TEST_SCENARIO="$TEST_SCENARIO" \
+    "$SCRIPT" --max-iterations 1 --extra-instruction "Focus on task splitting only when blocked." \
+    >"$case_tmp/stdout.log" 2>"$case_tmp/stderr.log"
+
+  assert_contains "$case_tmp/prompt_1.txt" "Extra instruction:"
+  assert_contains "$case_tmp/prompt_1.txt" "Focus on task splitting only when blocked."
+  assert_contains "$case_tmp/stdout.log" "<promise>COMPLETE</promise>"
+}
+
 run_case_success_first
 run_case_success_without_model
 run_case_gate_failure_propagates
+run_case_extra_instruction_is_appended
 
 echo "tools/agent-loop/run_test.sh: PASS"
