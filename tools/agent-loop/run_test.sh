@@ -14,6 +14,15 @@ assert_contains() {
   fi
 }
 
+assert_regex() {
+  local file="$1"
+  local pattern="$2"
+  if ! grep -Eq "$pattern" "$file"; then
+    echo "Assertion failed: pattern '$pattern' not found in $file" >&2
+    exit 1
+  fi
+}
+
 make_fake_bin() {
   local fake_bin="$1"
   mkdir -p "$fake_bin"
@@ -109,6 +118,7 @@ EOF
 
 run_case_success_first() {
   local case_tmp
+  local log_path
   case_tmp="$(mktemp -d)"
   TEST_TMP_DIR="$case_tmp"
   TEST_SCENARIO="success_first"
@@ -123,6 +133,27 @@ run_case_success_first() {
   assert_contains "$case_tmp/codex_args_1.log" "arg3=gpt-5.3-codex"
   assert_contains "$case_tmp/prompt_1.txt" 'Run $work-on-backlog now'
   assert_contains "$case_tmp/stdout.log" "<promise>COMPLETE</promise>"
+  assert_regex "$case_tmp/stdout.log" '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z \[agent-loop\] start:'
+  assert_contains "$case_tmp/stdout.log" "[agent-loop] iteration 1/3 begin"
+  assert_contains "$case_tmp/stdout.log" "[agent-loop] iteration 1/3 gate result=pass"
+  assert_contains "$case_tmp/stdout.log" "[agent-loop] iteration 1/3 end: completion criteria met"
+  assert_contains "$case_tmp/stdout.log" "[agent-loop] completion criteria met; exiting successfully"
+
+  log_path="$(sed -n 's/.*\[agent-loop\] active log file: //p' "$case_tmp/stdout.log" | head -n1)"
+  if [[ -z "$log_path" ]]; then
+    echo "Assertion failed: active log file path was not printed" >&2
+    exit 1
+  fi
+  if [[ "${log_path:0:1}" != "/" ]]; then
+    echo "Assertion failed: active log file path is not absolute: $log_path" >&2
+    exit 1
+  fi
+  if [[ ! -f "$log_path" ]]; then
+    echo "Assertion failed: active log file does not exist: $log_path" >&2
+    exit 1
+  fi
+  assert_contains "$log_path" "<promise>COMPLETE</promise>"
+  assert_contains "$log_path" "[agent-loop] iteration 1/3 begin"
 }
 
 run_case_success_without_model() {

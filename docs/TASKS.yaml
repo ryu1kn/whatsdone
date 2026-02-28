@@ -97,3 +97,19 @@ tasks:
       - "Usage example works: `./tools/agent-loop/run.sh --goal \"Implement REQ-2 and REQ-3 with tests\" --max-iterations 25 --model gpt-5.3-codex`."
     audit:
       change_reason: "Added requested backlog item to implement deterministic `tools/agent-loop/run.sh` orchestration script."
+  - id: REQ-6
+    title: "Stream agent loop progress and announce log path"
+    description: "Update `tools/agent-loop/run.sh` to improve logging quality: stream iteration progress to stdout in real time, print the log file path being used so users can manually inspect current progress, and clearly distinguish script messages from Codex agent output."
+    status: done
+    depends_on:
+      - REQ-5
+    supersedes: []
+    acceptance:
+      - "Running `tools/agent-loop/run.sh` shows ongoing progress on the console during execution, not only after each iteration completes."
+      - "At startup (and when rotated, if applicable), the script clearly prints the absolute path to the active log file."
+      - "The displayed log path points to the same file receiving the run output."
+      - "Script-originated log lines use a consistent, easily recognizable prefix or format that is visually distinct from raw Codex agent output."
+      - "Script-originated log entries include a timestamp so users can see when each milestone or line was reached."
+      - "Key lifecycle events are logged with clear markers (at minimum: start, per-iteration begin/end, gate result, completion/stop reason)."
+    audit:
+      change_reason: "Added requested UX follow-up so users can observe live execution and open the exact active log file."

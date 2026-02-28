@@ -1,1 +1,2 @@
 2026-02-28 07:20:58Z REQ-5 done: added tools/agent-loop/run.sh and run_test.sh; gate passes.
+2026-02-28 07:41:06Z REQ-6 done: streamed codex/gate output live, added timestamped [agent-loop] lifecycle logs, and announced active absolute log file path; gate passes.

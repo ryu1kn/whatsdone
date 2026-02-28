@@ -2,3 +2,4 @@
 {"timestamp":"2026-02-28T06:38:40Z","session_id":null,"tasks_changed":["REQ-1","REQ-2","REQ-3","REQ-4"],"reason":"Removed redundant parent field from tasks; lineage now represented by supersedes and ordering by depends_on."}
 {"timestamp":"2026-02-28T07:15:26Z","session_id":null,"tasks_changed":["REQ-5"],"reason":"Added requested task for deterministic tools/agent-loop/run.sh backlog loop script."}
 {"timestamp":"2026-02-28T07:20:58Z","session_id":null,"tasks_changed":["REQ-5"],"reason":"Implemented deterministic agent loop script with iterative codex execution, gate/clean checks, and failure diagnostics propagation."}
+{"timestamp":"2026-02-28T07:41:06Z","session_id":null,"tasks_changed":["REQ-6"],"reason":"Implemented real-time agent loop streaming logs with timestamped script lifecycle markers and announced absolute active log path."}
