@@ -46,7 +46,7 @@ tasks:
   - id: REQ-2
     title: "Reproduce PR workflow failure locally"
     description: "Inspect CI workflow definitions and reproduce failing PR workflow steps locally with the same commands and environment assumptions."
-    status: todo
+    status: done
     depends_on: []
     supersedes:
       - REQ-1
@@ -54,11 +54,11 @@ tasks:
       - "The failing CI step(s) are identified with a concrete root-cause hypothesis."
       - "A local command sequence is documented that reproduces the relevant failure."
     audit:
-      change_reason: "Child task added to make REQ-1 executable in small, testable increments."
+      change_reason: "Completed by documenting deterministic local PR workflow failure reproduction and root-cause hypothesis in docs/req-2-pr-workflow-repro.md."
   - id: REQ-3
     title: "Prevent deploy jobs from running on pull_request events"
     description: "Update GitHub Actions workflow conditions so PR runs never deploy to ci, dev-* or production environments."
-    status: todo
+    status: done
     depends_on:
       - REQ-2
     supersedes:
@@ -71,7 +71,7 @@ tasks:
   - id: REQ-4
     title: "Fix PR build checks and validate gate parity"
     description: "Implement targeted fixes for the identified CI failures and ensure local gate parity to keep PR checks green."
-    status: todo
+    status: done
     depends_on:
       - REQ-2
       - REQ-3
@@ -81,7 +81,7 @@ tasks:
       - "All PR-targeted CI checks pass using equivalent local commands."
       - "Repository gate (`mise run gate`) passes after the fixes."
     audit:
-      change_reason: "Child task added to constrain implementation scope to actionable post-diagnosis fixes."
+      change_reason: "Completed by adding a pull_request-only pr-check workflow job (running `mise run gate`) while deploy jobs remain restricted to push on main."
   - id: REQ-5
     title: "Add deterministic agent loop script"
     description: "Create `tools/agent-loop/run.sh` to run Codex in a deterministic backlog loop with gate and clean-repo enforcement between iterations."
