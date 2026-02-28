@@ -1,0 +1,1 @@
+2026-02-28 07:20:58Z REQ-5 done: added tools/agent-loop/run.sh and run_test.sh; gate passes.

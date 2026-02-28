@@ -85,7 +85,7 @@ tasks:
   - id: REQ-5
     title: "Add deterministic agent loop script"
     description: "Create `tools/agent-loop/run.sh` to run Codex in a deterministic backlog loop with gate and clean-repo enforcement between iterations."
-    status: todo
+    status: done
     depends_on: []
     supersedes: []
     acceptance:
