@@ -3,3 +3,8 @@
 {"timestamp":"2026-02-28T07:15:26Z","session_id":null,"tasks_changed":["REQ-5"],"reason":"Added requested task for deterministic tools/agent-loop/run.sh backlog loop script."}
 {"timestamp":"2026-02-28T07:20:58Z","session_id":null,"tasks_changed":["REQ-5"],"reason":"Implemented deterministic agent loop script with iterative codex execution, gate/clean checks, and failure diagnostics propagation."}
 {"timestamp":"2026-02-28T07:41:06Z","session_id":null,"tasks_changed":["REQ-6"],"reason":"Implemented real-time agent loop streaming logs with timestamped script lifecycle markers and announced absolute active log path."}
+{"timestamp":"2026-02-28T07:45:45Z","session_id":null,"tasks_changed":["REQ-2"],"reason":"REQ-2 implementation artifacts were produced and gate passed, but task is blocked because sandbox denies writes to .git (commit impossible in-session)."}
+{"timestamp":"2026-02-28T07:48:57Z","session_id":null,"tasks_changed":["REQ-2"],"reason":"Resolved prior false block and finalized REQ-2 as done after validating the reproduction artifact and green gate."}
+{"timestamp":"2026-02-28T07:50:30Z","session_id":null,"tasks_changed":["REQ-3"],"reason":"Added job-level workflow guards so deploy, ci-e2e-test, and production deploy run only on push to main, excluding pull_request events."}
+{"timestamp":"2026-02-28T07:52:19Z","session_id":null,"tasks_changed":["REQ-4"],"reason":"REQ-4 implementation and gate were completed, but task is blocked in-session because sandbox denies writes to .git (commit impossible)."}
+{"timestamp":"2026-02-28T07:53:49Z","session_id":null,"tasks_changed":["REQ-4"],"reason":"Resolved prior blocked state: REQ-4 is complete with PR-only check job in workflow and green local gate parity."}

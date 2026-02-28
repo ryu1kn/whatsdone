@@ -22,7 +22,17 @@ env:
   NODE_VERSION: 24
 
 jobs:
+  pr-check:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3.6.0
+    - uses: jdx/mise-action@v2
+    - run: mise run gate
+
   ci-deploy:
+    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     environment:
       name: CI
@@ -41,6 +51,7 @@ jobs:
         ENV_NAME: ci
 
   ci-e2e-test:
+    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
     needs: [ci-deploy]
     runs-on: ubuntu-latest
     steps:
@@ -58,6 +69,7 @@ jobs:
           ENV_NAME: ci
 
   production-deploy:
+    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
     needs: [ci-e2e-test]
     runs-on: ubuntu-latest
     environment:

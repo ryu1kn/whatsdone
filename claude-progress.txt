@@ -1,2 +1,7 @@
 2026-02-28 07:20:58Z REQ-5 done: added tools/agent-loop/run.sh and run_test.sh; gate passes.
 2026-02-28 07:41:06Z REQ-6 done: streamed codex/gate output live, added timestamped [agent-loop] lifecycle logs, and announced active absolute log file path; gate passes.
+2026-02-28 07:45:45Z REQ-2 blocked: implementation artifacts and gate pass are complete, but sandbox denies .git writes so commit cannot be created in-session.
+2026-02-28 07:48:57Z REQ-2 done: resolved prior bookkeeping block; kept deterministic PR workflow repro note in docs/req-2-pr-workflow-repro.md; gate passes.
+2026-02-28 07:50:30Z REQ-3 done: added workflow if-guards to skip deploy/e2e/prod jobs on pull_request and limit them to push on main; gate passes.
+2026-02-28 07:52:19Z REQ-4 blocked: added PR gate job and validated `mise run gate`, but sandbox denied .git writes so required commit could not be created in-session.
+2026-02-28 07:53:49Z REQ-4 done: resolved prior blocked state; PR workflow now has pull_request-only pr-check and deploy jobs remain push/main-gated; gate passes.
