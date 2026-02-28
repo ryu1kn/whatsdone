@@ -32,7 +32,7 @@ size_profiles:
     max_sessions: 0
 
 tasks:
-  - id: REC-1
+  - id: REQ-1
     title: "Make PR build pass on GitHub"
     description: "The PR build on GitHub currently never succeeds. Investigate the cause of the failure and implement the necessary fixes to ensure that the PR build passes successfully with all checks green. Additionally, ensure that the PR build does not deploy to ci, dev-* or production environments."
     status: superseded
@@ -43,46 +43,46 @@ tasks:
       - "A PR build doesn't deploy to ci, dev-* or production environments."
     audit:
       change_reason: "Split into executable subtasks because original acceptance criteria require remote GitHub validation and exceed one safe local session."
-  - id: REC-2
+  - id: REQ-2
     title: "Reproduce PR workflow failure locally"
     description: "Inspect CI workflow definitions and reproduce failing PR workflow steps locally with the same commands and environment assumptions."
     status: todo
     depends_on: []
     supersedes:
-      - REC-1
+      - REQ-1
     acceptance:
       - "The failing CI step(s) are identified with a concrete root-cause hypothesis."
       - "A local command sequence is documented that reproduces the relevant failure."
     audit:
-      change_reason: "Child task added to make REC-1 executable in small, testable increments."
-  - id: REC-3
+      change_reason: "Child task added to make REQ-1 executable in small, testable increments."
+  - id: REQ-3
     title: "Prevent deploy jobs from running on pull_request events"
     description: "Update GitHub Actions workflow conditions so PR runs never deploy to ci, dev-* or production environments."
     status: todo
     depends_on:
-      - REC-2
+      - REQ-2
     supersedes:
-      - REC-1
+      - REQ-1
     acceptance:
       - "Deployment jobs are gated to exclude pull_request events."
       - "Workflow configuration clearly restricts deploy environments to appropriate events/branches."
     audit:
       change_reason: "Child task added to isolate deployment-safety requirement from general CI pass requirement."
-  - id: REC-4
+  - id: REQ-4
     title: "Fix PR build checks and validate gate parity"
     description: "Implement targeted fixes for the identified CI failures and ensure local gate parity to keep PR checks green."
     status: todo
     depends_on:
-      - REC-2
-      - REC-3
+      - REQ-2
+      - REQ-3
     supersedes:
-      - REC-1
+      - REQ-1
     acceptance:
       - "All PR-targeted CI checks pass using equivalent local commands."
       - "Repository gate (`mise run gate`) passes after the fixes."
     audit:
       change_reason: "Child task added to constrain implementation scope to actionable post-diagnosis fixes."
-  - id: REC-5
+  - id: REQ-5
     title: "Add deterministic agent loop script"
     description: "Create `tools/agent-loop/run.sh` to run Codex in a deterministic backlog loop with gate and clean-repo enforcement between iterations."
     status: todo
