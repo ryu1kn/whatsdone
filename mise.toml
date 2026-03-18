@@ -15,6 +15,7 @@ set -euo pipefail
 for dir in modules/*; do
   if [ -f "$dir/package.json" ]; then
     echo "==> test_module: $dir"
+    yarn --cwd "$dir" install
     yarn --cwd "$dir" test_module
   fi
 done
