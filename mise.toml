@@ -9,6 +9,7 @@ BUILD_NUMBER = 0
 
 [tasks.gate]
 description = "Run default local gate checks"
+shell = "bash"
 run = """
 set -euo pipefail
 for dir in modules/*; do
