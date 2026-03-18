@@ -16,6 +16,9 @@ for dir in modules/*; do
   if [ -f "$dir/package.json" ]; then
     echo "==> test_module: $dir"
     yarn --cwd "$dir" install
+    if [ -f "$dir/app/package.json" ]; then
+      yarn --cwd "$dir/app" install
+    fi
     yarn --cwd "$dir" test_module
   fi
 done
