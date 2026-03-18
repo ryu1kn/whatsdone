@@ -12,14 +12,11 @@ description = "Run default local gate checks"
 run = """
 #!/usr/bin/env bash
 set -euo pipefail
+# whatsdone-assets/app done-item test asserts Melbourne-local time formatting
 export TZ=Australia/Melbourne
 for dir in modules/*; do
   if [ -f "$dir/package.json" ]; then
     echo "==> test_module: $dir"
-    yarn --cwd "$dir" install
-    if [ -f "$dir/app/package.json" ]; then
-      yarn --cwd "$dir/app" install
-    fi
     yarn --cwd "$dir" test_module
   fi
 done
