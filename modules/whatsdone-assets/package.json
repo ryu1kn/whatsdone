@@ -16,7 +16,7 @@
     "destroy": "cd ops && kumo destroy-module --verbose",
     "deploy:app": "./deploy-app.sh",
     "lint": "eslint .",
-    "test_module": "yarn run lint && yarn --cwd app test"
+    "test_module": "yarn && yarn run lint && yarn --cwd app && yarn --cwd app test"
   },
   "devDependencies": {
     "directory-s3uploader": "file:../../local-npm/directory-s3uploader",

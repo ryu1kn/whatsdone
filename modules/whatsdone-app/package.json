@@ -16,7 +16,7 @@
     "predeploy": "yarn run build && yarn run coverage",
     "deploy": "cd ops && yarn && kumo deploy-module --verbose",
     "destroy": "cd ops && kumo destroy-module --verbose",
-    "test_module": "yarn run lint && yarn test"
+    "test_module": "yarn && yarn run lint && yarn test"
   },
   "dependencies": {
     "aws-sdk": "~2.820.0",
