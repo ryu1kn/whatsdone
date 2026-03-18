@@ -24,3 +24,6 @@ node_modules
 mise.local.toml
 
 /tools/llm-eval/
+
+/CLAUDE.local.md
+/.claude/**/*.local.*
