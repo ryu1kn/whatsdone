@@ -12,6 +12,7 @@ description = "Run default local gate checks"
 run = """
 #!/usr/bin/env bash
 set -euo pipefail
+export TZ=Australia/Melbourne
 for dir in modules/*; do
   if [ -f "$dir/package.json" ]; then
     echo "==> test_module: $dir"
