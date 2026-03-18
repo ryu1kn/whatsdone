@@ -20,6 +20,7 @@ env:
   BUILD_NUMBER: ${{ github.run_number }}-${{ github.run_id }}
   BUILD_BRANCH: ${{ github.ref_name }}
   NODE_VERSION: 24
+  FETCH_DEPTH: 30
 
 jobs:
   pr-check:
@@ -41,7 +42,7 @@ jobs:
     - name: checkout
       uses: actions/checkout@v3.6.0
       with:
-        fetch-depth: 10
+        fetch-depth: ${{ env.FETCH_DEPTH }}
     - uses: actions/setup-node@v3.8.1
       with:
         cache: npm
@@ -58,7 +59,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3.6.0
         with:
-          fetch-depth: 10
+          fetch-depth: ${{ env.FETCH_DEPTH }}
       - uses: actions/setup-node@v3.8.1
         with:
           cache: npm
@@ -79,7 +80,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3.6.0
         with:
-          fetch-depth: 10
+          fetch-depth: ${{ env.FETCH_DEPTH }}
       - uses: actions/setup-node@v3.8.1
         with:
           cache: npm

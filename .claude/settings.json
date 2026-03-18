@@ -4,7 +4,9 @@
       "Bash(uv lock:*)",
       "Bash(yarn upgrade:*)",
       "Bash(grep:*)",
-      "Bash(yarn install:*)"
+      "Bash(yarn install:*)",
+      "WebSearch",
+      "WebFetch(domain:docs.github.com)"
     ]
   }
 }
