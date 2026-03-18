@@ -9,8 +9,8 @@ BUILD_NUMBER = 0
 
 [tasks.gate]
 description = "Run default local gate checks"
-shell = "bash"
 run = """
+#!/usr/bin/env bash
 set -euo pipefail
 for dir in modules/*; do
   if [ -f "$dir/package.json" ]; then
