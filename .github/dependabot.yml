@@ -1,0 +1,69 @@
+# Dependabot configuration.
+#
+# Until this file existed, Dependabot ran on auto-detected manifests. The
+# entries below mirror that status quo (every directory where dependabot has
+# historically opened bumps) plus an explicit ignore rule documented below.
+#
+# When adding a new module with a package.json / pyproject.toml, please add a
+# matching entry here.
+
+version: 2
+updates:
+  # ---- npm (Node.js) ----
+  - package-ecosystem: npm
+    directory: /modules/whatsdone-app
+    schedule:
+      interval: daily
+    ignore:
+      # uuid >= 11.0.3 ships type declarations that use TypeScript 5 syntax
+      # (`export type * from ...`), which fails to compile under the
+      # `typescript@^4.1.3` we currently use in this module. uuid 11.0.2 is
+      # the last TS-4-compatible release. The CVE that triggered the original
+      # bump (GHSA-w5hq-g745-h8pq, missing buffer bounds check in v3/v5/v6
+      # when buf is provided, patched in 11.1.1) does not affect this module:
+      # the only call site is `Uuid.v4()` in ServiceFactory.ts with no buf
+      # argument. Drop this rule once TypeScript is upgraded to 5.x in this
+      # module (see TODO.md "TypeScript 5 upgrade").
+      - dependency-name: uuid
+        versions: [">=11.0.3"]
+
+  - package-ecosystem: npm
+    directory: /modules/whatsdone-app/ops
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /modules/whatsdone-assets
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /modules/whatsdone-assets/app
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /test/e2e
+    schedule:
+      interval: weekly
+
+  # ---- pip (Python) ----
+  - package-ecosystem: pip
+    directory: /ml
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: pip
+    directory: /tools/done-analysis
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: pip
+    directory: /tools/topic-classification
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: pip
+    directory: /tools/topic-classification/ops
+    schedule:
+      interval: weekly
