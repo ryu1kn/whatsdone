@@ -16,7 +16,7 @@
     "predeploy": "yarn run build && yarn run coverage",
     "deploy": "cd ops && yarn && kumo deploy-module --verbose",
     "destroy": "cd ops && kumo destroy-module --verbose",
-    "test_module": "yarn && yarn run lint && yarn test"
+    "test_module": "yarn && yarn run compile && yarn run lint && yarn test"
   },
   "dependencies": {
     "aws-sdk": "~2.820.0",
@@ -28,7 +28,7 @@
     "lodash.pick": "~4.4.0",
     "route-parser": "0.0.5",
     "tslib": "^2.6.2",
-    "uuid": "~14.0.0"
+    "uuid": "11.0.2"
   },
   "devDependencies": {
     "@types/lodash.get": "^4.4.6",
@@ -39,7 +39,6 @@
     "@types/mocha": "^8.2.0",
     "@types/node": "^12.19.11",
     "@types/route-parser": "^0.1.3",
-    "@types/uuid": "^8.3.0",
     "mocha": "^8.2.1",
     "nyc": "^15.1.0",
     "testdouble": "^3.16.1",
