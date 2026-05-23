@@ -19,7 +19,7 @@
     "test_module": "yarn && yarn run compile && yarn run lint && yarn test"
   },
   "dependencies": {
-    "aws-sdk": "~2.820.0",
+    "aws-sdk": "~2.1693.0",
     "aws-xray-sdk": "^3.2.0",
     "lodash.get": "~4.4.2",
     "lodash.keyby": "~4.6.0",
