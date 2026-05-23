@@ -36,7 +36,7 @@
     "react-router-dom": "^5.2.0",
     "redux": "^4.1.0",
     "showdown": "^1.9.1",
-    "util": "^0.12.4",
+    "util": "^0.12.5",
     "whatwg-fetch": "~3.6.2"
   },
   "devDependencies": {
