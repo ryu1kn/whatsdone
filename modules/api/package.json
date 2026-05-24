@@ -1,5 +1,5 @@
 {
-  "name": "whatsdone-api",
+  "name": "api",
   "private": true,
   "scripts": {
     "deploy": "kumo deploy-module --verbose",
