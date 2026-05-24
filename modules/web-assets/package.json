@@ -1,5 +1,5 @@
 {
-  "name": "whatsdone-assets",
+  "name": "web-assets",
   "private": true,
   "config": {
     "BUILD_DIR": ".build",

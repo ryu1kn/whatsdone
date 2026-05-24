@@ -3,7 +3,7 @@ whatsdone-env
 user-id-store
 done-store
 authentication
-whatsdone-assets
+web-assets
 web-cache
 backend
 api

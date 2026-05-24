@@ -31,7 +31,7 @@ The project uses `yarn` for dependency management. To build the project, you can
 * **Frontend:**
 
   ```bash
-  cd modules/whatsdone-assets
+  cd modules/web-assets
   yarn install
   yarn build
   ```
@@ -50,7 +50,7 @@ The project has unit tests for both the backend and frontend. To run the tests, 
 * **Frontend:**
 
   ```bash
-  cd modules/whatsdone-assets/app
+  cd modules/web-assets/app
   yarn test
   ```
 

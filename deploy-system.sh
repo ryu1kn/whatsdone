@@ -11,7 +11,7 @@ for MODULE in ${MODULES[*]} ; do
 done
 
 echo -e "\n=== Updating UI assets ==="
-(cd modules/whatsdone-assets && yarn install && yarn run build && yarn run deploy:app )
+(cd modules/web-assets && yarn install && yarn run build && yarn run deploy:app )
 
 echo
 echo "========================"
