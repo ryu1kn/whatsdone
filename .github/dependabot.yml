@@ -11,7 +11,7 @@ version: 2
 updates:
   # ---- npm (Node.js) ----
   - package-ecosystem: npm
-    directory: /modules/whatsdone-app
+    directory: /modules/backend
     schedule:
       interval: daily
     ignore:
@@ -28,7 +28,7 @@ updates:
         versions: [">=11.0.3"]
 
   - package-ecosystem: npm
-    directory: /modules/whatsdone-app/ops
+    directory: /modules/backend/ops
     schedule:
       interval: daily
 

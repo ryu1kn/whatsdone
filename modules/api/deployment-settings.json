@@ -19,7 +19,7 @@
       "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
       "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-env"]]}
     },
-    "whatsdone-app": {
+    "backend": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
       "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
@@ -73,8 +73,8 @@
         "UserIdTableName": {"$ref": "#/_dataSourceData/user-id-store/TableName"},
         "UserPoolId": {"$ref": "#/_dataSourceData/authentication/UserPoolId"},
         "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
-        "LambdaS3Bucket": {"$ref": "#/_dataSourceData/whatsdone-app/packages/backend-app/s3bucket"},
-        "LambdaS3Key": {"$ref": "#/_dataSourceData/whatsdone-app/packages/backend-app/s3key"}
+        "LambdaS3Bucket": {"$ref": "#/_dataSourceData/backend/packages/backend-app/s3bucket"},
+        "LambdaS3Key": {"$ref": "#/_dataSourceData/backend/packages/backend-app/s3key"}
       }
     },
     {

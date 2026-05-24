@@ -1,5 +1,5 @@
 {
-  "moduleName": "whatsdone-app",
+  "moduleName": "backend",
   "config": {
     "script": "node -p \"JSON.stringify(require('./module-config.js'))\""
   },
