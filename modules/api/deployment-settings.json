@@ -43,7 +43,7 @@
       "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
       "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "user-id-store"]]}
     },
-    "whatsdone-web-cache": {
+    "web-cache": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
       "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
@@ -66,9 +66,9 @@
         "DomainName": {"$ref": "#/_deploymentConfig/domainName"},
         "HostedZoneId": {"$ref": "#/_deploymentConfig/hostedZoneId"},
         "NodeVersionMajor": {"$ref": "#/_deploymentConfig/nodeVersionMajor"},
-        "CertificateArn": {"$ref": "#/_dataSourceData/whatsdone-web-cache/CertificateArn"},
+        "CertificateArn": {"$ref": "#/_dataSourceData/web-cache/CertificateArn"},
         "DbRegion": {"$ref": "#/_taskRegion"},
-        "WebappEndpoint": {"Fn::Join": ["", ["https://", {"$ref": "#/_dataSourceData/whatsdone-web-cache/PublicDomain"}]]},
+        "WebappEndpoint": {"Fn::Join": ["", ["https://", {"$ref": "#/_dataSourceData/web-cache/PublicDomain"}]]},
         "DoneTableName": {"$ref": "#/_dataSourceData/done-store/TableName"},
         "UserIdTableName": {"$ref": "#/_dataSourceData/user-id-store/TableName"},
         "UserPoolId": {"$ref": "#/_dataSourceData/authentication/UserPoolId"},
