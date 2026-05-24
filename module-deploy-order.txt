@@ -4,7 +4,7 @@ user-id-store
 done-store
 authentication
 whatsdone-assets
-whatsdone-web-cache
+web-cache
 backend
 api
 gateway

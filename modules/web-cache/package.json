@@ -1,5 +1,5 @@
 {
-  "name": "whatsdone-web-cache",
+  "name": "web-cache",
   "private": true,
   "scripts": {
     "deploy": "kumo deploy-module --verbose",
