@@ -1,5 +1,5 @@
 {
-  "name": "whatsdone-app",
+  "name": "backend",
   "private": true,
   "engines": {
     "node": ">= 24"

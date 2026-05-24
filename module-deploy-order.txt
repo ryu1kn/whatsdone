@@ -5,6 +5,6 @@ done-store
 authentication
 whatsdone-assets
 whatsdone-web-cache
-whatsdone-app
+backend
 api
 gateway

@@ -1,5 +1,5 @@
 {
-  "name": "whatsdone-app",
+  "name": "backend",
   "private": true,
   "dependencies": {
     "directory-s3uploader": "file:../../../local-npm/directory-s3uploader"

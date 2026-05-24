@@ -23,7 +23,7 @@ The project uses `yarn` for dependency management. To build the project, you can
 * **Backend:**
 
   ```bash
-  cd modules/whatsdone-app
+  cd modules/backend
   yarn install
   yarn build
   ```
@@ -43,7 +43,7 @@ The project has unit tests for both the backend and frontend. To run the tests, 
 * **Backend:**
 
   ```bash
-  cd modules/whatsdone-app
+  cd modules/backend
   yarn test
   ```
 
