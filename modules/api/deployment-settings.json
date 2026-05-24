@@ -13,7 +13,7 @@
     "prefix": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-api"]]}
   },
   "dataSources": {
-    "whatsdone-env": {
+    "env": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
       "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
@@ -72,7 +72,7 @@
         "DoneTableName": {"$ref": "#/_dataSourceData/done-store/TableName"},
         "UserIdTableName": {"$ref": "#/_dataSourceData/user-id-store/TableName"},
         "UserPoolId": {"$ref": "#/_dataSourceData/authentication/UserPoolId"},
-        "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
+        "LoggingBucket": {"$ref": "#/_dataSourceData/env/Bucket"},
         "LambdaS3Bucket": {"$ref": "#/_dataSourceData/backend/packages/backend-app/s3bucket"},
         "LambdaS3Key": {"$ref": "#/_dataSourceData/backend/packages/backend-app/s3key"}
       }
