@@ -378,7 +378,7 @@
             "Ref": "LambdaS3Key"
           }
         },
-        "KmsKeyArn": "arn:aws:kms:ap-southeast-2:650892143834:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7",
+        "KmsKeyArn": {"Fn::Sub": "arn:aws:kms:ap-southeast-2:${AWS::AccountId}:key/3594d37f-a06f-4766-aa9a-ef3cb180eff7"},
         "Environment": {
           "Variables": {
             "DB_REGION": {"Ref": "DbRegion"},
