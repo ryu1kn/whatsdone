@@ -13,7 +13,7 @@
     "prefix": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-web-cache"]]}
   },
   "dataSources": {
-    "whatsdone-env": {
+    "env": {
       "type": "s3-bucket",
       "region": {"$ref": "#/_args/region"},
       "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
@@ -64,7 +64,7 @@
       "stackParams": {
         "CertificateArn": {"$ref": "#/_deploymentOutputs/CertificateArn"},
         "PublicDomain": {"$ref": "#/_deploymentOutputs/PublicDomain"},
-        "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
+        "LoggingBucket": {"$ref": "#/_dataSourceData/env/Bucket"},
         "WebappDomain": {"$ref": "#/_dataSourceData/web-assets/WebappDomain"},
         "WebappBasePath": {"$ref": "#/_dataSourceData/web-assets/WebappBasePath"}
       }

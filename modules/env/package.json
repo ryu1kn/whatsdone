@@ -1,5 +1,5 @@
 {
-  "name": "whatsdone-env",
+  "name": "env",
   "private": true,
   "scripts": {
     "deploy": "kumo deploy-module --verbose",
