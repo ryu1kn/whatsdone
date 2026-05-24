@@ -7,4 +7,4 @@ whatsdone-assets
 whatsdone-web-cache
 whatsdone-app
 whatsdone-api
-whatsdone-gateway
+gateway
