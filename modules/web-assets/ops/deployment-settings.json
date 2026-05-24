@@ -1,5 +1,5 @@
 {
-  "moduleName": "whatsdone-assets",
+  "moduleName": "web-assets",
   "config": {
     "script": "node -p \"JSON.stringify(require('../module-config/$ENV.js'))\"",
     "envVars": {

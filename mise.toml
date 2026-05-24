@@ -12,7 +12,7 @@ description = "Run default local gate checks"
 run = """
 #!/usr/bin/env bash
 set -euo pipefail
-# whatsdone-assets/app done-item test asserts Melbourne-local time formatting
+# web-assets/app done-item test asserts Melbourne-local time formatting
 export TZ=Australia/Melbourne
 for dir in modules/*; do
   if [ -f "$dir/package.json" ]; then

@@ -19,7 +19,7 @@
       "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
       "key": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-env"]]}
     },
-    "whatsdone-assets": {
+    "web-assets": {
         "type": "s3-bucket",
         "region": {"$ref": "#/_args/region"},
         "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
@@ -65,8 +65,8 @@
         "CertificateArn": {"$ref": "#/_deploymentOutputs/CertificateArn"},
         "PublicDomain": {"$ref": "#/_deploymentOutputs/PublicDomain"},
         "LoggingBucket": {"$ref": "#/_dataSourceData/whatsdone-env/Bucket"},
-        "WebappDomain": {"$ref": "#/_dataSourceData/whatsdone-assets/WebappDomain"},
-        "WebappBasePath": {"$ref": "#/_dataSourceData/whatsdone-assets/WebappBasePath"}
+        "WebappDomain": {"$ref": "#/_dataSourceData/web-assets/WebappDomain"},
+        "WebappBasePath": {"$ref": "#/_dataSourceData/web-assets/WebappBasePath"}
       }
     }
   ]

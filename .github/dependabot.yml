@@ -33,12 +33,12 @@ updates:
       interval: daily
 
   - package-ecosystem: npm
-    directory: /modules/whatsdone-assets
+    directory: /modules/web-assets
     schedule:
       interval: daily
 
   - package-ecosystem: npm
-    directory: /modules/whatsdone-assets/app
+    directory: /modules/web-assets/app
     schedule:
       interval: daily
 
