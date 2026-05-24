@@ -1,9 +1,15 @@
-# Cloud Infrastructure Naming conventions
+# Module and infrastructure names
 
-## AWS resources
+Apply these conventions to new resources. Preserve existing stack ownership,
+logical IDs, physical names, endpoints and references.
 
-- CloudFormation stack name has this prefix: {env_name}-whatsdone-
-  - When a resource is not per-environment, starts with: whatsdone-
+- Modules: `modules/{name}`, with matching `moduleName`, without a project prefix.
+- Per-environment stacks/resources: `whatsdone-{env}-{name}`.
+- Shared stacks/resources: `whatsdone-{name}`.
+- S3 bucket names must also be globally unique; check availability before creation.
+- CloudFront origin IDs: `whatsdone-{name}`, with matching `TargetOriginId` references.
+  These are distribution references, not CloudFormation resource logical IDs.
+- CDK construct names: `Whatsdone` prefix.
 
-## AWS CDK resource name
-- Names inside CDK should have this prefix: Whatsdone
+Keep deployed domains. Include the environment in new non-production hostnames.
+Review replacements, removals, aliases and name collisions before any rename.
