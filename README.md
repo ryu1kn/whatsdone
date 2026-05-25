@@ -90,15 +90,7 @@ to work on different file list.
 
 ### Deploying entire system
 
-The target account must already contain the Route 53 hosted zone configured in
-`config/common.js` and an issued certificate matching `certDomainName` in
-`us-east-1` for CloudFront. Keep existing resource names and configuration.
-
-If you want to deploy `prod` environment, you need to have `prod` config in modules then execute:
-
-```sh
-$ AWS_PROFILE=your-profile AWS_REGION=ap-southeast-2 ENV_NAME=prod ./deploy-system.sh
-```
+See [deployment prerequisites and commands](docs/deploying-system.md).
 
 ## Installing dev dependencies
 
