@@ -11,7 +11,10 @@
       "Type" : "AWS::S3::Bucket",
       "DeletionPolicy": "__DELETION_POLICY__",
       "Properties" : {
-        "BucketName" : {"Ref": "BucketName"}
+        "BucketName" : {"Ref": "BucketName"},
+        "OwnershipControls": {
+          "Rules": [{"ObjectOwnership": "BucketOwnerPreferred"}]
+        }
       }
     }
   },
