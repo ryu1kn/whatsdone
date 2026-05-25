@@ -7,12 +7,23 @@ POSITIONAL_ARGS=($0)
 
 main() {
     parseArgs "$@"
+    resolveAwsCredentials
 
     for MODULE in ${POSITIONAL_ARGS[@]:1} ; do
         echo -e "\n=== Deploying module $MODULE ==="
         (cd modules/$MODULE && yarn run deploy --env $ENV_NAME --region $AWS_REGION)
         echo
     done
+}
+
+# Resolve profiles unsupported by the deployment tool's AWS SDK v2.
+resolveAwsCredentials() {
+    if [[ -n "${AWS_ACCESS_KEY_ID:-}" || -z "${AWS_PROFILE:-}" ]]; then
+        return
+    fi
+    local credentials
+    credentials="$(aws configure export-credentials --profile "$AWS_PROFILE" --format env)" || return
+    eval "$credentials"
 }
 
 parseArgs() {
