@@ -5,7 +5,7 @@ This directory contains AWS CDK code to create the necessary AWS resources for t
 ## Prerequisites
 
 1. AWS CDK CLI installed: `mise install`
-2. AWS credentials configured in your AWS config/credentials file with profile `ryuichi`
+2. AWS credentials configured in your AWS config/credentials file with env var `AWS_PROFILE`
 3. Python dependencies installed: `uv sync`
 
 ## Deployment
