@@ -1,0 +1,6 @@
+framework:
+  - cloudformation
+evaluate-variables: true
+compact: true
+directory:
+  - ci/

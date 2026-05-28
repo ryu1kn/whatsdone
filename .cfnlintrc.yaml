@@ -1,0 +1,3 @@
+# CloudFormation templates owned by CI.
+templates:
+  - ci/*.yaml
