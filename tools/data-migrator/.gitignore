@@ -1,4 +1,8 @@
+/.bsp/
 /.idea
+/.metals/
 /target
-/project/target
+/project/metals.sbt
+/project/target/
+/project/project/
 /.attach_pid*

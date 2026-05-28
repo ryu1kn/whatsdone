@@ -21,6 +21,9 @@ node_modules
 # Visual Studio Code
 /.vscode
 
+# Vim
+/.metals/
+
 mise.local.toml
 
 /tools/llm-eval/
