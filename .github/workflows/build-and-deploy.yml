@@ -127,6 +127,8 @@ jobs:
           cache-dependency-path: test/e2e/yarn.lock
           node-version: ${{ env.NODE_VERSION }}
       - name: Cache Playwright browsers
+        # XXX: Sometimes, downloading Playwright get stuck. No point waiting longer.
+        timeout-minutes: 5
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
