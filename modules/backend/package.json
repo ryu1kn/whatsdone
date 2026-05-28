@@ -31,7 +31,7 @@
     "uuid": "11.0.2"
   },
   "devDependencies": {
-    "@types/lodash.get": "^4.4.6",
+    "@types/lodash.get": "^4.4.9",
     "@types/lodash.keyby": "^4.6.6",
     "@types/lodash.map": "^4.6.13",
     "@types/lodash.omit": "^4.5.6",
