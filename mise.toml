@@ -1,13 +1,34 @@
 [tools]
 yarn = "1.22.19"
 node = "24"
+python = "3.13"
+uv = "0.6.14"
 
 [env]
 AWS_REGION = "ap-southeast-2"
 BUILD_NUMBER = 0
 
-[tasks.gate]
-description = "Run default local gate checks"
+[tasks.cfn-lint]
+description = "Lint ci/ CloudFormation templates with cfn-lint"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+echo "==> cfn-lint: ci/ CloudFormation templates"
+uv tool run --from cfn-lint==1.59.0 cfn-lint --config-file .cfnlintrc.yaml
+"""
+
+[tasks.checkov]
+description = "Scan ci/ CloudFormation templates with Checkov"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+echo "==> checkov: ci/ CloudFormation templates"
+uv tool run --from checkov==3.4.0 checkov \
+  --config-file .checkov.yml
+"""
+
+[tasks.gate-tests]
+description = "Run module unit tests (gate without Checkov)"
 run = """
 #!/usr/bin/env bash
 set -euo pipefail
@@ -19,4 +40,14 @@ for dir in modules/*; do
     yarn --cwd "$dir" test_module
   fi
 done
+"""
+
+[tasks.gate]
+description = "Run default local gate checks"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+mise run cfn-lint
+mise run checkov
+mise run gate-tests
 """

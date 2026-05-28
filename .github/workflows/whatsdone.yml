@@ -30,7 +30,12 @@ jobs:
     - name: checkout
       uses: actions/checkout@v3.6.0
     - uses: jdx/mise-action@v2
-    - run: mise run gate
+    - name: Lint CloudFormation templates (cfn-lint)
+      run: mise run cfn-lint
+    - name: Check CloudFormation templates (Checkov)
+      run: mise run checkov
+    - name: Run unit tests
+      run: mise run gate-tests
 
   ci-deploy:
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
