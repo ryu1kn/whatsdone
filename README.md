@@ -2,9 +2,7 @@
 
 # What's Done
 
-Personal activity tracker. Take memos of what I (or we) have done today.
-
-This is my toy project that I experiment different technologies/tools I want to try.
+Personal activity tracker. Take memos of what you have done today.
 
 ## Architecture
 
