@@ -1,4 +1,4 @@
-[![ryu1kn/whatsdone](https://github.com/ryu1kn/whatsdone/actions/workflows/whatsdone.yml/badge.svg)](https://github.com/ryu1kn/whatsdone/actions/workflows/whatsdone.yml)
+[![build-and-deploy](https://github.com/ryu1kn/whatsdone/actions/workflows/build-and-deploy.yml/badge.svg?branch=main)](https://github.com/ryu1kn/whatsdone/actions?query=branch%3Amain+workflow%3Abuild-and-deploy)
 
 # What's Done
 
