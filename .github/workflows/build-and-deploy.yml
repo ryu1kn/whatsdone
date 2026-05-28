@@ -118,8 +118,14 @@ jobs:
           mask-aws-account-id: true
       - uses: actions/setup-node@v3.8.1
         with:
-          cache: npm
+          cache: yarn
+          cache-dependency-path: test/e2e/yarn.lock
           node-version: ${{ env.NODE_VERSION }}
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('test/e2e/yarn.lock') }}
       - run: make test
         working-directory: test/e2e
         env:
