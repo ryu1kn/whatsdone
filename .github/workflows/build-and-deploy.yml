@@ -6,12 +6,6 @@ on:
   pull_request:
   workflow_dispatch:
 
-concurrency:
-#   # This item has no matching transformer
-#   maximum_number_of_builds: 1
-  group: "${{ github.ref }}"
-  cancel-in-progress: true
-
 env:
   AWS_PROFILE: ci-whatsdone
   AWS_REGION: ap-southeast-2
@@ -25,6 +19,9 @@ env:
 jobs:
   pr-check:
     if: ${{ github.event_name == 'pull_request' }}
+    concurrency:
+      group: ${{ github.ref }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     steps:
     - name: checkout
@@ -66,6 +63,10 @@ jobs:
   ci-deploy:
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
     runs-on: ubuntu-latest
+    concurrency:
+      group: env-ci
+      cancel-in-progress: false
+      queue: max
     permissions:
       id-token: write
       contents: read
@@ -97,6 +98,10 @@ jobs:
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
     needs: [ci-deploy]
     runs-on: ubuntu-latest
+    concurrency:
+      group: env-ci
+      cancel-in-progress: false
+      queue: max
     permissions:
       id-token: write
       contents: read
@@ -135,6 +140,9 @@ jobs:
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
     needs: [ci-e2e-test]
     runs-on: ubuntu-latest
+    concurrency:
+      group: env-prod
+      cancel-in-progress: false
     permissions:
       id-token: write
       contents: read
