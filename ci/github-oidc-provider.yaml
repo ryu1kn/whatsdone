@@ -1,0 +1,19 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: GitHub Actions OIDC provider (account-level)
+
+Resources:
+  GitHubOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+
+Outputs:
+  OidcProviderArn:
+    Description: ARN of the GitHub OIDC provider
+    Value: !GetAtt GitHubOidcProvider.Arn
+    Export:
+      Name: whatsdone-github-oidc-provider-arn

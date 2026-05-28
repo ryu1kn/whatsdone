@@ -1,0 +1,279 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: GitHub Actions OIDC IAM roles for What's Done CI/CD
+
+Parameters:
+  GitHubOidcProviderArn:
+    Description: ARN of the GitHub OIDC provider in this account
+    Type: String
+  GitHubOrgRepo:
+    Description: GitHub org/repo allowed to assume these roles
+    Type: String
+    Default: ryu1kn/whatsdone
+  CiEnvironmentName:
+    Description: GitHub environment name for CI deploys
+    Type: String
+    Default: CI
+  ProductionEnvironmentName:
+    Description: GitHub environment name for production deploys
+    Type: String
+    Default: Production
+  CiRoleName:
+    Description: IAM role name for CI GitHub environment
+    Type: String
+    Default: whatsdone-github-ci
+  ProdRoleName:
+    Description: IAM role name for Production GitHub environment
+    Type: String
+    Default: whatsdone-github-prod
+
+Resources:
+  WhatsDoneGitHubCiRole:
+    Type: AWS::IAM::Role
+    Metadata:
+      checkov:
+        skip:
+          - id: CKV_AWS_108
+            comment: Deployment provisions services and discovers their resources.
+          - id: CKV_AWS_109
+            comment: Deployment manages service roles and resource policies.
+          - id: CKV_AWS_110
+            comment: Deployment creates and passes service execution roles.
+          - id: CKV_AWS_111
+            comment: Existing deployment operations require resource-wide writes.
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      RoleName: !Ref CiRoleName
+      Description: GitHub Actions OIDC role for CI environment
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref GitHubOidcProviderArn
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+                token.actions.githubusercontent.com:sub: !Sub "repo:${GitHubOrgRepo}:environment:${CiEnvironmentName}"
+      Policies:
+        - PolicyName: whatsdone-github-ci-deploy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: Stmt1489901204000
+                Effect: Allow
+                Action:
+                  - acm:DescribeCertificate
+                  - acm:GetCertificate
+                  - acm:ListCertificates
+                  - acm:ListTagsForCertificate
+                  - apigateway:DELETE
+                  - apigateway:GET
+                  - apigateway:PATCH
+                  - apigateway:POST
+                  - apigateway:PUT
+                  - cloudformation:CreateChangeSet
+                  - cloudformation:CreateStack
+                  - cloudformation:DeleteStack
+                  - cloudformation:DescribeChangeSet
+                  - cloudformation:DescribeStacks
+                  - cloudformation:DescribeStackEvents
+                  - cloudformation:ExecuteChangeSet
+                  - cloudformation:DeleteChangeSet
+                  - cloudformation:GetTemplate
+                  - cloudformation:GetTemplateSummary
+                  - cloudformation:UpdateStack
+                  - cloudformation:UpdateTerminationProtection
+                  - cloudfront:CreateCloudFrontOriginAccessIdentity
+                  - cloudfront:CreateDistribution
+                  - cloudfront:DeleteDistribution
+                  - cloudfront:GetDistribution
+                  - cloudfront:GetDistributionConfig
+                  - cloudfront:UpdateDistribution
+                  - cognito-idp:CreateUserPoolDomain
+                  - cognito-idp:DescribeUserPoolDomain
+                  - cognito-idp:UpdateUserPoolClient
+                  - dynamodb:CreateTable
+                  - dynamodb:DeleteTable
+                  - dynamodb:DescribeTable
+                  - dynamodb:UpdateTable
+                  - iam:CreateRole
+                  - iam:DeleteRole
+                  - iam:GetRole
+                  - iam:DeleteRolePolicy
+                  - iam:PassRole
+                  - iam:PutRolePolicy
+                  - kms:CreateGrant
+                  - kms:Encrypt
+                  - kms:Decrypt
+                  - lambda:AddPermission
+                  - lambda:CreateFunction
+                  - lambda:DeleteFunction
+                  - lambda:GetFunction
+                  - lambda:GetFunctionConfiguration
+                  - lambda:GetPolicy
+                  - lambda:RemovePermission
+                  - lambda:UpdateFunctionCode
+                  - lambda:UpdateFunctionConfiguration
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:DeleteLogGroup
+                  - logs:DeleteLogStream
+                  - logs:DescribeLogGroups
+                  - logs:DescribeLogStreams
+                  - logs:PutLogEvents
+                  - logs:PutRetentionPolicy
+                  - route53:ChangeResourceRecordSets
+                  - route53:GetChange
+                  - route53:GetHostedZone
+                  - s3:*
+                Resource: "*"
+              - Sid: Stmt1489901204001
+                Effect: Allow
+                Action:
+                  - secretsmanager:GetSecretValue
+                Resource: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:/whatsdone/ci/*"
+              - Sid: Stmt03
+                Effect: Allow
+                Action:
+                  - comprehend:CreateEndpoint
+                  - comprehend:DeleteEndpoint
+                  - comprehend:DescribeEndpoint
+                  - comprehend:UpdateEndpoint
+                Resource:
+                  - !Sub "arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier-endpoint/whatsdone-*-topic-classifier"
+                  - !Sub "arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier/whatsdone-topic-classifier"
+                  - !Sub "arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier/whatsdone-topic-classifier/version/*"
+              - Sid: Stmt04
+                Effect: Allow
+                Action:
+                  - comprehend:ListEndpoints
+                Resource: "*"
+
+  WhatsDoneGitHubProdRole:
+    Type: AWS::IAM::Role
+    Metadata:
+      checkov:
+        skip:
+          - id: CKV_AWS_108
+            comment: Deployment provisions services and discovers their resources.
+          - id: CKV_AWS_109
+            comment: Deployment manages service roles and resource policies.
+          - id: CKV_AWS_110
+            comment: Deployment creates and passes service execution roles.
+          - id: CKV_AWS_111
+            comment: Existing deployment operations require resource-wide writes.
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      RoleName: !Ref ProdRoleName
+      Description: GitHub Actions OIDC role for Production environment
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref GitHubOidcProviderArn
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+                token.actions.githubusercontent.com:sub: !Sub "repo:${GitHubOrgRepo}:environment:${ProductionEnvironmentName}"
+      Policies:
+        - PolicyName: whatsdone-github-prod-deploy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: Stmt1489901204000
+                Effect: Allow
+                Action:
+                  - acm:DescribeCertificate
+                  - acm:GetCertificate
+                  - acm:ListCertificates
+                  - acm:ListTagsForCertificate
+                  - apigateway:DELETE
+                  - apigateway:GET
+                  - apigateway:PATCH
+                  - apigateway:POST
+                  - apigateway:PUT
+                  - cloudformation:CreateChangeSet
+                  - cloudformation:CreateStack
+                  - cloudformation:DeleteStack
+                  - cloudformation:DescribeChangeSet
+                  - cloudformation:DescribeStacks
+                  - cloudformation:DescribeStackEvents
+                  - cloudformation:ExecuteChangeSet
+                  - cloudformation:DeleteChangeSet
+                  - cloudformation:GetTemplate
+                  - cloudformation:GetTemplateSummary
+                  - cloudformation:UpdateStack
+                  - cloudformation:UpdateTerminationProtection
+                  - cloudfront:CreateCloudFrontOriginAccessIdentity
+                  - cloudfront:CreateDistribution
+                  - cloudfront:DeleteDistribution
+                  - cloudfront:GetDistribution
+                  - cloudfront:GetDistributionConfig
+                  - cloudfront:UpdateDistribution
+                  - cognito-idp:CreateUserPoolDomain
+                  - cognito-idp:DescribeUserPoolDomain
+                  - cognito-idp:UpdateUserPoolClient
+                  - dynamodb:CreateTable
+                  - dynamodb:DeleteTable
+                  - dynamodb:DescribeTable
+                  - dynamodb:UpdateTable
+                  - iam:CreateRole
+                  - iam:DeleteRole
+                  - iam:GetRole
+                  - iam:DeleteRolePolicy
+                  - iam:PassRole
+                  - iam:PutRolePolicy
+                  - kms:CreateGrant
+                  - kms:Encrypt
+                  - kms:Decrypt
+                  - lambda:AddPermission
+                  - lambda:CreateFunction
+                  - lambda:DeleteFunction
+                  - lambda:GetFunction
+                  - lambda:GetFunctionConfiguration
+                  - lambda:GetPolicy
+                  - lambda:RemovePermission
+                  - lambda:UpdateFunctionCode
+                  - lambda:UpdateFunctionConfiguration
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:DeleteLogGroup
+                  - logs:DeleteLogStream
+                  - logs:DescribeLogGroups
+                  - logs:DescribeLogStreams
+                  - logs:PutLogEvents
+                  - logs:PutRetentionPolicy
+                  - route53:ChangeResourceRecordSets
+                  - route53:GetChange
+                  - route53:GetHostedZone
+                  - s3:*
+                Resource: "*"
+              - Sid: Stmt03
+                Effect: Allow
+                Action:
+                  - comprehend:CreateEndpoint
+                  - comprehend:DeleteEndpoint
+                  - comprehend:DescribeEndpoint
+                  - comprehend:UpdateEndpoint
+                Resource:
+                  - !Sub "arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier-endpoint/whatsdone-*-topic-classifier"
+                  - !Sub "arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier/whatsdone-topic-classifier"
+                  - !Sub "arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier/whatsdone-topic-classifier/version/*"
+              - Sid: Stmt04
+                Effect: Allow
+                Action:
+                  - comprehend:ListEndpoints
+                Resource: "*"
+
+Outputs:
+  CiRoleArn:
+    Description: ARN of the CI GitHub Actions role
+    Value: !GetAtt WhatsDoneGitHubCiRole.Arn
+  ProdRoleArn:
+    Description: ARN of the Production GitHub Actions role
+    Value: !GetAtt WhatsDoneGitHubProdRole.Arn
