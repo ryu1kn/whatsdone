@@ -1,7 +1,7 @@
 
 # Continuous Integration / Continuous Delivery
 
-What's Done works on AWS; hence you need an IAM user for CI/CD service to deploy the system.
+GitHub Actions uses OIDC roles. Keep the existing CI user for laptop operations.
 
 Creation of the user is done only at the beginning; so I just provide the CloudFormation template and Makefile for this.
 After you create a user, you need to create an access key.
@@ -26,9 +26,6 @@ $ AWS_PROFILE=<YOUR_PROFILE_NAME> make create-access-key
 
 Make sure you take a memo of `SecretAccessKey` in the output. You can only see this at this timing.
 
-To set the access key id and secret access key, update GitHub Actions secrets
-[here](https://github.com/ryu1kn/whatsdone/settings/secrets/actions).
-
 ## Static analysis
 
 `mise run gate` runs cfn-lint, Checkov and module tests. Pull requests run the same checks.
@@ -45,3 +42,29 @@ a separate permissions review and approved stack update. Other resources remain 
 cfn-lint W3037 is suppressed only on the deployment group because its legacy
 `apigateway:HEAD` and `apigateway:OPTIONS` actions are unrecognized by IAM.
 The policy is preserved pending the same permissions review.
+
+## GitHub OIDC
+
+Inspect existing providers, roles and stack ownership before setup. Reuse an
+existing account provider only after confirming its owner. These templates create
+one retained account provider and separate CI/Production roles. Role permissions
+match deployment needs and remain broad; resource-specific Checkov exceptions
+cover service provisioning and role management. Existing CI-user permissions,
+Cognito resources and the E2E secret stack are unchanged.
+
+With approval and provider-creation privileges:
+
+```sh
+AWS_PROFILE=ci-whatsdone make deploy-github-oidc-provider
+AWS_PROFILE=ci-whatsdone make deploy-github-oidc-roles
+AWS_PROFILE=ci-whatsdone make show-github-oidc-role-arns
+```
+
+Set each GitHub environment's `AWS_ROLE_ARN` variable to its corresponding role.
+Restrict CI deployments to `main` and the explicitly approved validation branch;
+restrict Production to `main`. Environment subjects contain no branch claim, so
+GitHub environment branch policies enforce permitted refs. Do not enable OIDC
+until those restrictions are configured. No access keys are required by Actions.
+
+References: [GitHub environment trust](https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws),
+[optional provider thumbprints](https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-iam-oidcprovider.html).
