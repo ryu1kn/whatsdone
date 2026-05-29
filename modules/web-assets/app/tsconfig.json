@@ -22,9 +22,13 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noUncheckedIndexedAccess": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "paths": {
+      // testdouble ships types but its package.json "exports" map has no
+      // "types" condition, so they are invisible under bundler resolution.
+      "testdouble": ["./node_modules/testdouble/index.d.ts"]
+    },
     "types": [
-      "@types/webpack-env",
       "jest"
     ],
     "esModuleInterop": true,
@@ -32,7 +36,12 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true
   },
+  "include": [
+    "src/**/*",
+    "test/**/*"
+  ],
   "exclude": [
+    "node_modules",
     ".build/**/*",
     ".cache/**/*",
     ".yarn/**/*",
