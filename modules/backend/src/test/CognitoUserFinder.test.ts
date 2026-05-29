@@ -1,35 +1,34 @@
 import ServiceLocator from '../lib/ServiceLocator';
 import CognitoUserFinder from '../lib/CognitoUserFinder';
-import * as td from 'testdouble';
 import ServiceFactory from '../lib/ServiceFactory';
-import {AWSError, CognitoIdentityServiceProvider} from 'aws-sdk';
-import {PromiseResult} from 'aws-sdk/lib/request';
-import {ListUsersResponse} from 'aws-sdk/clients/cognitoidentityserviceprovider';
+import {CognitoIdentityProviderClient, ListUsersCommand} from '@aws-sdk/client-cognito-identity-provider';
+import {AwsClientStub, mockClient} from 'aws-sdk-client-mock';
 import {deepStrictEqual} from 'assert';
-import {awsSdkResponse} from './helper/AwsHelper';
 
 describe('Server CognitoUserFinder', () => {
+  let cognitoMock: AwsClientStub<CognitoIdentityProviderClient>;
+
+  beforeEach(() => {
+    cognitoMock = mockClient(CognitoIdentityProviderClient);
+  });
+
+  afterEach(() => cognitoMock.restore());
 
   it('uses CognitoIdentityServiceProvider to get the first matching user\'s info', async () => {
-    const cognitoIdentityServiceProvider = createCognitoIdentityServiceProvider();
-    const userFinder = createCognitoUserFinder(cognitoIdentityServiceProvider);
+    cognitoMock.on(ListUsersCommand, {
+      UserPoolId: 'USER_POOL_ID',
+      AttributesToGet: [],
+      Filter: 'sub = "ID"'
+    }).resolves({Users: ['USER_1' as any]});
+
+    const userFinder = createCognitoUserFinder();
     const user = await userFinder.find('ID');
     deepStrictEqual(user, 'USER_1');
   });
 
-  function createCognitoIdentityServiceProvider() {
-    const cognito = td.object('listUsers') as CognitoIdentityServiceProvider;
-    td.when(cognito.listUsers({
-      UserPoolId: 'USER_POOL_ID',
-      AttributesToGet: [],
-      Filter: 'sub = "ID"'
-    })).thenReturn(awsSdkResponse({Users: ['USER_1']} as unknown as PromiseResult<ListUsersResponse, AWSError>));
-    return cognito;
-  }
-
-  function createCognitoUserFinder(cognitoIdentityServiceProvider: CognitoIdentityServiceProvider) {
+  function createCognitoUserFinder() {
     ServiceLocator.load({
-      createCognitoIdentityServiceProvider: () => cognitoIdentityServiceProvider,
+      createCognitoIdentityServiceProvider: () => new CognitoIdentityProviderClient({region: 'ap-southeast-2'}),
       createConfig: () => ({userPoolId: 'USER_POOL_ID'})
     } as ServiceFactory);
     return new CognitoUserFinder();

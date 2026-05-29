@@ -1,5 +1,5 @@
 
-import AWS = require('aws-sdk');
+import {DynamoDBDocumentClient, GetCommand, QueryCommand} from '@aws-sdk/lib-dynamodb';
 import ServiceLocator from '../ServiceLocator';
 
 type UserIdRecord = {
@@ -8,7 +8,7 @@ type UserIdRecord = {
 };
 
 export default class UserIdRepository {
-  private _docClient: AWS.DynamoDB.DocumentClient;
+  private _docClient: DynamoDBDocumentClient;
   private _tableName: string;
 
   constructor(tableName: string) {
@@ -21,7 +21,7 @@ export default class UserIdRepository {
       TableName: this._tableName,
       Key: {id}
     };
-    const response = await this._docClient.get(params).promise();
+    const response = await this._docClient.send(new GetCommand(params));
     return (response.Item || {}).cognitoUserId;
   }
 
@@ -33,7 +33,7 @@ export default class UserIdRepository {
       ExpressionAttributeValues: {':hkey': cognitoUserId},
       ProjectionExpression: 'id'
     };
-    const result = await this._docClient.query(params).promise();
+    const result = await this._docClient.send(new QueryCommand(params));
     const item = result.Items![0];
     return item && item.id;
   }

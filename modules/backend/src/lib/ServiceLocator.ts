@@ -1,4 +1,5 @@
-import AWS = require('aws-sdk');
+import {CognitoIdentityProviderClient} from '@aws-sdk/client-cognito-identity-provider';
+import {DynamoDBDocumentClient} from '@aws-sdk/lib-dynamodb';
 import ServiceFactory from './ServiceFactory';
 import DoneRepository from './repositories/Done';
 import UserIdRepository from './repositories/UserId';
@@ -19,7 +20,7 @@ import TopicClassifier from './services/TopicClassifier';
 
 type InstanceCache = {
   Config?: AppConfig;
-  CognitoIdentityServiceProvider?: AWS.CognitoIdentityServiceProvider;
+  CognitoIdentityServiceProvider?: CognitoIdentityProviderClient;
   CognitoUserFinder?: CognitoUserFinder;
   GetDonesRequestHandler?: LambdaRequestHandler['handle'];
   PostDoneRequestHandler?: LambdaRequestHandler['handle'];
@@ -35,7 +36,7 @@ type InstanceCache = {
   UserNameService?: UserNameService;
   UserIdRepository?: UserIdRepository;
   DoneRepository?: DoneRepository;
-  DynamoDBDocumentClient?: AWS.DynamoDB.DocumentClient;
+  DynamoDBDocumentClient?: DynamoDBDocumentClient;
   DoneQueryHelper?: DoneQueryHelper;
   DoneDynamoTableClient?: DynamoTableClient;
   UuidGenerator?: { generate: () => string };

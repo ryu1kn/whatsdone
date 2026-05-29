@@ -1,11 +1,21 @@
 import AWSXRay = require('aws-xray-sdk');
-import RawAWS = require('aws-sdk');
 import LambdaRequestHandler from './LambdaRequestHandler';
 import {randomUUID} from 'node:crypto';
+import {CognitoIdentityProviderClient} from '@aws-sdk/client-cognito-identity-provider';
+import {DynamoDBClient} from '@aws-sdk/client-dynamodb';
+import {DynamoDBDocumentClient} from '@aws-sdk/lib-dynamodb';
 import {Logger, LogLevelString} from './Logger';
 import {EnvVars} from './EnvVars';
 
-const AWS = (process.env.IS_LOCAL_RUN === 'true') ? RawAWS : AWSXRay.captureAWS(RawAWS);
+// The AWS SDK v3 is modular, so X-Ray can no longer wrap the whole SDK as it
+// did for v2 via captureAWS. Each client is instrumented individually with
+// captureAWSv3Client instead. Tracing is skipped for local runs, where there
+// is no X-Ray segment to attach sub-segments to.
+const isLocalRun = process.env.IS_LOCAL_RUN === 'true';
+
+function captureClient<T>(client: T): T {
+  return isLocalRun ? client : AWSXRay.captureAWSv3Client(client);
+}
 
 export default class ServiceFactory {
   private env: EnvVars;
@@ -22,7 +32,7 @@ export default class ServiceFactory {
   }
 
   createCognitoIdentityServiceProvider() {
-    return new AWS.CognitoIdentityServiceProvider();
+    return captureClient(new CognitoIdentityProviderClient({}));
   }
 
   createCognitoUserFinder() {
@@ -88,8 +98,11 @@ export default class ServiceFactory {
     return new Logger(this.env.LOG_LEVEL as LogLevelString);
   }
 
-  createDynamoDBDocumentClient(): AWS.DynamoDB.DocumentClient {
-    return new AWS.DynamoDB.DocumentClient({region: this.env.DB_REGION});
+  createDynamoDBDocumentClient(): DynamoDBDocumentClient {
+    const client = new DynamoDBClient({region: this.env.DB_REGION});
+    return captureClient(DynamoDBDocumentClient.from(client, {
+      marshallOptions: {removeUndefinedValues: true}
+    }));
   }
 
   createDoneQueryHelper() {

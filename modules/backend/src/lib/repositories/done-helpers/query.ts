@@ -1,5 +1,5 @@
 import _omit = require('lodash.omit');
-import AWS = require('aws-sdk');
+import {DynamoDBDocumentClient, QueryCommand} from '@aws-sdk/lib-dynamodb';
 import ServiceLocator from '../../ServiceLocator';
 import WrappedError from '../../WrappedError';
 import * as utils from '../utils';
@@ -31,7 +31,7 @@ type DoneQueryParams = {
   ExpressionAttributeValues: {':m': string;};
   ScanIndexForward: boolean;
   ProjectionExpression: string;
-  Select: string;
+  Select: 'SPECIFIC_ATTRIBUTES';
   ExclusiveStartKey?: DoneLastEvaluatedKey;
 };
 
@@ -47,7 +47,7 @@ type DynamoQueryResult = {
 };
 
 export default class DoneQueryHelper {
-  private _docClient: AWS.DynamoDB.DocumentClient;
+  private _docClient: DynamoDBDocumentClient;
   private _dateProvider: {getCurrentDate: () => Date};
   private _collectionName: string;
 
@@ -67,7 +67,7 @@ export default class DoneQueryHelper {
 
   private async _query(startKey?: DoneLastEvaluatedKey): Promise<DoneQueryResult> {
     const queryUntil = async (params: DoneQueryParams, accumulatedResponse: DynamoQueryResult): Promise<DynamoQueryResult> => {
-      const queryResult = await this._docClient.query(params).promise();
+      const queryResult = await this._docClient.send(new QueryCommand(params));
       const newAccumulatedResponse = {
         Items: [...accumulatedResponse.Items, ...queryResult.Items as DoneInDb[]],
         LastEvaluatedKey: queryResult.LastEvaluatedKey as DoneLastEvaluatedKey
@@ -126,7 +126,7 @@ export default class DoneQueryHelper {
         ExpressionAttributeValues: {':m': monthKey},
         ScanIndexForward: false,
         ProjectionExpression: 'id, #date, doneThing, userId, topics',
-        Select: 'SPECIFIC_ATTRIBUTES'
+        Select: 'SPECIFIC_ATTRIBUTES' as const
       },
       exclusiveStartKey
     );
