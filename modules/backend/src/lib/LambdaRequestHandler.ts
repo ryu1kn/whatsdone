@@ -31,7 +31,7 @@ export default class LambdaRequestHandler {
   handle = async (event: Event): Promise<Response> => {
     const response = await this.handleRequest(event);
     return this._lambdaResponseFormatter.format(response);
-  }
+  };
 
   private async handleRequest(event: Event) {
     const normalisedRequest = this._lambdaRequestNormaliser.normalise(event);

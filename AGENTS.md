@@ -70,4 +70,4 @@ The deployment process is as follows:
 
 ## Development Conventions
 
-The project uses TypeScript for both the backend and frontend. It also uses ESLint and TSLint for linting. The code is well-structured and follows the standard conventions for a full-stack TypeScript application.
+The project uses TypeScript for both the backend and frontend. It also uses ESLint for linting. The code is well-structured and follows the standard conventions for a full-stack TypeScript application.
