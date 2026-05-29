@@ -82,10 +82,9 @@ jobs:
         aws-profile: ci-whatsdone
         output-env-credentials: true
         mask-aws-account-id: true
-    - name: Lint CloudFormation templates
-      run: mise run cfn-lint
-    - name: Check CloudFormation templates
-      run: mise run checkov
+    - uses: jdx/mise-action@v2
+    - name: Test infra
+      run: mise run test-infra
     - run: ./ci-build.sh
       env:
         ENV_NAME: ci
