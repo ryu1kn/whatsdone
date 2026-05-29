@@ -1,4 +1,5 @@
-import 'babel-polyfill';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 import * as td from 'testdouble';
 
 import ServiceLocator from '../src/service-locator';
