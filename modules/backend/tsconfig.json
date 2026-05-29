@@ -8,7 +8,12 @@
       "es6",
       "es2017"
     ],
+    "types": [
+      "node",
+      "mocha"
+    ],
     "sourceMap": false,
+    "skipLibCheck": true,
     "strict": true
   },
   "exclude": [

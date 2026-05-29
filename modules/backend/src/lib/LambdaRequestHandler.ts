@@ -44,7 +44,7 @@ export default class LambdaRequestHandler {
       };
       return await this._requestProcessor.process(normalisedRequest, session);
     } catch (e) {
-      return this._requestProcessErrorProcessor.process(e);
+      return this._requestProcessErrorProcessor.process(e as Error);
     }
   }
 

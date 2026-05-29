@@ -61,7 +61,7 @@ export default class DoneQueryHelper {
     try {
       return await this._query(this.decodeNextKey(nextKey));
     } catch (e) {
-      throw new WrappedError(e);
+      throw new WrappedError(e as Error);
     }
   }
 
