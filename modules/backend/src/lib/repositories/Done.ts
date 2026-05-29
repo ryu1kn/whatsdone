@@ -1,4 +1,3 @@
-import _pick = require('lodash.pick');
 import _omit = require('lodash.omit');
 import ServiceLocator from '../ServiceLocator';
 import * as utils from './utils';
@@ -6,7 +5,17 @@ import DynamoTableClient from './DynamoTableClient';
 import DoneQueryHelper, {DoneQueryResult} from './done-helpers/query';
 import {DoneDiff, DoneInDb, UserDone} from '../models/Done';
 
-const MODIFIABLE_FIELDS = ['date', 'doneThing'];
+const MODIFIABLE_FIELDS: (keyof DoneDiff)[] = ['date', 'doneThing'];
+
+// Keep only the whitelisted fields that are actually present on the input,
+// mirroring lodash.pick semantics (absent keys are not added as `undefined`).
+const pickModifiableFields = (newData: DoneDiff): DoneDiff =>
+  MODIFIABLE_FIELDS.reduce((overwrite: DoneDiff, field) => {
+    if (field in newData) {
+      overwrite[field] = newData[field];
+    }
+    return overwrite;
+  }, {});
 
 export default class DoneRepository {
   private _doneDynamoTableClient: DynamoTableClient;
@@ -47,7 +56,7 @@ export default class DoneRepository {
     if (found.userId !== currentUserId) {
       throw new Error('[AccessDenied]: You don\'t have the permission to modify this item.');
     }
-    const doneOverwrite = _pick(newData, MODIFIABLE_FIELDS);
+    const doneOverwrite = pickModifiableFields(newData);
     const finalOverwrite = utils.getDoneWithMonth(doneOverwrite);
     const done = await this._doneDynamoTableClient.update(id, finalOverwrite) as DoneInDb;
     return _omit(done, 'month');
