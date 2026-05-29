@@ -28,7 +28,7 @@ describe('Server EnvVars', () => {
 
   it('errors out if required env vars are missing', () => {
     throws(() => {
-      new EnvVars({} as ProcessEnv);  // tslint:disable-line:no-unused-expression
+      new EnvVars({} as ProcessEnv);
     });
   });
 });
