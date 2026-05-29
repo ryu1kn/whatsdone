@@ -27,8 +27,8 @@ uv tool run --from checkov==3.4.0 checkov \
   --config-file .checkov.yml
 """
 
-[tasks.gate-tests]
-description = "Run module unit tests (gate without Checkov)"
+[tasks.test-modules]
+description = "Run module unit tests"
 run = """
 #!/usr/bin/env bash
 set -euo pipefail
@@ -42,12 +42,10 @@ for dir in modules/*; do
 done
 """
 
+[tasks.test-infra]
+description = "Run default infra gate checks"
+depends = ["cfn-lint", "checkov"]
+
 [tasks.gate]
 description = "Run default local gate checks"
-run = """
-#!/usr/bin/env bash
-set -euo pipefail
-mise run cfn-lint
-mise run checkov
-mise run gate-tests
-"""
+depends = ["test-infra", "test-modules"]
