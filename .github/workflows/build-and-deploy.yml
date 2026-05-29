@@ -82,10 +82,6 @@ jobs:
         aws-profile: ci-whatsdone
         output-env-credentials: true
         mask-aws-account-id: true
-    - uses: actions/setup-node@v4
-      with:
-        cache: npm
-        node-version: ${{ env.NODE_VERSION }}
     - name: Lint CloudFormation templates
       run: mise run cfn-lint
     - name: Check CloudFormation templates
