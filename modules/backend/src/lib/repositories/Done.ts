@@ -7,16 +7,6 @@ import {DoneDiff, DoneInDb, UserDone} from '../models/Done';
 
 const MODIFIABLE_FIELDS: (keyof DoneDiff)[] = ['date', 'doneThing'];
 
-// Keep only the whitelisted fields that are actually present on the input,
-// mirroring lodash.pick semantics (absent keys are not added as `undefined`).
-const pickModifiableFields = (newData: DoneDiff): DoneDiff =>
-  MODIFIABLE_FIELDS.reduce((overwrite: DoneDiff, field) => {
-    if (field in newData) {
-      overwrite[field] = newData[field];
-    }
-    return overwrite;
-  }, {});
-
 export default class DoneRepository {
   private _doneDynamoTableClient: DynamoTableClient;
   private _doneQueryHelper: DoneQueryHelper;
@@ -56,7 +46,7 @@ export default class DoneRepository {
     if (found.userId !== currentUserId) {
       throw new Error('[AccessDenied]: You don\'t have the permission to modify this item.');
     }
-    const doneOverwrite = pickModifiableFields(newData);
+    const doneOverwrite = utils.pick(newData, MODIFIABLE_FIELDS);
     const finalOverwrite = utils.getDoneWithMonth(doneOverwrite);
     const done = await this._doneDynamoTableClient.update(id, finalOverwrite) as DoneInDb;
     return _omit(done, 'month');
