@@ -16,7 +16,7 @@
     "@smithy/types" "^4.19.0"
     tslib "^2.6.2"
 
-"@aws-sdk/client-dynamodb@^3.1056.0":
+"@aws-sdk/client-dynamodb@^3.1057.0":
   version "3.1156.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-dynamodb/-/client-dynamodb-3.1156.0.tgz#0f197e319fe83a38657a3d297cb584e2863ae595"
   integrity sha512-K7wOerEfbVIMHxssmqXPKw/TtrKl9D7jDv1f8AtCr0S1jh040HChaV1vgDtzU2tmbCFlVvLQrG6vvZbHrTwacw==
