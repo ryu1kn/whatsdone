@@ -9,15 +9,10 @@ export default class UpdateDoneCommand {
     this._doneRepository = ServiceLocator.doneRepository;
   }
 
-  async execute(data: DoneDiff, doneId: string, userId: string) {
-    const done = await this._doneRepository.update(doneId, userId, data);
-    return {
-      id: done.id,
-      userId: done.userId,
-      date: done.date,
-      doneThing: done.doneThing,
-      topics: ['foo']
-    };
+  async execute(data: DoneDiff, doneId: string, currentUserId: string) {
+    const done = await this._doneRepository.update(doneId, currentUserId, data);
+    const {id, userId, date, doneThing} = done;
+    return {id, userId, date, doneThing, topics: ['foo']};
   }
 
 }
