@@ -1,10 +1,10 @@
-import AWS = require('aws-sdk');
+import {DeleteCommand, DynamoDBDocumentClient, GetCommand, PutCommand, UpdateCommand} from '@aws-sdk/lib-dynamodb';
 import ServiceLocator from '../ServiceLocator';
 import WrappedError from '../WrappedError';
 import {ObjectMap} from '../models/Collection';
 
 export default class DynamoTableClient {
-  private _docClient: AWS.DynamoDB.DocumentClient;
+  private _docClient: DynamoDBDocumentClient;
   private _uuidGenerator: {generate: () => string};
   private _collectionName: string;
   private _idName: string;
@@ -22,7 +22,7 @@ export default class DynamoTableClient {
       Key: this.toIdObject(id)
     };
     try {
-      const response = await this._docClient.get(params).promise();
+      const response = await this._docClient.send(new GetCommand(params));
       return response.Item as ObjectMap<any>;
     } catch (e) {
       throw new WrappedError(e as Error, params);
@@ -36,7 +36,7 @@ export default class DynamoTableClient {
       Item: Object.assign({}, newData, this.toIdObject(id))
     };
     try {
-      await this._docClient.put(params).promise();
+      await this._docClient.send(new PutCommand(params));
       return id;
     } catch (e) {
       throw new WrappedError(e as Error, params);
@@ -49,7 +49,7 @@ export default class DynamoTableClient {
       Key: this.toIdObject(id)
     };
     try {
-      await this._docClient.delete(params).promise();
+      await this._docClient.send(new DeleteCommand(params));
     } catch (e) {
       throw new WrappedError(e as Error, params);
     }
@@ -62,7 +62,7 @@ export default class DynamoTableClient {
       AttributeUpdates: this.getAttributeUpdatesValues(newData)
     };
     try {
-      await this._docClient.update(params).promise();
+      await this._docClient.send(new UpdateCommand(params));
       return await this.getById(id); // XXX: Don't query again
     } catch (e) {
       throw new WrappedError(e as Error, params);

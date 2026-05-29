@@ -2,49 +2,56 @@ import DynamoTableClient from '../../lib/repositories/DynamoTableClient';
 import ServiceLocator from '../../lib/ServiceLocator';
 import ServiceFactory from '../../lib/ServiceFactory';
 import {deepStrictEqual, doesNotReject} from 'assert';
-import {awsSdkResponse} from '../helper/AwsHelper';
-import * as td from 'testdouble';
-import {DynamoDB} from 'aws-sdk';
+import {DynamoDBClient} from '@aws-sdk/client-dynamodb';
+import {DeleteCommand, DynamoDBDocumentClient, GetCommand, PutCommand, UpdateCommand} from '@aws-sdk/lib-dynamodb';
+import {AwsClientStub, mockClient} from 'aws-sdk-client-mock';
 
 describe('Server DynamoTableClient', () => {
-  const dynamoDBDocumentClient = td.instance(DynamoDB.DocumentClient);
+  let ddbMock: AwsClientStub<DynamoDBDocumentClient>;
+  let client: DynamoTableClient;
 
-  td.when(dynamoDBDocumentClient.get({TableName: 'TABLE_NAME', Key: {id: 'ITEM_ID'}}))
-    .thenReturn(awsSdkResponse({Item: 'ITEM'}));
+  beforeEach(() => {
+    ddbMock = mockClient(DynamoDBDocumentClient);
 
-  td.when(dynamoDBDocumentClient.put({
-    TableName: 'TABLE_NAME',
-    Item: {
-      DATA: '..',
-      id: 'UUID'
-    }
-  })).thenReturn(awsSdkResponse());
+    ddbMock.on(GetCommand, {TableName: 'TABLE_NAME', Key: {id: 'ITEM_ID'}})
+      .resolves({Item: 'ITEM' as any});
 
-  td.when(dynamoDBDocumentClient.delete({
-    TableName: 'TABLE_NAME',
-    Key: {id: 'ITEM_ID'}
-  })).thenReturn(awsSdkResponse());
-
-  td.when(dynamoDBDocumentClient.update({
-    TableName: 'TABLE_NAME',
-    Key: {id: 'ITEM_ID'},
-    AttributeUpdates: {
-      KEY_1: {
-        Action: 'PUT',
-        Value: 'VALUE_1'
-      },
-      KEY_2: {
-        Action: 'PUT',
-        Value: 'VALUE_2'
+    ddbMock.on(PutCommand, {
+      TableName: 'TABLE_NAME',
+      Item: {
+        DATA: '..',
+        id: 'UUID'
       }
-    }
-  })).thenReturn(awsSdkResponse());
+    }).resolves({});
 
-  ServiceLocator.load({
-    createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
-    createUuidGenerator: () => ({generate: () => 'UUID'})
-  } as ServiceFactory);
-  const client = new DynamoTableClient('TABLE_NAME', 'id');
+    ddbMock.on(DeleteCommand, {
+      TableName: 'TABLE_NAME',
+      Key: {id: 'ITEM_ID'}
+    }).resolves({});
+
+    ddbMock.on(UpdateCommand, {
+      TableName: 'TABLE_NAME',
+      Key: {id: 'ITEM_ID'},
+      AttributeUpdates: {
+        KEY_1: {
+          Action: 'PUT',
+          Value: 'VALUE_1'
+        },
+        KEY_2: {
+          Action: 'PUT',
+          Value: 'VALUE_2'
+        }
+      }
+    }).resolves({});
+
+    ServiceLocator.load({
+      createDynamoDBDocumentClient: () => DynamoDBDocumentClient.from(new DynamoDBClient({region: 'ap-southeast-2'})),
+      createUuidGenerator: () => ({generate: () => 'UUID'})
+    } as ServiceFactory);
+    client = new DynamoTableClient('TABLE_NAME', 'id');
+  });
+
+  afterEach(() => ddbMock.restore());
 
   it('finds one item by ID', async () => {
     const item = await client.getById('ITEM_ID');

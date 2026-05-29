@@ -1,13 +1,21 @@
 import ServiceLocator from '../../../lib/ServiceLocator';
 import DoneQueryHelper from '../../../lib/repositories/done-helpers/query';
 import ServiceFactory from '../../../lib/ServiceFactory';
-import * as td from 'testdouble';
 import {Logger} from '../../../lib/Logger';
 import {deepStrictEqual} from 'assert';
-import {awsSdkResponse} from '../../helper/AwsHelper';
-import {DynamoDB} from 'aws-sdk';
+import {DynamoDBClient} from '@aws-sdk/client-dynamodb';
+import {DynamoDBDocumentClient, QueryCommand} from '@aws-sdk/lib-dynamodb';
+import {AwsClientStub, mockClient} from 'aws-sdk-client-mock';
 
 describe('Server DoneQueryHelper', () => {
+  let ddbMock: AwsClientStub<DynamoDBDocumentClient>;
+
+  beforeEach(() => {
+    ddbMock = mockClient(DynamoDBDocumentClient);
+  });
+
+  afterEach(() => ddbMock.restore());
+
   const padMonth = (n: number) => n < 10 ? `0${n}` : n;
   const prevMonth = (yearMonth: string) => {
     const [year, month] = yearMonth.split('-').map(n => parseInt(n, 10));
@@ -28,32 +36,30 @@ describe('Server DoneQueryHelper', () => {
     },
     ScanIndexForward: false,
     ProjectionExpression: 'id, #date, doneThing, userId, topics',
-    Select: 'SPECIFIC_ATTRIBUTES'
+    Select: 'SPECIFIC_ATTRIBUTES' as const
   };
   const makeItems = (size: number, group = 1) => [...Array(size)].map((_, i) => ({DATA: `ITEM-${group}-${i}`}));
 
   it('queries 20 items and that\'s everything', async () => {
     const items = makeItems(20);
-    const dynamoDBDocumentClient = td.instance(DynamoDB.DocumentClient);
-    td.when(dynamoDBDocumentClient.query(queryWithoutNextKey)).thenReturn(awsSdkResponse({Items: items}));
-    setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
+    ddbMock.on(QueryCommand, queryWithoutNextKey).resolves({Items: items});
+    setupServiceLocator({currentDate: '2017-08-01T07:26:27.574Z'});
 
     const client = new DoneQueryHelper('TABLE_NAME');
     deepStrictEqual(await client.query(), {items, nextKey: undefined});
   });
 
   it('returns items honouring next page key', async () => {
-    const dynamoDBDocumentClient = td.instance(DynamoDB.DocumentClient);
-    td.when(dynamoDBDocumentClient.query({
+    ddbMock.on(QueryCommand, {
       ...queryWithoutNextKey,
       ExclusiveStartKey: {
         id: 'ID',
         date: '2017-08-01T07:26:27.574Z',
         month: '2017-08'
       }
-    })).thenReturn(awsSdkResponse({Items: makeItems(20)}));
+    }).resolves({Items: makeItems(20)});
 
-    setupServiceLocator({dynamoDBDocumentClient});
+    setupServiceLocator({});
     const client = new DoneQueryHelper('TABLE_NAME');
 
     const nextKey = JSON.stringify({
@@ -66,16 +72,15 @@ describe('Server DoneQueryHelper', () => {
   });
 
   it('returns a key for next page if it exists', async () => {
-    const dynamoDBDocumentClient = td.instance(DynamoDB.DocumentClient);
-    td.when(dynamoDBDocumentClient.query(queryWithoutNextKey)).thenReturn(awsSdkResponse({
+    ddbMock.on(QueryCommand, queryWithoutNextKey).resolves({
       Items: makeItems(23),
       LastEvaluatedKey: {
         id: 'ID',
         date: '2017-08-02T07:26:27.574Z',
         month: '2017-08'
       }
-    }));
-    setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
+    });
+    setupServiceLocator({currentDate: '2017-08-01T07:26:27.574Z'});
 
     const client = new DoneQueryHelper('TABLE_NAME');
     const result = await client.query();
@@ -83,12 +88,11 @@ describe('Server DoneQueryHelper', () => {
   });
 
   it('automatically queries previous month if result does not have enough records', async () => {
-    const dynamoDBDocumentClient = td.instance(DynamoDB.DocumentClient);
-    td.when(dynamoDBDocumentClient.query(queryWithoutNextKey))
-      .thenReturn(awsSdkResponse({Items: makeItems(17, 1)}));
-    td.when(dynamoDBDocumentClient.query({...queryWithoutNextKey, ExpressionAttributeValues: {':m': '2017-07'}, Limit: 3}))
-      .thenReturn(awsSdkResponse({Items: makeItems(3, 2)}));
-    setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
+    ddbMock.on(QueryCommand, queryWithoutNextKey)
+      .resolves({Items: makeItems(17, 1)});
+    ddbMock.on(QueryCommand, {...queryWithoutNextKey, ExpressionAttributeValues: {':m': '2017-07'}, Limit: 3})
+      .resolves({Items: makeItems(3, 2)});
+    setupServiceLocator({currentDate: '2017-08-01T07:26:27.574Z'});
 
     const client = new DoneQueryHelper('TABLE_NAME');
 
@@ -99,14 +103,13 @@ describe('Server DoneQueryHelper', () => {
   });
 
   it('automatically queries for previous 2 months if result does not have enough records', async () => {
-    const dynamoDBDocumentClient = td.instance(DynamoDB.DocumentClient);
-    td.when(dynamoDBDocumentClient.query(queryWithoutNextKey))
-      .thenReturn(awsSdkResponse({Items: makeItems(15, 1)}));
-    td.when(dynamoDBDocumentClient.query({...queryWithoutNextKey, ExpressionAttributeValues: {':m': '2017-07'}, Limit: 5}))
-      .thenReturn(awsSdkResponse({Items: makeItems(3, 2)}));
-    td.when(dynamoDBDocumentClient.query({...queryWithoutNextKey, ExpressionAttributeValues: {':m': '2017-06'}, Limit: 2}))
-      .thenReturn(awsSdkResponse({Items: makeItems(2, 3)}));
-    setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
+    ddbMock.on(QueryCommand, queryWithoutNextKey)
+      .resolves({Items: makeItems(15, 1)});
+    ddbMock.on(QueryCommand, {...queryWithoutNextKey, ExpressionAttributeValues: {':m': '2017-07'}, Limit: 5})
+      .resolves({Items: makeItems(3, 2)});
+    ddbMock.on(QueryCommand, {...queryWithoutNextKey, ExpressionAttributeValues: {':m': '2017-06'}, Limit: 2})
+      .resolves({Items: makeItems(2, 3)});
+    setupServiceLocator({currentDate: '2017-08-01T07:26:27.574Z'});
 
     const client = new DoneQueryHelper('TABLE_NAME');
 
@@ -118,12 +121,11 @@ describe('Server DoneQueryHelper', () => {
 
   // XXX: This rule causes the very slow response time when it queries the DB 30 times!
   it('tries to find items as old as March 2015', async () => {
-    const dynamoDBDocumentClient = td.instance(DynamoDB.DocumentClient);
     for (let yearMonth = '2017-08'; yearMonth !== '2015-02'; yearMonth = prevMonth(yearMonth)) {
-      td.when(dynamoDBDocumentClient.query(td.matchers.contains({ExpressionAttributeValues: {':m': yearMonth}})))
-        .thenReturn(awsSdkResponse({Items: [], LastEvaluatedKey: {date: `${yearMonth}-01T07:26:27.574Z`}}));
+      ddbMock.on(QueryCommand, {ExpressionAttributeValues: {':m': yearMonth}})
+        .resolves({Items: [], LastEvaluatedKey: {date: `${yearMonth}-01T07:26:27.574Z`}});
     }
-    setupServiceLocator({dynamoDBDocumentClient, currentDate: '2017-08-01T07:26:27.574Z'});
+    setupServiceLocator({currentDate: '2017-08-01T07:26:27.574Z'});
 
     const client = new DoneQueryHelper('TABLE_NAME');
     await client.query();
@@ -134,13 +136,13 @@ describe('Server DoneQueryHelper', () => {
     });
   });
 
-  function setupServiceLocator({dynamoDBDocumentClient, currentDate}: any) {
+  function setupServiceLocator({currentDate}: any) {
     const dateProvider = {
       getCurrentDate: () => currentDate ? new Date(currentDate) : new Date()
     };
     const logger = {error: () => {}} as Logger;
     ServiceLocator.load({
-      createDynamoDBDocumentClient: () => dynamoDBDocumentClient,
+      createDynamoDBDocumentClient: () => DynamoDBDocumentClient.from(new DynamoDBClient({region: 'ap-southeast-2'})),
       createDateProvider: () => dateProvider,
       createLogger: () => logger
     } as ServiceFactory);

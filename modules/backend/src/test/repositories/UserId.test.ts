@@ -1,33 +1,40 @@
 import ServiceLocator from '../../lib/ServiceLocator';
 import UserIdRepository from '../../lib/repositories/UserId';
 import ServiceFactory from '../../lib/ServiceFactory';
-import * as td from 'testdouble';
-import {PromiseResult} from 'aws-sdk/lib/request';
-import {AWSError, DynamoDB} from 'aws-sdk';
-import {GetItemOutput, QueryOutput} from 'aws-sdk/clients/dynamodb';
+import {DynamoDBClient} from '@aws-sdk/client-dynamodb';
+import {DynamoDBDocumentClient, GetCommand, QueryCommand} from '@aws-sdk/lib-dynamodb';
+import {AwsClientStub, mockClient} from 'aws-sdk-client-mock';
 import {deepStrictEqual} from 'assert';
-import {awsSdkResponse} from '../helper/AwsHelper';
 
 describe('Server UserIdRepository', () => {
-  const docClient = td.instance(DynamoDB.DocumentClient);
-  td.when(docClient.get({
-    TableName: 'USER_ID_TABLE_NAME',
-    Key: {id: 'USER_ID'}
-  })).thenReturn(awsSdkResponse({
-    Item: {cognitoUserId: 'COGNITO_USER_ID'}
-  } as unknown as PromiseResult<GetItemOutput, AWSError>));
-  td.when(docClient.query({
-    TableName: 'USER_ID_TABLE_NAME',
-    IndexName: 'cognitoUserId',
-    KeyConditionExpression: 'cognitoUserId = :hkey',
-    ExpressionAttributeValues: {':hkey': 'COGNITO_USER_ID'},
-    ProjectionExpression: 'id'
-  })).thenReturn(awsSdkResponse({
-    Items: [{id: 'OLD_USER_ID'}]
-  } as unknown as PromiseResult<QueryOutput, AWSError>));
+  let ddbMock: AwsClientStub<DynamoDBDocumentClient>;
+  let repository: UserIdRepository;
 
-  ServiceLocator.load({createDynamoDBDocumentClient: () => docClient} as ServiceFactory);
-  const repository = new UserIdRepository('USER_ID_TABLE_NAME');
+  beforeEach(() => {
+    ddbMock = mockClient(DynamoDBDocumentClient);
+    ddbMock.on(GetCommand, {
+      TableName: 'USER_ID_TABLE_NAME',
+      Key: {id: 'USER_ID'}
+    }).resolves({
+      Item: {cognitoUserId: 'COGNITO_USER_ID'}
+    });
+    ddbMock.on(QueryCommand, {
+      TableName: 'USER_ID_TABLE_NAME',
+      IndexName: 'cognitoUserId',
+      KeyConditionExpression: 'cognitoUserId = :hkey',
+      ExpressionAttributeValues: {':hkey': 'COGNITO_USER_ID'},
+      ProjectionExpression: 'id'
+    }).resolves({
+      Items: [{id: 'OLD_USER_ID'}]
+    });
+
+    ServiceLocator.load({
+      createDynamoDBDocumentClient: () => DynamoDBDocumentClient.from(new DynamoDBClient({region: 'ap-southeast-2'}))
+    } as ServiceFactory);
+    repository = new UserIdRepository('USER_ID_TABLE_NAME');
+  });
+
+  afterEach(() => ddbMock.restore());
 
   it('finds a cognito user id', async () => {
     const result = await repository.getCognitoUserId('USER_ID');

@@ -1,4 +1,5 @@
 
+import {CognitoIdentityProviderClient, ListUsersCommand} from '@aws-sdk/client-cognito-identity-provider';
 import ServiceLocator from './ServiceLocator';
 
 export type CognitoUser = {
@@ -6,7 +7,7 @@ export type CognitoUser = {
 };
 
 export default class CognitoUserFinder {
-  private _cognitoIdentityServiceProvider: AWS.CognitoIdentityServiceProvider;
+  private _cognitoIdentityServiceProvider: CognitoIdentityProviderClient;
   private _userPoolId: string;
 
   constructor() {
@@ -20,8 +21,8 @@ export default class CognitoUserFinder {
       AttributesToGet: [],
       Filter: `sub = "${cognitoUserId}"`
     };
-    const result = await this._cognitoIdentityServiceProvider.listUsers(params).promise();
-    return result.Users![0] as CognitoUser;
+    const result = await this._cognitoIdentityServiceProvider.send(new ListUsersCommand(params));
+    return result.Users![0] as unknown as CognitoUser;
   }
 
 }
