@@ -4,7 +4,6 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const SRC_DIR = path.resolve(__dirname, 'src');
 const BUILD_DIR = path.resolve(__dirname, process.env.npm_package_config_buildDir);
@@ -14,7 +13,8 @@ const devMode = process.env.NODE_ENV !== 'production'
 
 module.exports = {
   entry: [
-    'babel-polyfill',
+    'core-js/stable',
+    'regenerator-runtime/runtime',
     'whatwg-fetch',
     `${SRC_DIR}/app.tsx`
   ],
@@ -44,37 +44,17 @@ module.exports = {
         ]
       },
       {
-        test: /\.(woff|woff2)$/,
-        loader: 'url-loader',
-        options: {
-          limit: BYTE_LIMIT,
-          mimetype: 'application/font-woff'
-        }
-      },
-      {
-        test: /\.ttf$/,
-        loader: 'url-loader',
-        options: {
-          limit: BYTE_LIMIT,
-          mimetype: 'application/octet-stream'
+        test: /\.(woff|woff2|ttf|svg)$/,
+        type: 'asset',
+        parser: {
+          dataUrlCondition: {maxSize: BYTE_LIMIT}
         }
       },
       {
         test: /\.eot$/,
-        loader: 'file-loader'
-      },
-      {
-        test: /\.svg$/,
-        loader: 'url-loader',
-        options: {
-          limit: BYTE_LIMIT,
-          mimetype: 'image/svg+xml'
-        }
+        type: 'asset/resource'
       }
     ]
-  },
-  optimization: {
-    minimizer: devMode ? [] : [new UglifyJsPlugin()]
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -95,8 +75,10 @@ module.exports = {
     new MiniCssExtractPlugin({filename: 'style-[hash].css'})
   ],
   devServer: {
-    contentBase: BUILD_DIR,
-    watchContentBase: true,
+    static: {
+      directory: BUILD_DIR,
+      watch: true
+    },
     liveReload: true
   }
 };
