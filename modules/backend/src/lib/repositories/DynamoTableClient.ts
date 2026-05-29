@@ -25,7 +25,7 @@ export default class DynamoTableClient {
       const response = await this._docClient.get(params).promise();
       return response.Item as ObjectMap<any>;
     } catch (e) {
-      throw new WrappedError(e, params);
+      throw new WrappedError(e as Error, params);
     }
   }
 
@@ -39,7 +39,7 @@ export default class DynamoTableClient {
       await this._docClient.put(params).promise();
       return id;
     } catch (e) {
-      throw new WrappedError(e, params);
+      throw new WrappedError(e as Error, params);
     }
   }
 
@@ -51,7 +51,7 @@ export default class DynamoTableClient {
     try {
       await this._docClient.delete(params).promise();
     } catch (e) {
-      throw new WrappedError(e, params);
+      throw new WrappedError(e as Error, params);
     }
   }
 
@@ -65,7 +65,7 @@ export default class DynamoTableClient {
       await this._docClient.update(params).promise();
       return await this.getById(id); // XXX: Don't query again
     } catch (e) {
-      throw new WrappedError(e, params);
+      throw new WrappedError(e as Error, params);
     }
   }
 
