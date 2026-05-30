@@ -55,7 +55,7 @@
     "@types/showdown": "^1.9.3",
     "babel-jest": "^27.0.2",
     "babel-loader": "^8.2.2",
-    "cors": "^2.8.4",
+    "cors": "^2.8.6",
     "css-loader": "^7.1.2",
     "express": "^4.20.0",
     "favicons": "^7.3.0",
