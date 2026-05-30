@@ -28,7 +28,7 @@ function zipDirectory(state) {
 
   archive.directory(state.directoryPath, false);
   archive.finalize();
-  return Object.assign({}, state, {zipStream});
+  return {...state, zipStream};
 }
 
 function uploadZip(state) {
