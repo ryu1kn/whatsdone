@@ -1,7 +1,7 @@
 import AWSXRay = require('aws-xray-sdk');
 import RawAWS = require('aws-sdk');
 import LambdaRequestHandler from './LambdaRequestHandler';
-import Uuid = require('uuid');
+import {randomUUID} from 'node:crypto';
 import {Logger, LogLevelString} from './Logger';
 import {EnvVars} from './EnvVars';
 
@@ -118,7 +118,7 @@ export default class ServiceFactory {
   }
 
   createUuidGenerator(): {generate: () => string} {
-    return {generate: () => Uuid.v4()};
+    return {generate: () => randomUUID()};
   }
 
   createDateProvider(): {getCurrentDate: () => Date} {
