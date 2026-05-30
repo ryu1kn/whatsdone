@@ -1,4 +1,3 @@
-import AWS from 'aws-sdk';
 import ServiceLocator from './service-locator';
 import {parse} from 'querystring';
 import jwtDecode from 'jwt-decode';
@@ -11,7 +10,7 @@ import {
   CognitoUserSession,
   CookieStorage
 } from 'amazon-cognito-identity-js';
-import ConfigProvider, {AppConfig} from './config-provider';
+import ConfigProvider from './config-provider';
 
 interface JwtToken {
   id_token: string
@@ -31,7 +30,6 @@ export class CognitoUserInitialiser {
 
   async initialise() {
     const appConfig = await this._configProvider.getConfig();
-    this._configureAWSSdk(appConfig);
     const userPool = new CognitoUserPool({
       UserPoolId: appConfig.USER_POOL_ID,
       ClientId: appConfig.CLIENT_ID,
@@ -56,12 +54,5 @@ export class CognitoUserInitialiser {
       });
       cognitoUser.setSignInUserSession(userSession);
     }
-  }
-
-  private _configureAWSSdk(appConfig: AppConfig) {
-    AWS.config.region = appConfig.REGION;
-    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-      IdentityPoolId: appConfig.IDENTITY_POOL_ID
-    });
   }
 }
