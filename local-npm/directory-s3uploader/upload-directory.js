@@ -16,28 +16,29 @@ module.exports = ({directoryPath, s3bucket, s3key}) => {
 
 function zipDirectory(state) {
   const archive = archiver('zip');
+  archive.directory(state.directoryPath, false);
+  archive.finalize();
+  return Object.assign({}, state, {zipStream: archive});
+}
+
+function uploadZip(state) {
+  const zipStream = state.zipStream;
 
   // @aws-sdk/lib-storage requires a native stream.Readable as the upload
   // Body, but archiver builds on the userland `readable-stream` package, so
   // its output fails lib-storage's `instanceof Readable` check. Bridge it
   // through a native PassThrough and forward archiver errors so a failed
   // zip still rejects the upload.
-  const zipStream = new PassThrough();
-  archive.on('error', err => zipStream.destroy(err));
-  archive.pipe(zipStream);
+  const streamWrap = new PassThrough();
 
-  archive.directory(state.directoryPath, false);
-  archive.finalize();
-  return {...state, zipStream};
-}
+  zipStream.on('error', err => streamWrap.destroy(err));
 
-function uploadZip(state) {
   const upload = new Upload({
     client: s3Client,
     params: {
       Bucket: state.s3bucket,
       Key: state.s3key,
-      Body: state.zipStream
+      Body: zipStream.pipe(streamWrap)
     }
   });
   return upload.done();
