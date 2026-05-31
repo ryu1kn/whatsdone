@@ -1,7 +1,7 @@
 name := "data-migrator"
 version := "0.0.1-SNAPSHOT"
 
-scalaVersion := "2.13.0"
+scalaVersion := "2.13.18"
 
 scalacOptions ++= Seq(
   "-encoding", "UTF-8",   // source files are in UTF-8

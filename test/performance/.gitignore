@@ -1,5 +1,9 @@
-/.bsp
+/.bsp/
+/.bloop/
 /.idea
-/project/target
+/.metals/
 /target
-/project/project
+/project/.bloop/
+/project/metals.sbt
+/project/target/
+/project/project/
