@@ -5,8 +5,10 @@ const {S3Client, HeadObjectCommand} = require('@aws-sdk/client-s3')
 // Per-environment deploys do NOT rebuild it — this script verifies the already
 // published artifact exists and emits its location so the `api` module points
 // every environment's Lambda at the same bytes (CI builds, prod promotes).
-if (!process.env.BUILD_NUMBER) {
-  throw new Error('Environment variable BUILD_NUMBER is not set')
+for (const name of ['BUILD_NUMBER', 'ARTIFACT_BUCKET', 'ARTIFACT_BASE_PATH']) {
+  if (!process.env[name]) {
+    throw new Error(`Environment variable ${name} is not set`)
+  }
 }
 
 const s3bucket = process.env.ARTIFACT_BUCKET
