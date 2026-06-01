@@ -5,29 +5,53 @@
   },
   "outputsStore": {
     "type": "s3-bucket",
-    "region": {"$ref": "#/_args/region"},
-    "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
-    "prefix": {"Fn::Join": ["/", [{"$ref": "#/_env"}, "whatsdone-app"]]}
+    "region": {
+      "$ref": "#/_args/region"
+    },
+    "bucket": {
+      "$ref": "#/_deploymentConfig/deploymentOutputsBucket"
+    },
+    "prefix": {
+      "Fn::Join": [
+        "/",
+        [
+          {
+            "$ref": "#/_env"
+          },
+          "whatsdone-app"
+        ]
+      ]
+    }
   },
   "dataSources": {
     "artifact-store": {
       "type": "s3-bucket",
-      "region": {"$ref": "#/_args/region"},
-      "bucket": {"$ref": "#/_deploymentConfig/deploymentOutputsBucket"},
+      "region": {
+        "$ref": "#/_args/region"
+      },
+      "bucket": {
+        "$ref": "#/_deploymentConfig/deploymentOutputsBucket"
+      },
       "key": "artifact-store"
     }
   },
   "tasks": [
     {
-      "id": "upload-lambda",
+      "id": "resolve-lambda",
       "type": "custom",
       "run": {
-        "script": "node upload-artifact > $TASK_OUTPUTS_FILE",
+        "script": "aws s3api head-object --bucket \"$ARTIFACT_BUCKET\" --key \"$ARTIFACT_BASE_PATH/$BUILD_NUMBER.zip\" --region \"$AWS_REGION\" > /dev/null && node resolve-artifact > $TASK_OUTPUTS_FILE",
         "envVars": {
-          "AWS_REGION": {"$ref": "#/_taskRegion"},
-          "ARTIFACT_BUCKET": {"$ref": "#/_dataSourceData/artifact-store/Bucket"},
+          "AWS_REGION": {
+            "$ref": "#/_taskRegion"
+          },
+          "ARTIFACT_BUCKET": {
+            "$ref": "#/_dataSourceData/artifact-store/Bucket"
+          },
           "ARTIFACT_BASE_PATH": "whatsdone-app",
-          "TASK_OUTPUTS_FILE": {"$ref": "#/_taskOutputsFile"}
+          "TASK_OUTPUTS_FILE": {
+            "$ref": "#/_taskOutputsFile"
+          }
         }
       },
       "outputsName": "packages"
