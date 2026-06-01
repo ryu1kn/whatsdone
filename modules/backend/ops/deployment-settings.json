@@ -40,7 +40,7 @@
       "id": "resolve-lambda",
       "type": "custom",
       "run": {
-        "script": "aws s3api head-object --bucket \"$ARTIFACT_BUCKET\" --key \"$ARTIFACT_BASE_PATH/$BUILD_NUMBER.zip\" --region \"$AWS_REGION\" > /dev/null && node resolve-artifact > $TASK_OUTPUTS_FILE",
+        "script": "node resolve-artifact > $TASK_OUTPUTS_FILE",
         "envVars": {
           "AWS_REGION": {
             "$ref": "#/_taskRegion"
