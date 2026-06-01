@@ -11,6 +11,7 @@
     "postbuild": "node ./upload-artifact",
     "postbuild:dev": "yarn run upload",
     "upload": "node ./upload-artifact",
+    "publish-artifact": "yarn install && yarn run build",
     "predeploy": "yarn install",
     "deploy": "cd ops && kumo deploy-module --verbose",
     "destroy": "cd ops && kumo destroy-module --verbose",

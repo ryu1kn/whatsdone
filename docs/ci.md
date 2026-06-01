@@ -6,3 +6,9 @@ Use the existing backend artifact prefix, `whatsdone-app`.
 
 Deploy the selected backend with `./deploy-module.sh --env <environment> backend api`.
 Deployment resolves the published ZIP without rebuilding it. Keep published keys unchanged.
+
+Publish web assets once with `yarn --cwd modules/web-assets publish-artifact`.
+The existing web artifact prefix is `whatsdone-assets`.
+Set `ENV_NAME` and reuse `BUILD_NUMBER` with `yarn --cwd modules/web-assets deploy:app`.
+Deployment adds that environment's `appConfig.json` to the downloaded bundle.
+`deploy-system.sh` selects published artifacts and never rebuilds them.
