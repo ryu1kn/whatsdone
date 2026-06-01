@@ -1,8 +1,10 @@
 const uploadDirectory = require('directory-s3uploader')
 const {join} = require('path')
 
-if (!process.env.BUILD_NUMBER) {
-  throw new Error('Environment variable BUILD_NUMBER is not set')
+for (const name of ['BUILD_NUMBER', 'ARTIFACT_BUCKET', 'ARTIFACT_BASE_PATH']) {
+  if (!process.env[name]) {
+    throw new Error(`Environment variable ${name} is not set`)
+  }
 }
 
 const uploadLocation = {
