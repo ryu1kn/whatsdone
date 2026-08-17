@@ -5,7 +5,7 @@ description = "ML infrastructure for What's Done topic classification"
 requires-python = ">=3.13"
 dependencies = [
     "metaflow>=2.15.0",
-    "mlflow>=2.10.0",
+    "mlflow>=3.15.0",
     "scikit-learn>=1.4.0",
     "sentence-transformers>=2.5.0",
     "pandas>=2.2.0",
