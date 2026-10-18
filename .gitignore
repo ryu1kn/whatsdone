@@ -28,3 +28,6 @@ mise.local.toml
 /CLAUDE.local.md
 /.claude/**/*.local.*
 /.claude/worktrees/
+
+/AGENTS.override.md
+/.scratch/
