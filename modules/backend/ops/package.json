@@ -1,6 +1,9 @@
 {
   "name": "backend",
   "private": true,
+  "scripts": {
+    "test": "node --test upload-directory.test.cjs"
+  },
   "dependencies": {
     "directory-s3uploader": "file:../../../local-npm/directory-s3uploader"
   }
