@@ -12,6 +12,7 @@ const BYTE_LIMIT = 100000;
 const devMode = process.env.NODE_ENV !== 'production'
 
 module.exports = {
+  mode: devMode ? 'development' : 'production',
   entry: [
     'core-js/stable',
     'regenerator-runtime/runtime',
@@ -57,9 +58,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-    }),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery'
