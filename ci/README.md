@@ -11,8 +11,12 @@ After you create a user, you need to create an access key.
 To create/update the user:
 
 ```sh
-$ AWS_PROFILE=<YOUR_PROFILE_NAME> make deploy-ci-user
+$ AWS_PROFILE=<YOUR_PROFILE_NAME> make deploy-ci-user CI_USER_PARAMETERS_FILE=/path/to/parameters.json
 ```
+
+Use a CloudFormation `ParameterKey`/`ParameterValue` JSON file containing `CiUserName`,
+`ReadOnlyUserPoolArn`, and `ReadOnlyIdentityPoolArns` (comma-separated ARNs).
+Keep `CiUserName` unchanged when updating an existing user.
 
 To create an access key for the user
 
