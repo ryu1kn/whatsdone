@@ -4,6 +4,12 @@ Parameters:
   CiUserName:
     Description: User name for CI
     Type: String
+  ReadOnlyUserPoolArn:
+    Description: User pool ARN for CI read access
+    Type: String
+  ReadOnlyIdentityPoolArns:
+    Description: Comma-separated identity pool ARNs for CI read access
+    Type: CommaDelimitedList
 Resources:
   CiUser:
     Type: "AWS::IAM::User"
@@ -12,6 +18,68 @@ Resources:
         - !Ref WhatsDoneCiGroup
       Path: "/"
       UserName: !Ref CiUserName
+  WhatsDoneCiReadOnlyPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      Description: Read-only resource inspection for CI
+      Users:
+        - !Ref CiUser
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: ReadStacks
+            Effect: Allow
+            Action:
+              - cloudformation:GetTemplate
+              - cloudformation:ListStackResources
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/whatsdone-artifacts/*'
+              - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/dev-ryuichi-whatsdone-env-module/*'
+              - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/whatsdone-dev-ryuichi-user-id-store/*'
+              - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/dev-ryuichi-done-store/*'
+              - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/whatsdone-dev-ryuichi-authentication/*'
+              - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/dev-ryuichi-whatsdone-assets-module/*'
+              - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/dev-ryuichi-whatsdone-web-cache-module/*'
+              - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/dev-ryuichi-whatsdone-api/*'
+              - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/dev-ryuichi-whatsdone-gateway-module/*'
+          - Sid: ReadDynamoTables
+            Effect: Allow
+            Action:
+              - dynamodb:Scan
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/whatsdone-dev-ryuichi-dones'
+              - !Sub 'arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/whatsdone-dev-ryuichi-user-ids'
+          - Sid: ReadUserPool
+            Effect: Allow
+            Action:
+              - cognito-idp:DescribeUserPool
+              - cognito-idp:DescribeUserPoolClient
+              - cognito-idp:ListUsers
+              - cognito-idp:AdminGetUser
+            Resource: !Ref ReadOnlyUserPoolArn
+          - Sid: ReadGitHubProvider
+            Effect: Allow
+            Action:
+              - iam:GetOpenIDConnectProvider
+            Resource: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com'
+          - Sid: ListIamResources
+            Effect: Allow
+            Action:
+              - iam:ListOpenIDConnectProviders
+              - iam:ListRoles
+            Resource: "*"
+          - Sid: ReadSecretMetadata
+            Effect: Allow
+            Action:
+              - secretsmanager:DescribeSecret
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:/whatsdone/ci/e2e-test-*'
+              - !Sub 'arn:${AWS::Partition}:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:/whatsdone/dev-ryuichi/e2e-test-*'
+          - Sid: ReadIdentityPools
+            Effect: Allow
+            Action:
+              - cognito-identity:DescribeIdentityPool
+            Resource: !Ref ReadOnlyIdentityPoolArns
   WhatsDoneCiGroup:
     Type: "AWS::IAM::Group"
     Properties:
