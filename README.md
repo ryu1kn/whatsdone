@@ -105,6 +105,19 @@ mise trust
 mise install
 ```
 
+### Kumo plugins
+
+After every `kumo install`, pin `glob` before running Kumo commands:
+
+```sh
+cd .kumo
+node -e "const fs=require('fs'); const p=require('./package.json'); p.resolutions={...p.resolutions, glob:'7.2.3'}; fs.writeFileSync('package.json', JSON.stringify(p, null, 2)+'\n')"
+yarn install
+cd ..
+```
+
+`glob-promise` calls `glob` as a function; `glob@13` fails with `glob is not a function`. `kumo install` rewrites `.kumo/package.json`, so repeat the pin afterward. CI applies the same resolution in `ci-build.sh`.
+
 ## Test
 
 * Unit test: Backend/frontend modules have their own unit test.
