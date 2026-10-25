@@ -44,12 +44,12 @@ function install_build_dependencies() {
     yarn install
 }
 
-# HACK: Manually install as glob-promise doesn't lock versions...
+# glob-promise needs the callback API; kumo install resets package.json.
 function install_old_glob() {
     (
         cd .kumo
-        rm -rf node_modules/glob
-        npm install glob@8.1.0
+        node -e "const fs=require('fs'); const p=require('./package.json'); p.resolutions={...p.resolutions, glob:'7.2.3'}; fs.writeFileSync('package.json', JSON.stringify(p, null, 2)+'\n')"
+        yarn install
     )
 }
 
