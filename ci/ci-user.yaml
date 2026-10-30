@@ -7,6 +7,9 @@ Parameters:
   ReadOnlyUserPoolArn:
     Description: User pool ARN for CI read access
     Type: String
+  ReadOnlyCiUserPoolArn:
+    Description: CI user pool ARN for preservation reads
+    Type: String
   ReadOnlyIdentityPoolArns:
     Description: Comma-separated identity pool ARNs for CI read access
     Type: CommaDelimitedList
@@ -42,6 +45,12 @@ Resources:
               - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/dev-ryuichi-whatsdone-web-cache-module/*'
               - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/dev-ryuichi-whatsdone-api/*'
               - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/dev-ryuichi-whatsdone-gateway-module/*'
+              - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/ci-whatsdone-api/*'
+              - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/whatsdone-ci-authentication/*'
+              - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/ci-done-store/*'
+              - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/whatsdone-ci-user-id-store/*'
+              - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/whatsdone-e2e-test/*'
+              - !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/whatsdone-ci-user/*'
           - Sid: ReadDynamoTables
             Effect: Allow
             Action:
@@ -49,6 +58,8 @@ Resources:
             Resource:
               - !Sub 'arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/whatsdone-dev-ryuichi-dones'
               - !Sub 'arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/whatsdone-dev-ryuichi-user-ids'
+              - !Sub 'arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/whatsdone-ci-dones'
+              - !Sub 'arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/whatsdone-ci-user-ids'
           - Sid: ReadDevLambdaLogs
             Effect: Allow
             Action:
@@ -57,6 +68,14 @@ Resources:
             Resource:
               - !Sub 'arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/whatsdone-dev-ryuichi-ProxyLambdaFunction'
               - !Sub 'arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/whatsdone-dev-ryuichi-ProxyLambdaFunction:log-stream:*'
+          - Sid: ReadCiLambdaLogs
+            Effect: Allow
+            Action:
+              - logs:FilterLogEvents
+              - logs:GetLogEvents
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/whatsdone-ci-ProxyLambdaFunction'
+              - !Sub 'arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/whatsdone-ci-ProxyLambdaFunction:log-stream:*'
           - Sid: ReadUserPool
             Effect: Allow
             Action:
@@ -65,6 +84,13 @@ Resources:
               - cognito-idp:ListUsers
               - cognito-idp:AdminGetUser
             Resource: !Ref ReadOnlyUserPoolArn
+          - Sid: ReadCiUserPool
+            Effect: Allow
+            Action:
+              - cognito-idp:DescribeUserPool
+              - cognito-idp:DescribeUserPoolClient
+              - cognito-idp:ListUsers
+            Resource: !Ref ReadOnlyCiUserPoolArn
           - Sid: ReadGitHubProvider
             Effect: Allow
             Action:

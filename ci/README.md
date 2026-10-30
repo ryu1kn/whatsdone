@@ -15,7 +15,7 @@ $ AWS_PROFILE=<YOUR_PROFILE_NAME> make deploy-ci-user CI_USER_PARAMETERS_FILE=/p
 ```
 
 Use a CloudFormation `ParameterKey`/`ParameterValue` JSON file containing `CiUserName`,
-`ReadOnlyUserPoolArn`, and `ReadOnlyIdentityPoolArns` (comma-separated ARNs).
+`ReadOnlyUserPoolArn`, `ReadOnlyCiUserPoolArn`, and `ReadOnlyIdentityPoolArns` (comma-separated ARNs).
 Keep `CiUserName` unchanged when updating an existing user.
 
 To create an access key for the user
