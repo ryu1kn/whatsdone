@@ -2,7 +2,7 @@
   "name": "backend",
   "private": true,
   "scripts": {
-    "test": "node --test upload-directory.test.cjs"
+    "test": "node --test *.test.cjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1056.0",
