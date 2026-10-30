@@ -64,8 +64,9 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - name: Build, test and publish backend artifact
         working-directory: modules/backend
-        run: yarn run publish-artifact
+        run: ARTIFACT_BUCKET="$(node -p "require('../../config/common').artifactBucket")" yarn run publish-artifact
         env:
+          ARTIFACT_BASE_PATH: whatsdone-app
           BUILD_NUMBER: ${{ github.run_number }}-${{ github.run_id }}
       - name: Build and publish web-assets artifact
         working-directory: modules/web-assets
@@ -223,6 +224,6 @@ jobs:
 permissions:
   contents: read
 concurrency:
-  group: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.ref) || 'deployment' }}
+  group: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.run_id) || 'deployment' }}
   cancel-in-progress: false
   queue: max

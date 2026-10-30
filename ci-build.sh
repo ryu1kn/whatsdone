@@ -11,7 +11,7 @@ function main() {
         fi
         install_build_dependencies
         install_old_glob
-        ./deploy-module.sh --env ci backend
+        ./deploy-module.sh --env ci backend api
         (cd modules/web-assets && yarn install && yarn run deploy:app)
         return
     fi
