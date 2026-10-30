@@ -1,10 +1,6 @@
 const {S3Client, HeadObjectCommand} = require('@aws-sdk/client-s3')
 
-// The backend Lambda bundle is built and uploaded exactly once by the
-// `build-artifacts` CI job (see modules/backend/package.json `publish-artifact`).
-// Per-environment deploys do NOT rebuild it — this script verifies the already
-// published artifact exists and emits its location so the `api` module points
-// every environment's Lambda at the same bytes (CI builds, prod promotes).
+// Resolve the published ZIP without rebuilding or uploading it.
 for (const name of ['BUILD_NUMBER', 'ARTIFACT_BUCKET', 'ARTIFACT_BASE_PATH']) {
   if (!process.env[name]) {
     throw new Error(`Environment variable ${name} is not set`)
@@ -22,8 +18,8 @@ s3Client.send(new HeadObjectCommand({Bucket: s3bucket, Key: s3key}))
   })
   .catch(e => {
     console.error(
-      `Backend artifact not found at s3://${s3bucket}/${s3key}. ` +
-      `It must be published by the build-artifacts job before deploy. (${e.name})`
+      `Cannot verify backend artifact at s3://${s3bucket}/${s3key}. ` +
+      `Publish it before deployment; verify access and artifact settings. (${e.name})`
     )
     process.exitCode = 1
   })
