@@ -3,6 +3,7 @@ name: build-and-deploy
   push:
     branches:
       - main
+      - main-new
   pull_request: null
   workflow_dispatch:
     inputs:
@@ -195,7 +196,7 @@ jobs:
       - uses: jdx/mise-action@v2
       - name: Validate artifact selection
         env:
-          BUILD_NUMBER: ${{ inputs.artifact_build }}
+          BUILD_NUMBER: ${{ inputs.artifact_build || vars.CI_ARTIFACT_BUILD }}
         run: '[[ "$BUILD_NUMBER" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ && "$BUILD_NUMBER" != 0 ]]'
       - name: Test infrastructure
         run: mise run test-infra
@@ -220,7 +221,7 @@ jobs:
         run: ./ci-build.sh --deploy-selected-artifacts
         env:
           ENV_NAME: ci
-          BUILD_NUMBER: ${{ inputs.artifact_build }}
+          BUILD_NUMBER: ${{ inputs.artifact_build || vars.CI_ARTIFACT_BUILD }}
 permissions:
   contents: read
 concurrency:
