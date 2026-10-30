@@ -71,12 +71,16 @@ References: [GitHub environment trust](https://docs.github.com/en/actions/how-to
 
 ## Validate selected artifacts
 
-After reviewing the CI resource changes, authorize the branch push and hosted run
-separately. Dispatch `build-and-deploy` from `main-new` (or `main`) with the
-previously published `artifact_build`. Only `ci-validation` runs; production jobs
-require a push to `main`. The command promotes backend/web artifacts without
-rebuilding. `BUILD_NUMBER` is set on each publishing/deployment step because
-mise initializes it to `0`.
+After reviewing CI resource changes, authorize the branch push and hosted run
+separately. Before merging, set CI's `CI_ARTIFACT_BUILD` variable to the selected
+published build, then push `main-new` with approval. That push runs only
+`ci-validation`; production jobs require a push to `main`.
+
+Manual dispatch requires this workflow to exist on the default branch first.
+Once available, dispatch `build-and-deploy` from `main-new` (or `main`) with
+`artifact_build`. Both paths promote backend/web artifacts without rebuilding.
+`BUILD_NUMBER` is set on each publishing/deployment step because mise initializes
+it to `0`.
 
 Capture CI resource and record evidence before and after deployment. Compare
 selected ZIPs with deployed bytes and confirm DONEs load. Hosted role assumption
