@@ -61,10 +61,23 @@ AWS_PROFILE=ci-whatsdone make show-github-oidc-role-arns
 ```
 
 Set each GitHub environment's `AWS_ROLE_ARN` variable to its corresponding role.
-Restrict CI deployments to `main` and the explicitly approved validation branch;
+Restrict CI deployments to `main` and `main-new` only;
 restrict Production to `main`. Environment subjects contain no branch claim, so
 GitHub environment branch policies enforce permitted refs. Do not enable OIDC
 until those restrictions are configured. No access keys are required by Actions.
 
 References: [GitHub environment trust](https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws),
 [optional provider thumbprints](https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-iam-oidcprovider.html).
+
+## Validate selected artifacts
+
+After reviewing the CI resource changes, authorize the branch push and hosted run
+separately. Dispatch `build-and-deploy` from `main-new` (or `main`) with the
+previously published `artifact_build`. Only `ci-validation` runs; production jobs
+require a push to `main`. The command promotes backend/web artifacts without
+rebuilding. `BUILD_NUMBER` is set on each publishing/deployment step because
+mise initializes it to `0`.
+
+Capture CI resource and record evidence before and after deployment. Compare
+selected ZIPs with deployed bytes and confirm DONEs load. Hosted role assumption
+is required to verify OIDC; local checks cannot establish it.

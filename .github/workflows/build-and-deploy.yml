@@ -1,13 +1,16 @@
 name: build-and-deploy
-on:
+'on':
   push:
     branches:
-    - main
-  pull_request:
+      - main
+  pull_request: null
   workflow_dispatch:
-
+    inputs:
+      artifact_build:
+        description: Previously published backend/web BUILD_NUMBER to deploy to CI
+        required: true
+        type: string
 env:
-  AWS_PROFILE: ci-whatsdone
   AWS_REGION: ap-southeast-2
   COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
   BUILD_COMMIT_RANGE: ${{ github.event.before }}...${{ github.event.after }}
@@ -15,7 +18,7 @@ env:
   BUILD_BRANCH: ${{ github.ref_name }}
   NODE_VERSION: 24
   FETCH_DEPTH: 30
-
+  AWS_PROFILE: ci-whatsdone
 jobs:
   pr-check:
     if: ${{ github.event_name == 'pull_request' }}
@@ -24,45 +27,14 @@ jobs:
       cancel-in-progress: true
     runs-on: ubuntu-latest
     steps:
-    - name: checkout
-      uses: actions/checkout@v4
-    - uses: jdx/mise-action@v2
-    - name: Run all checks
-      run: mise run gate
-
-  oidc-test-ci:
-    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main-new' }}
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-    environment:
-      name: CI
-      url: https://whatsdone.ryuichi.io
-    steps:
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v6.1.1
-      with:
-        role-to-assume: ${{ vars.AWS_ROLE_ARN }}
-        aws-region: ${{ env.AWS_REGION }}
-        aws-profile: ci-whatsdone
-        output-env-credentials: true
-        mask-aws-account-id: true
-    - name: Verify CI OIDC connection
-      run: |
-        set -euo pipefail
-        aws sts get-caller-identity
-        caller_arn="$(aws sts get-caller-identity --query Arn --output text)"
-        echo "Assumed identity: ${caller_arn}"
-        echo "${caller_arn}" | grep -q 'whatsdone-github-ci'
-
-  ci-deploy:
+      - name: checkout
+        uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+      - name: Run all checks
+        run: mise run gate
+  build-artifacts:
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
     runs-on: ubuntu-latest
-    concurrency:
-      group: env-ci
-      cancel-in-progress: false
-      queue: max
     permissions:
       id-token: write
       contents: read
@@ -70,33 +42,76 @@ jobs:
       name: CI
       url: https://whatsdone-ci.ryuichi.io
     steps:
-    - name: checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: ${{ env.FETCH_DEPTH }}
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v6.1.1
-      with:
-        role-to-assume: ${{ vars.AWS_ROLE_ARN }}
-        aws-region: ${{ env.AWS_REGION }}
-        aws-profile: ci-whatsdone
-        output-env-credentials: true
-        mask-aws-account-id: true
-    - uses: jdx/mise-action@v2
-    - name: Test infra
-      run: mise run test-infra
-    - run: ./ci-build.sh
-      env:
-        ENV_NAME: ci
-
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: ${{ env.FETCH_DEPTH }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6.1.1
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+          aws-profile: ci-whatsdone
+          output-env-credentials: true
+          mask-aws-account-id: true
+      - uses: actions/setup-node@v4
+        with:
+          cache: yarn
+          cache-dependency-path: |
+            modules/backend/yarn.lock
+            modules/web-assets/yarn.lock
+            modules/web-assets/app/yarn.lock
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Build, test and publish backend artifact
+        working-directory: modules/backend
+        run: yarn run publish-artifact
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}-${{ github.run_id }}
+      - name: Build and publish web-assets artifact
+        working-directory: modules/web-assets
+        run: yarn run publish-artifact
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}-${{ github.run_id }}
+  ci-deploy:
+    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+    needs:
+      - build-artifacts
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    environment:
+      name: CI
+      url: https://whatsdone-ci.ryuichi.io
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: ${{ env.FETCH_DEPTH }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6.1.1
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+          aws-profile: ci-whatsdone
+          output-env-credentials: true
+          mask-aws-account-id: true
+      - uses: jdx/mise-action@v2
+      - name: Test infra
+        run: mise run test-infra
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: ${{ env.NODE_VERSION }}
+      - run: ./ci-build.sh
+        env:
+          ENV_NAME: ci
+          BUILD_NUMBER: ${{ github.run_number }}-${{ github.run_id }}
   ci-e2e-test:
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
-    needs: [ci-deploy]
+    needs:
+      - ci-deploy
     runs-on: ubuntu-latest
-    concurrency:
-      group: env-ci
-      cancel-in-progress: false
-      queue: max
     permissions:
       id-token: write
       contents: read
@@ -127,19 +142,16 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('test/e2e/yarn.lock') }}
       - run: make test
-        # XXX: Sometimes, downloading Playwright get stuck. No point waiting longer.
         timeout-minutes: 5
         working-directory: test/e2e
         env:
           ENV_NAME: ci
-
   production-deploy:
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
-    needs: [ci-e2e-test]
+    needs:
+      - build-artifacts
+      - ci-e2e-test
     runs-on: ubuntu-latest
-    concurrency:
-      group: env-prod
-      cancel-in-progress: false
     permissions:
       id-token: write
       contents: read
@@ -159,10 +171,58 @@ jobs:
           aws-profile: ci-whatsdone
           output-env-credentials: true
           mask-aws-account-id: true
-      - uses: actions/setup-node@v4
-        with:
-          cache: npm
-          node-version: ${{ env.NODE_VERSION }}
+      - uses: jdx/mise-action@v2
       - run: ./ci-build.sh
         env:
           ENV_NAME: prod
+          BUILD_NUMBER: ${{ github.run_number }}-${{ github.run_id }}
+  ci-validation:
+    if: >-
+      ${{ github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/main-new' || github.ref ==
+      'refs/heads/main') }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    environment:
+      name: CI
+      url: https://whatsdone-ci.ryuichi.io
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: ${{ env.FETCH_DEPTH }}
+      - uses: jdx/mise-action@v2
+      - name: Validate artifact selection
+        env:
+          BUILD_NUMBER: ${{ inputs.artifact_build }}
+        run: '[[ "$BUILD_NUMBER" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ && "$BUILD_NUMBER" != 0 ]]'
+      - name: Test infrastructure
+        run: mise run test-infra
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6.1.1
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+          aws-profile: ci-whatsdone
+          output-env-credentials: true
+          mask-aws-account-id: true
+      - name: Verify CI OIDC identity
+        env:
+          ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+        run: |-
+          set -euo pipefail
+          IFS=: read -r _ _ _ _ account _ <<< "$ROLE_ARN"
+          role="${ROLE_ARN##*/}"
+          caller="$(aws sts get-caller-identity --query Arn --output text)"
+          [[ "$caller" == "arn:aws:sts::${account}:assumed-role/${role}/"* ]]
+      - name: Deploy selected artifacts to CI
+        run: ./ci-build.sh --deploy-selected-artifacts
+        env:
+          ENV_NAME: ci
+          BUILD_NUMBER: ${{ inputs.artifact_build }}
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.ref) || 'deployment' }}
+  cancel-in-progress: false
+  queue: max

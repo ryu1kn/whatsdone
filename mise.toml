@@ -34,6 +34,7 @@ run = """
 set -euo pipefail
 # web-assets/app done-item test asserts Melbourne-local time formatting
 export TZ=Australia/Melbourne
+node --test ci-build.test.cjs
 for dir in modules/*; do
   if [ -f "$dir/package.json" ]; then
     echo "==> test_module: $dir"
