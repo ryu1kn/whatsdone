@@ -3,6 +3,18 @@
 set -euo pipefail
 
 function main() {
+    if [[ "${1:-}" == "--deploy-selected-artifacts" ]]; then
+        if [[ "${ENV_NAME:-}" != ci || ! "${BUILD_BRANCH:-}" =~ ^(main|main-new)$ ||
+              ! "${BUILD_NUMBER:-}" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ || "${BUILD_NUMBER}" == 0 ]]; then
+            echo 'Selected deployment requires CI, main/main-new and a valid BUILD_NUMBER.' >&2
+            exit 1
+        fi
+        install_build_dependencies
+        install_old_glob
+        ./deploy-module.sh --env ci backend
+        (cd modules/web-assets && yarn install && yarn run deploy:app)
+        return
+    fi
     if [[ "${BUILD_BRANCH:-}" != "main" ]] ; then
         echo 'Deployment can happen only from "main" branch'
         exit 0

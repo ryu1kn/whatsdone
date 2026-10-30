@@ -58,16 +58,11 @@ The project has unit tests for both the backend and frontend. To run the tests, 
 
 The project is deployed on AWS. The deployment is automated using GitHub Actions. The workflow is defined in `.github/workflows/build-and-deploy.yml`.
 
-The workflow runs different jobs depending on the trigger:
-
-* **Pull request**: the `pr-check` job runs `mise run gate` (cfn-lint, Checkov, and module unit tests). It does not touch AWS or deploy anything.
-* **Manual run (`workflow_dispatch`)**: the `oidc-test-ci` job verifies the CI OIDC connection.
-* **Push to `main`**: the deploy pipeline runs:
-
-  1.  The `ci-deploy` job is triggered. It lints and scans the CloudFormation templates (`cfn-lint`, Checkov), then runs the `./ci-build.sh` script with `ENV_NAME=ci`.
-  2.  The `ci-build.sh` script uses `buildmate` to build and deploy only the modules that have changed.
-  3.  After `ci-deploy` completes, the `ci-e2e-test` job runs the end-to-end tests against the CI environment.
-  4.  If the end-to-end tests pass, the `production-deploy` job runs the `./ci-build.sh` script with `ENV_NAME=prod` to deploy the changes to the production environment.
+The workflow runs checks on pull requests. A push to `main` publishes backend/web
+artifacts once, deploys them to CI, runs E2E tests, then promotes the same build
+to production. Manual dispatch deploys an explicitly selected published build to
+CI only, from `main` or the approved validation branch. Production requires a
+push to `main` and successful CI E2E tests.
 
 ## Development Conventions
 
