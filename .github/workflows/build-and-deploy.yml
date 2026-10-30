@@ -180,8 +180,8 @@ jobs:
           BUILD_NUMBER: ${{ github.run_number }}-${{ github.run_id }}
   ci-validation:
     if: >-
-      ${{ github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/main-new' || github.ref ==
-      'refs/heads/main') }}
+      ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main-new') || (github.event_name ==
+      'workflow_dispatch' && (github.ref == 'refs/heads/main-new' || github.ref == 'refs/heads/main')) }}
     runs-on: ubuntu-latest
     permissions:
       id-token: write
