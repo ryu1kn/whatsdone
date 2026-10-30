@@ -10,7 +10,7 @@ const run = promisify(execFile);
 async function fixture(t) {
   const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'ci-build-'));
   t.after(() => fs.rm(cwd, {recursive: true, force: true}));
-  for (const dir of ['bin', 'modules/backend', 'modules/web-assets']) {
+  for (const dir of ['bin', 'modules/backend', 'modules/api', 'modules/web-assets']) {
     await fs.mkdir(path.join(cwd, dir), {recursive: true});
   }
   for (const file of ['ci-build.sh', 'deploy-module.sh']) {
@@ -41,6 +41,7 @@ test('selected artifacts deploy to CI without building or publishing', async t =
   await f.deploy();
   const calls = await f.calls();
   assert.match(calls, /yarn backend run deploy --env ci --region ap-southeast-2/);
+  assert.match(calls, /yarn api run deploy --env ci --region ap-southeast-2/);
   assert.match(calls, /yarn web-assets run deploy:app/);
   assert.doesNotMatch(calls, /publish-artifact|run build|buildmate/);
 });
