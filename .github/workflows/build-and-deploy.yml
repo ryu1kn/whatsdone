@@ -47,13 +47,22 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: ${{ env.FETCH_DEPTH }}
+      - name: Mask AWS account details
+        env:
+          ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+        run: |-
+          set -euo pipefail
+          printf '::add-mask::%s\n' "$ROLE_ARN"
+          account="${ROLE_ARN#*::}"
+          account="${account%%:*}"
+          printf '::add-mask::%s\n' "$account"
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6.1.1
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
           aws-profile: ci-whatsdone
-          output-env-credentials: true
+          output-env-credentials: false
           mask-aws-account-id: true
       - uses: actions/setup-node@v4
         with:
@@ -90,13 +99,22 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: ${{ env.FETCH_DEPTH }}
+      - name: Mask AWS account details
+        env:
+          ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+        run: |-
+          set -euo pipefail
+          printf '::add-mask::%s\n' "$ROLE_ARN"
+          account="${ROLE_ARN#*::}"
+          account="${account%%:*}"
+          printf '::add-mask::%s\n' "$account"
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6.1.1
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
           aws-profile: ci-whatsdone
-          output-env-credentials: true
+          output-env-credentials: false
           mask-aws-account-id: true
       - uses: jdx/mise-action@v2
       - name: Test infra
@@ -125,13 +143,22 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: ${{ env.FETCH_DEPTH }}
+      - name: Mask AWS account details
+        env:
+          ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+        run: |-
+          set -euo pipefail
+          printf '::add-mask::%s\n' "$ROLE_ARN"
+          account="${ROLE_ARN#*::}"
+          account="${account%%:*}"
+          printf '::add-mask::%s\n' "$account"
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6.1.1
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
           aws-profile: ci-whatsdone
-          output-env-credentials: true
+          output-env-credentials: false
           mask-aws-account-id: true
       - uses: actions/setup-node@v4
         with:
@@ -165,13 +192,22 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: ${{ env.FETCH_DEPTH }}
+      - name: Mask AWS account details
+        env:
+          ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+        run: |-
+          set -euo pipefail
+          printf '::add-mask::%s\n' "$ROLE_ARN"
+          account="${ROLE_ARN#*::}"
+          account="${account%%:*}"
+          printf '::add-mask::%s\n' "$account"
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6.1.1
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
           aws-profile: ci-whatsdone
-          output-env-credentials: true
+          output-env-credentials: false
           mask-aws-account-id: true
       - uses: jdx/mise-action@v2
       - run: ./ci-build.sh
@@ -200,13 +236,22 @@ jobs:
         run: '[[ "$BUILD_NUMBER" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ && "$BUILD_NUMBER" != 0 ]]'
       - name: Test infrastructure
         run: mise run test-infra
+      - name: Mask AWS account details
+        env:
+          ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+        run: |-
+          set -euo pipefail
+          printf '::add-mask::%s\n' "$ROLE_ARN"
+          account="${ROLE_ARN#*::}"
+          account="${account%%:*}"
+          printf '::add-mask::%s\n' "$account"
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6.1.1
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
           aws-profile: ci-whatsdone
-          output-env-credentials: true
+          output-env-credentials: false
           mask-aws-account-id: true
       - name: Verify CI OIDC identity
         env:

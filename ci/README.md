@@ -65,6 +65,9 @@ Restrict CI deployments to `main` and `main-new` only;
 restrict Production to `main`. Environment subjects contain no branch claim, so
 GitHub environment branch policies enforce permitted refs. Do not enable OIDC
 until those restrictions are configured. No access keys are required by Actions.
+Actions writes assumed credentials to the `ci-whatsdone` profile. Profile-only
+output avoids credential lookup before that profile exists; deployment exports
+its credentials for the older deployment SDK.
 
 References: [GitHub environment trust](https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws),
 [optional provider thumbprints](https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-iam-oidcprovider.html).
