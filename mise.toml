@@ -6,7 +6,7 @@ uv = "0.6.14"
 
 [env]
 AWS_REGION = "ap-southeast-2"
-BUILD_NUMBER = 0
+BUILD_NUMBER = "{{ get_env(name='BUILD_NUMBER', default='') }}"
 
 [tasks.cfn-lint]
 description = "Lint ci/ CloudFormation templates with cfn-lint"

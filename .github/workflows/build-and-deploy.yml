@@ -233,7 +233,9 @@ jobs:
       - name: Validate artifact selection
         env:
           BUILD_NUMBER: ${{ inputs.artifact_build || vars.CI_ARTIFACT_BUILD }}
-        run: '[[ "$BUILD_NUMBER" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ && "$BUILD_NUMBER" != 0 ]]'
+        run: |-
+          [[ "$BUILD_NUMBER" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ && "$BUILD_NUMBER" != 0 ]]
+          test "$(mise exec -- node -p 'process.env.BUILD_NUMBER')" = "$BUILD_NUMBER"
       - name: Test infrastructure
         run: mise run test-infra
       - name: Mask AWS account details

@@ -82,8 +82,8 @@ published build, then push `main-new` with approval. That push runs only
 Manual dispatch requires this workflow to exist on the default branch first.
 Once available, dispatch `build-and-deploy` from `main-new` (or `main`) with
 `artifact_build`. Both paths promote backend/web artifacts without rebuilding.
-`BUILD_NUMBER` is set on each publishing/deployment step because mise initializes
-it to `0`.
+`BUILD_NUMBER` is required on each publishing/deployment step. Mise must not
+override the selected value.
 
 Capture CI resource and record evidence before and after deployment. Compare
 selected ZIPs with deployed bytes and confirm DONEs load. Hosted role assumption
