@@ -4,9 +4,9 @@ set -euo pipefail
 
 function main() {
     if [[ "${1:-}" == "--deploy-selected-artifacts" ]]; then
-        if [[ "${ENV_NAME:-}" != ci || ! "${BUILD_BRANCH:-}" =~ ^(main|main-new)$ ||
+        if [[ "${ENV_NAME:-}" != ci || "${BUILD_BRANCH:-}" != main ||
               ! "${BUILD_NUMBER:-}" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ || "${BUILD_NUMBER}" == 0 ]]; then
-            echo 'Selected deployment requires CI, main/main-new and a valid BUILD_NUMBER.' >&2
+            echo 'Selected deployment requires CI, main and a valid BUILD_NUMBER.' >&2
             exit 1
         fi
         install_build_dependencies

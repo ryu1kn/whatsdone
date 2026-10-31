@@ -32,7 +32,7 @@ if [[ '${command}' == kumo ]]; then mkdir -p .kumo; echo '{}' > .kumo/package.js
       cwd, timeout: 30000,
       env: {...process.env, PATH: `${cwd}/bin:${process.env.PATH}`, CALLS: calls, BUILDS: path.join(cwd, 'builds'), MISE_TRUSTED_CONFIG_PATHS: cwd, MISE_STATE_DIR: path.join(cwd, 'mise-state'),
         AWS_PROFILE: 'ci-whatsdone', AWS_REGION: 'ap-southeast-2',
-        BUILD_BRANCH: 'main-new', BUILD_NUMBER: 'selected-build', ENV_NAME: 'ci', ...env}
+        BUILD_BRANCH: 'main', BUILD_NUMBER: 'selected-build', ENV_NAME: 'ci', ...env}
     }),
     calls: () => fs.readFile(calls, 'utf8'),
     builds: () => fs.readFile(path.join(cwd, 'builds'), 'utf8')
@@ -50,7 +50,7 @@ test('selected artifacts deploy to CI without building or publishing', async t =
 });
 
 test('selected deployment rejects production, unsupported refs and invalid artifact selection before AWS', async t => {
-  for (const env of [{ENV_NAME: 'prod'}, {BUILD_BRANCH: 'feature'}, {BUILD_NUMBER: ''},
+  for (const env of [{ENV_NAME: 'prod'}, {BUILD_BRANCH: 'feature'}, {BUILD_BRANCH: 'main-new'}, {BUILD_NUMBER: ''},
     {BUILD_NUMBER: '../other'}, {BUILD_NUMBER: '0'}]) {
     const f = await fixture(t);
     await assert.rejects(f.deploy(env), /Selected deployment requires/);
