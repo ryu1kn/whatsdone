@@ -49,7 +49,7 @@ jobs:
           fetch-depth: ${{ env.FETCH_DEPTH }}
       - name: Mask AWS account details
         env:
-          ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+          ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
         run: |-
           set -euo pipefail
           printf '::add-mask::%s\n' "$ROLE_ARN"
@@ -59,7 +59,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6.1.1
         with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
           aws-profile: ci-whatsdone
           output-env-credentials: false
@@ -101,7 +101,7 @@ jobs:
           fetch-depth: ${{ env.FETCH_DEPTH }}
       - name: Mask AWS account details
         env:
-          ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+          ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
         run: |-
           set -euo pipefail
           printf '::add-mask::%s\n' "$ROLE_ARN"
@@ -111,7 +111,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6.1.1
         with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
           aws-profile: ci-whatsdone
           output-env-credentials: false
@@ -145,7 +145,7 @@ jobs:
           fetch-depth: ${{ env.FETCH_DEPTH }}
       - name: Mask AWS account details
         env:
-          ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+          ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
         run: |-
           set -euo pipefail
           printf '::add-mask::%s\n' "$ROLE_ARN"
@@ -155,7 +155,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6.1.1
         with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
           aws-profile: ci-whatsdone
           output-env-credentials: false
@@ -194,7 +194,7 @@ jobs:
           fetch-depth: ${{ env.FETCH_DEPTH }}
       - name: Mask AWS account details
         env:
-          ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+          ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
         run: |-
           set -euo pipefail
           printf '::add-mask::%s\n' "$ROLE_ARN"
@@ -204,7 +204,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6.1.1
         with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
           aws-profile: ci-whatsdone
           output-env-credentials: false
@@ -238,7 +238,7 @@ jobs:
         run: mise run test-infra
       - name: Mask AWS account details
         env:
-          ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+          ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
         run: |-
           set -euo pipefail
           printf '::add-mask::%s\n' "$ROLE_ARN"
@@ -248,14 +248,14 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6.1.1
         with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
           aws-profile: ci-whatsdone
           output-env-credentials: false
           mask-aws-account-id: true
       - name: Verify CI OIDC identity
         env:
-          ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+          ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
         run: |-
           set -euo pipefail
           IFS=: read -r _ _ _ _ account _ <<< "$ROLE_ARN"
