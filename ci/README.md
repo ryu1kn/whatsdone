@@ -1,30 +1,7 @@
-
 # Continuous Integration / Continuous Delivery
 
-GitHub Actions uses OIDC roles. Keep the existing CI user for laptop operations.
-
-Creation of the user is done only at the beginning; so I just provide the CloudFormation template and Makefile for this.
-After you create a user, you need to create an access key.
-
-## Create an IAM user
-
-To create/update the user:
-
-```sh
-$ AWS_PROFILE=<YOUR_PROFILE_NAME> make deploy-ci-user CI_USER_PARAMETERS_FILE=/path/to/parameters.json
-```
-
-Use a CloudFormation `ParameterKey`/`ParameterValue` JSON file containing `CiUserName`,
-`ReadOnlyUserPoolArn`, `ReadOnlyCiUserPoolArn`, and `ReadOnlyIdentityPoolArns` (comma-separated ARNs).
-Keep `CiUserName` unchanged when updating an existing user.
-
-To create an access key for the user
-
-```sh
-$ AWS_PROFILE=<YOUR_PROFILE_NAME> make create-access-key
-```
-
-Make sure you take a memo of `SecretAccessKey` in the output. You can only see this at this timing.
+GitHub Actions uses OIDC roles and requires no IAM user or access keys.
+The legacy CI user is pending separately approved retirement.
 
 ## Static analysis
 
@@ -32,25 +9,13 @@ Make sure you take a memo of `SecretAccessKey` in the output. You can only see t
 Run `mise run cfn-lint` or `mise run checkov` separately for CI templates.
 Configuration: `.cfnlintrc.yaml` and `.checkov.yml`.
 
-The existing CI deployment group requires broad resource access for CloudFormation,
-service provisioning and IAM role creation. Checkov suppressions on that group
-cover wildcard reads (CKV_AWS_108), permissions management (CKV_AWS_109),
-privilege escalation (CKV_AWS_110) and resource-wide writes (CKV_AWS_111).
-These permissions remain a security risk; tightening deployment access requires
-a separate permissions review and approved stack update. Other resources remain checked.
-
-cfn-lint W3037 is suppressed only on the deployment group because its legacy
-`apigateway:HEAD` and `apigateway:OPTIONS` actions are unrecognized by IAM.
-The policy is preserved pending the same permissions review.
-
 ## GitHub OIDC
 
 Inspect existing providers, roles and stack ownership before setup. Reuse an
 existing account provider only after confirming its owner. These templates create
 one retained account provider and separate CI/Production roles. Role permissions
 match deployment needs and remain broad; resource-specific Checkov exceptions
-cover service provisioning and role management. Existing CI-user permissions,
-Cognito resources and the E2E secret stack are unchanged.
+cover service provisioning and role management. Cognito resources and the E2E secret stack are independent and must be preserved.
 
 With approval and provider-creation privileges:
 
