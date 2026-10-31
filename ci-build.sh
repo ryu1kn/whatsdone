@@ -28,21 +28,27 @@ function main() {
 }
 
 function build_and_deploy() {
-    local commit_range="$(get_commit_range)"
-    echo "Commit range: $commit_range"
+    if grep -F '[CI:FULL_DEPLOY]' <<< "$COMMIT_MESSAGE" > /dev/null ; then
+        # XXX: Some changes such as tools/ aren't tested with this. See buildmate.config.js.
+        echo 'FULL_DEPLOY specified.'
+        ./deploy-system.sh
+    else
+        local commit_range="$(get_commit_range)"
+        echo "Commit range: $commit_range"
 
-    echo 'List of changed file(s) in the range:'
-    git diff --name-only "$commit_range"
-    echo
+        echo 'List of changed file(s) in the range:'
+        git diff --name-only "$commit_range"
+        echo
 
-    git diff --name-only "$commit_range" | ./node_modules/.bin/buildmate
+        git diff --name-only "$commit_range" | ./node_modules/.bin/buildmate
+    fi
 }
 
 function get_commit_range() {
     local one_line_message="$(tr '\n' ' ' <<< "$COMMIT_MESSAGE")"
     local potential_range="$(sed 's/.*\[COMMIT_RANGE:\([^]]*\)\].*/\1/' <<< "$one_line_message")"
 
-    if [[ "$potential_range" != "$one_line_message" ]] ; then
+    if  [[ "$potential_range" != "$one_line_message" ]] ; then
         echo "$potential_range"
     else
         echo "$BUILD_COMMIT_RANGE"

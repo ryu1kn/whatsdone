@@ -53,18 +53,18 @@ flowchart LR
 ## Technology Stack
 
 - infrastructure
-  - ~~heroku + MongoDB~~
-  - ~~heroku + DynamoDB~~
-  - ~~AWS Elastic Beanstalk (deployed with `kumo`) + DynamoDB~~
-  - AWS API Gateway + Lambda + DynamoDB (all deployed with `kumo`) ⬅️ Now here
-    - with other components including: CloudFormation, CloudFront, Route53, X-Ray, Cognito, S3
+    - ~~heroku + MongoDB~~
+    - ~~heroku + DynamoDB~~
+    - ~~AWS Elastic Beanstalk (deployed with `kumo`) + DynamoDB~~
+    - AWS API Gateway + Lambda + DynamoDB (all deployed with `kumo`) ⬅️ Now here
+        - with other components including: CloudFormation, CloudFront, Route53, X-Ray, Cognito, S3
 - backend
-  - ~~JavaScript~~ (deployed on AWS Lambda)
-  - TypeScript (deployed on AWS Lambda) ⬅️ Now here
+    - ~~JavaScript~~ (deployed on AWS Lambda)
+    - TypeScript (deployed on AWS Lambda) ⬅️ Now here
 - frontend
-  - ~~JavaScript + React + flux~~
-  - ~~JavaScript + React + Redux~~
-  - TypeScript + React + Redux ⬅️ Now here
+    - ~~JavaScript + React + flux~~
+    - ~~JavaScript + React + Redux~~
+    - TypeScript + React + Redux ⬅️ Now here
 
 ## Continuous Integration / Continuous Delivery
 
@@ -82,6 +82,7 @@ to trigger commands that are relevant to files changed.
 Currently, What's Done CI checks git commit range of the current build to find changed files.
 However, this is sometimes not what you want. To force the build to get the file list of
 desired commit range, you can include `[COMMIT_RANGE:sha1...sha2]` in your commit message.
+To trigger CI full deploy, include `[CI:FULL_DEPLOY]` in your commit message.
 
 Note that the actual commit used in the build is still `HEAD`. It is just to make the build
 to work on different file list.
@@ -114,11 +115,11 @@ cd ..
 
 ## Test
 
-* Unit test: Backend/frontend modules have their own unit test.
-* Performance test: Written in Scala using Gatling. see its [README](./test/performance/README.md).
-* End-to-end test: Written in JavaScript. see its [README](./test/e2e/README.md).
+- Unit test: Backend/frontend modules have their own unit test.
+- Performance test: Written in Scala using Gatling. see its [README](./test/performance/README.md).
+- End-to-end test: Written in JavaScript. see its [README](./test/e2e/README.md).
 
 ## Tools
 
-* Migrate done data from mongodb to dynamodb (written in Go). See its [README](./tools/copy-done-table/README.md).
-* What's Done API Client (written in Haskell). See its [README](./tools/api-client/README.md).
+- Migrate done data from mongodb to dynamodb (written in Go). See its [README](./tools/copy-done-table/README.md).
+- What's Done API Client (written in Haskell). See its [README](./tools/api-client/README.md).
