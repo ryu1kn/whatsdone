@@ -42,7 +42,9 @@ function get_commit_range() {
     local one_line_message="$(tr '\n' ' ' <<< "$COMMIT_MESSAGE")"
     local potential_range="$(sed 's/.*\[COMMIT_RANGE:\([^]]*\)\].*/\1/' <<< "$one_line_message")"
 
-    if [[ "$potential_range" != "$one_line_message" ]] ; then
+    if grep -F '[CI:FULL_REFRESH]' <<< "$COMMIT_MESSAGE" > /dev/null ; then
+        echo "5274c42..HEAD"
+    elif [[ "$potential_range" != "$one_line_message" ]] ; then
         echo "$potential_range"
     else
         echo "$BUILD_COMMIT_RANGE"
