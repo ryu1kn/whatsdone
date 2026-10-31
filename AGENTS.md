@@ -60,9 +60,9 @@ The project is deployed on AWS. The deployment is automated using GitHub Actions
 
 The workflow runs checks on pull requests. A push to `main` publishes backend/web
 artifacts once, deploys them to CI, runs E2E tests, then promotes the same build
-to production. An approved push to `main-new` or manual dispatch deploys an explicitly selected published build to
-CI only, from `main` or the approved validation branch. Production requires a
-push to `main` and successful CI E2E tests.
+to production. Manual dispatch from `main` deploys an explicitly selected
+published build to CI only. Production requires a push to `main` and successful
+CI E2E tests.
 
 ## Development Conventions
 
