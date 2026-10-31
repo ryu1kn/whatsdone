@@ -60,7 +60,7 @@ AWS_PROFILE=ci-whatsdone make deploy-github-oidc-roles
 AWS_PROFILE=ci-whatsdone make show-github-oidc-role-arns
 ```
 
-Set each GitHub environment's `AWS_ROLE_ARN` variable to its corresponding role.
+Set each GitHub environment's `AWS_ROLE_ARN` secret to its corresponding role.
 Restrict CI deployments to `main` and `main-new` only;
 restrict Production to `main`. Environment subjects contain no branch claim, so
 GitHub environment branch policies enforce permitted refs. Do not enable OIDC
