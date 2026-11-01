@@ -1,7 +1,7 @@
 import React from 'react';
 
 import DoneItem from './done-item';
-import {DoneItem as DoneItemData} from '../reducer';
+import type {DoneItem as DoneItemData} from '../reducer';
 
 export interface DoneListProps {
   title: string

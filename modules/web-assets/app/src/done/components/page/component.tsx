@@ -4,7 +4,7 @@ import React from 'react';
 
 import DoneHistory from '../history';
 import DoneForm from '../form';
-import {DoneState} from '../../reducer';
+import type {DoneState} from '../../reducer';
 
 export class DonePage extends React.Component<{done: DoneState, fetchDones: () => void}> {
 

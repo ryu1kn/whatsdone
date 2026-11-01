@@ -1,7 +1,7 @@
 import ServiceFactory from './service-factory';
 import ConfigProvider from './config-provider';
 import WhatsdoneApiClient from './whatsdone-api-client';
-import {SmartFetch} from './smart-fetch';
+import type {SmartFetch} from './smart-fetch';
 import {CookieStorage} from 'amazon-cognito-identity-js';
 import {CognitoUserInitialiser} from './cognito-user-initialiser';
 import AuthTokenProvider from './auth-token-provider';

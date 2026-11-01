@@ -1,5 +1,5 @@
 import ServiceLocator from './service-locator';
-import {SmartFetch} from './smart-fetch';
+import type {SmartFetch} from './smart-fetch';
 
 export interface AppConfig {
   CLIENT_ID: string

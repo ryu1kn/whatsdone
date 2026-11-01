@@ -1,5 +1,5 @@
 import ActionType from './action-type';
-import {AnyAction} from 'redux';
+import type {AnyAction} from 'redux';
 
 export type NextKey = string
 

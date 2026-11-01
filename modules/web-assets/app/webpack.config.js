@@ -20,8 +20,8 @@ module.exports = {
     `${SRC_DIR}/app.tsx`
   ],
   output: {
-    path: `${BUILD_DIR}/static`,
-    filename: 'build-[hash].js'
+    path: BUILD_DIR,
+    filename: 'static/build-[fullhash].js'
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.d.ts', '.tsx', '.json'],
@@ -68,9 +68,9 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: `${__dirname}/index.ejs`,
-      filename: `${BUILD_DIR}/index.html`
+      filename: 'index.html'
     }),
-    new MiniCssExtractPlugin({filename: 'style-[hash].css'})
+    new MiniCssExtractPlugin({filename: 'static/style-[contenthash].css'})
   ],
   devServer: {
     static: {

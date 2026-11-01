@@ -60,7 +60,7 @@ app.delete('/dones/:id', cors(corsOptions), (req, res) => {
   res.sendStatus(204);
 });
 
-app.get('*', (_req, res) => {
+app.use( (_req, res) => {
   res.sendStatus(404);
 });
 
