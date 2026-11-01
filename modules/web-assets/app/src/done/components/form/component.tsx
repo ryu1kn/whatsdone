@@ -6,9 +6,11 @@ interface DoneFormProps {
 
 export class DoneForm extends React.Component<DoneFormProps> {
 
+  private readonly doneThingRef = React.createRef<HTMLTextAreaElement>();
+
   private handleSubmit(e: any) {
     e.preventDefault();
-    const doneThingElement = this.refs.doneThing as HTMLTextAreaElement;
+    const doneThingElement = this.doneThingRef.current!;
     const doneThing = doneThingElement.value.trim();
     if (!doneThing) return;
 
@@ -19,12 +21,12 @@ export class DoneForm extends React.Component<DoneFormProps> {
   render() {
     return (
       <form className="doneform" onSubmit={this.handleSubmit.bind(this)}>
-        <div className="form-group">
-          <label className="sr-only" htmlFor="doneInput">Done Thing</label>
+        <div className="mb-2">
+          <label className="visually-hidden" htmlFor="doneInput">Done Thing</label>
           <textarea className="form-control" id="doneInput"
-            placeholder="What have you done today?" ref="doneThing" rows={6} />
+            placeholder="What have you done today?" ref={this.doneThingRef} rows={6} />
         </div>
-        <button type="submit" className="btn btn-default doneform__button">Done!</button>
+        <button type="submit" className="btn btn-outline-secondary doneform__button">Done!</button>
       </form>
     );
   }

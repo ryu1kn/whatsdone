@@ -1,9 +1,7 @@
 import ServiceLocator from './service-locator';
-import querystring from 'querystring';
-import url from 'url';
 import ConfigProvider from './config-provider';
-import {NextKey, RawDoneItem} from './done/reducer';
-import {SmartFetch, SmartFetchResponse} from './smart-fetch';
+import type {NextKey, RawDoneItem} from './done/reducer';
+import type {SmartFetch, SmartFetchResponse} from './smart-fetch';
 import AuthTokenProvider from './auth-token-provider';
 
 const DEFAULT_OPTIONS = {
@@ -37,7 +35,7 @@ class WhatsdoneApiClient {
   }
 
   getDones(nextKey?: NextKey): Promise<GetDonesResponse> {
-    const qs = nextKey ? `?${querystring.stringify({nextKey})}` : '';
+    const qs = nextKey ? `?nextKey=${encodeURIComponent(nextKey)}` : '';
     return this._relayFetch(`/dones${qs}`);
   }
 
@@ -62,7 +60,7 @@ class WhatsdoneApiClient {
   private _relayFetch(path: string, options?: RequestInit): Promise<SmartFetchResponse> {
     return Promise.all([this._getApiOrigin(), this._authTokenProvider.getIdToken()])
       .then(([apiOrigin, idToken]) => {
-        const uri = url.resolve(apiOrigin, path);
+        const uri = new URL(path, apiOrigin).href;
         const finalHeaders = Object.assign({}, options?.headers, {Authorization: idToken});
         const finalOptions = Object.assign({}, DEFAULT_OPTIONS, options, {headers: finalHeaders});
         return this._smartFetch(uri, finalOptions);
@@ -79,7 +77,7 @@ const withFormBody: (opts: Omit<RequestInit, 'body'> & {body: any}) => RequestIn
   (options) => ({
     ...options,
     headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
-    body: querystring.stringify(options.body)
+    body: new URLSearchParams(options.body).toString()
   })
 
 export default WhatsdoneApiClient;

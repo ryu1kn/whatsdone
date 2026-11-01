@@ -1,3 +1,9 @@
+html { font-size: 14px; }
+body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: #333; }
+.page-header { padding-bottom: 9px; margin: 40px 0 20px; border-bottom: 1px solid #eee; }
+h2 { font-size: 30px; }
+.form-control, .btn { font-size: 14px; border-radius: 4px; }
+
 p {
   font-size: 1.3em;
 }
@@ -7,14 +13,14 @@ p {
   flex-direction: column;
   align-items: stretch;
 }
-.doneform > .form-group {
+.doneform > .mb-2 {
   display: block;
   margin-bottom: 0.5em;
 }
-.doneform > .form-group > input {
+.doneform > .mb-2 > input {
   width: 100%;
 }
-.doneform > .form-group > textarea {
+.doneform > .mb-2 > textarea {
   width: 100%;
   resize: vertical;
 }
@@ -46,26 +52,18 @@ p {
 .doneitem__delete-action {
   display: none;
   position: absolute;
-  width: 2em;
-  height: 100%;
   right: 0;
-
-  font-size: 1.5em;
-}
-.doneitem:hover .doneitem__delete-action {
-  display: block;
-}
-.doneitem:hover .doneitem__delete-action::before {
-  content: "\e014";
-  position: absolute;
-  right: 0;
-  background-color: white;
+  padding: .25em;
+  border: 0;
+  border-radius: 50%;
+  background: white;
   opacity: .8;
-  width: 1.5em;
-  height: 1.5em;
-  border-radius: .75em;
-  line-height: 1.5em;
-  text-align: center;
+  font-size: 1.5em;
+  line-height: 1;
+}
+.doneitem:hover .doneitem__delete-action,
+.doneitem:focus-within .doneitem__delete-action {
+  display: block;
 }
 .doneitem__user {
   min-width: 3.5em;
