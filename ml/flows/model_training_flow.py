@@ -223,8 +223,15 @@ class ModelTrainingFlow(FlowSpec):
                             mlflow.log_metric(f"{class_name}_{metric_name}", metric_value)
 
             # Log model
-            mlflow.sklearn.log_model(self.model, "model")
-            mlflow.sklearn.log_model(self.vectorizer, "vectorizer")
+            # Preserve the existing artifact format across MLflow default changes.
+            mlflow.sklearn.log_model(
+                self.model, "model",
+                serialization_format=mlflow.sklearn.SERIALIZATION_FORMAT_CLOUDPICKLE,
+            )
+            mlflow.sklearn.log_model(
+                self.vectorizer, "vectorizer",
+                serialization_format=mlflow.sklearn.SERIALIZATION_FORMAT_CLOUDPICKLE,
+            )
 
             # Log model metadata
             model_metadata = {
