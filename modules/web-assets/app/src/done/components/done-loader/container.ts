@@ -1,7 +1,7 @@
 import Action from '../../action';
 import ServiceLocator from '../../../service-locator';
-import {Dispatch} from 'redux';
-import {NextKey} from '../../reducer';
+import type {Dispatch} from 'redux';
+import type {NextKey} from '../../reducer';
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {

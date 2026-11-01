@@ -1,9 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.min';
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {createRoot} from 'react-dom/client';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {Provider} from 'react-redux';
 import {createStore} from 'redux';
 
@@ -33,15 +32,14 @@ ServiceLocator.cognitoUserInitialiser.initialise()
   .then(() => store.dispatch({type: 'API_READY'}))
   .catch((e: Error) => { console.error(e.stack); });
 
-ReactDOM.render(
+createRoot(document.getElementById('content')!).render(
   (
     <Provider store={store}>
       <Router>
-        <Switch>
-          <Route exact path="/" component={DonePage} />
-        </Switch>
+        <Routes>
+          <Route path="/" element={<DonePage />} />
+        </Routes>
       </Router>
     </Provider>
-  ),
-  document.getElementById('content')
+  )
 );

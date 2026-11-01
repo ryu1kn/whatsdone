@@ -1,6 +1,6 @@
 import Action from '../../action';
 import ServiceLocator from '../../../service-locator';
-import {Dispatch} from 'redux';
+import type {Dispatch} from 'redux';
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   const whatsdoneApiClient = ServiceLocator.whatsdoneApiClient;

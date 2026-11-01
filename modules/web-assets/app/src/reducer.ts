@@ -1,5 +1,6 @@
 import {combineReducers} from 'redux';
-import reducer, {DoneState} from './done/reducer';
+import reducer from './done/reducer';
+import type {DoneState} from './done/reducer';
 
 export interface RootState {
   done: DoneState

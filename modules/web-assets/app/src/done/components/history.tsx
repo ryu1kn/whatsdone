@@ -3,7 +3,7 @@ import React from 'react';
 
 import DoneList from './done-list';
 import DoneLoader from './done-loader';
-import {DoneItem, DoneState} from '../reducer';
+import type {DoneItem, DoneState} from '../reducer';
 import {getFriendlyDayLabel, getLocalDateString} from './date-util';
 
 class DoneHistory extends React.Component<{done: DoneState}> {

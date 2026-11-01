@@ -1,6 +1,5 @@
 import ServiceLocator from './service-locator';
-import {parse} from 'querystring';
-import jwtDecode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import {
   CognitoAccessToken,
   CognitoIdToken,
@@ -37,7 +36,7 @@ export class CognitoUserInitialiser {
     });
 
     const hash = window.location.hash.substr(1);
-    const token = parse(hash) as unknown as JwtToken;
+    const token = Object.fromEntries(new URLSearchParams(hash)) as unknown as JwtToken;
 
     if (token.id_token && token.access_token) {
       const userData = {
@@ -49,8 +48,7 @@ export class CognitoUserInitialiser {
       const userSession = new CognitoUserSession({
         IdToken: new CognitoIdToken({IdToken: token.id_token}),
         AccessToken: new CognitoAccessToken({AccessToken: token.access_token}),
-        // @ts-ignore
-        RefreshToken: new CognitoRefreshToken()
+        RefreshToken: new CognitoRefreshToken({RefreshToken: ''})
       });
       cognitoUser.setSignInUserSession(userSession);
     }

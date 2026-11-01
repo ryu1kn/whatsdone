@@ -2,13 +2,8 @@ module.exports = function config(api) {
   api.cache.invalidate(() => process.env.NODE_ENV === 'production')
 
   return {
-    presets: [
-      ['@babel/preset-env', {
-        targets: {
-          browsers: ['last 2 versions', 'safari >= 7']
-        }
-      }]
-    ],
+    targets: {browsers: ['last 2 versions', 'safari >= 7']},
+    presets: [['@babel/preset-env', {modules: api.env('test') ? 'commonjs' : false}]],
 
     overrides: [
       {
@@ -17,7 +12,7 @@ module.exports = function config(api) {
       },
       {
         test: /\.tsx$/,
-        presets: ['@babel/preset-react']
+        presets: [['@babel/preset-react', {runtime: 'automatic'}]]
       }
     ]
   }

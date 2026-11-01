@@ -1,6 +1,6 @@
 import ActionType from './action-type';
-import {PostDoneItem} from '../whatsdone-api-client';
-import {NextKey, RawDoneItem} from './reducer';
+import type {PostDoneItem} from '../whatsdone-api-client';
+import type {NextKey, RawDoneItem} from './reducer';
 
 export default {
   getDones,

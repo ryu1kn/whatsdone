@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 import {getColorCode} from '../../../util';
 import {formatTime} from '../date-util';
 import {Converter} from 'showdown';
-import {RootState} from '../../../reducer';
+import type {RootState} from '../../../reducer';
 
 const converter = new Converter();
 
@@ -47,7 +47,7 @@ const DoneThingInEdit = ({doneThing, updateDone}: { doneThing: string, updateDon
         }}
       />
       <button
-        className="btn btn-default doneform__button"
+        className="btn btn-outline-secondary doneform__button"
         onClick={() => textareaRef.current && updateDone(textareaRef.current.value)}
         type="button"
       >
@@ -62,8 +62,12 @@ const DoneThingInView = ({doneThing, deleteDone}: { doneThing: string, deleteDon
     <>
       <div className={doneItemCss('done-thing')}
            dangerouslySetInnerHTML={{__html: converter.makeHtml(doneThing)}}/>
-      <div className={doneItemCss('delete-action') + ' glyphicon glyphicon-trash'}
-           onClick={createOnClickDelete(deleteDone)}/>
+      <button type="button" className={doneItemCss('delete-action')} aria-label="Delete DONE"
+              onClick={createOnClickDelete(deleteDone)}>
+        <svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true">
+          <path d="M5.5 1a.5.5 0 0 0-.5.5V3H2v1h1l1 10h8l1-10h1V3h-3V1.5a.5.5 0 0 0-.5-.5h-5zM6 2h4v1H6V2zM4 4h8l-.9 9H4.9L4 4z" />
+        </svg>
+      </button>
     </>
   );
 };

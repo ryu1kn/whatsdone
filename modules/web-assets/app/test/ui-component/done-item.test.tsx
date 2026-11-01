@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
 import {render, waitFor} from '@testing-library/react';
-import React from 'react';
 import 'regenerator-runtime/runtime';
 import {Provider} from 'react-redux';
 import DonePage from '../../src/done/components/page';

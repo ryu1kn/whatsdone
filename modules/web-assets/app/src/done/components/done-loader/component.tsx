@@ -1,5 +1,5 @@
 import React from 'react';
-import {NextKey} from '../../reducer';
+import type {NextKey} from '../../reducer';
 
 interface DoneLoaderProps {
   fetchDones: (nextKey: NextKey) => void
@@ -14,8 +14,8 @@ export class DoneLoader extends React.Component<DoneLoaderProps> {
 
   render() {
     return (
-      <div className="panel panel-default">
-        <div className="panel-body" onClick={this.fetchDones.bind(this)}>
+      <div className="card">
+        <div className="card-body" onClick={this.fetchDones.bind(this)}>
           Tap to load more
         </div>
       </div>
