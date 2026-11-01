@@ -19,16 +19,16 @@
     "test_module": "yarn && yarn run compile && yarn run lint && yarn test && yarn --cwd ops && yarn --cwd ops test"
   },
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.1057.0",
-    "@aws-sdk/client-dynamodb": "^3.1057.0",
-    "@aws-sdk/lib-dynamodb": "^3.1056.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.1161.0",
+    "@aws-sdk/client-dynamodb": "^3.1161.0",
+    "@aws-sdk/lib-dynamodb": "^3.1161.0",
     "aws-xray-sdk": "^3.12.0",
     "lodash.get": "~4.4.2",
     "lodash.keyby": "~4.6.0",
     "lodash.map": "~4.6.0",
     "lodash.omit": "~4.18.0",
     "route-parser": "0.0.5",
-    "tslib": "^2.8.1"
+    "tslib": "^2.9.1"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^5.10.0",
@@ -37,10 +37,10 @@
     "@types/lodash.map": "^4.6.13",
     "@types/lodash.omit": "^4.5.9",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^24.12.4",
+    "@types/node": "^26.6.6",
     "@types/route-parser": "^0.1.7",
     "aws-sdk-client-mock": "^4.1.0",
-    "eslint": "^10.4.1",
+    "eslint": "^10.14.0",
     "mocha": "^12.0.3",
     "nyc": "^18.0.0",
     "testdouble": "^4.0.0",
