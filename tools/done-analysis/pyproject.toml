@@ -4,19 +4,19 @@ version = "0.1.0"
 description = "Data analysis tools and notebooks for What's Done app."
 requires-python = ">=3.13"
 dependencies = [
-  "jupyter",
-  "notebook",
-  "pandas",
-  "altair",
-  "boto3>=1.38.8",
-  "sentence-transformers",
-  "hdbscan",
-  "scikit-learn",
-  "numpy",
-  "tqdm",
-  "torch>=2.7.0",
-  "plotly>=6.0.1",
-  "umap-learn>=0.5.7",
+  "jupyter>=1.1.1",
+  "notebook>=7.6.4",
+  "pandas>=3.1.0",
+  "altair>=6.3.0",
+  "boto3>=1.43.123",
+  "sentence-transformers>=6.2.0",
+  "hdbscan>=0.8.44",
+  "scikit-learn>=1.9.1",
+  "numpy>=2.5.4",
+  "tqdm>=4.70.1",
+  "torch>=2.15.0",
+  "plotly>=7.1.0",
+  "umap-learn>=0.5.12",
 ]
 
 [tool.uv]
