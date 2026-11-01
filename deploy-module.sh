@@ -16,7 +16,7 @@ main() {
     done
 }
 
-# Resolve profiles unsupported by the deployment tool's AWS SDK v2.
+# Resolve profiles unsupported by the deployment tool's AWS SDK v2 used by kumo.
 resolveAwsCredentials() {
     if [[ -n "${AWS_ACCESS_KEY_ID:-}" || -z "${AWS_PROFILE:-}" ]]; then
         return
