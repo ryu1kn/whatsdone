@@ -5,7 +5,7 @@
     "test": "node --test *.test.cjs"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1056.0",
+    "@aws-sdk/client-s3": "^3.1161.0",
     "directory-s3uploader": "file:../../../local-npm/directory-s3uploader"
   }
 }
