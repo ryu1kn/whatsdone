@@ -40,11 +40,27 @@ updates:
     directory: /ml
     schedule:
       interval: weekly
+    groups:
+      ml-dependencies:
+        patterns:
+          - "*"
+      ml-security-updates:
+        applies-to: security-updates
+        patterns:
+          - "*"
 
   - package-ecosystem: pip
     directory: /tools/done-analysis
     schedule:
       interval: weekly
+    groups:
+      done-analysis-dependencies:
+        patterns:
+          - "*"
+      done-analysis-security-updates:
+        applies-to: security-updates
+        patterns:
+          - "*"
 
   - package-ecosystem: pip
     directory: /tools/topic-classification
