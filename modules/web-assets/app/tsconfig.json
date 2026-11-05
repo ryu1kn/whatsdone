@@ -24,7 +24,7 @@
     "noUncheckedIndexedAccess": true,
     "moduleResolution": "bundler",
     "types": [
-      "jest"
+      "vitest/globals"
     ],
     "esModuleInterop": true,
     "skipLibCheck": true,

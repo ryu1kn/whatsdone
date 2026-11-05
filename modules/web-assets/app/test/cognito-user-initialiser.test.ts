@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import {CognitoUserInitialiser} from '../src/cognito-user-initialiser';
 import ServiceLocator from '../src/service-locator';

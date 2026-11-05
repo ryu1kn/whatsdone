@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import {render, waitFor} from '@testing-library/react';
 import 'regenerator-runtime/runtime';

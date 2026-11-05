@@ -17,8 +17,9 @@
     "prebuild:production": "yarn run clean",
     "build:production": "NODE_ENV=production webpack",
     "typecheck": "tsc --noEmit",
-    "test": "jest",
-    "clean": "rm -rf $npm_package_config_buildDir"
+    "test": "vitest run",
+    "clean": "rm -rf $npm_package_config_buildDir",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "amazon-cognito-identity-js": "^6.3.22",
@@ -45,12 +46,10 @@
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
-    "@types/jest": "^30.0.0",
     "@types/lodash": "^4.17.27",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@types/showdown": "^2.0.6",
-    "babel-jest": "^30.5.2",
     "babel-loader": "^10.1.1",
     "cors": "^2.8.6",
     "css-loader": "^7.1.5",
@@ -58,8 +57,7 @@
     "favicons": "^7.3.1",
     "favicons-webpack-plugin": "^6.0.1",
     "html-webpack-plugin": "^5.6.8",
-    "jest": "^30.5.2",
-    "jest-environment-jsdom": "^30.5.2",
+    "jsdom": "^27.0.0",
     "less": "^4.9.1",
     "less-loader": "^13.1.0",
     "mini-css-extract-plugin": "^2.10.2",
@@ -67,19 +65,10 @@
     "style-loader": "^4.0.0",
     "testdouble": "^4.0.0",
     "typescript": "^7.0.2",
+    "vite": "^8.0.0",
+    "vitest": "^4.0.0",
     "webpack": "^5.112.2",
     "webpack-cli": "^7.3.1",
     "webpack-dev-server": "^6.1.0"
-  },
-  "jest": {
-    "cacheDirectory": ".cache/jest",
-    "testPathIgnorePatterns": [
-      "<rootDir>/dist/",
-      "<rootDir>/.cache/"
-    ],
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/file.ts",
-      "\\.(css|less)$": "<rootDir>/test/__mocks__/style.ts"
-    }
   }
 }
