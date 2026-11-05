@@ -10,3 +10,9 @@
 ```
 
 Then open `http://localhost:8080`
+
+## Tests
+
+Run `yarn --cwd app test` for a single Vitest run, or
+`yarn --cwd app test:watch` while developing. Browser tests select jsdom with
+`@vitest-environment jsdom`. Tests run in the Australia/Melbourne timezone.
