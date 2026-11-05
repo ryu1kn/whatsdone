@@ -66,8 +66,24 @@ updates:
     directory: /tools/topic-classification
     schedule:
       interval: weekly
+    groups:
+      topic-classification-dependencies:
+        patterns:
+          - "*"
+      topic-classification-security-updates:
+        applies-to: security-updates
+        patterns:
+          - "*"
 
   - package-ecosystem: pip
     directory: /tools/topic-classification/ops
     schedule:
       interval: weekly
+    groups:
+      topic-classification-ops-dependencies:
+        patterns:
+          - "*"
+      topic-classification-ops-security-updates:
+        applies-to: security-updates
+        patterns:
+          - "*"
