@@ -172,12 +172,12 @@
     mnemonist "0.38.3"
     tslib "^2.6.2"
 
-"@aws-sdk/lib-dynamodb@^3.1161.0":
-  version "3.1161.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/lib-dynamodb/-/lib-dynamodb-3.1161.0.tgz#bdf5738435ed0c1078ffa903ab4ac2ba8fbb6beb"
-  integrity sha512-7BBhAGJHc5bbw8PenvVg2GN0L6JkNGrnZI0JBm7nQ8fCiGgwmA0c+jWrJkQtI+1R65MTpuFLAVU1qq0wsPsXaw==
+"@aws-sdk/lib-dynamodb@^3.1164.0":
+  version "3.1164.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/lib-dynamodb/-/lib-dynamodb-3.1164.0.tgz#c5ed4501f139e34242ba9cd214e83cae2109bce9"
+  integrity sha512-6oTZONhW90r/MBDtTXlLjeWMj1gwAJp8nJ8iTviy9+B8lGjaCgyxqWv5lwEfguPOoWPu6CDoBcxKhbROqo2j4Q==
   dependencies:
-    "@aws-sdk/core" "^3.979.1"
+    "@aws-sdk/core" "^3.980.1"
     "@aws-sdk/util-dynamodb" "^3.996.9"
     "@smithy/core" "^3.38.0"
     "@smithy/types" "^4.19.0"
